@@ -11,6 +11,7 @@ body{margin:0;font-family:"Trebuchet MS","Segoe UI",Arial,sans-serif;background:
 header{background:var(--ink);color:#fff;padding:14px 16px;text-align:center}
 header h1{margin:0;font-size:22px}
 header p{margin:4px 0 0;font-size:13px;color:#b9d6cf}
+#credit{color:#f2b705;font-weight:bold;font-size:14px;margin-top:6px}
 main{max-width:720px;margin:0 auto;padding:14px}
 .modes{display:flex;gap:8px;justify-content:center;margin-bottom:12px}
 button{font:inherit;font-weight:bold;border:0;border-radius:10px;padding:11px 20px;cursor:pointer;background:var(--ink);color:#fff}
@@ -48,7 +49,12 @@ label{font-size:13px}
 #lbBox h3{margin:0}
 #lbBox ol{margin:6px 0 0;padding-left:22px}
 #lbEntry{display:none;margin:10px 0}
-#lbEntry input{padding:9px;border-radius:8px;border:0;width:150px;font:inherit}
+#lbEntry input[type="text"], #lbEntry input[type="tel"]{padding:9px;border-radius:8px;border:0;font:inherit;margin:4px}
+#adminBox{display:none;max-width:480px;margin:14px auto;background:#fff;border:3px solid var(--ink);border-radius:14px;padding:14px}
+#adminBox h3{margin:0 0 8px;color:var(--ink)}
+.atable{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px}
+.atable th,.atable td{border:1px solid var(--line);padding:6px;text-align:left}
+.atable th{background:var(--ink);color:#fff}
 @media (prefers-reduced-motion:reduce){.bin{transition:none}}
 </style>
 </head>
@@ -82,6 +88,7 @@ label{font-size:13px}
   <div id="task">Press "Start camera", then show a waste item inside the dashed box.</div>
   <div class="bins" id="bins"></div>
   <div id="probs"></div>
+
   <div id="audit" style="display:none">
     <div id="auditTotal"></div>
     <div id="auditBars"></div>
@@ -91,33 +98,56 @@ label{font-size:13px}
       <button class="alt" id="aCsv" type="button">Download CSV</button>
       <button class="alt" id="aReset" type="button">Reset today</button>
     </div>
-    <p class="note">Each item is counted once, then remove it before showing the next. Counts are model predictions and can contain errors; use Undo to correct. No photos are saved, counts stay in this browser.</p>
+    <p class="note">Each item is counted once, then remove it before showing the next. Counts are model predictions and can contain errors; use Undo to correct.</p>
   </div>
 
+  <!-- PUBLIC LEADERBOARD (Shows ONLY Name & Score) -->
   <div id="lbBox">
-    <h3>Today's Top 5</h3>
+    <h3>🏆 Today's Top 5</h3>
     <ol id="lbList"></ol>
-    <p class="note">Scores are saved by first name only. The prize round is played live and supervised.</p>
+    <p class="note">Public view shows player name and score only. Phone numbers are kept private for the school admin.</p>
   </div>
 
+  <!-- SCORE & PHONE ENTRY -->
   <div id="end">
     <h2 id="endTitle"></h2>
     <p id="endText"></p>
     <div id="lbEntry">
-      <input id="lbName" maxlength="12" placeholder="First name only" aria-label="First name">
-      <div id="lbContactBox" style="margin:8px 0">
-        <input id="lbPhone" inputmode="numeric" maxlength="13" placeholder="Parent/guardian mobile (optional)" aria-label="Parent or guardian mobile number" style="width:260px;max-width:100%">
-        <label style="display:block;margin-top:6px"><input type="checkbox" id="lbOk"> A parent/guardian agrees</label>
-        <p class="note" id="lbNotice" style="color:#b9d6cf"></p>
+      <div>
+        <input type="text" id="lbName" maxlength="15" placeholder="Your Name" aria-label="Player name" style="width:220px">
       </div>
-      <button id="lbSave" type="button" style="background:var(--gold);color:#10262e">Save score</button>
+      <div style="margin:6px 0">
+        <input type="tel" id="lbPhone" inputmode="numeric" maxlength="13" placeholder="Mobile: 03XXXXXXXXX" aria-label="Mobile number" style="width:220px">
+        <p class="note" style="color:#b9d6cf;margin:4px 0">Mobile number is hidden from public & visible only to Teacher Admin.</p>
+      </div>
+      <button id="lbSave" type="button" style="background:var(--gold);color:#10262e">Save Score</button>
     </div>
-    <button id="again" type="button" style="background:var(--green)">Play again</button>
+    <button id="again" type="button" style="background:var(--green);margin-top:6px">Play again</button>
+  </div>
+
+  <!-- SECRET TEACHER ADMIN PANEL -->
+  <div id="adminBox">
+    <h3>🔒 Teacher Admin Panel (Private Records)</h3>
+    <div style="overflow-x:auto">
+      <table class="atable">
+        <thead>
+          <tr><th>#</th><th>Name</th><th>Score</th><th>Mobile Number</th><th>Date</th></tr>
+        </thead>
+        <tbody id="adminTable"></tbody>
+      </table>
+    </div>
+    <div class="abtns" style="margin-top:10px">
+      <button class="alt" id="admCsv" type="button">📥 Download Excel/CSV</button>
+      <button class="alt" id="admCopy" type="button">📋 Copy List</button>
+      <button class="alt" id="admClear" type="button" style="border-color:var(--coral);color:var(--coral)">🗑️ Clear All</button>
+      <button id="admClose" type="button">Close Admin</button>
+    </div>
   </div>
 
   <div class="foot">
     <label><input type="checkbox" id="voice" checked> Voice</label> &nbsp;
-    <label><input type="checkbox" id="sfx" checked> Sounds</label>
+    <label><input type="checkbox" id="sfx" checked> Sounds</label> &nbsp;|&nbsp;
+    <button id="admBtn" type="button" style="padding:4px 10px;font-size:12px;background:#456">🔒 Teacher Admin</button>
     <p>Model trained with Google Teachable Machine on our own photos. Needs internet to load the model.</p>
   </div>
 </main>
@@ -127,24 +157,14 @@ label{font-size:13px}
 <script>
 /* ===== EDIT HERE ===== */
 const MODEL_URL = "https://teachablemachine.withgoogle.com/models/GuFSPsxyV/";
-const CREDIT = "Teacher: Ghulam Hussain | GBHSS Haji Junejo Tarai";  // add student first names only, with school permission
-/* Each item must match a class name in your model (part of the name is enough). Add metal, glass etc. here after training them. */
+const CREDIT = "Guide Teacher: Ghulam Hussain Memon (PST, BCS, BSc, B.Ed) | GBHSS Haji Junejo Tarai | Team: [Student 1], [Student 2], [Student 3]";
+const ADMIN_PIN = "7860"; // Secret PIN to open Teacher Admin Panel
+
 const BINS = [
   {keys:["plastic"], name:"Plastic", ur:"پلاسٹک", bin:"Blue bin",  color:"#1e6fd9", icon:"🧴", tip:"Plastic can be collected and recycled instead of thrown away."},
   {keys:["paper","papar"], name:"Paper", ur:"کاغذ", bin:"Green bin", color:"#2e9e5b", icon:"📄", tip:"Dry, clean paper can be recycled. Keep it away from food."}
 ];
-/* Shared leaderboard (optional): fill after making a Google Form + Sheet. Leave empty to keep scores on this device only. */
-const SHARED = {
-  form:  "",   // https://docs.google.com/forms/d/e/FORM_ID/formResponse
-  name:  "",   // e.g. entry.123456789
-  score: "",   // e.g. entry.987654321
-  csv:   ""    // published Google Sheet link ending in output=csv
-};
-/* Prize contact (optional): a SECOND, PRIVATE Google Form with fields Name, Score, Phone. Never publish its sheet. Leave empty to hide the phone box. */
-const CONTACT = { form: "", name: "", score: "", phone: "" };
-const PRIZE_NOTICE = "Optional: a parent/guardian mobile number, used only to contact prize winners.";
-const MIN_CONF = 0.8, HOLD_MS = 800, ROUND_S = 60;
-const MAX_SCORE = Math.ceil(ROUND_S * 1000 / (HOLD_MS + 1800)) * 20;  // highest score possible in one round; larger shared scores are ignored
+const MIN_CONF = 0.75, HOLD_MS = 800, ROUND_S = 60;
 /* ===================== */
 
 const $ = id => document.getElementById(id);
@@ -232,7 +252,7 @@ function pick(p) {
 
 function handle(p) {
   let idx = pick(p);
-  if (idx === -1) idx = null;          // background / empty class
+  if (idx === -1) idx = null;
   const now = Date.now();
   if (idx !== holdKey) { holdKey = idx; holdSince = now; }
   document.querySelectorAll(".bin").forEach((d, i) => {
@@ -295,8 +315,13 @@ function endRound() {
   $("end").style.display = "block"; $("lbEntry").style.display = score > 0 ? "block" : "none"; beep([523, 659, 784]); updateHud();
 }
 function setMode(m) {
-  mode = m; clearInterval(timer); timeLeft = 0; $("end").style.display = "none"; $("audit").style.display = m === "audit" ? "block" : "none"; $("lbBox").style.display = m === "play" ? "block" : "none"; if (m === "play") renderLb();
-  $("mLearn").classList.toggle("on", m === "learn"); $("mPlay").classList.toggle("on", m === "play"); $("mAudit").classList.toggle("on", m === "audit");
+  mode = m; clearInterval(timer); timeLeft = 0; $("end").style.display = "none";
+  $("audit").style.display = m === "audit" ? "block" : "none";
+  $("lbBox").style.display = m === "play" ? "block" : "none";
+  if (m === "play") renderLb();
+  $("mLearn").classList.toggle("on", m === "learn");
+  $("mPlay").classList.toggle("on", m === "play");
+  $("mAudit").classList.toggle("on", m === "audit");
   if (!running) return;
   if (m === "play") startRound();
   else if (m === "audit") { $("task").textContent = "Audit: show one item at a time, then remove it."; renderAudit(); }
@@ -346,7 +371,7 @@ function summary() {
   const d = todayData(), total = sum(d);
   return `Waste audit ${today()}: ${total} items counted. ` +
     BINS.map(b => `${b.name} ${d[b.name] || 0}` + (total ? ` (${Math.round((d[b.name] || 0) * 100 / total)}%)` : "")).join(", ") +
-    ". Method: AI camera (Teachable Machine model), one count per item shown. Counts are model predictions and may contain errors.";
+    ". Method: AI camera (Teachable Machine model), one count per item shown.";
 }
 $("mAudit").onclick = () => setMode("audit");
 $("aUndo").onclick = () => {
@@ -366,47 +391,87 @@ $("aCsv").onclick = () => {
   a.download = "waste_audit.csv"; a.click();
 };
 
-/* ---- top 5 ---- */
-function pushShared(n, s) {
-  if (!SHARED.form) return;
-  fetch(SHARED.form, {method: "POST", mode: "no-cors", headers: {"Content-Type": "application/x-www-form-urlencoded"},
-    body: new URLSearchParams({[SHARED.name]: n, [SHARED.score]: s})}).catch(() => {});
-}
-function pushContact(n, s, ph) {
-  if (!CONTACT.form) return;
-  fetch(CONTACT.form, {method: "POST", mode: "no-cors", headers: {"Content-Type": "application/x-www-form-urlencoded"},
-    body: new URLSearchParams({[CONTACT.name]: n, [CONTACT.score]: s, [CONTACT.phone]: ph})}).catch(() => {});
-}
-async function loadShared() {
-  try {
-    const t = await (await fetch(SHARED.csv + (SHARED.csv.includes("?") ? "&" : "?") + "t=" + Date.now())).text();
-    return t.trim().split("\n").slice(1).map(l => l.replace(/\r/g, "").split(","))
-      .map(c => ({n: (c[1] || "").replace(/"/g, ""), s: Number(c[2])})).filter(r => r.n && !isNaN(r.s) && r.s <= MAX_SCORE)
-      .sort((a, b) => b.s - a.s).slice(0, 5);
-  } catch (e) { return null; }
-}
+/* ---- Public Top 5 & Private Admin Panel ---- */
 let LB = [];
-$("lbNotice").textContent = PRIZE_NOTICE;
-if (!CONTACT.form) $("lbContactBox").style.display = "none";
 try { LB = JSON.parse(localStorage.getItem("sdg_lb") || "[]"); } catch (e) {}
-async function renderLb() {
-  let list = LB.filter(r => r.d === today()).sort((a, b) => b.s - a.s).slice(0, 5);
-  if (SHARED.csv) { const sh = await loadShared(); if (sh) list = sh; }
+
+function renderLb() {
+  const list = LB.slice().sort((a, b) => b.s - a.s).slice(0, 5);
   const ol = $("lbList"); ol.innerHTML = "";
-  if (!list.length) { const li = document.createElement("li"); li.textContent = "No scores yet"; ol.appendChild(li); return; }
-  list.forEach(r => { const li = document.createElement("li"); li.textContent = r.n + " - " + r.s; ol.appendChild(li); });
-}
-$("lbSave").onclick = () => {
-  const n = $("lbName").value.replace(/[,"<>\n]/g, "").trim().slice(0, 12) || "Player";
-  const ph = ($("lbPhone").value || "").replace(/[\s-]/g, "");
-  if (ph) {
-    if (!/^03\d{9}$/.test(ph)) { alert("Enter the mobile number like 03XXXXXXXXX"); return; }
-    if (!$("lbOk").checked) { alert("Please tick the box: a parent/guardian agrees."); return; }
-    pushContact(n, score, ph);
+  if (!list.length) {
+    const li = document.createElement("li"); li.textContent = "No scores yet — play Challenge (60 s) to be #1!";
+    ol.appendChild(li); return;
   }
-  LB.push({n: n, s: score, d: today()}); LB = LB.slice(-200); pushShared(n, score);
+  // Public view ONLY shows Name (r.n) and Score (r.s)
+  list.forEach(r => {
+    const li = document.createElement("li");
+    li.textContent = r.n + " — " + r.s + " pts";
+    ol.appendChild(li);
+  });
+}
+
+function renderAdmin() {
+  const tb = $("adminTable"); tb.innerHTML = "";
+  const sorted = LB.slice().sort((a, b) => b.s - a.s);
+  if (!sorted.length) {
+    tb.innerHTML = `<tr><td colspan="5" style="text-align:center">No records saved yet</td></tr>`;
+    return;
+  }
+  sorted.forEach((r, i) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td>${i + 1}</td><td><b>${r.n}</b></td><td>${r.s}</td><td>${r.ph || "—"}</td><td>${r.d || ""}</td>`;
+    tb.appendChild(tr);
+  });
+}
+
+$("lbSave").onclick = () => {
+  const n = $("lbName").value.replace(/[,"<>\n]/g, "").trim() || "Player";
+  const ph = ($("lbPhone").value || "").replace(/[^\d+]/g, "").trim();
+  LB.push({n, s: score, ph: ph || "Not provided", d: today()});
   try { localStorage.setItem("sdg_lb", JSON.stringify(LB)); } catch (e) {}
-  $("lbName").value = ""; $("lbPhone").value = ""; $("lbOk").checked = false; $("lbEntry").style.display = "none"; setTimeout(renderLb, SHARED.csv ? 2500 : 0);
+  $("lbName").value = ""; $("lbPhone").value = "";
+  $("lbEntry").style.display = "none";
+  renderLb();
+  if ($("adminBox").style.display === "block") renderAdmin();
+  alert("Score saved! Your name & score are on the leaderboard.");
+};
+
+$("admBtn").onclick = () => {
+  const pin = prompt("Enter Teacher Admin PIN:");
+  if (pin === ADMIN_PIN) {
+    $("adminBox").style.display = "block";
+    renderAdmin();
+    $("adminBox").scrollIntoView({behavior: "smooth"});
+  } else if (pin !== null) {
+    alert("Incorrect PIN!");
+  }
+};
+
+$("admClose").onclick = () => { $("adminBox").style.display = "none"; };
+
+$("admCsv").onclick = () => {
+  const rows = ["Rank,Name,Score,Mobile_Number,Date"];
+  LB.slice().sort((a, b) => b.s - a.s).forEach((r, i) => {
+    rows.push(`${i + 1},"${r.n}",${r.s},"${r.ph || ""}",${r.d || ""}`);
+  });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([rows.join("\n")], {type: "text/csv"}));
+  a.download = "saaf_sindh_players_contacts.csv"; a.click();
+};
+
+$("admCopy").onclick = () => {
+  const txt = LB.slice().sort((a, b) => b.s - a.s)
+    .map((r, i) => `${i + 1}. ${r.n} | Score: ${r.s} | Phone: ${r.ph || "N/A"} (${r.d})`).join("\n") || "No records.";
+  if (navigator.clipboard) navigator.clipboard.writeText(txt).then(() => alert("All records copied!"));
+  else prompt("Copy records:", txt);
+};
+
+$("admClear").onclick = () => {
+  if (confirm("Are you sure you want to delete all saved scores and phone numbers?")) {
+    LB = [];
+    try { localStorage.removeItem("sdg_lb"); } catch (e) {}
+    renderLb(); renderAdmin();
+  }
 };
 </script>
 </body>
