@@ -8,8 +8,8 @@
 :root{--ink:#10262e;--bg:#eaf4f1;--card:#ffffff;--line:#c9dcd6;--blue:#1e6fd9;--green:#2e9e5b;--coral:#e8553d;--gold:#f2b705}
 *{box-sizing:border-box}
 body{margin:0;font-family:"Trebuchet MS","Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.45}
-header{background:var(--ink);color:#fff;padding:14px 16px;text-align:center}
-header h1{margin:0;font-size:22px}
+header{background:var(--ink);color:#fff;padding:14px 16px;text-align:center;user-select:none}
+header h1{margin:0;font-size:22px;cursor:default}
 header p{margin:4px 0 0;font-size:13px;color:#b9d6cf}
 #credit{color:#f2b705;font-weight:bold;font-size:14px;margin-top:6px}
 main{max-width:720px;margin:0 auto;padding:14px}
@@ -60,7 +60,7 @@ label{font-size:13px}
 </head>
 <body>
 <header>
-  <h1>Saaf Sindh AI: Waste Census</h1>
+  <h1 id="appTitle">Saaf Sindh AI: Waste Census</h1>
   <p>Sindh STREAM Journey 2026-27 | From Classrooms to Cosmos</p>
   <p>Count it, so councils can plan it.</p>
   <p id="credit"></p>
@@ -105,7 +105,7 @@ label{font-size:13px}
   <div id="lbBox">
     <h3>🏆 Today's Top 5</h3>
     <ol id="lbList"></ol>
-    <p class="note">Public view shows player name and score only. Phone numbers are kept private for the school admin.</p>
+    <p class="note">Public view shows player name and score only.</p>
   </div>
 
   <!-- SCORE & PHONE ENTRY -->
@@ -117,17 +117,17 @@ label{font-size:13px}
         <input type="text" id="lbName" maxlength="15" placeholder="Your Name" aria-label="Player name" style="width:220px">
       </div>
       <div style="margin:6px 0">
-        <input type="tel" id="lbPhone" inputmode="numeric" maxlength="13" placeholder="Mobile: 03XXXXXXXXX" aria-label="Mobile number" style="width:220px">
-        <p class="note" style="color:#b9d6cf;margin:4px 0">Mobile number is hidden from public & visible only to Teacher Admin.</p>
+        <input type="tel" id="lbPhone" inputmode="numeric" maxlength="13" placeholder="Mobile: 03XXXXXXXXX (Optional)" aria-label="Mobile number" style="width:220px">
+        <p class="note" style="color:#b9d6cf;margin:4px 0">Phone number is kept private for prize contact only.</p>
       </div>
       <button id="lbSave" type="button" style="background:var(--gold);color:#10262e">Save Score</button>
     </div>
     <button id="again" type="button" style="background:var(--green);margin-top:6px">Play again</button>
   </div>
 
-  <!-- SECRET TEACHER ADMIN PANEL -->
+  <!-- SECRET TEACHER ADMIN PANEL (Completely Hidden from Public) -->
   <div id="adminBox">
-    <h3>🔒 Teacher Admin Panel (Private Records)</h3>
+    <h3>🔒 Developer / Teacher Admin Panel</h3>
     <div style="overflow-x:auto">
       <table class="atable">
         <thead>
@@ -146,8 +146,7 @@ label{font-size:13px}
 
   <div class="foot">
     <label><input type="checkbox" id="voice" checked> Voice</label> &nbsp;
-    <label><input type="checkbox" id="sfx" checked> Sounds</label> &nbsp;|&nbsp;
-    <button id="admBtn" type="button" style="padding:4px 10px;font-size:12px;background:#456">🔒 Teacher Admin</button>
+    <label><input type="checkbox" id="sfx" checked> Sounds</label>
     <p>Model trained with Google Teachable Machine on our own photos. Needs internet to load the model.</p>
   </div>
 </main>
@@ -391,7 +390,7 @@ $("aCsv").onclick = () => {
   a.download = "waste_audit.csv"; a.click();
 };
 
-/* ---- Public Top 5 & Private Admin Panel ---- */
+/* ---- Public Top 5 & Hidden Developer Admin ---- */
 let LB = [];
 try { LB = JSON.parse(localStorage.getItem("sdg_lb") || "[]"); } catch (e) {}
 
@@ -402,7 +401,6 @@ function renderLb() {
     const li = document.createElement("li"); li.textContent = "No scores yet — play Challenge (60 s) to be #1!";
     ol.appendChild(li); return;
   }
-  // Public view ONLY shows Name (r.n) and Score (r.s)
   list.forEach(r => {
     const li = document.createElement("li");
     li.textContent = r.n + " — " + r.s + " pts";
@@ -436,8 +434,8 @@ $("lbSave").onclick = () => {
   alert("Score saved! Your name & score are on the leaderboard.");
 };
 
-$("admBtn").onclick = () => {
-  const pin = prompt("Enter Teacher Admin PIN:");
+function openAdmin() {
+  const pin = prompt("Enter Developer / Teacher Admin PIN:");
   if (pin === ADMIN_PIN) {
     $("adminBox").style.display = "block";
     renderAdmin();
@@ -445,9 +443,42 @@ $("admBtn").onclick = () => {
   } else if (pin !== null) {
     alert("Incorrect PIN!");
   }
+}
+
+/* Secret Trigger 1: 5 quick taps on the header title */
+let tapCount = 0, tapTimer = null;
+$("appTitle").onclick = () => {
+  tapCount++;
+  clearTimeout(tapTimer);
+  if (tapCount >= 5) {
+    tapCount = 0;
+    openAdmin();
+  } else {
+    tapTimer = setTimeout(() => { tapCount = 0; }, 2000);
+  }
 };
 
-$("admClose").onclick = () => { $("adminBox").style.display = "none"; };
+/* Secret Trigger 2: Keyboard shortcut Ctrl + Shift + A */
+window.addEventListener("keydown", e => {
+  if (e.ctrlKey && e.shiftKey && (e.key === "A" || e.key === "a")) {
+    e.preventDefault();
+    openAdmin();
+  }
+});
+
+/* Secret Trigger 3: URL Hash (#admin) */
+function checkHash() {
+  if (location.hash.toLowerCase() === "#admin") openAdmin();
+}
+window.addEventListener("hashchange", checkHash);
+setTimeout(checkHash, 400);
+
+$("admClose").onclick = () => {
+  $("adminBox").style.display = "none";
+  if (location.hash.toLowerCase() === "#admin") {
+    history.replaceState(null, "", location.pathname + location.search);
+  }
+};
 
 $("admCsv").onclick = () => {
   const rows = ["Rank,Name,Score,Mobile_Number,Date"];
