@@ -13,7 +13,7 @@ header h1{margin:0;font-size:22px;cursor:default}
 header p{margin:4px 0 0;font-size:13px;color:#b9d6cf}
 #credit{color:#f2b705;font-weight:bold;font-size:14px;margin-top:6px}
 main{max-width:720px;margin:0 auto;padding:14px}
-.modes{display:flex;gap:8px;justify-content:center;margin-bottom:12px}
+.modes{display:flex;gap:8px;justify-content:center;margin-bottom:12px;flex-wrap:wrap}
 button{font:inherit;font-weight:bold;border:0;border-radius:10px;padding:11px 20px;cursor:pointer;background:var(--ink);color:#fff}
 button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
 button.alt{background:#fff;color:var(--ink);border:2px solid var(--ink)}
@@ -70,6 +70,7 @@ label{font-size:13px}
     <button id="mLearn" class="alt on" type="button">Learn</button>
     <button id="mPlay" class="alt" type="button">Challenge (60 s)</button>
     <button id="mAudit" class="alt" type="button">Waste Audit</button>
+    <button id="hwBtn" class="alt" type="button" style="border-color:var(--green);color:var(--green)">🔌 Connect Arduino Flap</button>
   </div>
 
   <div class="stage">
@@ -101,11 +102,11 @@ label{font-size:13px}
     <p class="note">Each item is counted once, then remove it before showing the next. Counts are model predictions and can contain errors; use Undo to correct.</p>
   </div>
 
-  <!-- PUBLIC LEADERBOARD (Shows ONLY Name & Score) -->
+  <!-- PUBLIC LEADERBOARD (Shows ONLY Name & Score across ALL devices) -->
   <div id="lbBox">
-    <h3>🏆 Today's Top 5</h3>
+    <h3>🏆 Live Top 5 Leaderboard</h3>
     <ol id="lbList"></ol>
-    <p class="note">Public view shows player name and score only.</p>
+    <p class="note">Public view shows player name and score only (Live synced across Mobile & PC).</p>
   </div>
 
   <!-- SCORE & PHONE ENTRY -->
@@ -127,7 +128,8 @@ label{font-size:13px}
 
   <!-- SECRET TEACHER ADMIN PANEL (Completely Hidden from Public) -->
   <div id="adminBox">
-    <h3>🔒 Developer / Teacher Admin Panel</h3>
+    <h3>🔒 Developer / Teacher Admin Panel (Live Cloud Sync)</h3>
+    <p class="note" id="admStatus" style="margin:0 0 6px;font-weight:bold"></p>
     <div style="overflow-x:auto">
       <table class="atable">
         <thead>
@@ -137,6 +139,7 @@ label{font-size:13px}
       </table>
     </div>
     <div class="abtns" style="margin-top:10px">
+      <button class="alt" id="admRefresh" type="button">🔄 Refresh Cloud</button>
       <button class="alt" id="admCsv" type="button">📥 Download Excel/CSV</button>
       <button class="alt" id="admCopy" type="button">📋 Copy List</button>
       <button class="alt" id="admClear" type="button" style="border-color:var(--coral);color:var(--coral)">🗑️ Clear All</button>
@@ -159,9 +162,12 @@ const MODEL_URL = "https://teachablemachine.withgoogle.com/models/GuFSPsxyV/";
 const CREDIT = "Guide Teacher: Ghulam Hussain Memon (PST, BCS, BSc, B.Ed) | GBHSS Haji Junejo Tarai | Team: [Student 1], [Student 2], [Student 3]";
 const ADMIN_PIN = "7860"; // Secret PIN to open Teacher Admin Panel
 
+/* Live Cloud Server URL (Connected to your Google Sheet): */
+const CLOUD_URL = "https://script.google.com/macros/s/AKfycbxSl2q2L2PoYqatesWrVIjwR9NJmCNYJzMRx9Om6v2zfYwhpdDLz29NpzFxn0qRhYk1/exec"; 
+
 const BINS = [
-  {keys:["plastic"], name:"Plastic", ur:"پلاسٹک", bin:"Blue bin",  color:"#1e6fd9", icon:"🧴", tip:"Plastic can be collected and recycled instead of thrown away."},
-  {keys:["paper","papar"], name:"Paper", ur:"کاغذ", bin:"Green bin", color:"#2e9e5b", icon:"📄", tip:"Dry, clean paper can be recycled. Keep it away from food."}
+  {keys:["plastic"], name:"Plastic", ur:"پلاسٹک", bin:"Blue bin",  color:"#1e6fd9", icon:"🧴", cmd:"P", tip:"Plastic can be collected and recycled instead of thrown away."},
+  {keys:["paper","papar"], name:"Paper", ur:"کاغذ", bin:"Green bin", color:"#2e9e5b", icon:"📄", cmd:"A", tip:"Dry, clean paper can be recycled. Keep it away from food."}
 ];
 const MIN_CONF = 0.75, HOLD_MS = 800, ROUND_S = 60;
 /* ===================== */
@@ -170,6 +176,35 @@ const $ = id => document.getElementById(id);
 let model, video, ctx, mode = "learn", running = false;
 let score = 0, streak = 0, best = 0, timeLeft = 0, timer = null, target = null;
 let holdKey = null, holdSince = 0, cooldownUntil = 0, lastSaid = "";
+
+/* ---- Web Serial API for Arduino Servo Flap ---- */
+let serialPort = null, serialWriter = null, lastHwSent = 0;
+async function connectArduino() {
+  if (!("serial" in navigator)) {
+    alert("Web Serial API requires Google Chrome or Edge on Laptop/PC.");
+    return;
+  }
+  try {
+    serialPort = await navigator.serial.requestPort();
+    await serialPort.open({ baudRate: 9600 });
+    serialWriter = serialPort.writable.getWriter();
+    $("hwBtn").textContent = "✅ Arduino Connected";
+    $("hwBtn").style.background = "var(--green)";
+    $("hwBtn").style.color = "#fff";
+  } catch (e) {
+    alert("Arduino connection cancelled or failed: " + e.message);
+  }
+}
+async function triggerArduino(cmd) {
+  const now = Date.now();
+  if (!serialWriter || now - lastHwSent < 3000) return;
+  lastHwSent = now;
+  try {
+    const data = new TextEncoder().encode(cmd);
+    await serialWriter.write(data);
+  } catch (e) {}
+}
+$("hwBtn").onclick = connectArduino;
 
 try { best = +localStorage.getItem("sdg_best") || 0; } catch (e) {}
 $("best").textContent = best;
@@ -262,7 +297,10 @@ function handle(p) {
     if (idx === null) { $("task").innerHTML = "Hold one item inside the dashed box and keep it steady."; return; }
     const b = BINS[idx];
     $("task").innerHTML = `${b.icon} This is ${b.name.toUpperCase()}<small>Put it in the ${b.bin}. ${b.tip}</small>`;
-    if (now - holdSince > HOLD_MS) say(`This is ${b.name}. Put it in the ${b.bin}.`);
+    if (now - holdSince > HOLD_MS) {
+      say(`This is ${b.name}. Put it in the ${b.bin}.`);
+      triggerArduino(b.cmd);
+    }
     return;
   }
   if (mode === "audit") { auditStep(idx, now); return; }
@@ -272,6 +310,7 @@ function handle(p) {
     const gain = 10 + Math.min(streak, 5) * 2;
     score += gain; streak++;
     beep([660, 880]); say("Correct!");
+    triggerArduino(b.cmd);
     $("task").innerHTML = `Correct! +${gain}<small>${b.tip}</small>`;
     cooldownUntil = now + 1800;
     setTimeout(nextTarget, 1800);
@@ -352,6 +391,7 @@ function auditStep(idx, now) {
     const b = BINS[idx], d = todayData();
     d[b.name] = (d[b.name] || 0) + 1; lastCounted = b.name; saveAudit();
     beep([700]);
+    triggerArduino(b.cmd);
     $("task").innerHTML = `Counted: ${b.icon} ${b.name}<small>Remove it, then show the next item.</small>`;
     renderAudit();
   }
@@ -390,13 +430,24 @@ $("aCsv").onclick = () => {
   a.download = "waste_audit.csv"; a.click();
 };
 
-/* ---- Public Top 5 & Hidden Developer Admin ---- */
+/* ---- Cloud + Local Leaderboard & Hidden Developer Admin ---- */
 let LB = [];
 try { LB = JSON.parse(localStorage.getItem("sdg_lb") || "[]"); } catch (e) {}
 
-function renderLb() {
+async function renderLb() {
+  const ol = $("lbList");
+  if (CLOUD_URL) {
+    try {
+      const res = await fetch(CLOUD_URL + "?action=list&t=" + Date.now());
+      const cloudData = await res.json();
+      if (Array.isArray(cloudData)) {
+        LB = cloudData;
+        try { localStorage.setItem("sdg_lb", JSON.stringify(LB)); } catch (e) {}
+      }
+    } catch (e) {}
+  }
   const list = LB.slice().sort((a, b) => b.s - a.s).slice(0, 5);
-  const ol = $("lbList"); ol.innerHTML = "";
+  ol.innerHTML = "";
   if (!list.length) {
     const li = document.createElement("li"); li.textContent = "No scores yet — play Challenge (60 s) to be #1!";
     ol.appendChild(li); return;
@@ -408,8 +459,22 @@ function renderLb() {
   });
 }
 
-function renderAdmin() {
-  const tb = $("adminTable"); tb.innerHTML = "";
+async function renderAdmin() {
+  const tb = $("adminTable");
+  if (CLOUD_URL) {
+    $("admStatus").textContent = "☁️ Syncing from Cloud Server...";
+    try {
+      const res = await fetch(CLOUD_URL + "?action=admin&pin=" + encodeURIComponent(ADMIN_PIN) + "&t=" + Date.now());
+      const cloudData = await res.json();
+      if (Array.isArray(cloudData)) {
+        LB = cloudData;
+        $("admStatus").textContent = "✅ Live Cloud Sync Active (Showing Mobile + PC Scores)";
+      }
+    } catch (e) {
+      $("admStatus").textContent = "⚠️ Cloud unreachable — showing device records only";
+    }
+  }
+  tb.innerHTML = "";
   const sorted = LB.slice().sort((a, b) => b.s - a.s);
   if (!sorted.length) {
     tb.innerHTML = `<tr><td colspan="5" style="text-align:center">No records saved yet</td></tr>`;
@@ -422,16 +487,24 @@ function renderAdmin() {
   });
 }
 
-$("lbSave").onclick = () => {
+$("lbSave").onclick = async () => {
   const n = $("lbName").value.replace(/[,"<>\n]/g, "").trim() || "Player";
-  const ph = ($("lbPhone").value || "").replace(/[^\d+]/g, "").trim();
-  LB.push({n, s: score, ph: ph || "Not provided", d: today()});
+  const ph = ($("lbPhone").value || "").replace(/[^\d+]/g, "").trim() || "Not provided";
+  $("lbSave").disabled = true;
+  $("lbSave").textContent = "Saving to Cloud...";
+  LB.push({n, s: score, ph, d: today()});
   try { localStorage.setItem("sdg_lb", JSON.stringify(LB)); } catch (e) {}
+  if (CLOUD_URL) {
+    try {
+      await fetch(`${CLOUD_URL}?action=save&n=${encodeURIComponent(n)}&s=${score}&ph=${encodeURIComponent(ph)}&t=${Date.now()}`);
+    } catch (e) {}
+  }
   $("lbName").value = ""; $("lbPhone").value = "";
+  $("lbSave").disabled = false; $("lbSave").textContent = "Save Score";
   $("lbEntry").style.display = "none";
-  renderLb();
+  await renderLb();
   if ($("adminBox").style.display === "block") renderAdmin();
-  alert("Score saved! Your name & score are on the leaderboard.");
+  alert("Score saved to Cloud! Visible on both Mobile & PC.");
 };
 
 function openAdmin() {
@@ -473,6 +546,7 @@ function checkHash() {
 window.addEventListener("hashchange", checkHash);
 setTimeout(checkHash, 400);
 
+$("admRefresh").onclick = renderAdmin;
 $("admClose").onclick = () => {
   $("adminBox").style.display = "none";
   if (location.hash.toLowerCase() === "#admin") {
@@ -497,10 +571,13 @@ $("admCopy").onclick = () => {
   else prompt("Copy records:", txt);
 };
 
-$("admClear").onclick = () => {
-  if (confirm("Are you sure you want to delete all saved scores and phone numbers?")) {
+$("admClear").onclick = async () => {
+  if (confirm("Are you sure you want to delete ALL saved scores and phone numbers from Cloud & Device?")) {
     LB = [];
     try { localStorage.removeItem("sdg_lb"); } catch (e) {}
+    if (CLOUD_URL) {
+      try { await fetch(`${CLOUD_URL}?action=clear&pin=${encodeURIComponent(ADMIN_PIN)}&t=${Date.now()}`); } catch (e) {}
+    }
     renderLb(); renderAdmin();
   }
 };
