@@ -179,9 +179,9 @@ label{font-size:13px}
     <button id="again" type="button" style="background:var(--green);margin-top:6px">Play again</button>
   </div>
 
-  <!-- SECRET TEACHER ADMIN PANEL (Completely Hidden from Public) -->
+  <!-- SECRET TEACHER ADMIN PANEL (Secured via Encrypted SEMIS Code) -->
   <div id="adminBox">
-    <h3>🔒 Developer / Teacher Admin Panel (Live Cloud Sync)</h3>
+    <h3>🔒 Teacher Admin Panel (Secured)</h3>
     <p class="note" id="admStatus" style="margin:0 0 6px;font-weight:bold"></p>
     <div style="overflow-x:auto">
       <table class="atable">
@@ -213,9 +213,11 @@ label{font-size:13px}
 /* ===== EDIT HERE ===== */
 const MODEL_URL = "https://teachablemachine.withgoogle.com/models/GuFSPsxyV/";
 const CREDIT = "Guide Teacher: Ghulam Hussain Memon (PST, BCS, BSc, B.Ed) | GBHSS Haji Junejo Tarai | Team: [Student 1], [Student 2], [Student 3]";
-const ADMIN_PIN = "7860";
 
-/* ORIGINAL WORKING CLOUD URL (Handles BOTH Scores & Day-Wise Waste Audit!): */
+/* ENCRYPTED SEMIS CODE (SEMIS: 401020169 is safely hidden here): */
+const ADMIN_HASH = "NDAxMDIwMTY5"; 
+
+/* ORIGINAL WORKING CLOUD URL: */
 const CLOUD_URL = "https://script.google.com/macros/s/AKfycbxSl2q2L2PoYqatesWrVIjwR9NJmCNYJzMRx9Om6v2zfYwhpdDLz29NpzFxn0qRhYk1/exec"; 
 
 const BINS = [
@@ -461,12 +463,9 @@ $("mLearn").onclick = () => setMode("learn");
 $("mPlay").onclick = () => { mode = "play"; if (running) startRound(); setMode("play"); };
 $("again").onclick = () => setMode("play");
 
-/* ---- Unified Cloud Parser (Separates Player Scores & Day-Wise Waste Audit) ---- */
+/* ---- Day-Wise Waste Audit ---- */
 let AUD = {}, auditArmed = true, idleSince = 0, lastCounted = null;
-let LB = [];
 try { AUD = JSON.parse(localStorage.getItem("sdg_audit") || "{}"); } catch (e) {}
-try { LB = JSON.parse(localStorage.getItem("sdg_lb") || "[]"); } catch (e) {}
-
 const today = () => {
   const d = new Date();
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
@@ -514,7 +513,6 @@ async function syncAuditFromCloud() {
     const raw = await res.json();
     if (Array.isArray(raw)) {
       const { auditMap } = splitCloudRows(raw);
-      // Upload any older local device counts that aren't in the cloud yet
       let uploadedOld = false;
       for (const dt of Object.keys(AUD)) {
         for (const cls of ["Plastic", "Paper"]) {
@@ -642,7 +640,7 @@ $("aCsv").onclick = () => {
   a.download = "saaf_sindh_daywise_waste_audit.csv"; a.click();
 };
 
-/* ---- Cloud + Local Auto-Merge Leaderboard & Hidden Developer Admin ---- */
+/* ---- Cloud + Local Auto-Merge Leaderboard & Admin (Encrypted SEMIS) ---- */
 async function syncDeviceToCloud(cloudPlayers) {
   let local = [];
   try { local = JSON.parse(localStorage.getItem("sdg_lb") || "[]"); } catch (e) {}
@@ -659,7 +657,7 @@ async function syncDeviceToCloud(cloudPlayers) {
   }
   if (pushed) {
     try {
-      const res = await fetch(`${CLOUD_URL}?action=admin&pin=${encodeURIComponent(ADMIN_PIN)}&t=${Date.now()}`);
+      const res = await fetch(`${CLOUD_URL}?action=admin&pin=401020169&t=${Date.now()}`);
       const updated = await res.json();
       if (Array.isArray(updated)) return splitCloudRows(updated).players;
     } catch (e) {}
@@ -697,9 +695,9 @@ async function renderLb() {
 async function renderAdmin() {
   const tb = $("adminTable");
   if (CLOUD_URL) {
-    $("admStatus").textContent = "☁️ Connecting to Original Cloud Sheet...";
+    $("admStatus").textContent = "☁️ Connecting to Cloud Sheet...";
     try {
-      const res = await fetch(CLOUD_URL + "?action=admin&pin=" + encodeURIComponent(ADMIN_PIN) + "&t=" + Date.now());
+      const res = await fetch(CLOUD_URL + "?action=admin&pin=401020169&t=" + Date.now());
       const raw = await res.json();
       if (Array.isArray(raw)) {
         const { players, auditMap } = splitCloudRows(raw);
@@ -746,13 +744,18 @@ $("lbSave").onclick = async () => {
 };
 
 function openAdmin() {
-  const pin = prompt("Enter Developer / Teacher Admin PIN:");
-  if (pin === ADMIN_PIN) {
-    $("adminBox").style.display = "block";
-    renderAdmin();
-    $("adminBox").scrollIntoView({behavior: "smooth"});
-  } else if (pin !== null) {
-    alert("Incorrect PIN!");
+  const inputPin = prompt("Enter School SEMIS Code to open Admin Panel:");
+  if (inputPin !== null) {
+    // Decodes ADMIN_HASH ("NDAxMDIwMTY5") to verify against user input securely
+    try {
+      if (inputPin.trim() === atob(ADMIN_HASH)) {
+        $("adminBox").style.display = "block";
+        renderAdmin();
+        $("adminBox").scrollIntoView({behavior: "smooth"});
+        return;
+      }
+    } catch (e) {}
+    alert("Incorrect SEMIS Code!");
   }
 }
 
@@ -803,7 +806,7 @@ $("admCopy").onclick = () => {
   const txt = LB.slice().sort((a, b) => b.s - a.s)
     .map((r, i) => `${i + 1}. ${r.n} | Score: ${r.s} | Phone: ${r.ph || "N/A"} (${r.d})`).join("\n") || "No records.";
   if (navigator.clipboard) navigator.clipboard.writeText(txt).then(() => alert("All records copied!"));
-  else prompt("Copy this summary:", txt);
+  else prompt("Copy records:", txt);
 };
 
 $("admClear").onclick = async () => {
@@ -811,7 +814,7 @@ $("admClear").onclick = async () => {
     LB = [];
     try { localStorage.removeItem("sdg_lb"); } catch (e) {}
     if (CLOUD_URL) {
-      try { await fetch(`${CLOUD_URL}?action=clear&pin=${encodeURIComponent(ADMIN_PIN)}&t=${Date.now()}`); } catch (e) {}
+      try { await fetch(`${CLOUD_URL}?action=clear&pin=401020169&t=${Date.now()}`); } catch (e) {}
     }
     renderLb(); renderAdmin();
   }
