@@ -58,7 +58,7 @@ label{font-size:13px}
 .abar{flex:1;height:14px;background:#dfeae6;border-radius:7px;overflow:hidden}
 .abar i{display:block;height:100%}
 #audit{max-width:480px;margin:10px auto;background:#fff;border:2px solid var(--line);border-radius:14px;padding:12px}
-#auditTotal{font-weight:bold;margin-bottom:6px}
+#auditTotal{font-weight:bold;margin-bottom:4px;font-size:15px}
 .abtns{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;justify-content:center}
 .abtns button{padding:7px 12px;font-size:12px}
 .note{font-size:12px;color:#456;margin-top:8px}
@@ -72,6 +72,7 @@ label{font-size:13px}
 .atable{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px}
 .atable th,.atable td{border:1px solid var(--line);padding:6px;text-align:left}
 .atable th{background:var(--ink);color:#fff}
+.atable tfoot td{background:#eaf4f1;font-weight:bold;border-top:2px solid var(--ink)}
 @media (prefers-reduced-motion:reduce){.bin,#flapArm,#dropItem{transition:none}}
 </style>
 </head>
@@ -129,26 +130,29 @@ label{font-size:13px}
     </div>
   </div>
 
-  <!-- WASTE AUDIT (DAY-WISE) -->
+  <!-- WASTE AUDIT (DAY-WISE & MULTI-DEVICE CLOUD SYNCED) -->
   <div id="audit" style="display:none">
     <div id="auditTotal"></div>
+    <p class="note" id="auditSyncMsg" style="margin:0 0 6px;color:var(--green);font-weight:bold">☁️ Syncing Day-Wise Audit with Google Sheet...</p>
     <div id="auditBars"></div>
     <div class="abtns">
+      <button class="alt" id="aSync" type="button">🔄 Refresh Cloud Audit</button>
       <button class="alt" id="aUndo" type="button">Undo last</button>
       <button class="alt" id="aCopy" type="button">Copy summary</button>
       <button class="alt" id="aCsv" type="button">📥 Download Day-Wise CSV</button>
       <button class="alt" id="aReset" type="button">Reset today</button>
     </div>
-    <h4 style="margin:14px 0 4px;font-size:14px">📅 Day-Wise Waste Census</h4>
+    <h4 style="margin:14px 0 4px;font-size:14px">📅 Day-Wise Waste Census (Mobile + PC Combined)</h4>
     <div style="overflow-x:auto">
       <table class="atable">
         <thead>
-          <tr><th>Date</th><th>🧴 Plastic</th><th>📄 Paper</th><th>Total Items</th></tr>
+          <tr><th>Date</th><th>🧴 Plastic</th><th>📄 Paper</th><th>Day Total</th></tr>
         </thead>
         <tbody id="auditHistory"></tbody>
+        <tfoot id="auditFooter"></tfoot>
       </table>
     </div>
-    <p class="note">Each item is counted once. Remove item before showing the next.</p>
+    <p class="note">Each day starts fresh at 0 for "Today", while previous days and the Grand Total are saved in your Google Sheet & table above.</p>
   </div>
 
   <!-- PUBLIC LEADERBOARD -->
@@ -211,7 +215,7 @@ const MODEL_URL = "https://teachablemachine.withgoogle.com/models/GuFSPsxyV/";
 const CREDIT = "Guide Teacher: Ghulam Hussain Memon (PST, BCS, BSc, B.Ed) | GBHSS Haji Junejo Tarai | Team: [Student 1], [Student 2], [Student 3]";
 const ADMIN_PIN = "7860";
 
-/* ORIGINAL WORKING CLOUD URL (From Oct 18 Sheet Deployment): */
+/* ORIGINAL WORKING CLOUD URL (Handles BOTH Scores & Day-Wise Waste Audit!): */
 const CLOUD_URL = "https://script.google.com/macros/s/AKfycbxSl2q2L2PoYqatesWrVIjwR9NJmCNYJzMRx9Om6v2zfYwhpdDLz29NpzFxn0qRhYk1/exec"; 
 
 const BINS = [
@@ -442,7 +446,7 @@ function setMode(m) {
   $("audit").style.display = m === "audit" ? "block" : "none";
   $("lbBox").style.display = m === "play" ? "block" : "none";
   if (m === "play") renderLb();
-  if (m === "audit") renderAudit();
+  if (m === "audit") { renderAudit(); syncAuditFromCloud(); }
   $("mLearn").classList.toggle("on", m === "learn");
   $("mPlay").classList.toggle("on", m === "play");
   $("mAudit").classList.toggle("on", m === "audit");
@@ -457,9 +461,12 @@ $("mLearn").onclick = () => setMode("learn");
 $("mPlay").onclick = () => { mode = "play"; if (running) startRound(); setMode("play"); };
 $("again").onclick = () => setMode("play");
 
-/* ---- Day-Wise Waste Audit ---- */
+/* ---- Unified Cloud Parser (Separates Player Scores & Day-Wise Waste Audit) ---- */
 let AUD = {}, auditArmed = true, idleSince = 0, lastCounted = null;
+let LB = [];
 try { AUD = JSON.parse(localStorage.getItem("sdg_audit") || "{}"); } catch (e) {}
+try { LB = JSON.parse(localStorage.getItem("sdg_lb") || "[]"); } catch (e) {}
+
 const today = () => {
   const d = new Date();
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
@@ -467,6 +474,70 @@ const today = () => {
 const sum = o => Object.values(o || {}).reduce((a, b) => a + b, 0);
 function saveAudit() { try { localStorage.setItem("sdg_audit", JSON.stringify(AUD)); } catch (e) {} }
 function todayData() { return AUD[today()] || (AUD[today()] = {}); }
+
+function splitCloudRows(rows) {
+  const players = [];
+  const auditMap = {};
+  rows.forEach(r => {
+    const nameStr = String(r.n || "");
+    if (nameStr.startsWith("AUDIT | ")) {
+      const parts = nameStr.split(" | ");
+      const dt = parts[1] || today();
+      const cls = parts[2] || "Plastic";
+      const val = Number(r.s) || 0;
+      if (!auditMap[dt]) auditMap[dt] = {};
+      auditMap[dt][cls] = Math.max(0, (auditMap[dt][cls] || 0) + val);
+    } else {
+      players.push(r);
+    }
+  });
+  return { players, auditMap };
+}
+
+async function pushAuditDelta(cls, delta, dt = today()) {
+  if (!CLOUD_URL || !delta) return;
+  try {
+    $("auditSyncMsg").textContent = "☁️ Saving item to Google Sheet...";
+    const tag = `AUDIT | ${dt} | ${cls}`;
+    await fetch(`${CLOUD_URL}?action=save&n=${encodeURIComponent(tag)}&s=${delta}&ph=Waste_Audit&t=${Date.now()}`);
+    await syncAuditFromCloud();
+  } catch (e) {
+    $("auditSyncMsg").textContent = "⚠️ Offline — saved on device";
+  }
+}
+
+async function syncAuditFromCloud() {
+  if (!CLOUD_URL) return;
+  try {
+    $("auditSyncMsg").textContent = "☁️ Syncing Day-Wise Audit from Google Sheet...";
+    const res = await fetch(`${CLOUD_URL}?action=list&t=${Date.now()}`);
+    const raw = await res.json();
+    if (Array.isArray(raw)) {
+      const { auditMap } = splitCloudRows(raw);
+      // Upload any older local device counts that aren't in the cloud yet
+      let uploadedOld = false;
+      for (const dt of Object.keys(AUD)) {
+        for (const cls of ["Plastic", "Paper"]) {
+          const localCnt = (AUD[dt] && AUD[dt][cls]) || 0;
+          const cloudCnt = (auditMap[dt] && auditMap[dt][cls]) || 0;
+          if (localCnt > 0 && cloudCnt === 0) {
+            const tag = `AUDIT | ${dt} | ${cls}`;
+            await fetch(`${CLOUD_URL}?action=save&n=${encodeURIComponent(tag)}&s=${localCnt}&ph=Waste_Audit&t=${Date.now()}`);
+            if (!auditMap[dt]) auditMap[dt] = {};
+            auditMap[dt][cls] = localCnt;
+            uploadedOld = true;
+          }
+        }
+      }
+      AUD = auditMap;
+      saveAudit();
+      renderAudit();
+      $("auditSyncMsg").textContent = "✅ Live Synced with Google Sheet (Mobile + PC Combined)";
+    }
+  } catch (e) {
+    $("auditSyncMsg").textContent = "⚠️ Cloud unreachable — showing device counts";
+  }
+}
 
 function auditStep(idx, now) {
   if (idx === null) {
@@ -481,79 +552,104 @@ function auditStep(idx, now) {
     d[b.name] = (d[b.name] || 0) + 1; lastCounted = b.name; saveAudit();
     beep([700]);
     triggerArduino(idx, true);
-    $("task").innerHTML = `Counted: ${b.icon} ${b.name}<small>Remove it, then show next item.</small>`;
+    $("task").innerHTML = `Counted: ${b.icon} ${b.name}<small>Saved to Google Sheet! Remove it, then show next item.</small>`;
     renderAudit();
+    pushAuditDelta(b.name, 1);
   }
 }
 
 function renderAudit() {
-  const d = todayData(), total = sum(d);
-  let allTime = 0;
-  Object.keys(AUD).forEach(k => { allTime += sum(AUD[k]); });
-  $("auditTotal").textContent = `Today (${today()}): ${total} items | All Days Total: ${allTime} items`;
+  const d = todayData(), totalToday = sum(d);
+  let grandPlastic = 0, grandPaper = 0;
+  Object.keys(AUD).forEach(dt => {
+    grandPlastic += (AUD[dt] && AUD[dt]["Plastic"]) || 0;
+    grandPaper   += (AUD[dt] && AUD[dt]["Paper"]) || 0;
+  });
+  const grandTotal = grandPlastic + grandPaper;
+
+  $("auditTotal").textContent = `Today (${today()}): ${totalToday} items  |  Overall Total (All Days): ${grandTotal} items`;
   $("auditBars").innerHTML = BINS.map(b => {
-    const n = d[b.name] || 0, p = total ? Math.round(n * 100 / total) : 0;
+    const n = d[b.name] || 0, p = totalToday ? Math.round(n * 100 / totalToday) : 0;
     return `<div class="arow"><span>${b.icon} ${b.name}</span><div class="abar"><i style="width:${p}%;background:${b.color}"></i></div><b>${n} (${p}%)</b></div>`;
   }).join("");
 
   const hist = $("auditHistory");
+  const foot = $("auditFooter");
   if (hist) {
-    const dates = Object.keys(AUD).sort().reverse();
+    const dates = Object.keys(AUD).filter(dt => sum(AUD[dt]) > 0 || dt === today()).sort().reverse();
     if (!dates.length) {
       hist.innerHTML = `<tr><td colspan="4" style="text-align:center">No items counted yet</td></tr>`;
+      if (foot) foot.innerHTML = "";
     } else {
       hist.innerHTML = dates.map(dt => {
         const row = AUD[dt] || {};
         const pl = row["Plastic"] || 0;
         const pa = row["Paper"] || 0;
-        return `<tr><td><b>${dt}</b></td><td>${pl}</td><td>${pa}</td><td><b>${pl + pa}</b></td></tr>`;
+        const label = dt === today() ? `${dt} (Today)` : dt;
+        return `<tr><td><b>${label}</b></td><td>${pl}</td><td>${pa}</td><td><b>${pl + pa}</b></td></tr>`;
       }).join("");
+      if (foot) {
+        foot.innerHTML = `<tr><td>📊 Overall Total (All Days)</td><td>${grandPlastic}</td><td>${grandPaper}</td><td>${grandTotal}</td></tr>`;
+      }
     }
   }
 }
 
 function summary() {
   const d = todayData(), total = sum(d);
-  return `Waste audit ${today()}: ${total} items counted. ` +
-    BINS.map(b => `${b.name} ${d[b.name] || 0}` + (total ? ` (${Math.round((d[b.name] || 0) * 100 / total)}%)` : "")).join(", ") +
-    ". Method: AI camera (Teachable Machine model).";
+  let allTime = 0;
+  Object.keys(AUD).forEach(k => { allTime += sum(AUD[k]); });
+  return `Waste audit ${today()}: ${total} items today (${allTime} total across all days). ` +
+    BINS.map(b => `${b.name} ${d[b.name] || 0}`).join(", ") + ".";
 }
 
 $("mAudit").onclick = () => setMode("audit");
+$("aSync").onclick = syncAuditFromCloud;
 $("aUndo").onclick = () => {
   const d = todayData();
-  if (lastCounted && d[lastCounted] > 0) { d[lastCounted]--; lastCounted = null; saveAudit(); renderAudit(); }
+  if (lastCounted && d[lastCounted] > 0) {
+    const cls = lastCounted;
+    d[cls]--; lastCounted = null; saveAudit(); renderAudit();
+    pushAuditDelta(cls, -1);
+  }
 };
-$("aReset").onclick = () => {
-  if (confirm("Reset today's counts?")) { AUD[today()] = {}; saveAudit(); renderAudit(); }
+$("aReset").onclick = async () => {
+  if (confirm("Reset today's counts across all devices?")) {
+    const d = todayData();
+    const pl = d["Plastic"] || 0;
+    const pa = d["Paper"] || 0;
+    AUD[today()] = {}; saveAudit(); renderAudit();
+    if (pl > 0) await pushAuditDelta("Plastic", -pl);
+    if (pa > 0) await pushAuditDelta("Paper", -pa);
+  }
 };
 $("aCopy").onclick = () => {
   if (navigator.clipboard) navigator.clipboard.writeText(summary()).then(() => alert("Summary copied"));
   else prompt("Copy this summary:", summary());
 };
 $("aCsv").onclick = () => {
-  const rows = ["Date,Plastic,Paper,Total_Items"];
+  const rows = ["Date,Plastic,Paper,Day_Total"];
+  let gPl = 0, gPa = 0;
   Object.keys(AUD).sort().reverse().forEach(dt => {
     const pl = (AUD[dt] && AUD[dt]["Plastic"]) || 0;
     const pa = (AUD[dt] && AUD[dt]["Paper"]) || 0;
+    gPl += pl; gPa += pa;
     rows.push(`${dt},${pl},${pa},${pl + pa}`);
   });
+  rows.push(`OVERALL_TOTAL,${gPl},${gPa},${gPl + gPa}`);
   const a = document.createElement("a");
   a.href = URL.createObjectURL(new Blob([rows.join("\n")], {type: "text/csv"}));
   a.download = "saaf_sindh_daywise_waste_audit.csv"; a.click();
 };
 
 /* ---- Cloud + Local Auto-Merge Leaderboard & Hidden Developer Admin ---- */
-let LB = [];
-try { LB = JSON.parse(localStorage.getItem("sdg_lb") || "[]"); } catch (e) {}
-
-/* Automatically pushes any unsynced device records to the old Cloud Sheet */
-async function syncDeviceToCloud(cloudList) {
+async function syncDeviceToCloud(cloudPlayers) {
   let local = [];
   try { local = JSON.parse(localStorage.getItem("sdg_lb") || "[]"); } catch (e) {}
   let pushed = false;
   for (const r of local) {
-    const exists = cloudList.some(c => c.n === r.n && Number(c.s) === Number(r.s));
+    if (String(r.n || "").startsWith("AUDIT | ")) continue;
+    const exists = cloudPlayers.some(c => c.n === r.n && Number(c.s) === Number(r.s));
     if (!exists && r.n && r.s) {
       try {
         await fetch(`${CLOUD_URL}?action=save&n=${encodeURIComponent(r.n)}&s=${r.s}&ph=${encodeURIComponent(r.ph || "Not provided")}&t=${Date.now()}`);
@@ -565,10 +661,10 @@ async function syncDeviceToCloud(cloudList) {
     try {
       const res = await fetch(`${CLOUD_URL}?action=admin&pin=${encodeURIComponent(ADMIN_PIN)}&t=${Date.now()}`);
       const updated = await res.json();
-      if (Array.isArray(updated)) return updated;
+      if (Array.isArray(updated)) return splitCloudRows(updated).players;
     } catch (e) {}
   }
-  return cloudList;
+  return cloudPlayers;
 }
 
 async function renderLb() {
@@ -576,9 +672,11 @@ async function renderLb() {
   if (CLOUD_URL) {
     try {
       const res = await fetch(CLOUD_URL + "?action=list&t=" + Date.now());
-      const cloudData = await res.json();
-      if (Array.isArray(cloudData)) {
-        LB = await syncDeviceToCloud(cloudData);
+      const raw = await res.json();
+      if (Array.isArray(raw)) {
+        const { players, auditMap } = splitCloudRows(raw);
+        AUD = auditMap; saveAudit();
+        LB = await syncDeviceToCloud(players);
         try { localStorage.setItem("sdg_lb", JSON.stringify(LB)); } catch (e) {}
       }
     } catch (e) {}
@@ -602,10 +700,11 @@ async function renderAdmin() {
     $("admStatus").textContent = "☁️ Connecting to Original Cloud Sheet...";
     try {
       const res = await fetch(CLOUD_URL + "?action=admin&pin=" + encodeURIComponent(ADMIN_PIN) + "&t=" + Date.now());
-      let cloudData = await res.json();
-      if (Array.isArray(cloudData)) {
-        cloudData = await syncDeviceToCloud(cloudData);
-        LB = cloudData;
+      const raw = await res.json();
+      if (Array.isArray(raw)) {
+        const { players, auditMap } = splitCloudRows(raw);
+        AUD = auditMap; saveAudit();
+        LB = await syncDeviceToCloud(players);
         try { localStorage.setItem("sdg_lb", JSON.stringify(LB)); } catch (e) {}
         $("admStatus").textContent = "✅ Live Cloud Sync Active (Mobile + PC Merged!)";
       }
@@ -627,7 +726,7 @@ async function renderAdmin() {
 }
 
 $("lbSave").onclick = async () => {
-  const n = $("lbName").value.replace(/[,"<>\n]/g, "").trim() || "Player";
+  const n = $("lbName").value.replace(/[,"<>\n|]/g, "").trim() || "Player";
   const ph = ($("lbPhone").value || "").replace(/[^\d+]/g, "").trim() || "Not provided";
   $("lbSave").disabled = true;
   $("lbSave").textContent = "Saving to Cloud...";
