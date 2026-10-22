@@ -267,14 +267,14 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8.5/dist/teachablemachine-image.min.js"></script>
 <script>
-/* ===== PROJECT CONFIGURATION ===== */
+/* ===== PROJECT CONFIGURATION (OPTIMIZED FOR GLASS) ===== */
 const MODEL_URL = "https://teachablemachine.withgoogle.com/models/RP91qAZCY/";
 const CREDIT = "Guide Teacher: Ghulam Hussain Memon (PST, BCS, BSc, B.Ed) | GBHSS Haji Junejo Tarai";
 const ADMIN_HASH = "NDAxMDIwMTY5"; // Encrypted Teacher SEMIS PIN (401020169)
 const CLOUD_KEY  = "Nzg2MA==";     // Internal Apps Script Read Key for Full Sheet Sync
 const CLOUD_URL  = "https://script.google.com/macros/s/AKfycbxSl2q2L2PoYqatesWrVIjwR9NJmCNYJzMRx9Om6v2zfYwhpdDLz29NpzFxn0qRhYk1/exec";
 
-/* Historical Baseline (Ensures Oct 22 morning audit of 52 Plastic & 10 Paper = 62 is preserved) */
+/* Historical Baseline */
 const BASELINE_AUDIT = {
   "2026-10-22": { Plastic: 52, Paper: 10, Glass: 0 }
 };
@@ -282,9 +282,11 @@ const BASELINE_AUDIT = {
 const BINS = [
   {keys:["plastic"], name:"Plastic", ur:"پلاسٹک", bin:"Blue Bin",  color:"#1967d2", icon:"🧴", cmd:"P", angle:35,  tilt:-28, dropX:"-110px", tip:"Clean plastic bottles & wrappers can be recycled."},
   {keys:["paper","papar"], name:"Paper", ur:"کاغذ", bin:"Green Bin", color:"#1e8e3e", icon:"📄", cmd:"A", angle:145, tilt:28,  dropX:"85px",  tip:"Keep paper dry and clean for recycling."},
-  {keys:["glass","sheesha","mirror","jar"], name:"Glass", ur:"شیشہ", bin:"Red Bin", color:"#d93025", icon:"🫙", cmd:"G", angle:90,  tilt:0,   dropX:"-12px", tip:"Handle glass carefully! Glass jars & bottles can be recycled endlessly."}
+  {keys:["glass","sheesha","mirror","jar","kanch","bottle"], name:"Glass", ur:"شیشہ", bin:"Red Bin", color:"#d93025", icon:"🫙", cmd:"G", angle:90,  tilt:0,   dropX:"-12px", tip:"Handle glass carefully! Glass jars & bottles can be recycled endlessly."}
 ];
-const MIN_CONF = 0.75, HOLD_MS = 800, ROUND_S = 60, AI_INTERVAL_MS = 110;
+
+// Lowered confidence threshold to 0.65 so glass (reflective/transparent) is detected easily!
+const MIN_CONF = 0.65, HOLD_MS = 650, ROUND_S = 60, AI_INTERVAL_MS = 110;
 /* ================================= */
 
 const $ = id => document.getElementById(id);
@@ -496,7 +498,7 @@ function loop(timestamp) {
   requestAnimationFrame(loop);
 }
 
-/* ---- AI Detection (Handles Plastic, Paper, Glass & Ignores Empty) ---- */
+/* ---- AI Detection (Optimized for Glass & Empty Filter) ---- */
 function pick(p) {
   let top = p[0];
   p.forEach(x => { if (x.probability > top.probability) top = x; });
@@ -610,7 +612,7 @@ function setMode(m) {
   $("end").style.display = "none";
   $("hudBox").style.display = m === "play" ? "flex" : "none";
   $("audit").style.display = m === "audit" ? "block" : "none";
-  $("lbBox").style.display = m === "play" ? "block" : "none";
+  $("lbBox").style.display = m === "play" ? "play" : "none";
 
   $("mLearn").classList.toggle("on", m === "learn");
   $("mPlay").classList.toggle("on", m === "play");
@@ -665,7 +667,6 @@ const today = () => {
 };
 const sum = o => Object.values(o || {}).reduce((a, b) => a + b, 0);
 
-// Ensure baseline data is immediately visible even before first cloud response
 Object.keys(BASELINE_AUDIT).forEach(dt => {
   if (!AUD[dt]) AUD[dt] = {};
   Object.keys(BASELINE_AUDIT[dt]).forEach(cls => {
@@ -676,7 +677,6 @@ Object.keys(BASELINE_AUDIT).forEach(dt => {
 function saveAudit() { try { localStorage.setItem("sdg_audit", JSON.stringify(AUD)); } catch (e) {} }
 function todayData() { return AUD[today()] || (AUD[today()] = {}); }
 
-/* Fetches ALL rows from Google Sheet (bypassing Top-5 leaderboard truncation) */
 async function fetchAllSheetRows() {
   const res = await fetch(`${CLOUD_URL}?action=admin&pin=${encodeURIComponent(atob(CLOUD_KEY))}&t=${Date.now()}`);
   return await res.json();
@@ -722,7 +722,6 @@ async function syncAuditFromCloud() {
     if (Array.isArray(raw)) {
       const { auditMap } = splitCloudRows(raw);
 
-      // Ensure Oct 22 morning audit baseline (52 Plastic, 10 Paper = 62) is synced to Google Sheet once
       for (const dt of Object.keys(BASELINE_AUDIT)) {
         if (!auditMap[dt]) auditMap[dt] = {};
         for (const cls of ["Plastic", "Paper", "Glass"]) {
@@ -749,7 +748,6 @@ async function syncAuditFromCloud() {
   syncingAudit = false;
 }
 
-// Auto-refresh Waste Audit every 15 seconds while in Audit Mode so multiple users see live updates
 setInterval(() => {
   if (mode === "audit") syncAuditFromCloud();
 }, 15000);
@@ -836,7 +834,6 @@ $("aUndo").onclick = () => {
   }
 };
 
-/* Protected Reset Today with School SEMIS Code so students cannot wipe daily audit! */
 $("aReset").onclick = async () => {
   const pin = prompt("Enter School SEMIS Code to reset today's audit counts:");
   if (pin === null) return;
@@ -877,7 +874,7 @@ $("aCsv").onclick = () => {
   a.download = "saaf_sindh_daywise_waste_audit.csv"; a.click();
 };
 
-/* ---- Cloud + Local Auto-Merge Leaderboard & Admin (Encrypted SEMIS) ---- */
+/* ---- Cloud + Local Auto-Merge Leaderboard & Admin ---- */
 async function syncDeviceToCloud(cloudPlayers) {
   let local = [];
   try { local = JSON.parse(localStorage.getItem("sdg_lb") || "[]"); } catch (e) {}
