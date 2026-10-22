@@ -267,7 +267,7 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
 <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8.5/dist/teachablemachine-image.min.js"></script>
 <script>
 /* ===== PROJECT CONFIGURATION ===== */
-const MODEL_URL = "https://teachablemachine.withgoogle.com/models/GuFSPsxyV/";
+const MODEL_URL = "https://teachablemachine.withgoogle.com/models/RP91qAZCY/";
 const CREDIT = "Guide Teacher: Ghulam Hussain Memon (PST, BCS, BSc, B.Ed) | GBHSS Haji Junejo Tarai";
 const ADMIN_HASH = "NDAxMDIwMTY5"; // Encrypted SEMIS Code (401020169)
 const CLOUD_URL = "https://script.google.com/macros/s/AKfycbxSl2q2L2PoYqatesWrVIjwR9NJmCNYJzMRx9Om6v2zfYwhpdDLz29NpzFxn0qRhYk1/exec";
@@ -284,7 +284,7 @@ const $ = id => document.getElementById(id);
 let model, video, StreamRef = null, ctx, mode = "learn", running = false, facing = "environment";
 let score = 0, streak = 0, best = 0, timeLeft = 0, timer = null, target = null, gamePaused = false;
 let holdKey = null, holdSince = 0, cooldownUntil = 0, lastSaid = "", lastTaskHtml = "";
-let lastAiRun = 0, aiBusy = false, availableBinIndices = [0, 1];
+let lastAiRun = 0, aiBusy = false, availableBinIndices = [0, 1, 2];
 
 function setTask(html) {
   if (lastTaskHtml !== html) {
@@ -416,7 +416,6 @@ async function startCamera() {
     if (!model) {
       model = await tmImage.load(MODEL_URL + "model.json", MODEL_URL + "metadata.json");
       await model.predict($("cv"));
-      // Detect which classes exist in the trained Teachable Machine model
       const labels = (model.getClassLabels ? model.getClassLabels() : []).map(s => s.toLowerCase());
       const detected = [];
       BINS.forEach((b, idx) => {
@@ -430,7 +429,6 @@ async function startCamera() {
     $("camTools").style.display = "flex";
     running = true;
 
-    // If game was paused via "Off" button, RESUME countdown without resetting to 60s!
     if (mode === "play" && gamePaused && timeLeft > 0) {
       resumeRound();
     } else {
@@ -468,7 +466,6 @@ function stopCamera() {
 $("start").onclick = startCamera;
 $("stopBtn").onclick = stopCamera;
 
-/* Flip Camera ONLY switches lens without resetting timer or mode! */
 $("flipBtn").onclick = async () => {
   facing = facing === "environment" ? "user" : "environment";
   if (running) {
@@ -492,13 +489,14 @@ function loop(timestamp) {
   requestAnimationFrame(loop);
 }
 
-/* ---- AI Detection & Visual Hold Progress ---- */
+/* ---- AI Detection (Handles Plastic, Paper, Glass & Ignores Empty) ---- */
 function pick(p) {
   let top = p[0];
   p.forEach(x => { if (x.probability > top.probability) top = x; });
   $("probs").textContent = "AI Live Confidence:  " + p.map(x => `${x.className}: ${Math.round(x.probability * 100)}%`).join("   |   ");
   if (top.probability < MIN_CONF) return null;
   const n = top.className.trim().toLowerCase();
+  if (n.includes("empty") || n.includes("nothing") || n.includes("background") || n.includes("none")) return null;
   return BINS.findIndex(b => b.keys.some(k => n.includes(k)));
 }
 
@@ -562,7 +560,7 @@ function showTarget() {
 }
 function nextTarget() {
   if (!timeLeft) return;
-  const pool = availableBinIndices.length ? availableBinIndices : [0, 1];
+  const pool = availableBinIndices.length ? availableBinIndices : [0, 1, 2];
   let n;
   do { n = pool[Math.floor(Math.random() * pool.length)]; } while (pool.length > 1 && n === target);
   target = n; showTarget();
