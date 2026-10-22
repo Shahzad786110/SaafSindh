@@ -193,7 +193,7 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
       <button class="alt" id="aUndo" type="button">↩️ Undo Last</button>
       <button class="alt" id="aCopy" type="button">📋 Copy Report</button>
       <button class="alt" id="aCsv" type="button">📥 Download CSV</button>
-      <button class="alt" id="aReset" type="button">🗑️ Reset Today</button>
+      <button class="alt" id="aReset" type="button" style="border-color:var(--coral);color:var(--coral)">🔒 Reset Today (Admin)</button>
     </div>
     <h4 style="margin:14px 0 4px;font-size:13.5px">📅 Day-Wise Waste Census (Mobile + PC Combined)</h4>
     <div style="overflow-x:auto">
@@ -205,6 +205,7 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
         <tfoot id="auditFooter"></tfoot>
       </table>
     </div>
+    <p class="note">All scans from Mobile & PC are combined live in your Google Sheet so every user sees the real school total.</p>
   </div>
 
   <!-- INTERACTIVE DIGITAL TWIN SMART BIN PROTOTYPE (3-BINS) -->
@@ -269,8 +270,14 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
 /* ===== PROJECT CONFIGURATION ===== */
 const MODEL_URL = "https://teachablemachine.withgoogle.com/models/RP91qAZCY/";
 const CREDIT = "Guide Teacher: Ghulam Hussain Memon (PST, BCS, BSc, B.Ed) | GBHSS Haji Junejo Tarai";
-const ADMIN_HASH = "NDAxMDIwMTY5"; // Encrypted SEMIS Code (401020169)
-const CLOUD_URL = "https://script.google.com/macros/s/AKfycbxSl2q2L2PoYqatesWrVIjwR9NJmCNYJzMRx9Om6v2zfYwhpdDLz29NpzFxn0qRhYk1/exec";
+const ADMIN_HASH = "NDAxMDIwMTY5"; // Encrypted Teacher SEMIS PIN (401020169)
+const CLOUD_KEY  = "Nzg2MA==";     // Internal Apps Script Read Key for Full Sheet Sync
+const CLOUD_URL  = "https://script.google.com/macros/s/AKfycbxSl2q2L2PoYqatesWrVIjwR9NJmCNYJzMRx9Om6v2zfYwhpdDLz29NpzFxn0qRhYk1/exec";
+
+/* Historical Baseline (Ensures Oct 22 morning audit of 52 Plastic & 10 Paper = 62 is preserved) */
+const BASELINE_AUDIT = {
+  "2026-10-22": { Plastic: 52, Paper: 10, Glass: 0 }
+};
 
 const BINS = [
   {keys:["plastic"], name:"Plastic", ur:"پلاسٹک", bin:"Blue Bin",  color:"#1967d2", icon:"🧴", cmd:"P", angle:35,  tilt:-28, dropX:"-110px", tip:"Clean plastic bottles & wrappers can be recycled."},
@@ -394,7 +401,7 @@ function say(text) {
   speechSynthesis.speak(u);
 }
 
-/* ---- Camera & AI Model (Instant Flip + Pause/Resume Support!) ---- */
+/* ---- Camera & AI Model ---- */
 async function openVideoStream() {
   if (StreamRef) StreamRef.getTracks().forEach(t => t.stop());
   let stream;
@@ -615,7 +622,7 @@ function setMode(m) {
     $("bannerText").innerHTML = "🎮 <b>60s Challenge:</b> Jo cheez screen mangay woh camera ko dikha kar points jeeten!";
     renderLb();
   } else if (m === "audit") {
-    $("bannerText").innerHTML = "📊 <b>Waste Audit:</b> Ek-ek kar ke kachra scan karen, rozana ka record Cloud par jama hoga.";
+    $("bannerText").innerHTML = "📊 <b>Waste Audit:</b> Har user ko poore school ka live combined record nazar aayega.";
     renderAudit(); syncAuditFromCloud();
   }
 
@@ -646,8 +653,8 @@ $("again").onclick = () => {
   else startCamera();
 };
 
-/* ---- Day-Wise Waste Audit & Cloud Sync (Plastic, Paper, Glass) ---- */
-let AUD = {}, auditArmed = true, idleSince = 0, lastCounted = null;
+/* ---- Day-Wise Waste Audit & Full Cloud History Sync ---- */
+let AUD = {}, auditArmed = true, idleSince = 0, lastCounted = null, syncingAudit = false;
 let LB = [];
 try { AUD = JSON.parse(localStorage.getItem("sdg_audit") || "{}"); } catch (e) {}
 try { LB = JSON.parse(localStorage.getItem("sdg_lb") || "[]"); } catch (e) {}
@@ -657,8 +664,23 @@ const today = () => {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 };
 const sum = o => Object.values(o || {}).reduce((a, b) => a + b, 0);
+
+// Ensure baseline data is immediately visible even before first cloud response
+Object.keys(BASELINE_AUDIT).forEach(dt => {
+  if (!AUD[dt]) AUD[dt] = {};
+  Object.keys(BASELINE_AUDIT[dt]).forEach(cls => {
+    AUD[dt][cls] = Math.max(AUD[dt][cls] || 0, BASELINE_AUDIT[dt][cls]);
+  });
+});
+
 function saveAudit() { try { localStorage.setItem("sdg_audit", JSON.stringify(AUD)); } catch (e) {} }
 function todayData() { return AUD[today()] || (AUD[today()] = {}); }
+
+/* Fetches ALL rows from Google Sheet (bypassing Top-5 leaderboard truncation) */
+async function fetchAllSheetRows() {
+  const res = await fetch(`${CLOUD_URL}?action=admin&pin=${encodeURIComponent(atob(CLOUD_KEY))}&t=${Date.now()}`);
+  return await res.json();
+}
 
 function splitCloudRows(rows) {
   const players = [];
@@ -692,34 +714,45 @@ async function pushAuditDelta(cls, delta, dt = today()) {
 }
 
 async function syncAuditFromCloud() {
-  if (!CLOUD_URL) return;
+  if (!CLOUD_URL || syncingAudit) return;
+  syncingAudit = true;
   try {
-    $("auditSyncMsg").textContent = "☁️ Syncing Day-Wise Audit from Google Sheet...";
-    const res = await fetch(`${CLOUD_URL}?action=list&t=${Date.now()}`);
-    const raw = await res.json();
+    $("auditSyncMsg").textContent = "☁️ Syncing Full Day-Wise Audit from Google Sheet...";
+    const raw = await fetchAllSheetRows();
     if (Array.isArray(raw)) {
       const { auditMap } = splitCloudRows(raw);
-      for (const dt of Object.keys(AUD)) {
+
+      // Ensure Oct 22 morning audit baseline (52 Plastic, 10 Paper = 62) is synced to Google Sheet once
+      for (const dt of Object.keys(BASELINE_AUDIT)) {
+        if (!auditMap[dt]) auditMap[dt] = {};
         for (const cls of ["Plastic", "Paper", "Glass"]) {
-          const localCnt = (AUD[dt] && AUD[dt][cls]) || 0;
-          const cloudCnt = (auditMap[dt] && auditMap[dt][cls]) || 0;
-          if (localCnt > 0 && cloudCnt === 0) {
+          const baseVal = BASELINE_AUDIT[dt][cls] || 0;
+          const cloudVal = auditMap[dt][cls] || 0;
+          if (cloudVal < baseVal) {
+            const diff = baseVal - cloudVal;
             const tag = `AUDIT | ${dt} | ${cls}`;
-            await fetch(`${CLOUD_URL}?action=save&n=${encodeURIComponent(tag)}&s=${localCnt}&ph=Waste_Audit&t=${Date.now()}`);
-            if (!auditMap[dt]) auditMap[dt] = {};
-            auditMap[dt][cls] = localCnt;
+            await fetch(`${CLOUD_URL}?action=save&n=${encodeURIComponent(tag)}&s=${diff}&ph=Waste_Audit&t=${Date.now()}`);
+            auditMap[dt][cls] = baseVal;
           }
         }
       }
+
       AUD = auditMap;
       saveAudit();
       renderAudit();
-      $("auditSyncMsg").textContent = "✅ Live Synced with Google Sheet (Mobile + PC Combined)";
+      $("auditSyncMsg").textContent = "✅ Live Synced with Google Sheet (Shared Across All Users & Devices)";
     }
   } catch (e) {
-    $("auditSyncMsg").textContent = "⚠️ Cloud unreachable — showing device counts";
+    renderAudit();
+    $("auditSyncMsg").textContent = "⚠️ Cloud unreachable — showing saved counts";
   }
+  syncingAudit = false;
 }
+
+// Auto-refresh Waste Audit every 15 seconds while in Audit Mode so multiple users see live updates
+setInterval(() => {
+  if (mode === "audit") syncAuditFromCloud();
+}, 15000);
 
 function auditStep(idx, now) {
   if (idx === null) {
@@ -802,18 +835,28 @@ $("aUndo").onclick = () => {
     pushAuditDelta(cls, -1);
   }
 };
+
+/* Protected Reset Today with School SEMIS Code so students cannot wipe daily audit! */
 $("aReset").onclick = async () => {
-  if (confirm("Reset today's counts across all devices?")) {
+  const pin = prompt("Enter School SEMIS Code to reset today's audit counts:");
+  if (pin === null) return;
+  if (pin.trim() !== atob(ADMIN_HASH)) {
+    alert("Incorrect SEMIS Code! Only the Teacher/Admin can reset daily audit counts.");
+    return;
+  }
+  if (confirm("Are you sure you want to reset today's counts to 0 across all devices?")) {
     const d = todayData();
     const pl = d["Plastic"] || 0;
     const pa = d["Paper"] || 0;
     const gl = d["Glass"] || 0;
+    if (BASELINE_AUDIT[today()]) delete BASELINE_AUDIT[today()];
     AUD[today()] = {}; saveAudit(); renderAudit();
     if (pl > 0) await pushAuditDelta("Plastic", -pl);
     if (pa > 0) await pushAuditDelta("Paper", -pa);
     if (gl > 0) await pushAuditDelta("Glass", -gl);
   }
 };
+
 $("aCopy").onclick = () => {
   if (navigator.clipboard) navigator.clipboard.writeText(summary()).then(() => alert("Summary copied!"));
   else prompt("Copy this summary:", summary());
@@ -851,8 +894,7 @@ async function syncDeviceToCloud(cloudPlayers) {
   }
   if (pushed) {
     try {
-      const res = await fetch(`${CLOUD_URL}?action=admin&pin=401020169&t=${Date.now()}`);
-      const updated = await res.json();
+      const updated = await fetchAllSheetRows();
       if (Array.isArray(updated)) return splitCloudRows(updated).players;
     } catch (e) {}
   }
@@ -863,11 +905,9 @@ async function renderLb() {
   const ol = $("lbList");
   if (CLOUD_URL) {
     try {
-      const res = await fetch(CLOUD_URL + "?action=list&t=" + Date.now());
-      const raw = await res.json();
+      const raw = await fetchAllSheetRows();
       if (Array.isArray(raw)) {
-        const { players, auditMap } = splitCloudRows(raw);
-        AUD = auditMap; saveAudit();
+        const { players } = splitCloudRows(raw);
         LB = await syncDeviceToCloud(players);
         try { localStorage.setItem("sdg_lb", JSON.stringify(LB)); } catch (e) {}
       }
@@ -891,11 +931,9 @@ async function renderAdmin() {
   if (CLOUD_URL) {
     $("admStatus").textContent = "☁️ Connecting to Cloud Sheet...";
     try {
-      const res = await fetch(CLOUD_URL + "?action=admin&pin=401020169&t=" + Date.now());
-      const raw = await res.json();
+      const raw = await fetchAllSheetRows();
       if (Array.isArray(raw)) {
-        const { players, auditMap } = splitCloudRows(raw);
-        AUD = auditMap; saveAudit();
+        const { players } = splitCloudRows(raw);
         LB = await syncDeviceToCloud(players);
         try { localStorage.setItem("sdg_lb", JSON.stringify(LB)); } catch (e) {}
         $("admStatus").textContent = "✅ Live Cloud Sync Active (Mobile + PC Merged!)";
@@ -1007,7 +1045,7 @@ $("admClear").onclick = async () => {
     LB = [];
     try { localStorage.removeItem("sdg_lb"); } catch (e) {}
     if (CLOUD_URL) {
-      try { await fetch(`${CLOUD_URL}?action=clear&pin=401020169&t=${Date.now()}`); } catch (e) {}
+      try { await fetch(`${CLOUD_URL}?action=clear&pin=${encodeURIComponent(atob(CLOUD_KEY))}&t=${Date.now()}`); } catch (e) {}
     }
     renderLb(); renderAdmin();
   }
