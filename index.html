@@ -16,7 +16,7 @@ main{max-width:520px;margin:0 auto;padding:12px}
 
 /* ---- STEP TABS (MODES) ---- */
 .modes{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
-button{font:inherit;font-weight:bold;border:0;border-radius:12px;padding:10px 14px;cursor:pointer;background:var(--ink);color:#fff;transition:all .2s}
+button{font:inherit;font-weight:bold;border:0;border-radius:12px;padding:10px 14px;cursor:pointer;background:var(--ink);color:#fff;transition:background .2s,transform .15s}
 button:active{transform:scale(.97)}
 button.alt{background:#fff;color:var(--ink);border:2px solid var(--line)}
 button.on{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:0 4px 10px rgba(25,103,210,.28)}
@@ -30,14 +30,14 @@ button.on{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:
 /* ---- CAMERA STAGE & CONTROLS ---- */
 .stage{position:relative;background:#111;border-radius:16px;overflow:hidden;aspect-ratio:4/3;margin:0 auto;box-shadow:0 4px 14px rgba(0,0,0,.18);border:3px solid #fff}
 canvas{width:100%;height:100%;display:block;object-fit:cover}
-.guide{position:absolute;inset:15% 18%;border:2.5px dashed rgba(255,255,255,.8);border-radius:14px;pointer-events:none;transition:border-color .2s,transform .2s}
-.guide.locking{border-color:var(--gold);transform:scale(1.03)}
+.guide{position:absolute;inset:15% 18%;border:2.5px dashed rgba(255,255,255,.8);border-radius:14px;pointer-events:none;transition:border-color .2s}
+.guide.locking{border-color:var(--gold)}
 .cam-tools{position:absolute;top:8px;right:8px;display:none;gap:6px;z-index:4}
-.cam-tools button{padding:6px 10px;font-size:12px;border-radius:8px;background:rgba(15,41,48,.8);color:#fff;backdrop-filter:blur(4px)}
+.cam-tools button{padding:6px 10px;font-size:12px;border-radius:8px;background:rgba(15,41,48,.85);color:#fff}
 #startOverlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;background:rgba(15,41,48,.82);color:#fff;padding:16px;text-align:center;z-index:3}
 #start{font-size:17px;padding:13px 26px;background:var(--green);border-radius:30px;box-shadow:0 4px 14px rgba(30,142,62,.45)}
 .hold-wrap{position:absolute;bottom:0;left:0;right:0;height:7px;background:rgba(255,255,255,.2)}
-#holdBar{height:100%;width:0%;background:var(--gold);transition:width .1s linear}
+#holdBar{height:100%;width:0%;background:var(--gold);transition:width .12s linear}
 
 /* ---- GAME HUD (Only shown in Challenge Mode) ---- */
 .hud{display:none;gap:8px;margin:10px 0}
@@ -50,15 +50,15 @@ canvas{width:100%;height:100%;display:block;object-fit:cover}
 
 /* ---- BINS ---- */
 .bins{display:flex;gap:10px;margin:10px 0}
-.bin{flex:1;border:2.5px solid var(--line);border-radius:14px;background:var(--card);padding:10px 8px;text-align:center;font-size:14px;font-weight:bold;transition:all .22s}
+.bin{flex:1;border:2.5px solid var(--line);border-radius:14px;background:var(--card);padding:10px 8px;text-align:center;font-size:14px;font-weight:bold;transition:transform .2s,background .2s}
 .bin span.ico{display:block;font-size:32px;margin-bottom:2px}
 .bin small{display:block;font-weight:normal;font-size:12px;opacity:.85;margin-top:2px}
-.bin.hit{transform: translateY(-4px) scale(1.03);color:#fff;box-shadow:0 6px 14px rgba(0,0,0,.15)}
+.bin.hit{transform:translateY(-3px);color:#fff;box-shadow:0 6px 14px rgba(0,0,0,.15)}
 #probs{margin:4px 0 10px;font-size:12px;color:#456;text-align:center;background:#e3efec;padding:5px 10px;border-radius:20px}
 
 /* ---- DIGITAL TWIN SMART BIN PROTOTYPE ---- */
 #protoBox{margin:12px 0;background:var(--card);border:2px solid var(--line);border-radius:14px;padding:10px 12px;text-align:center}
-.proto-head{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;font-weight:bold;cursor:pointer}
+.proto-head{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;font-weight:bold}
 .proto-badge{background:var(--ink);color:var(--gold);padding:3px 8px;border-radius:6px;font-family:monospace;font-size:11.5px}
 .proto-stage{position:relative;height:150px;background:#f4faf8;border:2px dashed var(--line);border-radius:12px;overflow:hidden;margin:8px 0 6px}
 .chute{width:86px;height:24px;border-left:3px solid var(--ink);border-right:3px solid var(--ink);margin:0 auto;background:rgba(16,38,46,0.06);font-size:10.5px;color:#456;line-height:24px}
@@ -141,7 +141,7 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
     <div class="hold-wrap"><div id="holdBar"></div></div>
   </div>
 
-  <!-- GAME SCOREBOARD (Automatically hidden in Learn & Audit modes to prevent confusion!) -->
+  <!-- GAME SCOREBOARD (Automatically hidden in Learn & Audit modes) -->
   <div class="hud" id="hudBox">
     <div>Score<b id="score">0</b></div>
     <div>Streak<b id="streak">0</b></div>
@@ -272,13 +272,21 @@ const BINS = [
   {keys:["plastic"], name:"Plastic", ur:"پلاسٹک", bin:"Blue Bin",  color:"#1967d2", icon:"🧴", cmd:"P", angle:35, tilt:-28, tip:"Clean plastic bottles & wrappers can be recycled."},
   {keys:["paper","papar"], name:"Paper", ur:"کاغذ", bin:"Green Bin", color:"#1e8e3e", icon:"📄", cmd:"A", angle:145, tilt:28, tip:"Keep paper dry and clean for recycling."}
 ];
-const MIN_CONF = 0.75, HOLD_MS = 800, ROUND_S = 60;
+const MIN_CONF = 0.75, HOLD_MS = 800, ROUND_S = 60, AI_INTERVAL_MS = 110; // Throttles AI to ~9 FPS to prevent browser lag!
 /* ================================= */
 
 const $ = id => document.getElementById(id);
 let model, video, StreamRef = null, ctx, mode = "learn", running = false, facing = "environment";
 let score = 0, streak = 0, best = 0, timeLeft = 0, timer = null, target = null;
-let holdKey = null, holdSince = 0, cooldownUntil = 0, lastSaid = "";
+let holdKey = null, holdSince = 0, cooldownUntil = 0, lastSaid = "", lastTaskHtml = "";
+let lastAiRun = 0, aiBusy = false;
+
+function setTask(html) {
+  if (lastTaskHtml !== html) {
+    $("task").innerHTML = html;
+    lastTaskHtml = html;
+  }
+}
 
 try { best = +localStorage.getItem("sdg_best") || 0; } catch (e) {}
 $("best").textContent = best;
@@ -379,17 +387,19 @@ function say(text) {
   speechSynthesis.speak(u);
 }
 
-/* ---- Camera & AI Model (With Flip & Stop Controls) ---- */
+/* ---- Camera & AI Model (With GPU Warmup & Anti-Lag Loop) ---- */
 async function startCamera() {
   $("start").disabled = true;
   $("start").textContent = "⏳ Loading AI Model...";
   try {
     if (!model) {
       model = await tmImage.load(MODEL_URL + "model.json", MODEL_URL + "metadata.json");
+      // Pre-warm GPU shader once so camera doesn't freeze on start
+      await model.predict($("cv"));
     }
     if (StreamRef) StreamRef.getTracks().forEach(t => t.stop());
     let stream;
-    try { stream = await navigator.mediaDevices.getUserMedia({video:{facingMode: facing}, audio:false}); }
+    try { stream = await navigator.mediaDevices.getUserMedia({video:{facingMode: facing, width:{ideal:320}, height:{ideal:240}}, audio:false}); }
     catch (e) { stream = await navigator.mediaDevices.getUserMedia({video:true, audio:false}); }
     StreamRef = stream;
     video = document.createElement("video");
@@ -404,7 +414,7 @@ async function startCamera() {
   } catch (err) {
     $("start").disabled = false;
     $("start").textContent = "📷 Start AI Camera";
-    $("task").innerHTML = "⚠️ Camera permission needed!<small>Please allow camera access in your browser: " + err.message + "</small>";
+    setTask("⚠️ Camera permission needed!<small>Please allow camera access in your browser: " + err.message + "</small>");
   }
 }
 
@@ -417,7 +427,7 @@ function stopCamera() {
   $("start").disabled = false;
   $("start").textContent = "📷 Start AI Camera";
   $("holdBar").style.width = "0%";
-  $("task").innerHTML = "Camera paused.<small>Tap 'Start AI Camera' whenever you are ready.</small>";
+  setTask("Camera paused.<small>Tap 'Start AI Camera' whenever you are ready.</small>");
 }
 
 $("start").onclick = startCamera;
@@ -427,12 +437,20 @@ $("flipBtn").onclick = () => {
   if (running) startCamera();
 };
 
-async function loop() {
+function loop(timestamp) {
   if (!running) return;
   if (video.readyState >= 2) {
+    // 1. Draw smooth video frame every tick
     ctx.drawImage(video, 0, 0, 320, 240);
-    const p = await model.predict($("cv"));
-    handle(p);
+    // 2. Run AI prediction only every 110ms (~9 times/sec) so browser never hangs!
+    if (!aiBusy && timestamp - lastAiRun >= AI_INTERVAL_MS) {
+      aiBusy = true;
+      lastAiRun = timestamp;
+      model.predict($("cv")).then(p => {
+        handle(p);
+        aiBusy = false;
+      }).catch(() => { aiBusy = false; });
+    }
   }
   requestAnimationFrame(loop);
 }
@@ -453,7 +471,6 @@ function handle(p) {
   const now = Date.now();
   if (idx !== holdKey) { holdKey = idx; holdSince = now; }
 
-  // Visual progress bar for holding item steady
   const heldTime = idx !== null ? Math.min(HOLD_MS, now - holdSince) : 0;
   const pct = Math.round((heldTime / HOLD_MS) * 100);
   $("holdBar").style.width = pct + "%";
@@ -466,11 +483,11 @@ function handle(p) {
 
   if (mode === "learn") {
     if (idx === null) {
-      $("task").innerHTML = "Show Plastic 🧴 or Paper 📄 inside the box<small>Kachre ko camera ke dabbay ke beech mein rakhen</small>";
+      setTask("Show Plastic 🧴 or Paper 📄 inside the box<small>Kachre ko camera ke dabbay ke beech mein rakhen</small>");
       return;
     }
     const b = BINS[idx];
-    $("task").innerHTML = `${b.icon} Detected: ${b.name.toUpperCase()} (${b.ur})<small>Put in <b>${b.bin}</b> — ${b.tip}</small>`;
+    setTask(`${b.icon} Detected: ${b.name.toUpperCase()} (${b.ur})<small>Put in <b>${b.bin}</b> — ${b.tip}</small>`);
     if (now - holdSince > HOLD_MS) {
       say(`This is ${b.name}. Put it in the ${b.bin}.`);
       triggerArduino(idx);
@@ -488,12 +505,12 @@ function handle(p) {
     score += gain; streak++;
     beep([660, 880]); say("Correct!");
     triggerArduino(idx);
-    $("task").innerHTML = `✅ Correct! +${gain} Points<small>${b.tip}</small>`;
+    setTask(`✅ Correct! +${gain} Points<small>${b.tip}</small>`);
     cooldownUntil = now + 1500;
     setTimeout(nextTarget, 1500);
   } else {
     streak = 0; beep([300, 200]); say("Try again.");
-    $("task").innerHTML = `❌ That is ${b.name}! Please show <b>${BINS[target].name}</b>`;
+    setTask(`❌ That is ${b.name}! Please show <b>${BINS[target].name}</b>`);
     cooldownUntil = now + 1300;
     setTimeout(showTarget, 1300);
   }
@@ -503,7 +520,7 @@ function handle(p) {
 function showTarget() {
   if (mode !== "play" || !timeLeft) return;
   const b = BINS[target];
-  $("task").innerHTML = `🎯 Find & Show: ${b.icon} ${b.name.toUpperCase()} (${b.ur})<small>Hold it steady in the camera box to score points!</small>`;
+  setTask(`🎯 Find & Show: ${b.icon} ${b.name.toUpperCase()} (${b.ur})<small>Hold it steady in the camera box to score points!</small>`);
   holdKey = null; lastSaid = "";
 }
 function nextTarget() {
@@ -556,13 +573,12 @@ function setMode(m) {
   if (!running) return;
   if (m === "play") startRound();
   else if (m === "audit") {
-    $("task").innerHTML = "📊 Ready to Count: Show 1 item inside the box<small>Ek item scan hone ke baad hata len, phir agla dikhayen</small>";
+    setTask("📊 Ready to Count: Show 1 item inside the box<small>Ek item scan hone ke baad hata len, phir agla dikhayen</small>");
   } else {
-    $("task").innerHTML = "Show Plastic 🧴 or Paper 📄 inside the box<small>Kachre ko camera ke dabbay ke beech mein rakhen</small>";
+    setTask("Show Plastic 🧴 or Paper 📄 inside the box<small>Kachre ko camera ke dabbay ke beech mein rakhen</small>");
   }
 }
 
-// Auto-starts camera if user clicks any mode tab while camera is off!
 $("mLearn").onclick = () => { setMode("learn"); if (!running) startCamera(); };
 $("mPlay").onclick = () => { setMode("play"); if (!running) startCamera(); };
 $("mAudit").onclick = () => { setMode("audit"); if (!running) startCamera(); };
@@ -649,7 +665,7 @@ function auditStep(idx, now) {
     if (now - idleSince > 500) {
       if (!auditArmed) {
         auditArmed = true;
-        $("task").innerHTML = "📊 Ready for next item! Show inside box<small>Ab agla kachra camera ke samne layen</small>";
+        setTask("📊 Ready for next item! Show inside box<small>Ab agla kachra camera ke samne layen</small>");
       }
     }
     return;
@@ -662,7 +678,7 @@ function auditStep(idx, now) {
     beep([700, 920]);
     say(`${b.name} counted`);
     triggerArduino(idx, true);
-    $("task").innerHTML = `✅ Counted +1 ${b.icon} ${b.name}!<small style="color:var(--green);font-weight:bold">Remove item from camera to count the next one.</small>`;
+    setTask(`✅ Counted +1 ${b.icon} ${b.name}!<small style="color:var(--green);font-weight:bold">Remove item from camera to count the next one.</small>`);
     renderAudit();
     pushAuditDelta(b.name, 1);
   }
