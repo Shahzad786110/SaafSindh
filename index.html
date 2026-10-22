@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Saaf Sindh AI: Waste Census - Sindh STREAM 2026-27</title>
+<link rel="manifest" href="manifest.json">
 <style>
 :root{--ink:#0f2930;--bg:#eef6f4;--card:#ffffff;--line:#cde0da;--blue:#1967d2;--green:#1e8e3e;--coral:#d93025;--gold:#f9ab00}
 *{box-sizing:border-box}
@@ -187,7 +188,7 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
     <p class="note">Showing today's top 5 players. Play 60s Game to become #1!</p>
   </div>
 
-  <!-- WASTE AUDIT (Public View: Only Safe Buttons Shown) -->
+  <!-- WASTE AUDIT (Public View) -->
   <div id="audit">
     <div id="auditTotal"></div>
     <p class="note" id="auditSyncMsg" style="margin:0 0 6px;color:var(--green);font-weight:bold">☁️ Syncing Day-Wise Audit with Google Sheet...</p>
@@ -256,7 +257,7 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
       <button class="alt" id="admClear" type="button" style="border-color:var(--coral);color:var(--coral)">🗑️ Clear Players</button>
     </div>
 
-    <!-- ADMIN-ONLY WASTE AUDIT CONTROLS (Hidden from public users!) -->
+    <!-- ADMIN-ONLY WASTE AUDIT CONTROLS -->
     <div class="adm-sec">
       <h4 style="margin:0 0 4px;font-size:13.5px">📊 Waste Audit Admin Controls</h4>
       <p class="note" style="margin:0 0 6px">Download official Excel/CSV census report or reset today's waste counts.</p>
@@ -828,7 +829,6 @@ $("aUndo").onclick = () => {
   }
 };
 
-/* Admin-Only Reset Today (Visible only inside unlocked Teacher Admin Panel) */
 $("aReset").onclick = async () => {
   if (confirm("Are you sure you want to reset today's audit counts to 0 across all devices?")) {
     const d = todayData();
@@ -848,7 +848,6 @@ $("aCopy").onclick = () => {
   else prompt("Copy this summary:", summary());
 };
 
-/* Admin-Only Audit CSV Download (Visible only inside unlocked Teacher Admin Panel) */
 $("aCsv").onclick = () => {
   const rows = ["Date,Plastic,Paper,Glass,Day_Total"];
   let gPl = 0, gPa = 0, gGl = 0;
@@ -865,7 +864,7 @@ $("aCsv").onclick = () => {
   a.download = "saaf_sindh_daywise_waste_audit.csv"; a.click();
 };
 
-/* ---- Cloud + Local Auto-Merge Daily Exhibition Leaderboard ---- */
+/* ---- Cloud + Local Auto-Merge Leaderboard ---- */
 async function syncDeviceToCloud(cloudPlayers) {
   let local = [];
   try { local = JSON.parse(localStorage.getItem("sdg_lb") || "[]"); } catch (e) {}
@@ -1034,7 +1033,7 @@ $("admCopy").onclick = () => {
 $("admClear").onclick = async () => {
   if (confirm("Are you sure you want to delete ALL saved scores and phone numbers from Cloud & Device?")) {
     LB = [];
-    try { localStorage.removeItem("sdg_lb"); } catch (e) {}
+    try { localStorage.setItem("sdg_lb"); } catch (e) {}
     if (CLOUD_URL) {
       try { await fetch(`${CLOUD_URL}?action=clear&pin=${encodeURIComponent(atob(CLOUD_KEY))}&t=${Date.now()}`); } catch (e) {}
     }
