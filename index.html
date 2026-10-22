@@ -12,7 +12,7 @@ header{background:linear-gradient(135deg,#0f2930,#1b434d);color:#fff;padding:14p
 header h1{margin:0;font-size:21px;letter-spacing:.3px;cursor:default}
 header p{margin:3px 0 0;font-size:12.5px;color:#c3e3dc}
 #credit{color:var(--gold);font-weight:bold;font-size:12.5px;margin-top:5px}
-main{max-width:520px;margin:0 auto;padding:12px}
+main{max-width:540px;margin:0 auto;padding:12px}
 
 /* ---- STEP TABS (MODES) ---- */
 .modes{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
@@ -48,29 +48,31 @@ canvas{width:100%;height:100%;display:block;object-fit:cover}
 #task{margin:10px 0;background:var(--card);border:2px solid var(--line);border-radius:14px;padding:12px;text-align:center;font-size:18px;font-weight:bold;min-height:76px;display:flex;flex-direction:column;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.04)}
 #task small{display:block;font-size:13px;font-weight:normal;color:#456;margin-top:4px}
 
-/* ---- BINS ---- */
-.bins{display:flex;gap:10px;margin:10px 0}
-.bin{flex:1;border:2.5px solid var(--line);border-radius:14px;background:var(--card);padding:10px 8px;text-align:center;font-size:14px;font-weight:bold;transition:transform .2s,background .2s}
-.bin span.ico{display:block;font-size:32px;margin-bottom:2px}
-.bin small{display:block;font-weight:normal;font-size:12px;opacity:.85;margin-top:2px}
+/* ---- 3 BINS (Plastic, Paper, Glass) ---- */
+.bins{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}
+.bin{border:2.5px solid var(--line);border-radius:14px;background:var(--card);padding:8px 6px;text-align:center;font-size:13px;font-weight:bold;transition:transform .2s,background .2s}
+.bin span.ico{display:block;font-size:28px;margin-bottom:2px}
+.bin small{display:block;font-weight:normal;font-size:11px;opacity:.85;margin-top:2px}
 .bin.hit{transform:translateY(-3px);color:#fff;box-shadow:0 6px 14px rgba(0,0,0,.15)}
 #probs{margin:4px 0 10px;font-size:12px;color:#456;text-align:center;background:#e3efec;padding:5px 10px;border-radius:20px}
 
-/* ---- DIGITAL TWIN SMART BIN PROTOTYPE ---- */
+/* ---- DIGITAL TWIN SMART BIN PROTOTYPE (3-WAY) ---- */
 #protoBox{margin:12px 0;background:var(--card);border:2px solid var(--line);border-radius:14px;padding:10px 12px;text-align:center}
 .proto-head{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;font-weight:bold}
 .proto-badge{background:var(--ink);color:var(--gold);padding:3px 8px;border-radius:6px;font-family:monospace;font-size:11.5px}
-.proto-stage{position:relative;height:150px;background:#f4faf8;border:2px dashed var(--line);border-radius:12px;overflow:hidden;margin:8px 0 6px}
+.proto-stage{position:relative;height:155px;background:#f4faf8;border:2px dashed var(--line);border-radius:12px;overflow:hidden;margin:8px 0 6px}
 .chute{width:86px;height:24px;border-left:3px solid var(--ink);border-right:3px solid var(--ink);margin:0 auto;background:rgba(16,38,46,0.06);font-size:10.5px;color:#456;line-height:24px}
 #dropItem{position:absolute;top:2px;left:50%;transform:translate(-50%,0);font-size:24px;opacity:0;transition:transform 0.6s ease-in, opacity 0.2s}
 .pivot-axle{width:14px;height:14px;background:var(--gold);border:3px solid var(--ink);border-radius:50%;margin:14px auto 0;position:relative;z-index:3}
 #flapArm{width:110px;height:7px;background:var(--ink);border-radius:4px;margin:-10px auto 0;transform:rotate(0deg);transition:transform 0.35s cubic-bezier(.4,1.4,.6,1);position:relative;z-index:2}
-.p-bins{position:absolute;bottom:6px;left:10px;right:10px;display:flex;gap:12px}
-.p-bin{flex:1;height:58px;border-radius:0 0 10px 10px;border:2.5px solid;display:flex;flex-direction:column;justify-content:center;align-items:center;font-size:11.5px;font-weight:bold;background:#fff;transition:background .25s,color .25s}
+.p-bins{position:absolute;bottom:6px;left:8px;right:8px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.p-bin{height:58px;border-radius:0 0 10px 10px;border:2.5px solid;display:flex;flex-direction:column;justify-content:center;align-items:center;font-size:11px;font-weight:bold;background:#fff;transition:background .25s,color .25s}
 .p-bin.blue{border-color:var(--blue);color:var(--blue)}
 .p-bin.green{border-color:var(--green);color:var(--green)}
+.p-bin.red{border-color:var(--coral);color:var(--coral)}
 .p-bin.active.blue{background:var(--blue);color:#fff}
 .p-bin.active.green{background:var(--green);color:#fff}
+.p-bin.active.red{background:var(--coral);color:#fff}
 
 /* ---- END GAME, AUDIT & LEADERBOARD ---- */
 #end{display:none;margin:12px 0;background:var(--ink);color:#fff;border-radius:14px;padding:18px;text-align:center}
@@ -123,7 +125,7 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
 
   <!-- FRIENDLY GUIDE BANNER -->
   <div id="modeBanner">
-    <span id="bannerText">👉 <b>Learn Mode:</b> Camera kholen aur Plastic ya Paper dikhayen.</span>
+    <span id="bannerText">👉 <b>Learn Mode:</b> Camera kholen aur Plastic, Paper ya Glass (Sheesha) dikhayen.</span>
   </div>
 
   <!-- CAMERA BOX WITH PROGRESS BAR & FLIP BUTTON -->
@@ -132,10 +134,10 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
     <div class="guide" id="guideBox"></div>
     <div class="cam-tools" id="camTools">
       <button id="flipBtn" type="button" title="Switch Front/Back Camera">🔄 Flip Camera</button>
-      <button id="stopBtn" type="button" title="Turn Off Camera" style="background:rgba(217,48,37,.85)">⏹️ Off</button>
+      <button id="stopBtn" type="button" title="Pause Camera" style="background:rgba(217,48,37,.85)">⏹️ Off</button>
     </div>
     <div id="startOverlay">
-      <p style="margin:0 0 10px;font-size:14px;max-width:260px">Point camera at <b>Plastic 🧴</b> or <b>Paper 📄</b> for real-time AI detection</p>
+      <p id="overlayMsg" style="margin:0 0 10px;font-size:14px;max-width:280px">Point camera at <b>Plastic 🧴</b>, <b>Paper 📄</b> or <b>Glass 🫙</b> for real-time AI detection</p>
       <button id="start" type="button">📷 Start AI Camera</button>
     </div>
     <div class="hold-wrap"><div id="holdBar"></div></div>
@@ -155,7 +157,7 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
     <small>Camera kholne ke liye upar harey (Green) button ko dabayen.</small>
   </div>
 
-  <!-- COLOR-CODED BINS -->
+  <!-- COLOR-CODED BINS (Plastic, Paper, Glass) -->
   <div class="bins" id="bins"></div>
   <div id="probs">AI Confidence: Waiting for camera...</div>
 
@@ -171,7 +173,7 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
       </div>
       <button id="lbSave" type="button" style="background:var(--gold);color:#10262e">💾 Save Score to Cloud</button>
     </div>
-    <button id="again" type="button" style="background:var(--green);margin-top:8px">🔄 Play Again</button>
+    <button id="again" type="button" style="background:var(--green);margin-top:8px">🔄 Play New 60s Round</button>
   </div>
 
   <!-- PUBLIC TOP 5 LEADERBOARD (Shown in Game Mode) -->
@@ -197,7 +199,7 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
     <div style="overflow-x:auto">
       <table class="atable">
         <thead>
-          <tr><th>Date</th><th>🧴 Plastic</th><th>📄 Paper</th><th>Day Total</th></tr>
+          <tr><th>Date</th><th>🧴 Plastic</th><th>📄 Paper</th><th>🫙 Glass</th><th>Day Total</th></tr>
         </thead>
         <tbody id="auditHistory"></tbody>
         <tfoot id="auditFooter"></tfoot>
@@ -205,7 +207,7 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
     </div>
   </div>
 
-  <!-- INTERACTIVE DIGITAL TWIN SMART BIN PROTOTYPE -->
+  <!-- INTERACTIVE DIGITAL TWIN SMART BIN PROTOTYPE (3-BINS) -->
   <div id="protoBox">
     <div class="proto-head">
       <span>⚙️ Smart Bin Servo Flap (Digital Twin)</span>
@@ -218,13 +220,15 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
       <div id="flapArm"></div>
       <div class="p-bins">
         <div class="p-bin blue" id="pBin0">🧴 BLUE BIN<small>Plastic (35° Left)</small></div>
+        <div class="p-bin red" id="pBin2">🫙 RED BIN<small>Glass (90° Center)</small></div>
         <div class="p-bin green" id="pBin1">📄 GREEN BIN<small>Paper (145° Right)</small></div>
       </div>
     </div>
     <div class="abtns">
-      <button class="alt" id="testPlastic" type="button" style="border-color:var(--blue);color:var(--blue)">▶️ Demo Plastic Flap</button>
-      <button class="alt" id="testPaper" type="button" style="border-color:var(--green);color:var(--green)">▶️ Demo Paper Flap</button>
-      <button class="alt" id="hwBtn" type="button" style="border-color:var(--ink)">🔌 Connect Arduino USB</button>
+      <button class="alt" id="testPlastic" type="button" style="border-color:var(--blue);color:var(--blue)">▶️ Plastic ('P')</button>
+      <button class="alt" id="testGlass" type="button" style="border-color:var(--coral);color:var(--coral)">▶️ Glass ('G')</button>
+      <button class="alt" id="testPaper" type="button" style="border-color:var(--green);color:var(--green)">▶️ Paper ('A')</button>
+      <button class="alt" id="hwBtn" type="button" style="border-color:var(--ink)">🔌 Arduino USB</button>
     </div>
   </div>
 
@@ -269,17 +273,18 @@ const ADMIN_HASH = "NDAxMDIwMTY5"; // Encrypted SEMIS Code (401020169)
 const CLOUD_URL = "https://script.google.com/macros/s/AKfycbxSl2q2L2PoYqatesWrVIjwR9NJmCNYJzMRx9Om6v2zfYwhpdDLz29NpzFxn0qRhYk1/exec";
 
 const BINS = [
-  {keys:["plastic"], name:"Plastic", ur:"پلاسٹک", bin:"Blue Bin",  color:"#1967d2", icon:"🧴", cmd:"P", angle:35, tilt:-28, tip:"Clean plastic bottles & wrappers can be recycled."},
-  {keys:["paper","papar"], name:"Paper", ur:"کاغذ", bin:"Green Bin", color:"#1e8e3e", icon:"📄", cmd:"A", angle:145, tilt:28, tip:"Keep paper dry and clean for recycling."}
+  {keys:["plastic"], name:"Plastic", ur:"پلاسٹک", bin:"Blue Bin",  color:"#1967d2", icon:"🧴", cmd:"P", angle:35,  tilt:-28, dropX:"-110px", tip:"Clean plastic bottles & wrappers can be recycled."},
+  {keys:["paper","papar"], name:"Paper", ur:"کاغذ", bin:"Green Bin", color:"#1e8e3e", icon:"📄", cmd:"A", angle:145, tilt:28,  dropX:"85px",  tip:"Keep paper dry and clean for recycling."},
+  {keys:["glass","sheesha","mirror","jar"], name:"Glass", ur:"شیشہ", bin:"Red Bin", color:"#d93025", icon:"🫙", cmd:"G", angle:90,  tilt:0,   dropX:"-12px", tip:"Handle glass carefully! Glass jars & bottles can be recycled endlessly."}
 ];
-const MIN_CONF = 0.75, HOLD_MS = 800, ROUND_S = 60, AI_INTERVAL_MS = 110; // Throttles AI to ~9 FPS to prevent browser lag!
+const MIN_CONF = 0.75, HOLD_MS = 800, ROUND_S = 60, AI_INTERVAL_MS = 110;
 /* ================================= */
 
 const $ = id => document.getElementById(id);
 let model, video, StreamRef = null, ctx, mode = "learn", running = false, facing = "environment";
-let score = 0, streak = 0, best = 0, timeLeft = 0, timer = null, target = null;
+let score = 0, streak = 0, best = 0, timeLeft = 0, timer = null, target = null, gamePaused = false;
 let holdKey = null, holdSince = 0, cooldownUntil = 0, lastSaid = "", lastTaskHtml = "";
-let lastAiRun = 0, aiBusy = false;
+let lastAiRun = 0, aiBusy = false, availableBinIndices = [0, 1];
 
 function setTask(html) {
   if (lastTaskHtml !== html) {
@@ -295,7 +300,7 @@ if (CREDIT) $("credit").textContent = CREDIT;
 BINS.forEach((b, i) => {
   const d = document.createElement("div");
   d.className = "bin"; d.id = "bin" + i;
-  d.innerHTML = `<span class="ico">${b.icon}</span>${b.name} (${b.ur})<small>Put in ${b.bin}</small>`;
+  d.innerHTML = `<span class="ico">${b.icon}</span>${b.name} (${b.ur})<small>${b.bin}</small>`;
   d.style.borderColor = b.color;
   $("bins").appendChild(d);
 });
@@ -312,7 +317,7 @@ async function connectArduino() {
     serialPort = await navigator.serial.requestPort();
     await serialPort.open({ baudRate: 9600 });
     serialWriter = serialPort.writable.getWriter();
-    $("hwBtn").textContent = "✅ Arduino Connected";
+    $("hwBtn").textContent = "✅ Connected";
     $("hwBtn").style.background = "var(--green)";
     $("hwBtn").style.color = "#fff";
   } catch (e) {
@@ -326,9 +331,10 @@ function animatePrototype(idx) {
   clearTimeout(flapTimer);
   const item = $("dropItem");
   $("flapArm").style.transform = `rotate(${b.tilt}deg)`;
-  $("servoStatus").textContent = `Servo: ${b.angle}° ➔ ${b.bin}`;
+  $("servoStatus").textContent = `Servo: ${b.angle}° (Cmd '${b.cmd}' ➔ ${b.bin})`;
   $("pBin0").classList.toggle("active", idx === 0);
   $("pBin1").classList.toggle("active", idx === 1);
+  $("pBin2").classList.toggle("active", idx === 2);
 
   item.textContent = b.icon;
   item.style.transition = "none";
@@ -336,8 +342,7 @@ function animatePrototype(idx) {
   item.style.transform = "translate(-50%, 0)";
   setTimeout(() => {
     item.style.transition = "transform 0.55s ease-in, opacity 0.2s 0.45s";
-    const xOffset = idx === 0 ? "-90px" : "65px";
-    item.style.transform = `translate(${xOffset}, 95px)`;
+    item.style.transform = `translate(${b.dropX}, 95px)`;
     item.style.opacity = "0";
   }, 40);
 
@@ -346,6 +351,7 @@ function animatePrototype(idx) {
     $("servoStatus").textContent = "Servo: 90° (Ready)";
     $("pBin0").classList.remove("active");
     $("pBin1").classList.remove("active");
+    $("pBin2").classList.remove("active");
   }, 2000);
 }
 
@@ -363,6 +369,7 @@ async function triggerArduino(idx, force = false) {
 $("hwBtn").onclick = connectArduino;
 $("testPlastic").onclick = () => { beep([660]); triggerArduino(0, true); };
 $("testPaper").onclick = () => { beep([740]); triggerArduino(1, true); };
+$("testGlass").onclick = () => { beep([820]); triggerArduino(2, true); };
 
 /* ---- Sound and Voice ---- */
 let ac;
@@ -387,29 +394,48 @@ function say(text) {
   speechSynthesis.speak(u);
 }
 
-/* ---- Camera & AI Model (With GPU Warmup & Anti-Lag Loop) ---- */
+/* ---- Camera & AI Model (Instant Flip + Pause/Resume Support!) ---- */
+async function openVideoStream() {
+  if (StreamRef) StreamRef.getTracks().forEach(t => t.stop());
+  let stream;
+  try { stream = await navigator.mediaDevices.getUserMedia({video:{facingMode: facing, width:{ideal:320}, height:{ideal:240}}, audio:false}); }
+  catch (e) { stream = await navigator.mediaDevices.getUserMedia({video:true, audio:false}); }
+  StreamRef = stream;
+  if (!video) {
+    video = document.createElement("video");
+    video.playsInline = true; video.muted = true;
+  }
+  video.srcObject = stream;
+  await video.play();
+}
+
 async function startCamera() {
   $("start").disabled = true;
   $("start").textContent = "⏳ Loading AI Model...";
   try {
     if (!model) {
       model = await tmImage.load(MODEL_URL + "model.json", MODEL_URL + "metadata.json");
-      // Pre-warm GPU shader once so camera doesn't freeze on start
       await model.predict($("cv"));
+      // Detect which classes exist in the trained Teachable Machine model
+      const labels = (model.getClassLabels ? model.getClassLabels() : []).map(s => s.toLowerCase());
+      const detected = [];
+      BINS.forEach((b, idx) => {
+        if (labels.some(l => b.keys.some(k => l.includes(k)))) detected.push(idx);
+      });
+      if (detected.length) availableBinIndices = detected;
     }
-    if (StreamRef) StreamRef.getTracks().forEach(t => t.stop());
-    let stream;
-    try { stream = await navigator.mediaDevices.getUserMedia({video:{facingMode: facing, width:{ideal:320}, height:{ideal:240}}, audio:false}); }
-    catch (e) { stream = await navigator.mediaDevices.getUserMedia({video:true, audio:false}); }
-    StreamRef = stream;
-    video = document.createElement("video");
-    video.playsInline = true; video.muted = true; video.srcObject = stream;
-    await video.play();
+    await openVideoStream();
     ctx = $("cv").getContext("2d");
     $("startOverlay").style.display = "none";
     $("camTools").style.display = "flex";
     running = true;
-    setMode(mode);
+
+    // If game was paused via "Off" button, RESUME countdown without resetting to 60s!
+    if (mode === "play" && gamePaused && timeLeft > 0) {
+      resumeRound();
+    } else {
+      setMode(mode);
+    }
     requestAnimationFrame(loop);
   } catch (err) {
     $("start").disabled = false;
@@ -420,29 +446,40 @@ async function startCamera() {
 
 function stopCamera() {
   running = false;
-  clearInterval(timer);
+  if (mode === "play" && timeLeft > 0) {
+    gamePaused = true;
+    clearInterval(timer);
+    timer = null;
+    $("overlayMsg").innerHTML = `⏸️ <b>Game Paused!</b> (${timeLeft}s remaining & Score: ${score})`;
+    $("start").textContent = "▶️ Resume AI Camera";
+    setTask(`⏸️ Game Paused at ${timeLeft}s<small>Tap 'Resume AI Camera' to continue from ${timeLeft} seconds.</small>`);
+  } else {
+    $("overlayMsg").innerHTML = "Point camera at <b>Plastic 🧴</b>, <b>Paper 📄</b> or <b>Glass 🫙</b> for real-time AI detection";
+    $("start").textContent = "📷 Start AI Camera";
+    setTask("Camera paused.<small>Tap 'Start AI Camera' whenever you are ready.</small>");
+  }
   if (StreamRef) StreamRef.getTracks().forEach(t => t.stop());
   $("startOverlay").style.display = "flex";
   $("camTools").style.display = "none";
   $("start").disabled = false;
-  $("start").textContent = "📷 Start AI Camera";
   $("holdBar").style.width = "0%";
-  setTask("Camera paused.<small>Tap 'Start AI Camera' whenever you are ready.</small>");
 }
 
 $("start").onclick = startCamera;
 $("stopBtn").onclick = stopCamera;
-$("flipBtn").onclick = () => {
+
+/* Flip Camera ONLY switches lens without resetting timer or mode! */
+$("flipBtn").onclick = async () => {
   facing = facing === "environment" ? "user" : "environment";
-  if (running) startCamera();
+  if (running) {
+    try { await openVideoStream(); } catch (e) {}
+  }
 };
 
 function loop(timestamp) {
   if (!running) return;
   if (video.readyState >= 2) {
-    // 1. Draw smooth video frame every tick
     ctx.drawImage(video, 0, 0, 320, 240);
-    // 2. Run AI prediction only every 110ms (~9 times/sec) so browser never hangs!
     if (!aiBusy && timestamp - lastAiRun >= AI_INTERVAL_MS) {
       aiBusy = true;
       lastAiRun = timestamp;
@@ -483,7 +520,7 @@ function handle(p) {
 
   if (mode === "learn") {
     if (idx === null) {
-      setTask("Show Plastic 🧴 or Paper 📄 inside the box<small>Kachre ko camera ke dabbay ke beech mein rakhen</small>");
+      setTask("Show Plastic 🧴, Paper 📄 or Glass 🫙 inside the box<small>Kachre ko camera ke dabbay ke beech mein rakhen</small>");
       return;
     }
     const b = BINS[idx];
@@ -525,7 +562,9 @@ function showTarget() {
 }
 function nextTarget() {
   if (!timeLeft) return;
-  let n; do { n = Math.floor(Math.random() * BINS.length); } while (BINS.length > 1 && n === target);
+  const pool = availableBinIndices.length ? availableBinIndices : [0, 1];
+  let n;
+  do { n = pool[Math.floor(Math.random() * pool.length)]; } while (pool.length > 1 && n === target);
   target = n; showTarget();
 }
 function updateHud() {
@@ -533,13 +572,20 @@ function updateHud() {
   $("time").textContent = mode === "play" ? timeLeft + "s" : "--"; $("best").textContent = best;
 }
 function startRound() {
-  score = 0; streak = 0; timeLeft = ROUND_S; $("end").style.display = "none";
+  score = 0; streak = 0; timeLeft = ROUND_S; gamePaused = false;
+  $("end").style.display = "none";
   clearInterval(timer);
   timer = setInterval(() => { timeLeft--; updateHud(); if (timeLeft <= 0) endRound(); }, 1000);
   nextTarget(); updateHud();
 }
+function resumeRound() {
+  gamePaused = false;
+  clearInterval(timer);
+  timer = setInterval(() => { timeLeft--; updateHud(); if (timeLeft <= 0) endRound(); }, 1000);
+  showTarget(); updateHud();
+}
 function endRound() {
-  clearInterval(timer); timeLeft = 0;
+  clearInterval(timer); timer = null; timeLeft = 0; gamePaused = false;
   if (score > best) { best = score; try { localStorage.setItem("sdg_best", best); } catch (e) {} }
   const rank = score >= 150 ? "🏆 Sindh Eco Champion" : score >= 100 ? "🌟 Green Hero" : score >= 50 ? "♻️ Waste Warrior" : "🌱 Eco Starter";
   $("endTitle").textContent = rank;
@@ -551,7 +597,12 @@ function endRound() {
 }
 
 function setMode(m) {
-  mode = m; clearInterval(timer); timeLeft = 0; $("end").style.display = "none";
+  const switchingMode = (mode !== m);
+  mode = m;
+  if (switchingMode) {
+    clearInterval(timer); timer = null; timeLeft = 0; gamePaused = false;
+  }
+  $("end").style.display = "none";
   $("hudBox").style.display = m === "play" ? "flex" : "none";
   $("audit").style.display = m === "audit" ? "block" : "none";
   $("lbBox").style.display = m === "play" ? "block" : "none";
@@ -561,7 +612,7 @@ function setMode(m) {
   $("mAudit").classList.toggle("on", m === "audit");
 
   if (m === "learn") {
-    $("bannerText").innerHTML = "👉 <b>Learn Mode:</b> Camera ke samne Plastic ya Paper rakhen, AI uski pehchan karega.";
+    $("bannerText").innerHTML = "👉 <b>Learn Mode:</b> Camera ke samne Plastic, Paper ya Glass (Sheesha) rakhen.";
   } else if (m === "play") {
     $("bannerText").innerHTML = "🎮 <b>60s Challenge:</b> Jo cheez screen mangay woh camera ko dikha kar points jeeten!";
     renderLb();
@@ -571,20 +622,33 @@ function setMode(m) {
   }
 
   if (!running) return;
-  if (m === "play") startRound();
-  else if (m === "audit") {
+  if (m === "play") {
+    if (timeLeft > 0 && !switchingMode) resumeRound();
+    else startRound();
+  } else if (m === "audit") {
     setTask("📊 Ready to Count: Show 1 item inside the box<small>Ek item scan hone ke baad hata len, phir agla dikhayen</small>");
   } else {
-    setTask("Show Plastic 🧴 or Paper 📄 inside the box<small>Kachre ko camera ke dabbay ke beech mein rakhen</small>");
+    setTask("Show Plastic 🧴, Paper 📄 or Glass 🫙 inside the box<small>Kachre ko camera ke dabbay ke beech mein rakhen</small>");
   }
 }
 
 $("mLearn").onclick = () => { setMode("learn"); if (!running) startCamera(); };
-$("mPlay").onclick = () => { setMode("play"); if (!running) startCamera(); };
+$("mPlay").onclick = () => {
+  if (mode !== "play" || timeLeft <= 0) {
+    mode = "play"; timeLeft = 0; gamePaused = false;
+    if (running) startRound();
+    else startCamera();
+  }
+  setMode("play");
+};
 $("mAudit").onclick = () => { setMode("audit"); if (!running) startCamera(); };
-$("again").onclick = () => { setMode("play"); if (!running) startCamera(); };
+$("again").onclick = () => {
+  timeLeft = 0; gamePaused = false;
+  if (running) startRound();
+  else startCamera();
+};
 
-/* ---- Day-Wise Waste Audit & Cloud Sync ---- */
+/* ---- Day-Wise Waste Audit & Cloud Sync (Plastic, Paper, Glass) ---- */
 let AUD = {}, auditArmed = true, idleSince = 0, lastCounted = null;
 let LB = [];
 try { AUD = JSON.parse(localStorage.getItem("sdg_audit") || "{}"); } catch (e) {}
@@ -638,7 +702,7 @@ async function syncAuditFromCloud() {
     if (Array.isArray(raw)) {
       const { auditMap } = splitCloudRows(raw);
       for (const dt of Object.keys(AUD)) {
-        for (const cls of ["Plastic", "Paper"]) {
+        for (const cls of ["Plastic", "Paper", "Glass"]) {
           const localCnt = (AUD[dt] && AUD[dt][cls]) || 0;
           const cloudCnt = (auditMap[dt] && auditMap[dt][cls]) || 0;
           if (localCnt > 0 && cloudCnt === 0) {
@@ -686,12 +750,13 @@ function auditStep(idx, now) {
 
 function renderAudit() {
   const d = todayData(), totalToday = sum(d);
-  let grandPlastic = 0, grandPaper = 0;
+  let grandPlastic = 0, grandPaper = 0, grandGlass = 0;
   Object.keys(AUD).forEach(dt => {
     grandPlastic += (AUD[dt] && AUD[dt]["Plastic"]) || 0;
     grandPaper   += (AUD[dt] && AUD[dt]["Paper"]) || 0;
+    grandGlass   += (AUD[dt] && AUD[dt]["Glass"]) || 0;
   });
-  const grandTotal = grandPlastic + grandPaper;
+  const grandTotal = grandPlastic + grandPaper + grandGlass;
 
   $("auditTotal").textContent = `Today (${today()}): ${totalToday} items  |  Overall Total: ${grandTotal} items`;
   $("auditBars").innerHTML = BINS.map(b => {
@@ -704,18 +769,19 @@ function renderAudit() {
   if (hist) {
     const dates = Object.keys(AUD).filter(dt => sum(AUD[dt]) > 0 || dt === today()).sort().reverse();
     if (!dates.length) {
-      hist.innerHTML = `<tr><td colspan="4" style="text-align:center">No items counted yet</td></tr>`;
+      hist.innerHTML = `<tr><td colspan="5" style="text-align:center">No items counted yet</td></tr>`;
       if (foot) foot.innerHTML = "";
     } else {
       hist.innerHTML = dates.map(dt => {
         const row = AUD[dt] || {};
         const pl = row["Plastic"] || 0;
         const pa = row["Paper"] || 0;
+        const gl = row["Glass"] || 0;
         const label = dt === today() ? `${dt} (Today)` : dt;
-        return `<tr><td><b>${label}</b></td><td>${pl}</td><td>${pa}</td><td><b>${pl + pa}</b></td></tr>`;
+        return `<tr><td><b>${label}</b></td><td>${pl}</td><td>${pa}</td><td>${gl}</td><td><b>${pl + pa + gl}</b></td></tr>`;
       }).join("");
       if (foot) {
-        foot.innerHTML = `<tr><td>📊 Overall Total (All Days)</td><td>${grandPlastic}</td><td>${grandPaper}</td><td>${grandTotal}</td></tr>`;
+        foot.innerHTML = `<tr><td>📊 Overall Total</td><td>${grandPlastic}</td><td>${grandPaper}</td><td>${grandGlass}</td><td>${grandTotal}</td></tr>`;
       }
     }
   }
@@ -743,9 +809,11 @@ $("aReset").onclick = async () => {
     const d = todayData();
     const pl = d["Plastic"] || 0;
     const pa = d["Paper"] || 0;
+    const gl = d["Glass"] || 0;
     AUD[today()] = {}; saveAudit(); renderAudit();
     if (pl > 0) await pushAuditDelta("Plastic", -pl);
     if (pa > 0) await pushAuditDelta("Paper", -pa);
+    if (gl > 0) await pushAuditDelta("Glass", -gl);
   }
 };
 $("aCopy").onclick = () => {
@@ -753,15 +821,16 @@ $("aCopy").onclick = () => {
   else prompt("Copy this summary:", summary());
 };
 $("aCsv").onclick = () => {
-  const rows = ["Date,Plastic,Paper,Day_Total"];
-  let gPl = 0, gPa = 0;
+  const rows = ["Date,Plastic,Paper,Glass,Day_Total"];
+  let gPl = 0, gPa = 0, gGl = 0;
   Object.keys(AUD).sort().reverse().forEach(dt => {
     const pl = (AUD[dt] && AUD[dt]["Plastic"]) || 0;
     const pa = (AUD[dt] && AUD[dt]["Paper"]) || 0;
-    gPl += pl; gPa += pa;
-    rows.push(`${dt},${pl},${pa},${pl + pa}`);
+    const gl = (AUD[dt] && AUD[dt]["Glass"]) || 0;
+    gPl += pl; gPa += pa; gGl += gl;
+    rows.push(`${dt},${pl},${pa},${gl},${pl + pa + gl}`);
   });
-  rows.push(`OVERALL_TOTAL,${gPl},${gPa},${gPl + gPa}`);
+  rows.push(`OVERALL_TOTAL,${gPl},${gPa},${gGl},${gPl + gPa + gGl}`);
   const a = document.createElement("a");
   a.href = URL.createObjectURL(new Blob([rows.join("\n")], {type: "text/csv"}));
   a.download = "saaf_sindh_daywise_waste_audit.csv"; a.click();
