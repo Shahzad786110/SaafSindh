@@ -5,144 +5,195 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Saaf Sindh AI: Waste Census - Sindh STREAM 2026-27</title>
 <style>
-:root{--ink:#10262e;--bg:#eaf4f1;--card:#ffffff;--line:#c9dcd6;--blue:#1e6fd9;--green:#2e9e5b;--coral:#e8553d;--gold:#f2b705}
+:root{--ink:#0f2930;--bg:#eef6f4;--card:#ffffff;--line:#cde0da;--blue:#1967d2;--green:#1e8e3e;--coral:#d93025;--gold:#f9ab00}
 *{box-sizing:border-box}
-body{margin:0;font-family:"Trebuchet MS","Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.45}
-header{background:var(--ink);color:#fff;padding:14px 16px;text-align:center;user-select:none}
-header h1{margin:0;font-size:22px;cursor:default}
-header p{margin:4px 0 0;font-size:13px;color:#b9d6cf}
-#credit{color:#f2b705;font-weight:bold;font-size:14px;margin-top:6px}
-main{max-width:720px;margin:0 auto;padding:14px}
-.modes{display:flex;gap:8px;justify-content:center;margin-bottom:12px;flex-wrap:wrap}
-button{font:inherit;font-weight:bold;border:0;border-radius:10px;padding:11px 20px;cursor:pointer;background:var(--ink);color:#fff}
-button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
-button.alt{background:#fff;color:var(--ink);border:2px solid var(--ink)}
-button.on{background:var(--blue);border-color:var(--blue);color:#fff}
-.stage{position:relative;background:#000;border-radius:14px;overflow:hidden;aspect-ratio:4/3;max-width:480px;margin:0 auto}
-canvas{width:100%;height:100%;display:block}
-.guide{position:absolute;inset:16% 20%;border:3px dashed rgba(255,255,255,.75);border-radius:14px;pointer-events:none}
-#start{position:absolute;inset:0;margin:auto;width:max-content;height:max-content;font-size:18px;background:var(--green)}
-.hud{display:flex;gap:8px;max-width:480px;margin:10px auto}
-.hud div{flex:1;background:var(--card);border:2px solid var(--line);border-radius:10px;padding:6px;text-align:center;font-size:13px}
-.hud b{display:block;font-size:22px}
-#task{max-width:480px;margin:10px auto;background:var(--card);border:3px solid var(--line);border-radius:14px;padding:14px;text-align:center;font-size:20px;font-weight:bold;min-height:92px}
-#task small{display:block;font-size:14px;font-weight:normal;margin-top:4px}
-.bins{display:flex;gap:8px;max-width:480px;margin:10px auto}
-.bin{flex:1;border:3px solid var(--line);border-radius:12px;background:var(--card);padding:8px;text-align:center;font-size:14px;transition:transform .2s}
-.bin span{display:block;font-size:30px}
-.bin.hit{transform:scale(1.08);color:#fff}
-#probs{max-width:480px;margin:6px auto;font-size:13px;color:#456;text-align:center}
+body{margin:0;font-family:"Segoe UI",Roboto,"Trebuchet MS",Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.45}
+header{background:linear-gradient(135deg,#0f2930,#1b434d);color:#fff;padding:14px 16px;text-align:center;user-select:none;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+header h1{margin:0;font-size:21px;letter-spacing:.3px;cursor:default}
+header p{margin:3px 0 0;font-size:12.5px;color:#c3e3dc}
+#credit{color:var(--gold);font-weight:bold;font-size:12.5px;margin-top:5px}
+main{max-width:520px;margin:0 auto;padding:12px}
 
-/* ---- DIGITAL TWIN SMART BIN PROTOTYPE STYLES ---- */
-#protoBox{max-width:480px;margin:12px auto;background:var(--card);border:2px solid var(--line);border-radius:14px;padding:12px;text-align:center}
-.proto-head{display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:bold;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--line)}
-.proto-badge{background:var(--ink);color:var(--gold);padding:3px 8px;border-radius:6px;font-family:monospace;font-size:12px}
-.proto-stage{position:relative;height:165px;background:#f4faf8;border:2px dashed var(--line);border-radius:12px;overflow:hidden;margin:6px 0}
-.chute{width:90px;height:28px;border-left:4px solid var(--ink);border-right:4px solid var(--ink);margin:0 auto;background:rgba(16,38,46,0.06);font-size:11px;color:#456;line-height:28px}
-#dropItem{position:absolute;top:4px;left:50%;transform:translate(-50%,0);font-size:26px;opacity:0;transition:transform 0.65s ease-in, opacity 0.2s}
-.pivot-axle{width:16px;height:16px;background:var(--gold);border:3px solid var(--ink);border-radius:50%;margin:16px auto 0;position:relative;z-index:3}
-#flapArm{width:120px;height:8px;background:var(--ink);border-radius:4px;margin:-12px auto 0;transform:rotate(0deg);transition:transform 0.35s cubic-bezier(.4,1.4,.6,1);position:relative;z-index:2}
-.p-bins{position:absolute;bottom:8px;left:12px;right:12px;display:flex;gap:16px}
-.p-bin{flex:1;height:68px;border-radius:0 0 10px 10px;border:3px solid;display:flex;flex-direction:column;justify-content:center;align-items:center;font-size:12px;font-weight:bold;background:#fff;transition:background .25s,color .25s}
+/* ---- STEP TABS (MODES) ---- */
+.modes{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+button{font:inherit;font-weight:bold;border:0;border-radius:12px;padding:10px 14px;cursor:pointer;background:var(--ink);color:#fff;transition:all .2s}
+button:active{transform:scale(.97)}
+button.alt{background:#fff;color:var(--ink);border:2px solid var(--line)}
+button.on{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:0 4px 10px rgba(25,103,210,.28)}
+.mode-btn{display:flex;flex-direction:column;align-items:center;padding:9px 6px;font-size:13px}
+.mode-btn span{font-size:18px;margin-bottom:2px}
+.mode-btn small{font-weight:normal;font-size:10.5px;opacity:.85}
+
+/* ---- MODE BANNER ---- */
+#modeBanner{background:#fff;border-left:5px solid var(--blue);border-radius:10px;padding:8px 12px;margin-bottom:10px;font-size:13px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+
+/* ---- CAMERA STAGE & CONTROLS ---- */
+.stage{position:relative;background:#111;border-radius:16px;overflow:hidden;aspect-ratio:4/3;margin:0 auto;box-shadow:0 4px 14px rgba(0,0,0,.18);border:3px solid #fff}
+canvas{width:100%;height:100%;display:block;object-fit:cover}
+.guide{position:absolute;inset:15% 18%;border:2.5px dashed rgba(255,255,255,.8);border-radius:14px;pointer-events:none;transition:border-color .2s,transform .2s}
+.guide.locking{border-color:var(--gold);transform:scale(1.03)}
+.cam-tools{position:absolute;top:8px;right:8px;display:none;gap:6px;z-index:4}
+.cam-tools button{padding:6px 10px;font-size:12px;border-radius:8px;background:rgba(15,41,48,.8);color:#fff;backdrop-filter:blur(4px)}
+#startOverlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;background:rgba(15,41,48,.82);color:#fff;padding:16px;text-align:center;z-index:3}
+#start{font-size:17px;padding:13px 26px;background:var(--green);border-radius:30px;box-shadow:0 4px 14px rgba(30,142,62,.45)}
+.hold-wrap{position:absolute;bottom:0;left:0;right:0;height:7px;background:rgba(255,255,255,.2)}
+#holdBar{height:100%;width:0%;background:var(--gold);transition:width .1s linear}
+
+/* ---- GAME HUD (Only shown in Challenge Mode) ---- */
+.hud{display:none;gap:8px;margin:10px 0}
+.hud div{flex:1;background:var(--card);border:2px solid var(--line);border-radius:12px;padding:6px;text-align:center;font-size:12px}
+.hud b{display:block;font-size:20px;color:var(--blue)}
+
+/* ---- AI STATUS TASK BOX ---- */
+#task{margin:10px 0;background:var(--card);border:2px solid var(--line);border-radius:14px;padding:12px;text-align:center;font-size:18px;font-weight:bold;min-height:76px;display:flex;flex-direction:column;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.04)}
+#task small{display:block;font-size:13px;font-weight:normal;color:#456;margin-top:4px}
+
+/* ---- BINS ---- */
+.bins{display:flex;gap:10px;margin:10px 0}
+.bin{flex:1;border:2.5px solid var(--line);border-radius:14px;background:var(--card);padding:10px 8px;text-align:center;font-size:14px;font-weight:bold;transition:all .22s}
+.bin span.ico{display:block;font-size:32px;margin-bottom:2px}
+.bin small{display:block;font-weight:normal;font-size:12px;opacity:.85;margin-top:2px}
+.bin.hit{transform: translateY(-4px) scale(1.03);color:#fff;box-shadow:0 6px 14px rgba(0,0,0,.15)}
+#probs{margin:4px 0 10px;font-size:12px;color:#456;text-align:center;background:#e3efec;padding:5px 10px;border-radius:20px}
+
+/* ---- DIGITAL TWIN SMART BIN PROTOTYPE ---- */
+#protoBox{margin:12px 0;background:var(--card);border:2px solid var(--line);border-radius:14px;padding:10px 12px;text-align:center}
+.proto-head{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;font-weight:bold;cursor:pointer}
+.proto-badge{background:var(--ink);color:var(--gold);padding:3px 8px;border-radius:6px;font-family:monospace;font-size:11.5px}
+.proto-stage{position:relative;height:150px;background:#f4faf8;border:2px dashed var(--line);border-radius:12px;overflow:hidden;margin:8px 0 6px}
+.chute{width:86px;height:24px;border-left:3px solid var(--ink);border-right:3px solid var(--ink);margin:0 auto;background:rgba(16,38,46,0.06);font-size:10.5px;color:#456;line-height:24px}
+#dropItem{position:absolute;top:2px;left:50%;transform:translate(-50%,0);font-size:24px;opacity:0;transition:transform 0.6s ease-in, opacity 0.2s}
+.pivot-axle{width:14px;height:14px;background:var(--gold);border:3px solid var(--ink);border-radius:50%;margin:14px auto 0;position:relative;z-index:3}
+#flapArm{width:110px;height:7px;background:var(--ink);border-radius:4px;margin:-10px auto 0;transform:rotate(0deg);transition:transform 0.35s cubic-bezier(.4,1.4,.6,1);position:relative;z-index:2}
+.p-bins{position:absolute;bottom:6px;left:10px;right:10px;display:flex;gap:12px}
+.p-bin{flex:1;height:58px;border-radius:0 0 10px 10px;border:2.5px solid;display:flex;flex-direction:column;justify-content:center;align-items:center;font-size:11.5px;font-weight:bold;background:#fff;transition:background .25s,color .25s}
 .p-bin.blue{border-color:var(--blue);color:var(--blue)}
 .p-bin.green{border-color:var(--green);color:var(--green)}
 .p-bin.active.blue{background:var(--blue);color:#fff}
 .p-bin.active.green{background:var(--green);color:#fff}
 
-#end{display:none;max-width:480px;margin:12px auto;background:var(--ink);color:#fff;border-radius:14px;padding:18px;text-align:center}
-#end h2{margin:0 0 6px}
-.foot{max-width:480px;margin:14px auto 4px;font-size:12px;color:#456;text-align:center}
-label{font-size:13px}
-.arow{display:flex;align-items:center;gap:8px;margin:6px 0;font-size:14px}
-.arow>span{width:92px;text-align:left}
-.abar{flex:1;height:14px;background:#dfeae6;border-radius:7px;overflow:hidden}
+/* ---- END GAME, AUDIT & LEADERBOARD ---- */
+#end{display:none;margin:12px 0;background:var(--ink);color:#fff;border-radius:14px;padding:18px;text-align:center}
+#end h2{margin:0 0 6px;color:var(--gold)}
+.foot{margin:14px auto 4px;font-size:12px;color:#456;text-align:center}
+.toolbar{display:flex;justify-content:center;gap:12px;align-items:center;flex-wrap:wrap;background:#fff;padding:8px 12px;border-radius:12px;border:1px solid var(--line);margin-top:10px}
+label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
+.arow{display:flex;align-items:center;gap:8px;margin:6px 0;font-size:13.5px}
+.arow>span{width:88px;text-align:left}
+.abar{flex:1;height:13px;background:#dfeae6;border-radius:7px;overflow:hidden}
 .abar i{display:block;height:100%}
-#audit{max-width:480px;margin:10px auto;background:#fff;border:2px solid var(--line);border-radius:14px;padding:12px}
-#auditTotal{font-weight:bold;margin-bottom:4px;font-size:15px}
+#audit{display:none;margin:10px 0;background:#fff;border:2px solid var(--line);border-radius:14px;padding:12px}
+#auditTotal{font-weight:bold;margin-bottom:4px;font-size:14.5px}
 .abtns{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;justify-content:center}
-.abtns button{padding:7px 12px;font-size:12px}
-.note{font-size:12px;color:#456;margin-top:8px}
-#lbBox{display:none;max-width:480px;margin:10px auto;background:#fff;border:2px solid var(--line);border-radius:14px;padding:12px}
-#lbBox h3{margin:0}
-#lbBox ol{margin:6px 0 0;padding-left:22px}
+.abtns button{padding:7px 11px;font-size:12px}
+.note{font-size:11.5px;color:#456;margin-top:6px}
+#lbBox{display:none;margin:10px 0;background:#fff;border:2px solid var(--line);border-radius:14px;padding:12px}
+#lbBox h3{margin:0;font-size:16px}
+#lbBox ol{margin:6px 0 0;padding-left:22px;font-size:14px}
 #lbEntry{display:none;margin:10px 0}
-#lbEntry input[type="text"], #lbEntry input[type="tel"]{padding:9px;border-radius:8px;border:0;font:inherit;margin:4px}
-#adminBox{display:none;max-width:480px;margin:14px auto;background:#fff;border:3px solid var(--ink);border-radius:14px;padding:14px}
+#lbEntry input{padding:9px 12px;border-radius:8px;border:0;font:inherit;margin:4px;width:230px}
+#adminBox{display:none;margin:14px 0;background:#fff;border:3px solid var(--ink);border-radius:14px;padding:14px}
 #adminBox h3{margin:0 0 8px;color:var(--ink)}
-.atable{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px}
+.atable{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:8px}
 .atable th,.atable td{border:1px solid var(--line);padding:6px;text-align:left}
 .atable th{background:var(--ink);color:#fff}
 .atable tfoot td{background:#eaf4f1;font-weight:bold;border-top:2px solid var(--ink)}
-@media (prefers-reduced-motion:reduce){.bin,#flapArm,#dropItem{transition:none}}
 </style>
 </head>
 <body>
 <header>
-  <h1 id="appTitle">Saaf Sindh AI: Waste Census</h1>
+  <h1 id="appTitle">♻️ Saaf Sindh AI: Waste Census</h1>
   <p>Sindh STREAM Journey 2026-27 | From Classrooms to Cosmos</p>
-  <p>Count it, so councils can plan it.</p>
-  <p id="credit"></p>
+  <div id="credit"></div>
 </header>
+
 <main>
+  <!-- 3 EASY MODE TABS -->
   <div class="modes">
-    <button id="mLearn" class="alt on" type="button">Learn</button>
-    <button id="mPlay" class="alt" type="button">Challenge (60 s)</button>
-    <button id="mAudit" class="alt" type="button">Waste Audit</button>
-    <button id="hwBtn" class="alt" type="button" style="border-color:var(--green);color:var(--green)">🔌 Connect Arduino Flap</button>
+    <button id="mLearn" class="alt mode-btn on" type="button">
+      <span>🔍</span>Learn Mode<small>Identify Waste</small>
+    </button>
+    <button id="mPlay" class="alt mode-btn" type="button">
+      <span>🎮</span>60s Game<small>Play & Win</small>
+    </button>
+    <button id="mAudit" class="alt mode-btn" type="button">
+      <span>📊</span>Waste Audit<small>Day-Wise Count</small>
+    </button>
   </div>
 
+  <!-- FRIENDLY GUIDE BANNER -->
+  <div id="modeBanner">
+    <span id="bannerText">👉 <b>Learn Mode:</b> Camera kholen aur Plastic ya Paper dikhayen.</span>
+  </div>
+
+  <!-- CAMERA BOX WITH PROGRESS BAR & FLIP BUTTON -->
   <div class="stage">
     <canvas id="cv" width="320" height="240"></canvas>
-    <div class="guide"></div>
-    <button id="start" type="button">Start camera</button>
+    <div class="guide" id="guideBox"></div>
+    <div class="cam-tools" id="camTools">
+      <button id="flipBtn" type="button" title="Switch Front/Back Camera">🔄 Flip Camera</button>
+      <button id="stopBtn" type="button" title="Turn Off Camera" style="background:rgba(217,48,37,.85)">⏹️ Off</button>
+    </div>
+    <div id="startOverlay">
+      <p style="margin:0 0 10px;font-size:14px;max-width:260px">Point camera at <b>Plastic 🧴</b> or <b>Paper 📄</b> for real-time AI detection</p>
+      <button id="start" type="button">📷 Start AI Camera</button>
+    </div>
+    <div class="hold-wrap"><div id="holdBar"></div></div>
   </div>
 
-  <div class="hud">
+  <!-- GAME SCOREBOARD (Automatically hidden in Learn & Audit modes to prevent confusion!) -->
+  <div class="hud" id="hudBox">
     <div>Score<b id="score">0</b></div>
     <div>Streak<b id="streak">0</b></div>
-    <div>Time<b id="time">--</b></div>
+    <div>Time Left<b id="time">60s</b></div>
     <div>Best<b id="best">0</b></div>
   </div>
 
-  <div id="task">Press "Start camera", then show a waste item inside the dashed box.</div>
-  <div class="bins" id="bins"></div>
-  <div id="probs"></div>
-
-  <!-- INTERACTIVE DIGITAL TWIN SMART BIN PROTOTYPE -->
-  <div id="protoBox">
-    <div class="proto-head">
-      <span>⚙️ Smart Bin Servo Flap Prototype (Digital Twin)</span>
-      <span class="proto-badge" id="servoStatus">Servo: 90° (Neutral)</span>
-    </div>
-    <div class="proto-stage">
-      <div class="chute">AI Drop Chute</div>
-      <div id="dropItem">🧴</div>
-      <div class="pivot-axle" title="SG90 Servo Motor Axle"></div>
-      <div id="flapArm"></div>
-      <div class="p-bins">
-        <div class="p-bin blue" id="pBin0">🧴 PLASTIC BIN<small>Left Tilt (35° | Cmd 'P')</small></div>
-        <div class="p-bin green" id="pBin1">📄 PAPER BIN<small>Right Tilt (145° | Cmd 'A')</small></div>
-      </div>
-    </div>
-    <div class="abtns">
-      <button class="alt" id="testPlastic" type="button" style="border-color:var(--blue);color:var(--blue)">▶️ Test Plastic Flap ('P')</button>
-      <button class="alt" id="testPaper" type="button" style="border-color:var(--green);color:var(--green)">▶️ Test Paper Flap ('A')</button>
-    </div>
+  <!-- AI INSTRUCTION / RESULT BOX -->
+  <div id="task">
+    Tap "📷 Start AI Camera" above to begin!
+    <small>Camera kholne ke liye upar harey (Green) button ko dabayen.</small>
   </div>
 
-  <!-- WASTE AUDIT (DAY-WISE & MULTI-DEVICE CLOUD SYNCED) -->
-  <div id="audit" style="display:none">
+  <!-- COLOR-CODED BINS -->
+  <div class="bins" id="bins"></div>
+  <div id="probs">AI Confidence: Waiting for camera...</div>
+
+  <!-- END OF 60s GAME POPUP -->
+  <div id="end">
+    <h2 id="endTitle"></h2>
+    <p id="endText"></p>
+    <div id="lbEntry">
+      <div><input type="text" id="lbName" maxlength="15" placeholder="Enter Your Name"></div>
+      <div>
+        <input type="tel" id="lbPhone" inputmode="numeric" maxlength="13" placeholder="Mobile: 03XXXXXXXXX (Optional)">
+        <p class="note" style="color:#b9d6cf;margin:2px 0 6px">Phone number stays private (for teacher prize contact only).</p>
+      </div>
+      <button id="lbSave" type="button" style="background:var(--gold);color:#10262e">💾 Save Score to Cloud</button>
+    </div>
+    <button id="again" type="button" style="background:var(--green);margin-top:8px">🔄 Play Again</button>
+  </div>
+
+  <!-- PUBLIC TOP 5 LEADERBOARD (Shown in Game Mode) -->
+  <div id="lbBox">
+    <h3>🏆 Live Top 5 Leaderboard</h3>
+    <ol id="lbList"></ol>
+    <p class="note">Synced live across Mobile & PC. Play 60s Game to get #1!</p>
+  </div>
+
+  <!-- WASTE AUDIT (Shown in Audit Mode) -->
+  <div id="audit">
     <div id="auditTotal"></div>
     <p class="note" id="auditSyncMsg" style="margin:0 0 6px;color:var(--green);font-weight:bold">☁️ Syncing Day-Wise Audit with Google Sheet...</p>
     <div id="auditBars"></div>
     <div class="abtns">
-      <button class="alt" id="aSync" type="button">🔄 Refresh Cloud Audit</button>
-      <button class="alt" id="aUndo" type="button">Undo last</button>
-      <button class="alt" id="aCopy" type="button">Copy summary</button>
-      <button class="alt" id="aCsv" type="button">📥 Download Day-Wise CSV</button>
-      <button class="alt" id="aReset" type="button">Reset today</button>
+      <button class="alt" id="aSync" type="button">🔄 Refresh Cloud</button>
+      <button class="alt" id="aUndo" type="button">↩️ Undo Last</button>
+      <button class="alt" id="aCopy" type="button">📋 Copy Report</button>
+      <button class="alt" id="aCsv" type="button">📥 Download CSV</button>
+      <button class="alt" id="aReset" type="button">🗑️ Reset Today</button>
     </div>
-    <h4 style="margin:14px 0 4px;font-size:14px">📅 Day-Wise Waste Census (Mobile + PC Combined)</h4>
+    <h4 style="margin:14px 0 4px;font-size:13.5px">📅 Day-Wise Waste Census (Mobile + PC Combined)</h4>
     <div style="overflow-x:auto">
       <table class="atable">
         <thead>
@@ -152,31 +203,29 @@ label{font-size:13px}
         <tfoot id="auditFooter"></tfoot>
       </table>
     </div>
-    <p class="note">Each day starts fresh at 0 for "Today", while previous days and the Grand Total are saved in your Google Sheet & table above.</p>
   </div>
 
-  <!-- PUBLIC LEADERBOARD -->
-  <div id="lbBox">
-    <h3>🏆 Live Top 5 Leaderboard</h3>
-    <ol id="lbList"></ol>
-    <p class="note">Public view shows player name and score only (Live synced across Mobile & PC).</p>
-  </div>
-
-  <!-- SCORE & PHONE ENTRY -->
-  <div id="end">
-    <h2 id="endTitle"></h2>
-    <p id="endText"></p>
-    <div id="lbEntry">
-      <div>
-        <input type="text" id="lbName" maxlength="15" placeholder="Your Name" aria-label="Player name" style="width:220px">
-      </div>
-      <div style="margin:6px 0">
-        <input type="tel" id="lbPhone" inputmode="numeric" maxlength="13" placeholder="Mobile: 03XXXXXXXXX (Optional)" aria-label="Mobile number" style="width:220px">
-        <p class="note" style="color:#b9d6cf;margin:4px 0">Phone number is kept private for prize contact only.</p>
-      </div>
-      <button id="lbSave" type="button" style="background:var(--gold);color:#10262e">Save Score</button>
+  <!-- INTERACTIVE DIGITAL TWIN SMART BIN PROTOTYPE -->
+  <div id="protoBox">
+    <div class="proto-head">
+      <span>⚙️ Smart Bin Servo Flap (Digital Twin)</span>
+      <span class="proto-badge" id="servoStatus">Servo: 90° (Ready)</span>
     </div>
-    <button id="again" type="button" style="background:var(--green);margin-top:6px">Play again</button>
+    <div class="proto-stage">
+      <div class="chute">AI Drop Chute</div>
+      <div id="dropItem">🧴</div>
+      <div class="pivot-axle" title="SG90 Servo Motor Axle"></div>
+      <div id="flapArm"></div>
+      <div class="p-bins">
+        <div class="p-bin blue" id="pBin0">🧴 BLUE BIN<small>Plastic (35° Left)</small></div>
+        <div class="p-bin green" id="pBin1">📄 GREEN BIN<small>Paper (145° Right)</small></div>
+      </div>
+    </div>
+    <div class="abtns">
+      <button class="alt" id="testPlastic" type="button" style="border-color:var(--blue);color:var(--blue)">▶️ Demo Plastic Flap</button>
+      <button class="alt" id="testPaper" type="button" style="border-color:var(--green);color:var(--green)">▶️ Demo Paper Flap</button>
+      <button class="alt" id="hwBtn" type="button" style="border-color:var(--ink)">🔌 Connect Arduino USB</button>
+    </div>
   </div>
 
   <!-- SECRET TEACHER ADMIN PANEL (Secured via Encrypted SEMIS Code) -->
@@ -192,52 +241,63 @@ label{font-size:13px}
       </table>
     </div>
     <div class="abtns" style="margin-top:10px">
-      <button class="alt" id="admRefresh" type="button">🔄 Refresh & Sync Cloud</button>
+      <button class="alt" id="admRefresh" type="button">🔄 Sync Cloud</button>
       <button class="alt" id="admCsv" type="button">📥 Download Excel/CSV</button>
       <button class="alt" id="admCopy" type="button">📋 Copy List</button>
       <button class="alt" id="admClear" type="button" style="border-color:var(--coral);color:var(--coral)">🗑️ Clear All</button>
-      <button id="admClose" type="button">Close Admin</button>
+      <button id="admClose" type="button">Close</button>
     </div>
   </div>
 
+  <!-- BOTTOM SETTINGS BAR -->
+  <div class="toolbar">
+    <label><input type="checkbox" id="voice" checked> 🔊 AI Voice</label>
+    <label><input type="checkbox" id="sfx" checked> 🔔 Sound Effects</label>
+  </div>
   <div class="foot">
-    <label><input type="checkbox" id="voice" checked> Voice</label> &nbsp;
-    <label><input type="checkbox" id="sfx" checked> Sounds</label>
-    <p>Model trained with Google Teachable Machine on our own photos. Needs internet to load the model.</p>
+    Powered by TensorFlow.js & Google Teachable Machine (MobileNet Edge AI).
   </div>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8.5/dist/teachablemachine-image.min.js"></script>
 <script>
-/* ===== EDIT HERE ===== */
+/* ===== PROJECT CONFIGURATION ===== */
 const MODEL_URL = "https://teachablemachine.withgoogle.com/models/GuFSPsxyV/";
-const CREDIT = "Guide Teacher: Ghulam Hussain Memon (PST, BCS, BSc, B.Ed) | GBHSS Haji Junejo Tarai | Team: [Student 1], [Student 2], [Student 3]";
-
-/* ENCRYPTED SEMIS CODE (SEMIS: 401020169 is safely hidden here): */
-const ADMIN_HASH = "NDAxMDIwMTY5"; 
-
-/* ORIGINAL WORKING CLOUD URL: */
-const CLOUD_URL = "https://script.google.com/macros/s/AKfycbxSl2q2L2PoYqatesWrVIjwR9NJmCNYJzMRx9Om6v2zfYwhpdDLz29NpzFxn0qRhYk1/exec"; 
+const CREDIT = "Guide Teacher: Ghulam Hussain Memon (PST, BCS, BSc, B.Ed) | GBHSS Haji Junejo Tarai";
+const ADMIN_HASH = "NDAxMDIwMTY5"; // Encrypted SEMIS Code (401020169)
+const CLOUD_URL = "https://script.google.com/macros/s/AKfycbxSl2q2L2PoYqatesWrVIjwR9NJmCNYJzMRx9Om6v2zfYwhpdDLz29NpzFxn0qRhYk1/exec";
 
 const BINS = [
-  {keys:["plastic"], name:"Plastic", ur:"پلاسٹک", bin:"Blue bin",  color:"#1e6fd9", icon:"🧴", cmd:"P", angle:35, tilt:-28, tip:"Plastic can be collected and recycled instead of thrown away."},
-  {keys:["paper","papar"], name:"Paper", ur:"کاغذ", bin:"Green bin", color:"#2e9e5b", icon:"📄", cmd:"A", angle:145, tilt:28, tip:"Dry, clean paper can be recycled. Keep it away from food."}
+  {keys:["plastic"], name:"Plastic", ur:"پلاسٹک", bin:"Blue Bin",  color:"#1967d2", icon:"🧴", cmd:"P", angle:35, tilt:-28, tip:"Clean plastic bottles & wrappers can be recycled."},
+  {keys:["paper","papar"], name:"Paper", ur:"کاغذ", bin:"Green Bin", color:"#1e8e3e", icon:"📄", cmd:"A", angle:145, tilt:28, tip:"Keep paper dry and clean for recycling."}
 ];
 const MIN_CONF = 0.75, HOLD_MS = 800, ROUND_S = 60;
-/* ===================== */
+/* ================================= */
 
 const $ = id => document.getElementById(id);
-let model, video, ctx, mode = "learn", running = false;
+let model, video, StreamRef = null, ctx, mode = "learn", running = false, facing = "environment";
 let score = 0, streak = 0, best = 0, timeLeft = 0, timer = null, target = null;
 let holdKey = null, holdSince = 0, cooldownUntil = 0, lastSaid = "";
 
-/* ---- Digital Twin + Web Serial API for Arduino Servo Flap ---- */
+try { best = +localStorage.getItem("sdg_best") || 0; } catch (e) {}
+$("best").textContent = best;
+if (CREDIT) $("credit").textContent = CREDIT;
+
+BINS.forEach((b, i) => {
+  const d = document.createElement("div");
+  d.className = "bin"; d.id = "bin" + i;
+  d.innerHTML = `<span class="ico">${b.icon}</span>${b.name} (${b.ur})<small>Put in ${b.bin}</small>`;
+  d.style.borderColor = b.color;
+  $("bins").appendChild(d);
+});
+
+/* ---- Digital Twin + Web Serial API ---- */
 let serialPort = null, serialWriter = null, lastHwSent = 0, flapTimer = null;
 
 async function connectArduino() {
   if (!("serial" in navigator)) {
-    alert("Web Serial API requires Google Chrome or Edge on Laptop/PC.");
+    alert("Arduino USB connection requires Google Chrome or Edge on a Laptop/PC.");
     return;
   }
   try {
@@ -248,7 +308,7 @@ async function connectArduino() {
     $("hwBtn").style.background = "var(--green)";
     $("hwBtn").style.color = "#fff";
   } catch (e) {
-    alert("Arduino connection cancelled or failed: " + e.message);
+    alert("Arduino connection cancelled: " + e.message);
   }
 }
 
@@ -258,7 +318,7 @@ function animatePrototype(idx) {
   clearTimeout(flapTimer);
   const item = $("dropItem");
   $("flapArm").style.transform = `rotate(${b.tilt}deg)`;
-  $("servoStatus").textContent = `Servo: ${b.angle}° (Cmd '${b.cmd}' ➔ ${b.bin})`;
+  $("servoStatus").textContent = `Servo: ${b.angle}° ➔ ${b.bin}`;
   $("pBin0").classList.toggle("active", idx === 0);
   $("pBin1").classList.toggle("active", idx === 1);
 
@@ -267,29 +327,28 @@ function animatePrototype(idx) {
   item.style.opacity = "1";
   item.style.transform = "translate(-50%, 0)";
   setTimeout(() => {
-    item.style.transition = "transform 0.6s ease-in, opacity 0.2s 0.5s";
-    const xOffset = idx === 0 ? "-95px" : "70px";
-    item.style.transform = `translate(${xOffset}, 105px)`;
+    item.style.transition = "transform 0.55s ease-in, opacity 0.2s 0.45s";
+    const xOffset = idx === 0 ? "-90px" : "65px";
+    item.style.transform = `translate(${xOffset}, 95px)`;
     item.style.opacity = "0";
   }, 40);
 
   flapTimer = setTimeout(() => {
     $("flapArm").style.transform = "rotate(0deg)";
-    $("servoStatus").textContent = "Servo: 90° (Neutral)";
+    $("servoStatus").textContent = "Servo: 90° (Ready)";
     $("pBin0").classList.remove("active");
     $("pBin1").classList.remove("active");
-  }, 2200);
+  }, 2000);
 }
 
 async function triggerArduino(idx, force = false) {
   const now = Date.now();
-  if (!force && now - lastHwSent < 2600) return;
+  if (!force && now - lastHwSent < 2500) return;
   lastHwSent = now;
   animatePrototype(idx);
   if (!serialWriter) return;
   try {
-    const data = new TextEncoder().encode(BINS[idx].cmd);
-    await serialWriter.write(data);
+    await serialWriter.write(new TextEncoder().encode(BINS[idx].cmd));
   } catch (e) {}
 }
 
@@ -297,19 +356,7 @@ $("hwBtn").onclick = connectArduino;
 $("testPlastic").onclick = () => { beep([660]); triggerArduino(0, true); };
 $("testPaper").onclick = () => { beep([740]); triggerArduino(1, true); };
 
-try { best = +localStorage.getItem("sdg_best") || 0; } catch (e) {}
-$("best").textContent = best;
-if (CREDIT) $("credit").textContent = CREDIT;
-
-BINS.forEach((b, i) => {
-  const d = document.createElement("div");
-  d.className = "bin"; d.id = "bin" + i;
-  d.innerHTML = `<span>${b.icon}</span>${b.name}<br><span style="font-size:15px" dir="rtl">${b.ur}</span><small>${b.bin}</small>`;
-  d.style.borderColor = b.color;
-  $("bins").appendChild(d);
-});
-
-/* ---- sound and voice ---- */
+/* ---- Sound and Voice ---- */
 let ac;
 function beep(freqs) {
   if (!$("sfx").checked) return;
@@ -332,28 +379,53 @@ function say(text) {
   speechSynthesis.speak(u);
 }
 
-/* ---- camera and model ---- */
+/* ---- Camera & AI Model (With Flip & Stop Controls) ---- */
 async function startCamera() {
   $("start").disabled = true;
-  $("task").textContent = "Loading the AI model...";
+  $("start").textContent = "⏳ Loading AI Model...";
   try {
-    model = await tmImage.load(MODEL_URL + "model.json", MODEL_URL + "metadata.json");
+    if (!model) {
+      model = await tmImage.load(MODEL_URL + "model.json", MODEL_URL + "metadata.json");
+    }
+    if (StreamRef) StreamRef.getTracks().forEach(t => t.stop());
     let stream;
-    try { stream = await navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"}, audio:false}); }
+    try { stream = await navigator.mediaDevices.getUserMedia({video:{facingMode: facing}, audio:false}); }
     catch (e) { stream = await navigator.mediaDevices.getUserMedia({video:true, audio:false}); }
+    StreamRef = stream;
     video = document.createElement("video");
     video.playsInline = true; video.muted = true; video.srcObject = stream;
     await video.play();
     ctx = $("cv").getContext("2d");
-    $("start").style.display = "none";
+    $("startOverlay").style.display = "none";
+    $("camTools").style.display = "flex";
     running = true;
     setMode(mode);
     requestAnimationFrame(loop);
   } catch (err) {
     $("start").disabled = false;
-    $("task").innerHTML = "Could not start. Allow camera access, use https, and check your internet.<small>" + err.message + "</small>";
+    $("start").textContent = "📷 Start AI Camera";
+    $("task").innerHTML = "⚠️ Camera permission needed!<small>Please allow camera access in your browser: " + err.message + "</small>";
   }
 }
+
+function stopCamera() {
+  running = false;
+  clearInterval(timer);
+  if (StreamRef) StreamRef.getTracks().forEach(t => t.stop());
+  $("startOverlay").style.display = "flex";
+  $("camTools").style.display = "none";
+  $("start").disabled = false;
+  $("start").textContent = "📷 Start AI Camera";
+  $("holdBar").style.width = "0%";
+  $("task").innerHTML = "Camera paused.<small>Tap 'Start AI Camera' whenever you are ready.</small>";
+}
+
+$("start").onclick = startCamera;
+$("stopBtn").onclick = stopCamera;
+$("flipBtn").onclick = () => {
+  facing = facing === "environment" ? "user" : "environment";
+  if (running) startCamera();
+};
 
 async function loop() {
   if (!running) return;
@@ -365,11 +437,11 @@ async function loop() {
   requestAnimationFrame(loop);
 }
 
-/* ---- game logic ---- */
+/* ---- AI Detection & Visual Hold Progress ---- */
 function pick(p) {
   let top = p[0];
   p.forEach(x => { if (x.probability > top.probability) top = x; });
-  $("probs").textContent = p.map(x => x.className + " " + Math.round(x.probability * 100) + "%").join("  |  ");
+  $("probs").textContent = "AI Live Confidence:  " + p.map(x => `${x.className}: ${Math.round(x.probability * 100)}%`).join("   |   ");
   if (top.probability < MIN_CONF) return null;
   const n = top.className.trim().toLowerCase();
   return BINS.findIndex(b => b.keys.some(k => n.includes(k)));
@@ -380,21 +452,35 @@ function handle(p) {
   if (idx === -1) idx = null;
   const now = Date.now();
   if (idx !== holdKey) { holdKey = idx; holdSince = now; }
+
+  // Visual progress bar for holding item steady
+  const heldTime = idx !== null ? Math.min(HOLD_MS, now - holdSince) : 0;
+  const pct = Math.round((heldTime / HOLD_MS) * 100);
+  $("holdBar").style.width = pct + "%";
+  $("guideBox").classList.toggle("locking", idx !== null);
+
   document.querySelectorAll(".bin").forEach((d, i) => {
     d.classList.toggle("hit", i === idx);
     d.style.background = i === idx ? BINS[i].color : "";
   });
+
   if (mode === "learn") {
-    if (idx === null) { $("task").innerHTML = "Hold one item inside the dashed box and keep it steady."; return; }
+    if (idx === null) {
+      $("task").innerHTML = "Show Plastic 🧴 or Paper 📄 inside the box<small>Kachre ko camera ke dabbay ke beech mein rakhen</small>";
+      return;
+    }
     const b = BINS[idx];
-    $("task").innerHTML = `${b.icon} This is ${b.name.toUpperCase()}<small>Put it in the ${b.bin}. ${b.tip}</small>`;
+    $("task").innerHTML = `${b.icon} Detected: ${b.name.toUpperCase()} (${b.ur})<small>Put in <b>${b.bin}</b> — ${b.tip}</small>`;
     if (now - holdSince > HOLD_MS) {
       say(`This is ${b.name}. Put it in the ${b.bin}.`);
       triggerArduino(idx);
     }
     return;
   }
+
   if (mode === "audit") { auditStep(idx, now); return; }
+
+  // Challenge Game Mode
   if (!timeLeft || now < cooldownUntil || idx === null || now - holdSince < HOLD_MS) return;
   const b = BINS[idx];
   if (idx === target) {
@@ -402,14 +488,14 @@ function handle(p) {
     score += gain; streak++;
     beep([660, 880]); say("Correct!");
     triggerArduino(idx);
-    $("task").innerHTML = `Correct! +${gain}<small>${b.tip}</small>`;
-    cooldownUntil = now + 1800;
-    setTimeout(nextTarget, 1800);
+    $("task").innerHTML = `✅ Correct! +${gain} Points<small>${b.tip}</small>`;
+    cooldownUntil = now + 1500;
+    setTimeout(nextTarget, 1500);
   } else {
     streak = 0; beep([300, 200]); say("Try again.");
-    $("task").innerHTML = `That is ${b.name}. Find ${BINS[target].name}.`;
-    cooldownUntil = now + 1500;
-    setTimeout(showTarget, 1500);
+    $("task").innerHTML = `❌ That is ${b.name}! Please show <b>${BINS[target].name}</b>`;
+    cooldownUntil = now + 1300;
+    setTimeout(showTarget, 1300);
   }
   updateHud();
 }
@@ -417,7 +503,7 @@ function handle(p) {
 function showTarget() {
   if (mode !== "play" || !timeLeft) return;
   const b = BINS[target];
-  $("task").innerHTML = `Show me: ${b.icon} ${b.name.toUpperCase()}<small>Hold it steady in the box</small>`;
+  $("task").innerHTML = `🎯 Find & Show: ${b.icon} ${b.name.toUpperCase()} (${b.ur})<small>Hold it steady in the camera box to score points!</small>`;
   holdKey = null; lastSaid = "";
 }
 function nextTarget() {
@@ -427,7 +513,7 @@ function nextTarget() {
 }
 function updateHud() {
   $("score").textContent = score; $("streak").textContent = streak;
-  $("time").textContent = mode === "play" ? timeLeft : "--"; $("best").textContent = best;
+  $("time").textContent = mode === "play" ? timeLeft + "s" : "--"; $("best").textContent = best;
 }
 function startRound() {
   score = 0; streak = 0; timeLeft = ROUND_S; $("end").style.display = "none";
@@ -438,34 +524,56 @@ function startRound() {
 function endRound() {
   clearInterval(timer); timeLeft = 0;
   if (score > best) { best = score; try { localStorage.setItem("sdg_best", best); } catch (e) {} }
-  const rank = score >= 150 ? "Sindh Eco Champion" : score >= 100 ? "Green Hero" : score >= 50 ? "Waste Warrior" : "Eco Starter";
+  const rank = score >= 150 ? "🏆 Sindh Eco Champion" : score >= 100 ? "🌟 Green Hero" : score >= 50 ? "♻️ Waste Warrior" : "🌱 Eco Starter";
   $("endTitle").textContent = rank;
-  $("endText").textContent = `You scored ${score}. Best: ${best}.`;
-  $("end").style.display = "block"; $("lbEntry").style.display = score > 0 ? "block" : "none"; beep([523, 659, 784]); updateHud();
+  $("endText").textContent = `You scored ${score} points! (Best: ${best})`;
+  $("end").style.display = "block";
+  $("lbEntry").style.display = score > 0 ? "block" : "none";
+  beep([523, 659, 784]); updateHud();
+  $("end").scrollIntoView({behavior: "smooth"});
 }
+
 function setMode(m) {
   mode = m; clearInterval(timer); timeLeft = 0; $("end").style.display = "none";
+  $("hudBox").style.display = m === "play" ? "flex" : "none";
   $("audit").style.display = m === "audit" ? "block" : "none";
   $("lbBox").style.display = m === "play" ? "block" : "none";
-  if (m === "play") renderLb();
-  if (m === "audit") { renderAudit(); syncAuditFromCloud(); }
+
   $("mLearn").classList.toggle("on", m === "learn");
   $("mPlay").classList.toggle("on", m === "play");
   $("mAudit").classList.toggle("on", m === "audit");
+
+  if (m === "learn") {
+    $("bannerText").innerHTML = "👉 <b>Learn Mode:</b> Camera ke samne Plastic ya Paper rakhen, AI uski pehchan karega.";
+  } else if (m === "play") {
+    $("bannerText").innerHTML = "🎮 <b>60s Challenge:</b> Jo cheez screen mangay woh camera ko dikha kar points jeeten!";
+    renderLb();
+  } else if (m === "audit") {
+    $("bannerText").innerHTML = "📊 <b>Waste Audit:</b> Ek-ek kar ke kachra scan karen, rozana ka record Cloud par jama hoga.";
+    renderAudit(); syncAuditFromCloud();
+  }
+
   if (!running) return;
   if (m === "play") startRound();
-  else if (m === "audit") { $("task").textContent = "Audit: show one item at a time, then remove it."; }
-  else { $("task").textContent = "Hold one item inside the dashed box."; updateHud(); }
+  else if (m === "audit") {
+    $("task").innerHTML = "📊 Ready to Count: Show 1 item inside the box<small>Ek item scan hone ke baad hata len, phir agla dikhayen</small>";
+  } else {
+    $("task").innerHTML = "Show Plastic 🧴 or Paper 📄 inside the box<small>Kachre ko camera ke dabbay ke beech mein rakhen</small>";
+  }
 }
 
-$("start").onclick = startCamera;
-$("mLearn").onclick = () => setMode("learn");
-$("mPlay").onclick = () => { mode = "play"; if (running) startRound(); setMode("play"); };
-$("again").onclick = () => setMode("play");
+// Auto-starts camera if user clicks any mode tab while camera is off!
+$("mLearn").onclick = () => { setMode("learn"); if (!running) startCamera(); };
+$("mPlay").onclick = () => { setMode("play"); if (!running) startCamera(); };
+$("mAudit").onclick = () => { setMode("audit"); if (!running) startCamera(); };
+$("again").onclick = () => { setMode("play"); if (!running) startCamera(); };
 
-/* ---- Day-Wise Waste Audit ---- */
+/* ---- Day-Wise Waste Audit & Cloud Sync ---- */
 let AUD = {}, auditArmed = true, idleSince = 0, lastCounted = null;
+let LB = [];
 try { AUD = JSON.parse(localStorage.getItem("sdg_audit") || "{}"); } catch (e) {}
+try { LB = JSON.parse(localStorage.getItem("sdg_lb") || "[]"); } catch (e) {}
+
 const today = () => {
   const d = new Date();
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
@@ -513,7 +621,6 @@ async function syncAuditFromCloud() {
     const raw = await res.json();
     if (Array.isArray(raw)) {
       const { auditMap } = splitCloudRows(raw);
-      let uploadedOld = false;
       for (const dt of Object.keys(AUD)) {
         for (const cls of ["Plastic", "Paper"]) {
           const localCnt = (AUD[dt] && AUD[dt][cls]) || 0;
@@ -523,7 +630,6 @@ async function syncAuditFromCloud() {
             await fetch(`${CLOUD_URL}?action=save&n=${encodeURIComponent(tag)}&s=${localCnt}&ph=Waste_Audit&t=${Date.now()}`);
             if (!auditMap[dt]) auditMap[dt] = {};
             auditMap[dt][cls] = localCnt;
-            uploadedOld = true;
           }
         }
       }
@@ -540,7 +646,12 @@ async function syncAuditFromCloud() {
 function auditStep(idx, now) {
   if (idx === null) {
     if (!idleSince) idleSince = now;
-    if (now - idleSince > 600) auditArmed = true;
+    if (now - idleSince > 500) {
+      if (!auditArmed) {
+        auditArmed = true;
+        $("task").innerHTML = "📊 Ready for next item! Show inside box<small>Ab agla kachra camera ke samne layen</small>";
+      }
+    }
     return;
   }
   idleSince = 0;
@@ -548,9 +659,10 @@ function auditStep(idx, now) {
     auditArmed = false;
     const b = BINS[idx], d = todayData();
     d[b.name] = (d[b.name] || 0) + 1; lastCounted = b.name; saveAudit();
-    beep([700]);
+    beep([700, 920]);
+    say(`${b.name} counted`);
     triggerArduino(idx, true);
-    $("task").innerHTML = `Counted: ${b.icon} ${b.name}<small>Saved to Google Sheet! Remove it, then show next item.</small>`;
+    $("task").innerHTML = `✅ Counted +1 ${b.icon} ${b.name}!<small style="color:var(--green);font-weight:bold">Remove item from camera to count the next one.</small>`;
     renderAudit();
     pushAuditDelta(b.name, 1);
   }
@@ -565,7 +677,7 @@ function renderAudit() {
   });
   const grandTotal = grandPlastic + grandPaper;
 
-  $("auditTotal").textContent = `Today (${today()}): ${totalToday} items  |  Overall Total (All Days): ${grandTotal} items`;
+  $("auditTotal").textContent = `Today (${today()}): ${totalToday} items  |  Overall Total: ${grandTotal} items`;
   $("auditBars").innerHTML = BINS.map(b => {
     const n = d[b.name] || 0, p = totalToday ? Math.round(n * 100 / totalToday) : 0;
     return `<div class="arow"><span>${b.icon} ${b.name}</span><div class="abar"><i style="width:${p}%;background:${b.color}"></i></div><b>${n} (${p}%)</b></div>`;
@@ -601,7 +713,6 @@ function summary() {
     BINS.map(b => `${b.name} ${d[b.name] || 0}`).join(", ") + ".";
 }
 
-$("mAudit").onclick = () => setMode("audit");
 $("aSync").onclick = syncAuditFromCloud;
 $("aUndo").onclick = () => {
   const d = todayData();
@@ -622,7 +733,7 @@ $("aReset").onclick = async () => {
   }
 };
 $("aCopy").onclick = () => {
-  if (navigator.clipboard) navigator.clipboard.writeText(summary()).then(() => alert("Summary copied"));
+  if (navigator.clipboard) navigator.clipboard.writeText(summary()).then(() => alert("Summary copied!"));
   else prompt("Copy this summary:", summary());
 };
 $("aCsv").onclick = () => {
@@ -682,7 +793,7 @@ async function renderLb() {
   const list = LB.slice().sort((a, b) => b.s - a.s).slice(0, 5);
   ol.innerHTML = "";
   if (!list.length) {
-    const li = document.createElement("li"); li.textContent = "No scores yet — play Challenge (60 s) to be #1!";
+    const li = document.createElement("li"); li.textContent = "No scores yet — play 60s Game to be #1!";
     ol.appendChild(li); return;
   }
   list.forEach(r => {
@@ -736,7 +847,7 @@ $("lbSave").onclick = async () => {
     } catch (e) {}
   }
   $("lbName").value = ""; $("lbPhone").value = "";
-  $("lbSave").disabled = false; $("lbSave").textContent = "Save Score";
+  $("lbSave").disabled = false; $("lbSave").textContent = "💾 Save Score to Cloud";
   $("lbEntry").style.display = "none";
   await renderLb();
   if ($("adminBox").style.display === "block") renderAdmin();
@@ -746,7 +857,6 @@ $("lbSave").onclick = async () => {
 function openAdmin() {
   const inputPin = prompt("Enter School SEMIS Code to open Admin Panel:");
   if (inputPin !== null) {
-    // Decodes ADMIN_HASH ("NDAxMDIwMTY5") to verify against user input securely
     try {
       if (inputPin.trim() === atob(ADMIN_HASH)) {
         $("adminBox").style.display = "block";
