@@ -1,0 +1,15 @@
+{
+  "name": "Saaf Sindh AI: Waste Census",
+  "short_name": "Saaf Sindh AI",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#eef6f4",
+  "theme_color": "#0f2930",
+  "icons": [
+    {
+      "src": "https://img.icons8.com/color/512/recycle-sign.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
