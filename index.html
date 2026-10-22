@@ -176,11 +176,11 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
     <button id="again" type="button" style="background:var(--green);margin-top:8px">🔄 Play New 60s Round</button>
   </div>
 
-  <!-- PUBLIC TOP 5 LEADERBOARD (Shown in Game Mode) -->
+  <!-- PUBLIC DAILY EXHIBITION WINNERS LEADERBOARD -->
   <div id="lbBox">
-    <h3>🏆 Live Top 5 Leaderboard</h3>
+    <h3>🏆 Today's Exhibition Winners (Live)</h3>
     <ol id="lbList"></ol>
-    <p class="note">Synced live across Mobile & PC. Play 60s Game to get #1!</p>
+    <p class="note">Showing today's top 5 players. Play 60s Game to become #1!</p>
   </div>
 
   <!-- WASTE AUDIT (Shown in Audit Mode) -->
@@ -267,17 +267,12 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8.5/dist/teachablemachine-image.min.js"></script>
 <script>
-/* ===== PROJECT CONFIGURATION (OPTIMIZED FOR GLASS) ===== */
+/* ===== PROJECT CONFIGURATION (DAILY EXHIBITION LEADERBOARD) ===== */
 const MODEL_URL = "https://teachablemachine.withgoogle.com/models/RP91qAZCY/";
 const CREDIT = "Guide Teacher: Ghulam Hussain Memon (PST, BCS, BSc, B.Ed) | GBHSS Haji Junejo Tarai";
 const ADMIN_HASH = "NDAxMDIwMTY5"; // Encrypted Teacher SEMIS PIN (401020169)
 const CLOUD_KEY  = "Nzg2MA==";     // Internal Apps Script Read Key for Full Sheet Sync
 const CLOUD_URL  = "https://script.google.com/macros/s/AKfycbxSl2q2L2PoYqatesWrVIjwR9NJmCNYJzMRx9Om6v2zfYwhpdDLz29NpzFxn0qRhYk1/exec";
-
-/* Historical Baseline */
-const BASELINE_AUDIT = {
-  "2026-10-22": { Plastic: 52, Paper: 10, Glass: 0 }
-};
 
 const BINS = [
   {keys:["plastic"], name:"Plastic", ur:"پلاسٹک", bin:"Blue Bin",  color:"#1967d2", icon:"🧴", cmd:"P", angle:35,  tilt:-28, dropX:"-110px", tip:"Clean plastic bottles & wrappers can be recycled."},
@@ -285,7 +280,6 @@ const BINS = [
   {keys:["glass","sheesha","mirror","jar","kanch","bottle"], name:"Glass", ur:"شیشہ", bin:"Red Bin", color:"#d93025", icon:"🫙", cmd:"G", angle:90,  tilt:0,   dropX:"-12px", tip:"Handle glass carefully! Glass jars & bottles can be recycled endlessly."}
 ];
 
-// Lowered confidence threshold to 0.65 so glass (reflective/transparent) is detected easily!
 const MIN_CONF = 0.65, HOLD_MS = 650, ROUND_S = 60, AI_INTERVAL_MS = 110;
 /* ================================= */
 
@@ -498,7 +492,7 @@ function loop(timestamp) {
   requestAnimationFrame(loop);
 }
 
-/* ---- AI Detection (Optimized for Glass & Empty Filter) ---- */
+/* ---- AI Detection ---- */
 function pick(p) {
   let top = p[0];
   p.forEach(x => { if (x.probability > top.probability) top = x; });
@@ -612,7 +606,7 @@ function setMode(m) {
   $("end").style.display = "none";
   $("hudBox").style.display = m === "play" ? "flex" : "none";
   $("audit").style.display = m === "audit" ? "block" : "none";
-  $("lbBox").style.display = m === "play" ? "play" : "none";
+  $("lbBox").style.display = m === "play" ? "block" : "none";
 
   $("mLearn").classList.toggle("on", m === "learn");
   $("mPlay").classList.toggle("on", m === "play");
@@ -667,13 +661,6 @@ const today = () => {
 };
 const sum = o => Object.values(o || {}).reduce((a, b) => a + b, 0);
 
-Object.keys(BASELINE_AUDIT).forEach(dt => {
-  if (!AUD[dt]) AUD[dt] = {};
-  Object.keys(BASELINE_AUDIT[dt]).forEach(cls => {
-    AUD[dt][cls] = Math.max(AUD[dt][cls] || 0, BASELINE_AUDIT[dt][cls]);
-  });
-});
-
 function saveAudit() { try { localStorage.setItem("sdg_audit", JSON.stringify(AUD)); } catch (e) {} }
 function todayData() { return AUD[today()] || (AUD[today()] = {}); }
 
@@ -722,21 +709,13 @@ async function syncAuditFromCloud() {
     if (Array.isArray(raw)) {
       const { auditMap } = splitCloudRows(raw);
 
-      for (const dt of Object.keys(BASELINE_AUDIT)) {
-        if (!auditMap[dt]) auditMap[dt] = {};
-        for (const cls of ["Plastic", "Paper", "Glass"]) {
-          const baseVal = BASELINE_AUDIT[dt][cls] || 0;
-          const cloudVal = auditMap[dt][cls] || 0;
-          if (cloudVal < baseVal) {
-            const diff = baseVal - cloudVal;
-            const tag = `AUDIT | ${dt} | ${cls}`;
-            await fetch(`${CLOUD_URL}?action=save&n=${encodeURIComponent(tag)}&s=${diff}&ph=Waste_Audit&t=${Date.now()}`);
-            auditMap[dt][cls] = baseVal;
-          }
+      for (const dt of Object.keys(auditMap)) {
+        if (!AUD[dt]) AUD[dt] = {};
+        for (const cls of Object.keys(auditMap[dt])) {
+          AUD[dt][cls] = Math.max(AUD[dt][cls] || 0, auditMap[dt][cls]);
         }
       }
 
-      AUD = auditMap;
       saveAudit();
       renderAudit();
       $("auditSyncMsg").textContent = "✅ Live Synced with Google Sheet (Shared Across All Users & Devices)";
@@ -846,7 +825,6 @@ $("aReset").onclick = async () => {
     const pl = d["Plastic"] || 0;
     const pa = d["Paper"] || 0;
     const gl = d["Glass"] || 0;
-    if (BASELINE_AUDIT[today()]) delete BASELINE_AUDIT[today()];
     AUD[today()] = {}; saveAudit(); renderAudit();
     if (pl > 0) await pushAuditDelta("Plastic", -pl);
     if (pa > 0) await pushAuditDelta("Paper", -pa);
@@ -874,7 +852,7 @@ $("aCsv").onclick = () => {
   a.download = "saaf_sindh_daywise_waste_audit.csv"; a.click();
 };
 
-/* ---- Cloud + Local Auto-Merge Leaderboard & Admin ---- */
+/* ---- Cloud + Local Auto-Merge Daily Exhibition Leaderboard ---- */
 async function syncDeviceToCloud(cloudPlayers) {
   let local = [];
   try { local = JSON.parse(localStorage.getItem("sdg_lb") || "[]"); } catch (e) {}
@@ -910,10 +888,14 @@ async function renderLb() {
       }
     } catch (e) {}
   }
-  const list = LB.slice().sort((a, b) => b.s - a.s).slice(0, 5);
+  // Filter Leaderboard strictly for TODAY'S EXHIBITION WINNERS (r.d === today())
+  const currDate = today();
+  const todayPlayers = LB.filter(r => r.d === currDate);
+  const list = todayPlayers.slice().sort((a, b) => b.s - a.s).slice(0, 5);
   ol.innerHTML = "";
   if (!list.length) {
-    const li = document.createElement("li"); li.textContent = "No scores yet — play 60s Game to be #1!";
+    const li = document.createElement("li"); 
+    li.textContent = `No scores yet for today (${currDate}) — play 60s Game to be #1!`;
     ol.appendChild(li); return;
   }
   list.forEach(r => {
