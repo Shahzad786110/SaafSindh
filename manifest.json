@@ -1,15 +1,26 @@
 {
+  "id": "/index.html",
   "name": "Saaf Sindh AI: Waste Census",
   "short_name": "Saaf Sindh AI",
+  "description": "AI-Powered Real-Time Waste Sorting, 60s Challenge Game, and Day-Wise School Waste Census for Sindh STREAM 2026-27.",
   "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#eef6f4",
   "theme_color": "#0f2930",
   "icons": [
     {
-      "src": "https://img.icons8.com/color/512/recycle-sign.png",
+      "src": "https://cdn-icons-png.flaticon.com/192/3299/3299935.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3299/3299935.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
