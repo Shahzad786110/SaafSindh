@@ -13,7 +13,9 @@ body{margin:0;font-family:"Segoe UI",Roboto,"Trebuchet MS",Arial,sans-serif;back
 header{background:linear-gradient(135deg,#0f2930,#1b434d);color:#fff;padding:14px 16px;text-align:center;user-select:none;box-shadow:0 2px 8px rgba(0,0,0,.15)}
 header h1{margin:0;font-size:21px;letter-spacing:.3px;cursor:default}
 header p{margin:3px 0 0;font-size:12.5px;color:#c3e3dc}
-#credit{color:var(--gold);font-weight:bold;font-size:12.5px;margin-top:6px;line-height:1.4}
+#credit{color:var(--gold);font-weight:bold;font-size:12.5px;margin-top:6px;line-height:1.45}
+.team-badge{display:inline-block;margin-top:6px;background:rgba(255,255,255,.12);border:1px solid rgba(249,171,0,.5);color:#fff;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:bold;letter-spacing:.2px}
+.team-badge b{color:var(--gold)}
 main{max-width:540px;margin:0 auto;padding:12px}
 
 /* ---- STEP TABS (MODES) ---- */
@@ -58,7 +60,7 @@ canvas{width:100%;height:100%;display:block;object-fit:cover}
 .bin.hit{transform:translateY(-3px);color:#fff;box-shadow:0 6px 14px rgba(0,0,0,.15)}
 #probs{margin:4px 0 10px;font-size:12px;color:#456;text-align:center;background:#e3efec;padding:5px 10px;border-radius:20px}
 
-/* ---- DIGITAL TWIN SMART BIN PROTOTYPE (3-WAY) ---- */
+/* ---- DIGITAL TWIN SMART BIN PROTOTYPE (3-WAY SIMULATION) ---- */
 #protoBox{margin:12px 0;background:var(--card);border:2px solid var(--line);border-radius:14px;padding:10px 12px;text-align:center}
 .proto-head{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;font-weight:bold}
 .proto-badge{background:var(--ink);color:var(--gold);padding:3px 8px;border-radius:6px;font-family:monospace;font-size:11.5px}
@@ -79,7 +81,7 @@ canvas{width:100%;height:100%;display:block;object-fit:cover}
 /* ---- END GAME, AUDIT & LEADERBOARD ---- */
 #end{display:none;margin:12px 0;background:var(--ink);color:#fff;border-radius:14px;padding:18px;text-align:center}
 #end h2{margin:0 0 6px;color:var(--gold)}
-.foot{margin:14px auto 6px;font-size:11.5px;color:#456;text-align:center;line-height:1.5}
+.foot{margin:14px auto 6px;font-size:11.5px;color:#456;text-align:center;line-height:1.55}
 .toolbar{display:flex;justify-content:center;gap:12px;align-items:center;flex-wrap:wrap;background:#fff;padding:8px 12px;border-radius:12px;border:1px solid var(--line);margin-top:10px}
 label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
 .arow{display:flex;align-items:center;gap:8px;margin:6px 0;font-size:13.5px}
@@ -112,6 +114,9 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
   <div id="credit">
     👨‍🏫 Guide Teacher: Ghulam Hussain Memon (BCS, B.Sc., B.Ed.)<br>
     <span style="color:#eaf4f1;font-weight:normal;font-size:12px">PST — GBHSS Haji Junejo Tarai</span>
+  </div>
+  <div class="team-badge">
+    🌟 <b>Student Team:</b> Zahid Ali • Dost Ali • Shahmeer
   </div>
 </header>
 
@@ -212,16 +217,16 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
     <p class="note">All scans from Mobile & PC are combined live in your Google Sheet so every user sees the real school total.</p>
   </div>
 
-  <!-- INTERACTIVE DIGITAL TWIN SMART BIN PROTOTYPE (3-BINS) -->
+  <!-- INTERACTIVE DIGITAL TWIN SMART BIN PROTOTYPE (3-BINS SIMULATION) -->
   <div id="protoBox">
     <div class="proto-head">
-      <span>⚙️ Smart Bin Servo Flap (Digital Twin)</span>
-      <span class="proto-badge" id="servoStatus">Servo: 90° (Ready)</span>
+      <span>⚙️ Smart Bin Flap (Digital Twin Simulation)</span>
+      <span class="proto-badge" id="servoStatus">Flap: 90° (Ready)</span>
     </div>
     <div class="proto-stage">
       <div class="chute">AI Drop Chute</div>
       <div id="dropItem">🧴</div>
-      <div class="pivot-axle" title="SG90 Servo Motor Axle"></div>
+      <div class="pivot-axle" title="Smart Sorting Flap Axle"></div>
       <div id="flapArm"></div>
       <div class="p-bins">
         <div class="p-bin blue" id="pBin0">🧴 BLUE BIN<small>Plastic (35° Left)</small></div>
@@ -230,10 +235,9 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
       </div>
     </div>
     <div class="abtns">
-      <button class="alt" id="testPlastic" type="button" style="border-color:var(--blue);color:var(--blue)">▶️ Plastic ('P')</button>
-      <button class="alt" id="testGlass" type="button" style="border-color:var(--coral);color:var(--coral)">▶️ Glass ('G')</button>
-      <button class="alt" id="testPaper" type="button" style="border-color:var(--green);color:var(--green)">▶️ Paper ('A')</button>
-      <button class="alt" id="hwBtn" type="button" style="border-color:var(--ink)">🔌 Arduino USB</button>
+      <button class="alt" id="testPlastic" type="button" style="border-color:var(--blue);color:var(--blue)">▶️ Test Plastic</button>
+      <button class="alt" id="testGlass" type="button" style="border-color:var(--coral);color:var(--coral)">▶️ Test Glass</button>
+      <button class="alt" id="testPaper" type="button" style="border-color:var(--green);color:var(--green)">▶️ Test Paper</button>
     </div>
   </div>
 
@@ -278,8 +282,8 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
 
   <!-- PROFESSIONAL DEVELOPER FOOTER -->
   <div class="foot">
-    <b>Built with:</b> TensorFlow.js • MobileNet Edge AI • Google Cloud Apps Script • Web Serial IoT<br>
-    © 2026 Saaf Sindh AI | Developed at <b>GBHSS Haji Junejo Tarai</b>
+    <b>Built with:</b> TensorFlow.js • MobileNet Edge AI • Google Cloud Apps Script • Digital Twin Simulation<br>
+    <b>Student Presenters:</b> Zahid Ali, Dost Ali & Shahmeer | © 2026 <b>GBHSS Haji Junejo Tarai</b>
   </div>
 </main>
 
@@ -325,25 +329,8 @@ BINS.forEach((b, i) => {
   $("bins").appendChild(d);
 });
 
-/* ---- Digital Twin + Web Serial API ---- */
-let serialPort = null, serialWriter = null, lastHwSent = 0, flapTimer = null;
-
-async function connectArduino() {
-  if (!("serial" in navigator)) {
-    alert("Arduino USB connection requires Google Chrome or Edge on a Laptop/PC.");
-    return;
-  }
-  try {
-    serialPort = await navigator.serial.requestPort();
-    await serialPort.open({ baudRate: 9600 });
-    serialWriter = serialPort.writable.getWriter();
-    $("hwBtn").textContent = "✅ Connected";
-    $("hwBtn").style.background = "var(--green)";
-    $("hwBtn").style.color = "#fff";
-  } catch (e) {
-    alert("Arduino connection cancelled: " + e.message);
-  }
-}
+/* ---- Digital Twin Smart Bin Simulation ---- */
+let lastHwSent = 0, flapTimer = null;
 
 function animatePrototype(idx) {
   const b = BINS[idx];
@@ -351,7 +338,7 @@ function animatePrototype(idx) {
   clearTimeout(flapTimer);
   const item = $("dropItem");
   $("flapArm").style.transform = `rotate(${b.tilt}deg)`;
-  $("servoStatus").textContent = `Servo: ${b.angle}° (Cmd '${b.cmd}' ➔ ${b.bin})`;
+  $("servoStatus").textContent = `Flap: ${b.angle}° ➔ ${b.bin}`;
   $("pBin0").classList.toggle("active", idx === 0);
   $("pBin1").classList.toggle("active", idx === 1);
   $("pBin2").classList.toggle("active", idx === 2);
@@ -368,28 +355,23 @@ function animatePrototype(idx) {
 
   flapTimer = setTimeout(() => {
     $("flapArm").style.transform = "rotate(0deg)";
-    $("servoStatus").textContent = "Servo: 90° (Ready)";
+    $("servoStatus").textContent = "Flap: 90° (Ready)";
     $("pBin0").classList.remove("active");
     $("pBin1").classList.remove("active");
     $("pBin2").classList.remove("active");
   }, 2000);
 }
 
-async function triggerArduino(idx, force = false) {
+function triggerBinSimulation(idx, force = false) {
   const now = Date.now();
   if (!force && now - lastHwSent < 2500) return;
   lastHwSent = now;
   animatePrototype(idx);
-  if (!serialWriter) return;
-  try {
-    await serialWriter.write(new TextEncoder().encode(BINS[idx].cmd));
-  } catch (e) {}
 }
 
-$("hwBtn").onclick = connectArduino;
-$("testPlastic").onclick = () => { beep([660]); triggerArduino(0, true); };
-$("testPaper").onclick = () => { beep([740]); triggerArduino(1, true); };
-$("testGlass").onclick = () => { beep([820]); triggerArduino(2, true); };
+$("testPlastic").onclick = () => { beep([660]); triggerBinSimulation(0, true); };
+$("testPaper").onclick = () => { beep([740]); triggerBinSimulation(1, true); };
+$("testGlass").onclick = () => { beep([820]); triggerBinSimulation(2, true); };
 
 /* ---- Sound and Voice ---- */
 let ac;
@@ -545,7 +527,7 @@ function handle(p) {
     setTask(`${b.icon} Detected: ${b.name.toUpperCase()} (${b.ur})<small>Put in <b>${b.bin}</b> — ${b.tip}</small>`);
     if (now - holdSince > HOLD_MS) {
       say(`This is ${b.name}. Put it in the ${b.bin}.`);
-      triggerArduino(idx);
+      triggerBinSimulation(idx);
     }
     return;
   }
@@ -559,7 +541,7 @@ function handle(p) {
     const gain = 10 + Math.min(streak, 5) * 2;
     score += gain; streak++;
     beep([660, 880]); say("Correct!");
-    triggerArduino(idx);
+    triggerBinSimulation(idx);
     setTask(`✅ Correct! +${gain} Points<small>${b.tip}</small>`);
     cooldownUntil = now + 1500;
     setTimeout(nextTarget, 1500);
@@ -766,7 +748,7 @@ function auditStep(idx, now) {
     d[b.name] = (d[b.name] || 0) + 1; lastCounted = b.name; saveAudit();
     beep([700, 920]);
     say(`${b.name} counted`);
-    triggerArduino(idx, true);
+    triggerBinSimulation(idx, true);
     setTask(`✅ Counted +1 ${b.icon} ${b.name}!<small style="color:var(--green);font-weight:bold">Remove item from camera to count the next one.</small>`);
     renderAudit();
     pushAuditDelta(b.name, 1);
@@ -1034,7 +1016,7 @@ $("admCopy").onclick = () => {
 $("admClear").onclick = async () => {
   if (confirm("Are you sure you want to delete ALL saved scores and phone numbers from Cloud & Device?")) {
     LB = [];
-    try { localStorage.setItem("sdg_lb"); } catch (e) {}
+    try { localStorage.removeItem("sdg_lb"); } catch (e) {}
     if (CLOUD_URL) {
       try { await fetch(`${CLOUD_URL}?action=clear&pin=${encodeURIComponent(atob(CLOUD_KEY))}&t=${Date.now()}`); } catch (e) {}
     }
