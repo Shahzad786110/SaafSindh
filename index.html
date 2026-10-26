@@ -269,6 +269,7 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
       <div class="abtns">
         <button class="alt" id="aCsv" type="button" style="border-color:var(--green);color:var(--green)">📥 Download Audit CSV</button>
         <button class="alt" id="aReset" type="button" style="border-color:var(--coral);color:var(--coral)">🗑️ Reset Today's Audit</button>
+        <button class="alt" id="aMatchCloud" type="button" style="border-color:var(--blue);color:var(--blue)">☁️ Match Exact Cloud Sheet</button>
         <button id="admClose" type="button">Close Admin</button>
       </div>
     </div>
@@ -291,9 +292,9 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
 <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8.5/dist/teachablemachine-image.min.js"></script>
 <script>
 /* ===== PROJECT CONFIGURATION ===== */
-const MODEL_URL = "https://teachablemachine.withgoogle.com/models/RP91qAZCY/";
+const MODEL_URL  = "https://teachablemachine.withgoogle.com/models/RP91qAZCY/";
 const ADMIN_HASH = "NDAxMDIwMTY5"; // Encrypted Teacher SEMIS PIN (401020169)
-const CLOUD_KEY  = "Nzg2MA==";     // Internal Apps Script Read Key for Full Sheet Sync
+const CLOUD_KEY  = "NDAxMDIwMTY5"; // Matched SEMIS Key so Cloud returns 100% of rows
 const CLOUD_URL  = "https://script.google.com/macros/s/AKfycbxSl2q2L2PoYqatesWrVIjwR9NJmCNYJzMRx9Om6v2zfYwhpdDLz29NpzFxn0qRhYk1/exec";
 
 const BINS = [
@@ -648,7 +649,7 @@ $("again").onclick = () => {
   else startCamera();
 };
 
-/* ---- Day-Wise Waste Audit & Full Cloud History Sync ---- */
+/* ---- Day-Wise Waste Audit & Two-Way Full Cloud History Sync ---- */
 let AUD = {}, auditArmed = true, idleSince = 0, lastCounted = null, syncingAudit = false;
 let LB = [];
 try { AUD = JSON.parse(localStorage.getItem("sdg_audit") || "{}"); } catch (e) {}
@@ -675,8 +676,8 @@ function splitCloudRows(rows) {
     const nameStr = String(r.n || "");
     if (nameStr.startsWith("AUDIT | ")) {
       const parts = nameStr.split(" | ");
-      const dt = parts[1] || today();
-      const cls = parts[2] || "Plastic";
+      const dt = (parts[1] || today()).trim();
+      const cls = (parts[2] || "Plastic").trim();
       const val = Number(r.s) || 0;
       if (!auditMap[dt]) auditMap[dt] = {};
       auditMap[dt][cls] = Math.max(0, (auditMap[dt][cls] || 0) + val);
@@ -699,19 +700,39 @@ async function pushAuditDelta(cls, delta, dt = today()) {
   }
 }
 
-async function syncAuditFromCloud() {
+async function syncAuditFromCloud(forceCloudOnly = false) {
   if (!CLOUD_URL || syncingAudit) return;
   syncingAudit = true;
   try {
-    $("auditSyncMsg").textContent = "☁️ Syncing Full Day-Wise Audit from Google Sheet...";
+    $("auditSyncMsg").textContent = "☁️ Syncing Full Day-Wise Audit with Google Sheet...";
     const raw = await fetchAllSheetRows();
     if (Array.isArray(raw)) {
       const { auditMap } = splitCloudRows(raw);
 
-      for (const dt of Object.keys(auditMap)) {
-        if (!AUD[dt]) AUD[dt] = {};
-        for (const cls of Object.keys(auditMap[dt])) {
-          AUD[dt][cls] = Math.max(AUD[dt][cls] || 0, auditMap[dt][cls]);
+      if (forceCloudOnly) {
+        // Replace device memory with exact Google Sheet numbers
+        AUD = auditMap;
+      } else {
+        // 1. Pull higher or missing counts from Cloud to Device
+        for (const dt of Object.keys(auditMap)) {
+          if (!AUD[dt]) AUD[dt] = {};
+          for (const cls of Object.keys(auditMap[dt])) {
+            AUD[dt][cls] = Math.max(AUD[dt][cls] || 0, auditMap[dt][cls]);
+          }
+        }
+        // 2. Push any unsynced local counts from Device up to Cloud so Mobile & PC match 100%!
+        for (const dt of Object.keys(AUD)) {
+          for (const cls of Object.keys(AUD[dt] || {})) {
+            const localVal = Number(AUD[dt][cls]) || 0;
+            const cloudVal = (auditMap[dt] && Number(auditMap[dt][cls])) || 0;
+            if (localVal > cloudVal) {
+              const diff = localVal - cloudVal;
+              const tag = `AUDIT | ${dt} | ${cls}`;
+              try {
+                await fetch(`${CLOUD_URL}?action=save&n=${encodeURIComponent(tag)}&s=${diff}&ph=Waste_Audit&t=${Date.now()}`);
+              } catch (e) {}
+            }
+          }
         }
       }
 
@@ -802,7 +823,7 @@ function summary() {
     BINS.map(b => `${b.name} ${d[b.name] || 0}`).join(", ") + ".";
 }
 
-$("aSync").onclick = syncAuditFromCloud;
+$("aSync").onclick = () => syncAuditFromCloud(false);
 $("aUndo").onclick = () => {
   const d = todayData();
   if (lastCounted && d[lastCounted] > 0) {
@@ -824,6 +845,13 @@ $("aReset").onclick = async () => {
     if (gl > 0) await pushAuditDelta("Glass", -gl);
     alert("Today's waste audit has been reset to 0.");
   }
+};
+
+$("aMatchCloud").onclick = async () => {
+  try { localStorage.removeItem("sdg_audit"); } catch (e) {}
+  AUD = {};
+  await syncAuditFromCloud(true);
+  alert("Device cache cleared and matched 100% with Google Sheet!");
 };
 
 $("aCopy").onclick = () => {
