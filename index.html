@@ -46,7 +46,7 @@ canvas{width:100%;height:100%;display:block;object-fit:cover}
 .hold-wrap{position:absolute;bottom:0;left:0;right:0;height:7px;background:rgba(255,255,255,.2)}
 #holdBar{height:100%;width:0%;background:var(--gold);transition:width .12s linear}
 
-/* ---- GAME HUD (Only shown in Challenge Mode) ---- */
+/* ---- GAME HUD ---- */
 .hud{display:none;gap:8px;margin:10px 0}
 .hud div{flex:1;background:var(--card);border:2px solid var(--line);border-radius:12px;padding:6px;text-align:center;font-size:12px}
 .hud b{display:block;font-size:20px;color:var(--blue)}
@@ -63,7 +63,7 @@ canvas{width:100%;height:100%;display:block;object-fit:cover}
 .bin.hit{transform:translateY(-3px);color:#fff;box-shadow:0 6px 14px rgba(0,0,0,.15)}
 #probs{margin:4px 0 10px;font-size:12px;color:#456;text-align:center;background:#e3efec;padding:5px 10px;border-radius:20px}
 
-/* ---- DIGITAL TWIN SMART BIN PROTOTYPE (3-WAY SIMULATION) ---- */
+/* ---- DIGITAL TWIN SMART BIN PROTOTYPE ---- */
 #protoBox{margin:12px 0;background:var(--card);border:2px solid var(--line);border-radius:14px;padding:10px 12px;text-align:center}
 .proto-head{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;font-weight:bold}
 .proto-badge{background:var(--ink);color:var(--gold);padding:3px 8px;border-radius:6px;font-family:monospace;font-size:11.5px}
@@ -86,16 +86,17 @@ canvas{width:100%;height:100%;display:block;object-fit:cover}
 .c-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;border-bottom:2px solid var(--bg);padding-bottom:8px;margin-bottom:10px}
 .c-head h3{margin:0;font-size:16px;color:var(--ink)}
 .c-form{background:#f7fbf9;border:1.5px solid var(--line);border-radius:12px;padding:12px;margin-bottom:12px}
-.c-row{margin-bottom:8px}
+.c-row{margin-bottom:9px}
 .c-row label{font-weight:bold;font-size:12.5px;display:block;margin-bottom:3px;color:var(--ink)}
-.c-row input{width:100%;padding:9px 11px;border-radius:8px;border:1.5px solid var(--line);font:inherit;font-size:13.5px}
+.c-row input,.c-row select{width:100%;padding:9px 11px;border-radius:8px;border:1.5px solid var(--line);font:inherit;font-size:13.5px;background:#fff}
 .snap-box{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:4px}
-#snapPreview{width:96px;height:72px;object-fit:cover;border-radius:8px;border:2px solid var(--ink);display:none}
+#snapPreview{width:108px;height:80px;object-fit:cover;border-radius:8px;border:2px solid var(--ink);display:none}
 .rep-card{background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:10px;margin:8px 0;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
-.rep-info{flex:1;min-width:180px;font-size:12.5px;line-height:1.45}
+.rep-info{flex:1;min-width:175px;font-size:12.5px;line-height:1.45}
 .rep-status{padding:4px 10px;border-radius:14px;font-size:11.5px;font-weight:bold;display:inline-block}
 .st-pend{background:#fff3e0;color:#e65100;border:1px solid #ffb74d}
 .st-clean{background:#e6f4ea;color:var(--green);border:1px solid #81c784}
+.dept-tag{display:inline-block;background:#e3efec;color:var(--ink);padding:2px 7px;border-radius:6px;font-size:11px;font-weight:bold;margin-bottom:3px}
 #officerBar{display:none;background:linear-gradient(135deg,#0f2930,#1b434d);color:#fff;padding:10px 12px;border-radius:10px;margin-bottom:10px;font-size:12.5px;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
 
 /* ---- END GAME, AUDIT & LEADERBOARD ---- */
@@ -141,7 +142,7 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
 </header>
 
 <main>
-  <!-- 4 RESPONSIVE MODE TABS (PC 1x4 | Mobile 2x2) -->
+  <!-- 4 RESPONSIVE MODE TABS -->
   <div class="modes">
     <button id="mLearn" class="alt mode-btn on" type="button">
       <span>🔍</span>Learn Mode<small>Identify Waste</small>
@@ -153,7 +154,7 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
       <span>📊</span>Waste Audit<small>Day-Wise Count</small>
     </button>
     <button id="mCivic" class="alt mode-btn" type="button">
-      <span>🚨</span>Civic Report<small>Municipal Alert</small>
+      <span>🚨</span>Civic Report<small>UC / TC / MC</small>
     </button>
   </div>
 
@@ -177,7 +178,7 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
     <div class="hold-wrap"><div id="holdBar"></div></div>
   </div>
 
-  <!-- GAME SCOREBOARD (Automatically hidden in Learn, Audit & Civic modes) -->
+  <!-- GAME SCOREBOARD -->
   <div class="hud" id="hudBox">
     <div>Score<b id="score">0</b></div>
     <div>Streak<b id="streak">0</b></div>
@@ -243,21 +244,27 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
         <tfoot id="auditFooter"></tfoot>
       </table>
     </div>
-    <p class="note">All scans from Mobile & PC are combined live in your Google Sheet so every user sees the real school total.</p>
+    <p class="note">All scans from Mobile & PC are saved in the dedicated <b>Waste_Audit</b> sheet with automatic daily headings.</p>
   </div>
 
-  <!-- CIVIC GARBAGE REPORTING & MUNICIPAL PORTAL (No-Signup Citizen + Officer Login) -->
+  <!-- CIVIC GARBAGE REPORTING & LOCAL GOVT PORTAL (UC Tarai / TC Golarchi / MC Badin) -->
   <div id="civicBox">
     <div class="c-head">
-      <h3>🚨 Municipal Garbage Reporting Portal</h3>
+      <h3>🚨 Local Govt. Cleanliness Portal</h3>
       <button class="alt" id="officerBtn" type="button" style="padding:6px 11px;font-size:12px;border-color:var(--ink)">🔐 Officer Login</button>
     </div>
 
-    <!-- MUNICIPAL OFFICER ACTIVE BAR (Shown after Officer Login) -->
+    <!-- MUNICIPAL OFFICER ACTIVE BAR -->
     <div id="officerBar">
-      <span>👮‍♂️ <b>Municipal Officer Mode:</b> GBHSS HAJI JUNEJO (Verified)</span>
-      <div style="display:flex;gap:6px">
-        <button id="offCsvBtn" type="button" style="background:var(--gold);color:var(--ink);padding:5px 10px;font-size:11.5px">📥 Download CSV</button>
+      <span id="officerTitle">👮‍♂️ <b>Officer Mode:</b> Verified</span>
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+        <select id="offFilter" style="padding:4px 8px;border-radius:6px;border:0;font-size:11.5px;font-weight:bold">
+          <option value="ALL">Show All Halqas</option>
+          <option value="UC Tarai">UC Tarai Only</option>
+          <option value="Town Committee Golarchi">TC Golarchi Only</option>
+          <option value="Municipal Committee Badin">MC Badin Only</option>
+        </select>
+        <button id="offCsvBtn" type="button" style="background:var(--gold);color:var(--ink);padding:5px 10px;font-size:11.5px">📥 CSV</button>
         <button id="offLogoutBtn" type="button" style="background:var(--coral);color:#fff;padding:5px 10px;font-size:11.5px">Logout</button>
       </div>
     </div>
@@ -265,48 +272,57 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
     <!-- CITIZEN INSTANT REPORT FORM (WITHOUT SIGNUP) -->
     <div class="c-form">
       <div style="font-weight:bold;color:var(--green);font-size:13.5px;margin-bottom:8px">
-        📢 Citizen Direct Report (Without Signup — Kisi Account Ki Zaroorat Nahi)
+        📢 Citizen Direct Report (Without Signup — Photo Seedha Cloud Sheet 3 Mein Jayegi)
       </div>
 
       <div class="c-row">
-        <label>1. Capture Garbage Photo (Kachre Ki Tasveer Len):</label>
+        <label>1. Select Local Body / Halqa (Safai Ka Idara Chunen):</label>
+        <select id="repDept">
+          <option value="UC Tarai">🏛️ Union Council (UC) Tarai (Haji Junejo Tarai)</option>
+          <option value="Town Committee Golarchi">🏛️ Town Committee (TC) Golarchi (S.F. Rahu)</option>
+          <option value="Municipal Committee Badin">🏛️ Municipal Committee (MC) Badin</option>
+        </select>
+      </div>
+
+      <div class="c-row">
+        <label>2. Capture Garbage Photo (Kachre Ki Tasveer Len):</label>
         <div class="snap-box">
           <button id="snapBtn" type="button" style="background:var(--blue);padding:8px 12px;font-size:12.5px">📸 Snap from AI Camera</button>
           <button class="alt" id="uploadPhotoBtn" type="button" style="padding:7px 11px;font-size:12px">🖼️ Choose / Camera Photo</button>
           <input type="file" id="civicFile" accept="image/*" capture="environment" style="display:none">
           <img id="snapPreview" alt="Garbage Preview">
         </div>
-        <div class="note" id="snapStatus">AI Tag: Ready to capture waste photo</div>
+        <div class="note" id="snapStatus">AI Tag: Ready to capture waste photo (Saved to Cloud Sheet 3)</div>
       </div>
 
       <div class="c-row">
-        <label>2. Area / Mohalla / Street Name (Jahan Safai Karwani Hai):</label>
+        <label>3. Area / Mohalla / Street Name (Jahan Kachra Hai):</label>
         <div style="display:flex;gap:6px">
-          <input type="text" id="repArea" maxlength="45" placeholder="e.g. Main Bazar Haji Junejo Tarai / School Road">
+          <input type="text" id="repArea" maxlength="45" placeholder="e.g. Main Bazar Tarai / School Road / Golarchi Chowk">
           <button class="alt" id="gpsBtn" type="button" style="padding:8px 10px;font-size:12px;white-space:nowrap;border-color:var(--blue);color:var(--blue)">📍 Auto GPS</button>
         </div>
         <div class="note" id="gpsStatus">Optional: Tap 'Auto GPS' to attach exact Google Map pin.</div>
       </div>
 
       <div class="c-row">
-        <label>3. Citizen Name & Mobile (Optional — Bina Naam Ke Bhi Bhej Sakte Hain):</label>
+        <label>4. Citizen Name & Mobile (Optional — Bina Naam Ke Bhi Bhej Sakte Hain):</label>
         <input type="text" id="repCitizen" maxlength="35" placeholder="Name / 03XXXXXXXXX (Optional)">
       </div>
 
       <button id="sendReportBtn" type="button" style="width:100%;background:var(--green);padding:11px;font-size:14.5px;margin-top:4px">
-        📤 Send Alert to Municipal Committee
+        📤 Send Photo & Alert to Selected Authority
       </button>
     </div>
 
     <!-- LIVE MUNICIPAL COMPLAINTS FEED -->
     <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
-      <h4 style="margin:0;font-size:14px">📋 Live Area Cleanliness Requests (Cloud Synced)</h4>
-      <button class="alt" id="repSyncBtn" type="button" style="padding:5px 10px;font-size:11.5px">🔄 Refresh</button>
+      <h4 style="margin:0;font-size:14px">📋 Live Area Cleanliness Requests (With Cloud Photos)</h4>
+      <button class="alt" id="repSyncBtn" type="button" style="padding:5px 10px;font-size:11.5px">🔄 Refresh Cloud</button>
     </div>
     <div id="repList" style="margin-top:8px"></div>
   </div>
 
-  <!-- INTERACTIVE DIGITAL TWIN SMART BIN PROTOTYPE (3-BINS SIMULATION) -->
+  <!-- INTERACTIVE DIGITAL TWIN SMART BIN PROTOTYPE -->
   <div id="protoBox">
     <div class="proto-head">
       <span>⚙️ Smart Bin Flap (Digital Twin Simulation)</span>
@@ -330,12 +346,12 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
     </div>
   </div>
 
-  <!-- SECRET TEACHER ADMIN PANEL (Secured via Encrypted SEMIS Code) -->
+  <!-- SECRET TEACHER ADMIN PANEL -->
   <div id="adminBox">
     <h3>🔒 Teacher Admin Panel (Secured)</h3>
     <p class="note" id="admStatus" style="margin:0 0 6px;font-weight:bold"></p>
 
-    <h4 style="margin:8px 0 4px;font-size:13.5px">🏆 All Players & Prize Contacts</h4>
+    <h4 style="margin:8px 0 4px;font-size:13.5px">🏆 All Players & Prize Contacts (Sheet 1: Game_Scores)</h4>
     <div style="overflow-x:auto">
       <table class="atable">
         <thead>
@@ -351,10 +367,8 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
       <button class="alt" id="admClear" type="button" style="border-color:var(--coral);color:var(--coral)">🗑️ Clear Players</button>
     </div>
 
-    <!-- ADMIN-ONLY WASTE AUDIT CONTROLS -->
     <div class="adm-sec">
-      <h4 style="margin:0 0 4px;font-size:13.5px">📊 Waste Audit Admin Controls</h4>
-      <p class="note" style="margin:0 0 6px">Download official Excel/CSV census report or reset today's waste counts.</p>
+      <h4 style="margin:0 0 4px;font-size:13.5px">📊 Waste Audit Admin Controls (Sheet 2: Waste_Audit)</h4>
       <div class="abtns">
         <button class="alt" id="aCsv" type="button" style="border-color:var(--green);color:var(--green)">📥 Download Audit CSV</button>
         <button class="alt" id="aReset" type="button" style="border-color:var(--coral);color:var(--coral)">🗑️ Reset Today's Audit</button>
@@ -372,7 +386,7 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
 
   <!-- PROFESSIONAL DEVELOPER FOOTER -->
   <div class="foot">
-    <b>Built with:</b> TensorFlow.js • MobileNet Edge AI • Google Cloud Apps Script • Digital Twin Simulation<br>
+    <b>Built with:</b> TensorFlow.js • MobileNet Edge AI • 3-Tab Google Cloud Sheets • Digital Twin Simulation<br>
     <b>Student Presenters:</b> Zahid Ali, Dost Ali & Shahmeer | © 2026 <b>GBHSS Haji Junejo Tarai</b>
   </div>
 </main>
@@ -381,12 +395,18 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
 <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8.5/dist/teachablemachine-image.min.js"></script>
 <script>
 /* ===== PROJECT CONFIGURATION ===== */
-const MODEL_URL   = "https://teachablemachine.withgoogle.com/models/RP91qAZCY/";
-const ADMIN_HASH  = "NDAxMDIwMTY5"; // Encrypted Teacher SEMIS PIN (401020169)
-const CLOUD_KEY   = "NDAxMDIwMTY5"; // Matched SEMIS Key so Cloud returns 100% of rows
-const OFFICER_USR = "R0JIU1MgSEFKSSBKVU5FSk8="; // "GBHSS HAJI JUNEJO"
-const OFFICER_PWD = "NDAxMDIwMTY5SEo=";         // "401020169HJ"
-const CLOUD_URL   = "https://script.google.com/macros/s/AKfycbxSl2q2L2PoYqatesWrVIjwR9NJmCNYJzMRx9Om6v2zfYwhpdDLz29NpzFxn0qRhYk1/exec";
+const MODEL_URL  = "https://teachablemachine.withgoogle.com/models/RP91qAZCY/";
+const ADMIN_HASH = "NDAxMDIwMTY5"; // Encrypted Teacher SEMIS PIN (401020169)
+const CLOUD_KEY  = "NDAxMDIwMTY5";
+const CLOUD_URL  = "https://script.google.com/macros/s/AKfycbxSl2q2L2PoYqatesWrVIjwR9NJmCNYJzMRx9Om6v2zfYwhpdDLz29NpzFxn0qRhYk1/exec";
+
+// 4 Official Officer Accounts (School Super Admin, UC Tarai, TC Golarchi, MC Badin)
+const OFFICER_ACCOUNTS = [
+  { u: "GBHSS HAJI JUNEJO", p: "401020169HJ", label: "Super Admin (All Halqas)", filter: "ALL" },
+  { u: "UC TARAI",          p: "401020169T",  label: "Union Council (UC) Tarai", filter: "UC Tarai" },
+  { u: "TC GOLARCHI",       p: "401020169G",  label: "Town Committee Golarchi",  filter: "Town Committee Golarchi" },
+  { u: "MC BADIN",          p: "401020169B",  label: "Municipal Committee Badin",filter: "Municipal Committee Badin" }
+];
 
 const BINS = [
   {keys:["plastic"], name:"Plastic", ur:"پلاسٹک", bin:"Blue Bin",  color:"#1967d2", icon:"🧴", cmd:"P", angle:35,  tilt:-28, dropX:"-110px", tip:"Clean plastic bottles & wrappers can be recycled."},
@@ -613,7 +633,7 @@ function handle(p) {
 
   if (mode === "civic") {
     if (idx === null) {
-      setTask("🚨 Point camera at garbage pile & tap '📸 Snap from AI Camera'<small>Kachre ki tasveer le kar Municipal Committee ko report bhejen</small>");
+      setTask("🚨 Point camera at garbage pile & tap '📸 Snap from AI Camera'<small>Photo seedha Cloud Sheet 3 (Civic_Reports) mein save hogi</small>");
     } else {
       const b = BINS[idx];
       setTask(`🚨 AI Detected ${b.icon} ${b.name} Waste!<small>Tap '📸 Snap from AI Camera' below to attach photo & send alert</small>`);
@@ -637,7 +657,6 @@ function handle(p) {
 
   if (mode === "audit") { auditStep(idx, now); return; }
 
-  // Challenge Game Mode
   if (!timeLeft || now < cooldownUntil || idx === null || now - holdSince < HOLD_MS) return;
   const b = BINS[idx];
   if (idx === target) {
@@ -722,10 +741,10 @@ function setMode(m) {
     $("bannerText").innerHTML = "🎮 <b>60s Challenge:</b> Top 3 Winners will receive <b>Rs. 100 Top-Up Balance!</b>";
     renderLb();
   } else if (m === "audit") {
-    $("bannerText").innerHTML = "📊 <b>Waste Audit:</b> Har user ko poore school ka live combined record nazar aayega.";
+    $("bannerText").innerHTML = "📊 <b>Waste Audit:</b> Saved in Sheet 2 (Waste_Audit) with Daily Date Headings.";
     renderAudit(); syncAuditFromCloud();
   } else if (m === "civic") {
-    $("bannerText").innerHTML = "🚨 <b>Civic Report:</b> Kachre ki pic nikal kar bina signup ke Municipal Committee ko bhejen.";
+    $("bannerText").innerHTML = "🚨 <b>Civic Report:</b> Send photo & location to UC Tarai, TC Golarchi, or MC Badin.";
     renderReports(); syncAuditFromCloud();
   }
 
@@ -736,7 +755,7 @@ function setMode(m) {
   } else if (m === "audit") {
     setTask("📊 Ready to Count: Show 1 item inside the box<small>Ek item scan hone ke baad hata len, phir agla dikhayen</small>");
   } else if (m === "civic") {
-    setTask("🚨 Point camera at garbage pile & tap '📸 Snap from AI Camera'<small>Kachre ki tasveer le kar Municipal Committee ko report bhejen</small>");
+    setTask("🚨 Point camera at garbage pile & tap '📸 Snap from AI Camera'<small>Photo seedha Cloud Sheet 3 (Civic_Reports) mein save hogi</small>");
   } else {
     setTask("Show Plastic 🧴, Paper 📄 or Glass 🫙 inside the box<small>Kachre ko camera ke dabbay ke beech mein rakhen</small>");
   }
@@ -759,15 +778,14 @@ $("again").onclick = () => {
   else startCamera();
 };
 
-/* ---- Day-Wise Waste Audit, Civic Reports & Two-Way Cloud Sync ---- */
+/* ---- 3-Sheet Cloud Sync (Game_Scores, Waste_Audit, Civic_Reports with Photos) ---- */
 let AUD = {}, auditArmed = true, idleSince = 0, lastCounted = null, syncingAudit = false;
-let LB = [], REPORTS = [], PHOTO_CACHE = {};
-let officerLoggedIn = false, currentSnapTag = "Mixed Waste", currentGpsLink = "";
+let LB = [], REPORTS = [];
+let activeOfficer = null, currentSnapTag = "Mixed Waste", currentGpsLink = "", currentPhotoData = "";
 
 try { AUD = JSON.parse(localStorage.getItem("sdg_audit") || "{}"); } catch (e) {}
 try { LB = JSON.parse(localStorage.getItem("sdg_lb") || "[]"); } catch (e) {}
 try { REPORTS = JSON.parse(localStorage.getItem("sdg_reports") || "[]"); } catch (e) {}
-try { PHOTO_CACHE = JSON.parse(localStorage.getItem("sdg_photos") || "{}"); } catch (e) {}
 
 const today = () => {
   const d = new Date();
@@ -786,9 +804,23 @@ async function fetchAllSheetRows() {
 function splitCloudRows(rows) {
   const players = [];
   const auditMap = {};
-  const reportsMap = new Map();
+  const reportsList = [];
 
   rows.forEach(r => {
+    if (r.type === "report") {
+      reportsList.push({
+        id: r.id,
+        dept: r.dept || "UC Tarai",
+        area: r.area || "Unknown Area",
+        waste: r.waste || "Mixed Waste",
+        citizen: r.citizen || "Anonymous",
+        gps: r.gps || "",
+        status: r.status || "Pending",
+        d: r.d || today(),
+        photo: r.photo || ""
+      });
+      return;
+    }
     const nameStr = String(r.n || "");
     if (nameStr.startsWith("AUDIT | ")) {
       const parts = nameStr.split(" | ");
@@ -797,37 +829,17 @@ function splitCloudRows(rows) {
       const val = Number(r.s) || 0;
       if (!auditMap[dt]) auditMap[dt] = {};
       auditMap[dt][cls] = Math.max(0, (auditMap[dt][cls] || 0) + val);
-    } else if (nameStr.startsWith("REPORT | ")) {
-      const parts = nameStr.split(" | ");
-      const id = (parts[1] || "").trim();
-      const area = (parts[2] || "Unknown Area").trim();
-      const waste = (parts[3] || "Mixed Waste").trim();
-      const phParts = String(r.ph || "").split(" | ");
-      const citizen = (phParts[0] || "Anonymous Citizen").trim();
-      const gps = (phParts[1] || "").trim();
-      const status = Number(r.s) >= 1 ? 1 : 0;
-      const existing = reportsMap.get(id);
-      reportsMap.set(id, {
-        id,
-        rawKey: nameStr,
-        area,
-        waste,
-        citizen,
-        gps,
-        status: existing ? Math.max(existing.status, status) : status,
-        d: r.d || today()
-      });
-    } else {
+    } else if (nameStr) {
       players.push(r);
     }
   });
-  return { players, auditMap, reports: Array.from(reportsMap.values()) };
+  return { players, auditMap, reports: reportsList };
 }
 
 async function pushAuditDelta(cls, delta, dt = today()) {
   if (!CLOUD_URL || !delta) return;
   try {
-    $("auditSyncMsg").textContent = "☁️ Saving item to Google Sheet...";
+    $("auditSyncMsg").textContent = "☁️ Saving item to Sheet 2 (Waste_Audit)...";
     const tag = `AUDIT | ${dt} | ${cls}`;
     await fetch(`${CLOUD_URL}?action=save&n=${encodeURIComponent(tag)}&s=${delta}&ph=Waste_Audit&t=${Date.now()}`);
     await syncAuditFromCloud();
@@ -840,12 +852,12 @@ async function syncAuditFromCloud(forceCloudOnly = false) {
   if (!CLOUD_URL || syncingAudit) return;
   syncingAudit = true;
   try {
-    $("auditSyncMsg").textContent = "☁️ Syncing Full Day-Wise Audit with Google Sheet...";
+    $("auditSyncMsg").textContent = "☁️ Syncing 3 Sheets with Google Cloud...";
     const raw = await fetchAllSheetRows();
     if (Array.isArray(raw)) {
       const { auditMap, reports } = splitCloudRows(raw);
 
-      if (reports.length) {
+      if (reports.length || forceCloudOnly) {
         REPORTS = reports;
         try { localStorage.setItem("sdg_reports", JSON.stringify(REPORTS)); } catch (e) {}
         if (mode === "civic") renderReports();
@@ -890,7 +902,7 @@ setInterval(() => {
   if (mode === "audit" || mode === "civic") syncAuditFromCloud();
 }, 15000);
 
-/* ---- Civic Garbage Reporting & Officer Portal Logic ---- */
+/* ---- Civic Garbage Reporting (With Real Cloud Photo Upload to Sheet 3) ---- */
 $("snapBtn").onclick = async () => {
   if (!running) {
     await startCamera();
@@ -898,14 +910,14 @@ $("snapBtn").onclick = async () => {
   const c = document.createElement("canvas");
   c.width = 160; c.height = 120;
   c.getContext("2d").drawImage($("cv"), 0, 0, 160, 120);
-  const dataUrl = c.toDataURL("image/jpeg", 0.65);
-  $("snapPreview").src = dataUrl;
+  currentPhotoData = c.toDataURL("image/jpeg", 0.6);
+  $("snapPreview").src = currentPhotoData;
   $("snapPreview").style.display = "block";
   const detectedName = currentDetectedIdx !== null && BINS[currentDetectedIdx]
     ? `${BINS[currentDetectedIdx].icon} ${BINS[currentDetectedIdx].name} Dominant`
     : "♻️ Mixed Area Waste";
   currentSnapTag = detectedName;
-  $("snapStatus").innerHTML = `✅ <b>Photo Captured!</b> AI Tag: <b>${detectedName}</b>`;
+  $("snapStatus").innerHTML = `✅ <b>Photo Captured!</b> AI Tag: <b>${detectedName}</b> (Will save to Sheet 3)`;
   beep([660, 880]);
 };
 
@@ -920,10 +932,11 @@ $("civicFile").onchange = e => {
       const c = document.createElement("canvas");
       c.width = 160; c.height = 120;
       c.getContext("2d").drawImage(img, 0, 0, 160, 120);
-      $("snapPreview").src = c.toDataURL("image/jpeg", 0.65);
+      currentPhotoData = c.toDataURL("image/jpeg", 0.6);
+      $("snapPreview").src = currentPhotoData;
       $("snapPreview").style.display = "block";
       currentSnapTag = "📸 Citizen Photo Attached";
-      $("snapStatus").innerHTML = "✅ <b>Photo Attached!</b> Ready to send.";
+      $("snapStatus").innerHTML = "✅ <b>Photo Attached!</b> Ready to upload to Sheet 3.";
     };
     img.src = ev.target.result;
   };
@@ -948,6 +961,7 @@ $("gpsBtn").onclick = () => {
 };
 
 $("sendReportBtn").onclick = async () => {
+  const dept = $("repDept").value;
   const area = $("repArea").value.replace(/[|,"<>]/g, "").trim();
   if (!area) {
     alert("Please enter the Area / Mohalla name (or tap Auto GPS)!");
@@ -956,59 +970,75 @@ $("sendReportBtn").onclick = async () => {
   }
   const citizen = $("repCitizen").value.replace(/[|,"<>]/g, "").trim() || "Anonymous Citizen";
   const id = "R" + Date.now().toString().slice(-6);
-  const rawKey = `REPORT | ${id} | ${area} | ${currentSnapTag}`;
-  const phField = `${citizen} | ${currentGpsLink}`;
-
-  if ($("snapPreview").style.display === "block" && $("snapPreview").src) {
-    PHOTO_CACHE[id] = $("snapPreview").src;
-    try { localStorage.setItem("sdg_photos", JSON.stringify(PHOTO_CACHE)); } catch (e) {}
-  }
 
   $("sendReportBtn").disabled = true;
-  $("sendReportBtn").textContent = "⏳ Sending to Municipal Committee...";
+  $("sendReportBtn").textContent = "⏳ Uploading Photo & Report to Sheet 3...";
 
-  const newRep = { id, rawKey, area, waste: currentSnapTag, citizen, gps: currentGpsLink, status: 0, d: today() };
-  REPORTS.unshift(newRep);
+  const payload = {
+    action: "save_report",
+    id,
+    dept,
+    area,
+    waste: currentSnapTag,
+    citizen,
+    gps: currentGpsLink,
+    status: "Pending",
+    d: today(),
+    photo: currentPhotoData
+  };
+
+  REPORTS.push(payload);
   try { localStorage.setItem("sdg_reports", JSON.stringify(REPORTS)); } catch (e) {}
 
   if (CLOUD_URL) {
     try {
-      await fetch(`${CLOUD_URL}?action=save&n=${encodeURIComponent(rawKey)}&s=0&ph=${encodeURIComponent(phField)}&t=${Date.now()}`);
+      await fetch(CLOUD_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload)
+      });
+      await syncAuditFromCloud();
     } catch (e) {}
   }
 
   $("repArea").value = "";
   $("repCitizen").value = "";
+  currentPhotoData = "";
   $("snapPreview").style.display = "none";
-  $("snapStatus").textContent = "AI Tag: Ready to capture waste photo";
+  $("snapStatus").textContent = "AI Tag: Ready to capture waste photo (Saved to Cloud Sheet 3)";
   $("sendReportBtn").disabled = false;
-  $("sendReportBtn").textContent = "📤 Send Alert to Municipal Committee";
+  $("sendReportBtn").textContent = "📤 Send Photo & Alert to Selected Authority";
   beep([523, 659, 784]);
   renderReports();
-  alert("✅ Garbage Report sent to Municipal Committee! Complaint ID: #" + id);
+  alert(`✅ Garbage Report & Photo sent to ${dept}!\nComplaint ID: #${id}`);
 };
 
 function renderReports() {
   const box = $("repList");
-  if (!REPORTS.length) {
-    box.innerHTML = `<p class="note" style="text-align:center;padding:12px">No garbage complaints reported yet.</p>`;
+  const filterVal = activeOfficer ? $("offFilter").value : "ALL";
+  const list = REPORTS.filter(r => filterVal === "ALL" || r.dept === filterVal);
+
+  if (!list.length) {
+    box.innerHTML = `<p class="note" style="text-align:center;padding:12px">No garbage complaints found for ${filterVal}.</p>`;
     return;
   }
   box.innerHTML = "";
-  REPORTS.slice().reverse().forEach(r => {
+  list.slice().reverse().forEach(r => {
     const card = document.createElement("div");
     card.className = "rep-card";
-    const imgHtml = PHOTO_CACHE[r.id]
-      ? `<img src="${PHOTO_CACHE[r.id]}" style="width:74px;height:56px;object-fit:cover;border-radius:8px;border:1.5px solid var(--ink)">`
-      : `<div style="width:74px;height:56px;border-radius:8px;background:#e3efec;display:flex;align-items:center;justify-content:center;font-size:22px">🗑️</div>`;
+    const imgHtml = r.photo && r.photo.startsWith("data:image")
+      ? `<img src="${r.photo}" style="width:82px;height:62px;object-fit:cover;border-radius:8px;border:1.5px solid var(--ink)">`
+      : `<div style="width:82px;height:62px;border-radius:8px;background:#e3efec;display:flex;align-items:center;justify-content:center;font-size:22px">🗑️</div>`;
     const gpsHtml = r.gps ? ` • <a href="${r.gps}" target="_blank" style="color:var(--blue);font-weight:bold">📍 Map</a>` : "";
-    const statusBadge = r.status === 1
-      ? `<span class="rep-status st-clean">✅ Cleaned by Municipal</span>`
+    const isCleaned = String(r.status || "").toLowerCase().includes("clean");
+    const statusBadge = isCleaned
+      ? `<span class="rep-status st-clean">✅ ${r.status}</span>`
       : `<span class="rep-status st-pend">⏳ Pending Cleanup</span>`;
 
     card.innerHTML = `
       ${imgHtml}
       <div class="rep-info">
+        <span class="dept-tag">🏛️ ${r.dept || "UC Tarai"}</span><br>
         <b>📍 ${r.area}</b> <small style="color:#456">(#${r.id})</small><br>
         <span>${r.waste}</span>${gpsHtml}<br>
         <small style="color:#567">👤 ${r.citizen} • 📅 ${r.d}</small>
@@ -1019,20 +1049,20 @@ function renderReports() {
       </div>
     `;
 
-    if (officerLoggedIn) {
+    if (activeOfficer) {
       const act = card.querySelector(".off-actions");
       const btn = document.createElement("button");
       btn.type = "button";
       btn.style.padding = "5px 10px";
       btn.style.fontSize = "11.5px";
-      if (r.status === 1) {
+      if (isCleaned) {
         btn.textContent = "↩️ Mark Pending";
         btn.className = "alt";
-        btn.onclick = () => toggleReportStatus(r, 0);
+        btn.onclick = () => toggleReportStatus(r, "Pending");
       } else {
         btn.textContent = "✅ Mark as Cleaned";
         btn.style.background = "var(--green)";
-        btn.onclick = () => toggleReportStatus(r, 1);
+        btn.onclick = () => toggleReportStatus(r, `Cleaned by ${activeOfficer.u}`);
       }
       act.appendChild(btn);
     }
@@ -1044,47 +1074,52 @@ async function toggleReportStatus(rep, newStatus) {
   rep.status = newStatus;
   try { localStorage.setItem("sdg_reports", JSON.stringify(REPORTS)); } catch (e) {}
   renderReports();
-  if (CLOUD_URL && rep.rawKey) {
+  if (CLOUD_URL && rep.id) {
     try {
-      await fetch(`${CLOUD_URL}?action=set_audit&n=${encodeURIComponent(rep.rawKey)}&s=${newStatus}&t=${Date.now()}`);
+      await fetch(`${CLOUD_URL}?action=update_report&id=${encodeURIComponent(rep.id)}&st=${encodeURIComponent(newStatus)}&t=${Date.now()}`);
       await syncAuditFromCloud();
     } catch (e) {}
   }
 }
 
 $("officerBtn").onclick = () => {
-  if (officerLoggedIn) return;
-  const u = prompt("👮‍♂️ Municipal Officer Portal\nEnter Officer Username:");
+  if (activeOfficer) return;
+  const u = prompt("👮‍♂️ Local Govt. Officer Portal\nEnter Officer Username:\n(UC TARAI / TC GOLARCHI / MC BADIN / GBHSS HAJI JUNEJO)");
   if (u === null) return;
   const p = prompt("🔑 Enter Officer Password:");
   if (p === null) return;
 
-  if (u.trim().toUpperCase() === atob(OFFICER_USR).toUpperCase() && p.trim() === atob(OFFICER_PWD)) {
-    officerLoggedIn = true;
+  const matched = OFFICER_ACCOUNTS.find(acc => acc.u === u.trim().toUpperCase() && acc.p === p.trim());
+  if (matched) {
+    activeOfficer = matched;
+    $("officerTitle").innerHTML = `👮‍♂️ <b>${matched.label}</b> (${matched.u})`;
+    $("offFilter").value = matched.filter;
     $("officerBar").style.display = "flex";
     $("officerBtn").style.display = "none";
     renderReports();
-    alert("✅ Welcome Municipal Officer (GBHSS HAJI JUNEJO)! You can now mark reported areas as Cleaned.");
+    alert(`✅ Welcome Officer (${matched.label})!\nYou can now manage complaints and mark areas as Cleaned.`);
   } else {
     alert("❌ Invalid Officer Username or Password!");
   }
 };
 
+$("offFilter").onchange = renderReports;
+
 $("offLogoutBtn").onclick = () => {
-  officerLoggedIn = false;
+  activeOfficer = null;
   $("officerBar").style.display = "none";
   $("officerBtn").style.display = "inline-block";
   renderReports();
 };
 
 $("offCsvBtn").onclick = () => {
-  const rows = ["Report_ID,Area,Waste_Type,Citizen_Info,GPS_Map,Status,Date"];
+  const rows = ["Report_ID,Halqa_Department,Area,Waste_Type,Citizen_Info,GPS_Map,Status,Date"];
   REPORTS.forEach(r => {
-    rows.push(`"${r.id}","${r.area}","${r.waste}","${r.citizen}","${r.gps || ""}","${r.status === 1 ? "Cleaned" : "Pending"}","${r.d}"`);
+    rows.push(`"${r.id}","${r.dept || "UC Tarai"}","${r.area}","${r.waste}","${r.citizen}","${r.gps || ""}","${r.status}","${r.d}"`);
   });
   const a = document.createElement("a");
   a.href = URL.createObjectURL(new Blob([rows.join("\n")], {type: "text/csv"}));
-  a.download = "municipal_garbage_reports.csv"; a.click();
+  a.download = "local_govt_garbage_reports.csv"; a.click();
 };
 
 $("repSyncBtn").onclick = () => syncAuditFromCloud(false);
@@ -1278,7 +1313,7 @@ async function renderAdmin() {
         const { players } = splitCloudRows(raw);
         LB = await syncDeviceToCloud(players);
         try { localStorage.setItem("sdg_lb", JSON.stringify(LB)); } catch (e) {}
-        $("admStatus").textContent = "✅ Live Cloud Sync Active (Mobile + PC Merged!)";
+        $("admStatus").textContent = "✅ Live 3-Sheet Cloud Sync Active (Mobile + PC Merged!)";
       }
     } catch (e) {
       $("admStatus").textContent = "⚠️ Cloud unreachable — showing device records only";
@@ -1314,7 +1349,7 @@ $("lbSave").onclick = async () => {
   $("lbEntry").style.display = "none";
   await renderLb();
   if ($("adminBox").style.display === "block") renderAdmin();
-  alert("Score saved to Cloud! Top 3 Winners will receive Rs. 100 Top-Up Balance.");
+  alert("Score saved to Sheet 1 (Game_Scores)! Top 3 Winners will receive Rs. 100 Top-Up Balance.");
 };
 
 function openAdmin() {
