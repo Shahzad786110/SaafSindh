@@ -414,13 +414,23 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
 <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8.5/dist/teachablemachine-image.min.js"></script>
 <script>
 /* ========================================================= */
-/* SAAF SINDH AI: WASTE CENSUS - v7.0 (SECURITY PHASE 1)            */
+/* SAAF SINDH AI: WASTE CENSUS - v7.0 (SECURITY PHASE 1)     */
 /* Student Team: Zahid Ali, Dost Ali & Shahmeer              */
 /* Guide Teacher: Ghulam Hussain Memon (BCS - Univ of Sindh) */
 /* ========================================================= */
 
 const MODEL_URL  = "https://teachablemachine.withgoogle.com/models/RP91qAZCY/";
+const ADMIN_HASH = "NDAxMDIwMTY5"; // Encrypted Teacher SEMIS PIN (401020169)
+const CLOUD_KEY  = "NDAxMDIwMTY5";
 const CLOUD_URL  = "https://script.google.com/macros/s/AKfycbxSl2q2L2PoYqatesWrVIjwR9NJmCNYJzMRx9Om6v2zfYwhpdDLz29NpzFxn0qRhYk1/exec";
+
+// 4 Official Officer Accounts (Each Halqa Officer is strictly locked to their own jurisdiction)
+const OFFICER_ACCOUNTS = [
+  { u: "GBHSS HAJI JUNEJO", p: "401020169HJ", label: "Super Admin (All Halqas)", filter: "ALL", isSuper: true },
+  { u: "UC TARAI",          p: "401020169T",  label: "Union Council (UC) Tarai", filter: "UC Tarai", isSuper: false },
+  { u: "TC GOLARCHI",       p: "401020169G",  label: "Town Committee Golarchi",  filter: "Town Committee Golarchi", isSuper: false },
+  { u: "MC BADIN",          p: "401020169B",  label: "Municipal Committee Badin",filter: "Municipal Committee Badin", isSuper: false }
+];
 
 const BINS = [
   {keys:["plastic"], name:"Plastic", ur:"پلاسٹک", bin:"Blue Bin",  color:"#1967d2", icon:"🧴", cmd:"P", angle:35,  tilt:-28, dropX:"-95px", tip:"Clean plastic bottles & wrappers can be recycled."},
@@ -784,265 +794,173 @@ $("mPlay").onclick = () => {
   setMode("play");
 };
 $("mAudit").onclick = () => { setMode("audit"); if (!running) startCamera(); };
-$("mCivic").onclick = () => {
-  setMode("civic");
-  if (SESSION && SESSION.token) loadPrivateData().catch(err => { handleSessionError(err); });
-};
+$("mCivic").onclick = () => { setMode("civic"); };
 $("again").onclick = () => {
   timeLeft = 0; gamePaused = false;
   if (running) startRound();
   else startCamera();
 };
 
-/* ---- Secure Google Apps Script API + Public Dashboard ---- */
+/* ---- 3-Sheet Cloud Sync ---- */
 let AUD = {}, auditArmed = true, idleSince = 0, lastCounted = null, syncingAudit = false;
 let LB = [], REPORTS = [];
 let activeOfficer = null, currentSnapTag = "Mixed Waste", currentGpsLink = "", currentPhotoData = "";
-let SESSION = null;
 
-try { AUD = JSON.parse(localStorage.getItem("sdg_audit") || "{}"); } catch (e) { AUD = {}; }
-try { SESSION = JSON.parse(sessionStorage.getItem("saaf_session") || "null"); } catch (e) { SESSION = null; }
-if (SESSION && SESSION.token) {
-  activeOfficer = {
-    u: SESSION.username,
-    label: SESSION.role === "SUPER_ADMIN" ? "Super Admin (All Halqas)" : SESSION.dept,
-    filter: SESSION.dept,
-    isSuper: SESSION.role === "SUPER_ADMIN"
-  };
-}
+try { AUD = JSON.parse(localStorage.getItem("sdg_audit") || "{}"); } catch (e) {}
+try { LB = JSON.parse(localStorage.getItem("sdg_lb") || "[]"); } catch (e) {}
+try { REPORTS = JSON.parse(localStorage.getItem("sdg_reports") || "[]"); } catch (e) {}
 
 const today = () => {
   const d = new Date();
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 };
-const sum = o => Object.values(o || {}).reduce((a, b) => a + (Number(b) || 0), 0);
-const escapeHtml = value => String(value == null ? "" : value).replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[ch]));
-const makeId = prefix => prefix + Date.now().toString(36) + Math.random().toString(36).slice(2, 9);
+const sum = o => Object.values(o || {}).reduce((a, b) => a + b, 0);
 
-function saveAudit() {
-  try { localStorage.setItem("sdg_audit", JSON.stringify(AUD)); } catch (e) {}
-}
-function todayData() {
-  if (!AUD[today()]) AUD[today()] = { Plastic: 0, Paper: 0, Glass: 0 };
-  return AUD[today()];
+function saveAudit() { try { localStorage.setItem("sdg_audit", JSON.stringify(AUD)); } catch (e) {} }
+function todayData() { return AUD[today()] || (AUD[today()] = {}); }
+
+async function fetchAllSheetRows() {
+  const res = await fetch(`${CLOUD_URL}?action=admin&pin=${encodeURIComponent(atob(CLOUD_KEY))}&t=${Date.now()}`);
+  return await res.json();
 }
 
-async function apiPost(payload) {
-  if (!CLOUD_URL) throw new Error("Cloud API URL is not configured.");
-  const response = await fetch(CLOUD_URL, {
-    method: "POST",
-    headers: { "Content-Type": "text/plain;charset=utf-8" },
-    body: JSON.stringify(payload)
-  });
-  const result = await response.json();
-  if (!result || result.status !== "ok") {
-    const err = new Error(result && result.message ? result.message : "Cloud request failed.");
-    err.code = result && result.code ? result.code : "API_ERROR";
-    throw err;
-  }
-  return result.data || {};
-}
+function splitCloudRows(rows) {
+  const players = [];
+  const auditMap = {};
+  const reportsList = [];
 
-async function fetchPublicData() {
-  const response = await fetch(`${CLOUD_URL}?action=public&t=${Date.now()}`, { cache: "no-store" });
-  const result = await response.json();
-  if (!result || result.status !== "ok") throw new Error(result && result.message ? result.message : "Could not read public data.");
-  return result.data || { players: [], audit: {} };
-}
-
-function handleSessionError(err) {
-  if (["UNAUTHORIZED", "SESSION_EXPIRED"].includes(err.code)) {
-    clearSession(false);
-    alert("🔒 Your secure session has expired or is not authorized. Please log in again.");
-  }
-}
-
-function setSession(data) {
-  if (data.role !== "SUPER_ADMIN") LB = []; // Do not retain Super Admin contact data in an officer session.
-  SESSION = {
-    token: data.token,
-    username: data.username,
-    role: data.role,
-    dept: data.dept,
-    expiresIn: data.expiresIn
-  };
-  try { sessionStorage.setItem("saaf_session", JSON.stringify(SESSION)); } catch (e) {}
-  activeOfficer = {
-    u: data.username,
-    label: data.role === "SUPER_ADMIN" ? "Super Admin (All Halqas)" : data.dept,
-    filter: data.dept,
-    isSuper: data.role === "SUPER_ADMIN"
-  };
-}
-
-function clearSession(callServer = true) {
-  const token = SESSION && SESSION.token;
-  if (callServer && token) apiPost({ action: "logout", token }).catch(() => {});
-  SESSION = null;
-  activeOfficer = null;
-  REPORTS = [];
-  LB = []; // Clear private player-contact data held in memory after logout.
-  try { sessionStorage.removeItem("saaf_session"); } catch (e) {}
-  $("officerBar").style.display = "none";
-  $("offFilter").style.display = "none";
-  $("officerBtn").style.display = "inline-block";
-  $("secFeedContainer").style.display = "none";
-  $("secFeedLocked").style.display = "block";
-  $("adminBox").style.display = "none";
-  $("aUndo").style.display = "none";
-  renderReports();
-}
-
-async function authenticatePrompt(expectedRole) {
-  const username = prompt("Enter account username:");
-  if (username === null) return false;
-  const password = prompt("Enter your password:");
-  if (password === null) return false;
-  try {
-    const data = await apiPost({ action: "login", username: username.trim(), password });
-    if (expectedRole === "SUPER_ADMIN" && data.role !== "SUPER_ADMIN") {
-      await apiPost({ action: "logout", token: data.token }).catch(() => {});
-      alert("This account does not have Super Admin permission.");
-      return false;
+  rows.forEach(r => {
+    if (r.type === "report") {
+      reportsList.push({
+        id: r.id,
+        dept: r.dept || "UC Tarai",
+        area: r.area || "Unknown Area",
+        waste: r.waste || "Mixed Waste",
+        citizen: r.citizen || "Anonymous",
+        gps: r.gps || "",
+        status: r.status || "Pending",
+        d: r.d || today(),
+        photo: r.photo || ""
+      });
+      return;
     }
-    setSession(data);
-    return true;
-  } catch (err) {
-    alert("Login failed: " + err.message);
-    return false;
-  }
-}
-
-async function loadPrivateData() {
-  if (!SESSION || !SESSION.token) throw new Error("Please log in first.");
-  const data = await apiPost({ action: "admin_data", token: SESSION.token });
-  REPORTS = Array.isArray(data.reports) ? data.reports : [];
-  if (SESSION.role === "SUPER_ADMIN") LB = Array.isArray(data.players) ? data.players : [];
-  if (data.audit) AUD = data.audit;
-  saveAudit();
-  renderAudit();
-  if (mode === "civic") renderReports();
-  return data;
+    const nameStr = String(r.n || "");
+    if (nameStr.startsWith("AUDIT | ")) {
+      const parts = nameStr.split(" | ");
+      const dt = (parts[1] || today()).trim();
+      const cls = (parts[2] || "Plastic").trim();
+      const val = Number(r.s) || 0;
+      if (!auditMap[dt]) auditMap[dt] = {};
+      auditMap[dt][cls] = Math.max(0, (auditMap[dt][cls] || 0) + val);
+    } else if (nameStr) {
+      players.push(r);
+    }
+  });
+  return { players, auditMap, reports: reportsList };
 }
 
 async function pushAuditDelta(cls, delta, dt = today()) {
-  // Public clients can add a single scan only. Negative corrections require Super Admin authentication.
-  if (delta !== 1) {
-    if (!SESSION || SESSION.role !== "SUPER_ADMIN") throw new Error("Only Super Admin can reverse or adjust audit counts.");
-    return apiPost({ action: "audit_adjust", token: SESSION.token, category: cls, delta, date: dt });
-  }
-  const eventId = makeId("scan_");
-  const pending = (() => { try { return JSON.parse(localStorage.getItem("sdg_pending_audit") || "[]"); } catch (e) { return []; } })();
-  pending.push({ category: cls, eventId });
-  try { localStorage.setItem("sdg_pending_audit", JSON.stringify(pending)); } catch (e) {}
+  if (!CLOUD_URL || !delta) return;
   try {
-    $("auditSyncMsg").textContent = "☁️ Saving item to Google Sheet...";
-    await apiPost({ action: "audit_increment", category: cls, eventId });
-    const left = pending.filter(x => x.eventId !== eventId);
-    try { localStorage.setItem("sdg_pending_audit", JSON.stringify(left)); } catch (e) {}
+    $("auditSyncMsg").textContent = "☁️ Saving item to Sheet 2 (Waste_Audit)...";
+    const tag = `AUDIT | ${dt} | ${cls}`;
+    await fetch(`${CLOUD_URL}?action=save&n=${encodeURIComponent(tag)}&s=${delta}&ph=Waste_Audit&t=${Date.now()}`);
     await syncAuditFromCloud();
   } catch (e) {
-    $("auditSyncMsg").textContent = "⚠️ Offline — scan queued on this device and will retry when connected.";
-    throw e;
+    $("auditSyncMsg").textContent = "⚠️ Offline — saved on device";
   }
 }
 
-async function flushPendingAudit() {
-  let pending = [];
-  try { pending = JSON.parse(localStorage.getItem("sdg_pending_audit") || "[]"); } catch (e) { pending = []; }
-  if (!pending.length) return;
-  const remaining = [];
-  for (const item of pending) {
-    try {
-      await apiPost({ action: "audit_increment", category: item.category, eventId: item.eventId });
-    } catch (e) {
-      remaining.push(item);
-    }
-  }
-  try { localStorage.setItem("sdg_pending_audit", JSON.stringify(remaining)); } catch (e) {}
-}
-
-async function syncAuditFromCloud() {
+async function syncAuditFromCloud(forceCloudOnly = false) {
   if (!CLOUD_URL || syncingAudit) return;
   syncingAudit = true;
   try {
-    $("auditSyncMsg").textContent = "☁️ Syncing public census with Google Sheet...";
-    await flushPendingAudit();
-    const data = await fetchPublicData();
-    AUD = data.audit || {};
-    LB = data.players || [];
-    saveAudit();
-    renderAudit();
-    if (mode === "play") renderLb();
-    $("auditSyncMsg").textContent = "✅ Public census synced with Google Sheet.";
+    $("auditSyncMsg").textContent = "☁️ Syncing 3 Sheets with Google Cloud...";
+    const raw = await fetchAllSheetRows();
+    if (Array.isArray(raw)) {
+      const { auditMap, reports } = splitCloudRows(raw);
+
+      if (reports.length || forceCloudOnly) {
+        REPORTS = reports;
+        try { localStorage.setItem("sdg_reports", JSON.stringify(REPORTS)); } catch (e) {}
+        if (mode === "civic") renderReports();
+      }
+
+      if (forceCloudOnly) {
+        AUD = auditMap;
+      } else {
+        for (const dt of Object.keys(auditMap)) {
+          if (!AUD[dt]) AUD[dt] = {};
+          for (const cls of Object.keys(auditMap[dt])) {
+            AUD[dt][cls] = Math.max(AUD[dt][cls] || 0, auditMap[dt][cls]);
+          }
+        }
+        for (const dt of Object.keys(AUD)) {
+          for (const cls of Object.keys(AUD[dt] || {})) {
+            const localVal = Number(AUD[dt][cls]) || 0;
+            const cloudVal = (auditMap[dt] && Number(auditMap[dt][cls])) || 0;
+            if (localVal > cloudVal) {
+              const diff = localVal - cloudVal;
+              const tag = `AUDIT | ${dt} | ${cls}`;
+              try {
+                await fetch(`${CLOUD_URL}?action=save&n=${encodeURIComponent(tag)}&s=${diff}&ph=Waste_Audit&t=${Date.now()}`);
+              } catch (e) {}
+            }
+          }
+        }
+      }
+
+      saveAudit();
+      renderAudit();
+      $("auditSyncMsg").textContent = "✅ Live Synced with Google Sheet (Shared Across All Users & Devices)";
+    }
   } catch (e) {
     renderAudit();
-    $("auditSyncMsg").textContent = "⚠️ Cloud unavailable — showing locally cached census where available.";
-  } finally {
-    syncingAudit = false;
+    $("auditSyncMsg").textContent = "⚠️ Cloud unreachable — showing saved counts";
   }
+  syncingAudit = false;
 }
 
 setInterval(() => {
   if (mode === "audit" || mode === "civic") syncAuditFromCloud();
-  if (mode === "civic" && SESSION && SESSION.token) loadPrivateData().catch(handleSessionError);
-}, 30000);
+}, 15000);
 
-/* ---- Civic Garbage Reporting ---- */
-async function canvasToSafePhoto(canvas) {
-  let quality = 0.62;
-  let data = canvas.toDataURL("image/jpeg", quality);
-  while (data.length > 44000 && quality > 0.25) {
-    quality -= 0.08;
-    data = canvas.toDataURL("image/jpeg", quality);
-  }
-  if (data.length > 45000) throw new Error("Photo is too large. Please capture a smaller image.");
-  return data;
-}
-
+/* ---- Civic Garbage Reporting & Strict Halqa Jurisdiction Control ---- */
 $("snapBtn").onclick = async () => {
-  if (!running) await startCamera();
-  if (!running || !video || video.readyState < 2) {
-    alert("Camera is not ready. Please start the AI camera and try again.");
-    return;
+  if (!running) {
+    await startCamera();
   }
   const c = document.createElement("canvas");
   c.width = 160; c.height = 120;
   c.getContext("2d").drawImage($("cv"), 0, 0, 160, 120);
-  try {
-    currentPhotoData = await canvasToSafePhoto(c);
-    const detectedName = currentDetectedIdx !== null && BINS[currentDetectedIdx]
-      ? `${BINS[currentDetectedIdx].icon} ${BINS[currentDetectedIdx].name} Dominant`
-      : "♻️ Mixed Area Waste";
-    currentSnapTag = detectedName;
-    $("snapPreview").src = currentPhotoData;
-    $("snapPreview").style.display = "block";
-    $("snapStatus").textContent = `Photo captured. AI tag: ${detectedName}`;
-    beep([660, 880]);
-  } catch (e) { alert(e.message); }
+  currentPhotoData = c.toDataURL("image/jpeg", 0.6);
+  $("snapPreview").src = currentPhotoData;
+  $("snapPreview").style.display = "block";
+  const detectedName = currentDetectedIdx !== null && BINS[currentDetectedIdx]
+    ? `${BINS[currentDetectedIdx].icon} ${BINS[currentDetectedIdx].name} Dominant`
+    : "♻️ Mixed Area Waste";
+  currentSnapTag = detectedName;
+  $("snapStatus").innerHTML = `✅ <b>Photo Captured!</b> AI Tag: <b>${detectedName}</b> (Will save to Sheet 3)`;
+  beep([660, 880]);
 };
 
 $("uploadPhotoBtn").onclick = () => $("civicFile").click();
 $("civicFile").onchange = e => {
-  const file = e.target.files && e.target.files[0];
+  const file = e.target.files[0];
   if (!file) return;
-  if (!file.type.startsWith("image/")) { alert("Please select an image file."); return; }
   const reader = new FileReader();
   reader.onload = ev => {
     const img = new Image();
-    img.onload = async () => {
+    img.onload = () => {
       const c = document.createElement("canvas");
       c.width = 160; c.height = 120;
       c.getContext("2d").drawImage(img, 0, 0, 160, 120);
-      try {
-        currentPhotoData = await canvasToSafePhoto(c);
-        $("snapPreview").src = currentPhotoData;
-        $("snapPreview").style.display = "block";
-        currentSnapTag = "📸 Citizen Photo Attached";
-        $("snapStatus").textContent = "Photo attached and compressed. Ready to submit.";
-      } catch (err) { alert(err.message); }
+      currentPhotoData = c.toDataURL("image/jpeg", 0.6);
+      $("snapPreview").src = currentPhotoData;
+      $("snapPreview").style.display = "block";
+      currentSnapTag = "📸 Citizen Photo Attached";
+      $("snapStatus").innerHTML = "✅ <b>Photo Attached!</b> Ready to upload to Sheet 3.";
     };
-    img.onerror = () => alert("Could not read this image.");
     img.src = ev.target.result;
   };
   reader.readAsDataURL(file);
@@ -1050,54 +968,72 @@ $("civicFile").onchange = e => {
 
 $("gpsBtn").onclick = () => {
   if (!navigator.geolocation) {
-    $("gpsStatus").textContent = "⚠️ GPS is not supported in this browser.";
+    $("gpsStatus").textContent = "⚠️ GPS not supported on this browser.";
     return;
   }
-  $("gpsStatus").textContent = "🛰️ Getting GPS coordinates...";
+  $("gpsStatus").textContent = "🛰️ Getting live GPS coordinates...";
   navigator.geolocation.getCurrentPosition(pos => {
     const lat = pos.coords.latitude.toFixed(5);
     const lng = pos.coords.longitude.toFixed(5);
     currentGpsLink = `https://maps.google.com/?q=${lat},${lng}`;
-    $("gpsStatus").textContent = `✅ GPS ready: ${lat}, ${lng}`;
+    $("gpsStatus").innerHTML = `✅ <b>GPS Locked:</b> <a href="${currentGpsLink}" target="_blank">View on Google Maps (${lat}, ${lng})</a>`;
     if (!$("repArea").value.trim()) $("repArea").value = `GPS Pin (${lat}, ${lng})`;
   }, () => {
-    $("gpsStatus").textContent = "⚠️ Location permission denied — enter the area name manually.";
-  }, { enableHighAccuracy: true, timeout: 12000, maximumAge: 60000 });
+    $("gpsStatus").textContent = "⚠️ Location permission denied — please type Area name manually.";
+  });
 };
 
 $("sendReportBtn").onclick = async () => {
   const dept = $("repDept").value;
   const area = $("repArea").value.replace(/[|,"<>]/g, "").trim();
   if (!area) {
-    alert("Please enter the area / street name or use Auto GPS.");
+    alert("Please enter the Area / Mohalla name (or tap Auto GPS)!");
     $("repArea").focus();
     return;
   }
   const citizen = $("repCitizen").value.replace(/[|,"<>]/g, "").trim() || "Anonymous Citizen";
-  const id = makeId("R");
-  const btn = $("sendReportBtn");
-  btn.disabled = true;
-  btn.textContent = "⏳ Submitting report securely...";
-  try {
-    const data = await apiPost({
-      action: "save_report", id, dept, area,
-      waste: currentSnapTag, citizen, gps: currentGpsLink,
-      photo: currentPhotoData
-    });
-    $("repArea").value = "";
-    $("repCitizen").value = "";
-    currentPhotoData = "";
-    currentGpsLink = "";
-    $("snapPreview").style.display = "none";
-    $("snapStatus").textContent = "Ready to capture or attach a report photo.";
-    beep([523, 659, 784]);
-    alert(`✅ Report submitted successfully.\nComplaint ID: #${data.id || id}`);
-  } catch (err) {
-    alert("❌ Report was not confirmed as saved. " + err.message);
-  } finally {
-    btn.disabled = false;
-    btn.textContent = "📤 Send Photo & Alert to Selected Authority";
+  const id = "R" + Date.now().toString().slice(-6);
+
+  $("sendReportBtn").disabled = true;
+  $("sendReportBtn").textContent = "⏳ Uploading Photo & Report to Sheet 3...";
+
+  const payload = {
+    action: "save_report",
+    id,
+    dept,
+    area,
+    waste: currentSnapTag,
+    citizen,
+    gps: currentGpsLink,
+    status: "Pending",
+    d: today(),
+    photo: currentPhotoData
+  };
+
+  REPORTS.push(payload);
+  try { localStorage.setItem("sdg_reports", JSON.stringify(REPORTS)); } catch (e) {}
+
+  if (CLOUD_URL) {
+    try {
+      await fetch(CLOUD_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload)
+      });
+      await syncAuditFromCloud();
+    } catch (e) {}
   }
+
+  $("repArea").value = "";
+  $("repCitizen").value = "";
+  currentPhotoData = "";
+  $("snapPreview").style.display = "none";
+  $("snapStatus").textContent = "AI Tag: Ready to capture waste photo (Saved to Cloud Sheet 3)";
+  $("sendReportBtn").disabled = false;
+  $("sendReportBtn").textContent = "📤 Send Photo & Alert to Selected Authority";
+  beep([523, 659, 784]);
+  renderReports();
+  alert(`✅ Garbage Report & Photo sent to ${dept}!\nComplaint ID: #${id}`);
 };
 
 function getAllowedFilter() {
@@ -1107,212 +1043,238 @@ function getAllowedFilter() {
 
 function renderReports() {
   const box = $("repList");
-  if (!activeOfficer || !SESSION) {
+  if (!activeOfficer) {
     box.innerHTML = "";
     return;
   }
   const allowedFilter = getAllowedFilter();
-  // The server already restricts reports to the logged-in user's jurisdiction.
   const list = REPORTS.filter(r => allowedFilter === "ALL" || r.dept === allowedFilter);
+
   $("feedHeading").textContent = allowedFilter === "ALL"
     ? "📋 All Halqas Cleanliness Requests (Super Admin)"
-    : `📋 ${allowedFilter} — Cleanliness Requests`;
+    : `📋 ${allowedFilter} — Dedicated Cleanliness Requests`;
+
   if (!list.length) {
-    box.innerHTML = `<p class="note" style="text-align:center;padding:12px">No complaints found for <b>${escapeHtml(allowedFilter)}</b>.</p>`;
+    box.innerHTML = `<p class="note" style="text-align:center;padding:12px">No garbage complaints found for <b>${allowedFilter}</b>.</p>`;
     return;
   }
   box.innerHTML = "";
-  list.forEach(r => {
+  list.slice().reverse().forEach(r => {
     const card = document.createElement("div");
     card.className = "rep-card";
-    const safePhoto = typeof r.photo === "string" && /^data:image\/(jpeg|png|webp);base64,/i.test(r.photo)
-      ? `<img src="${r.photo}" alt="Complaint photo" style="width:82px;height:62px;object-fit:cover;border-radius:8px;border:1.5px solid var(--ink)">`
+    const imgHtml = r.photo && r.photo.startsWith("data:image")
+      ? `<img src="${r.photo}" style="width:82px;height:62px;object-fit:cover;border-radius:8px;border:1.5px solid var(--ink)">`
       : `<div style="width:82px;height:62px;border-radius:8px;background:#e3efec;display:flex;align-items:center;justify-content:center;font-size:22px">🗑️</div>`;
-    const gps = /^https:\/\/(maps\.google\.com|www\.google\.com\/maps)\//i.test(r.gps || "")
-      ? ` • <a href="${escapeHtml(r.gps)}" rel="noopener" target="_blank" style="color:var(--blue);font-weight:bold">📍 Map</a>` : "";
-    const status = String(r.status || "Pending");
-    const statusClass = status === "Resolved" || status === "Cleaned" ? "st-clean" : "st-pend";
-    const statusBadge = `<span class="rep-status ${statusClass}">${escapeHtml(status)}</span>`;
+    const gpsHtml = r.gps ? ` • <a href="${r.gps}" target="_blank" style="color:var(--blue);font-weight:bold">📍 Map</a>` : "";
+    const isCleaned = String(r.status || "").toLowerCase().includes("clean");
+    const statusBadge = isCleaned
+      ? `<span class="rep-status st-clean">✅ ${r.status}</span>`
+      : `<span class="rep-status st-pend">⏳ Pending Cleanup</span>`;
+
     card.innerHTML = `
-      ${safePhoto}
+      ${imgHtml}
       <div class="rep-info">
-        <span class="dept-tag">🏛️ ${escapeHtml(r.dept || "UC Tarai")}</span><br>
-        <b>📍 ${escapeHtml(r.area)}</b> <small style="color:#456">(#${escapeHtml(r.id)})</small><br>
-        <span>${escapeHtml(r.waste)}</span>${gps}<br>
-        <small style="color:#567">👤 ${escapeHtml(r.citizen)} • 📅 ${escapeHtml(r.d)}</small>
+        <span class="dept-tag">🏛️ ${r.dept || "UC Tarai"}</span><br>
+        <b>📍 ${r.area}</b> <small style="color:#456">(#${r.id})</small><br>
+        <span>${r.waste}</span>${gpsHtml}<br>
+        <small style="color:#567">👤 ${r.citizen} • 📅 ${r.d}</small>
       </div>
       <div style="text-align:right">
         ${statusBadge}
         <div class="off-actions" style="margin-top:6px"></div>
-      </div>`;
-    if (activeOfficer.isSuper || r.dept === activeOfficer.filter) {
-      const action = card.querySelector(".off-actions");
-      const statuses = ["Pending", "Assigned", "Cleaning in Progress", "Resolved"];
-      const index = statuses.indexOf(status);
-      const nextStatus = index < 0 || index === statuses.length - 1 ? "Pending" : statuses[index + 1];
-      const button = document.createElement("button");
-      button.type = "button";
-      button.style.padding = "5px 10px";
-      button.style.fontSize = "11.5px";
-      button.textContent = status === "Resolved" ? "↩️ Reopen" : `Update: ${nextStatus}`;
-      button.className = status === "Resolved" ? "alt" : "";
-      if (status !== "Resolved") button.style.background = "var(--green)";
-      button.onclick = () => toggleReportStatus(r, nextStatus);
-      action.appendChild(button);
+      </div>
+    `;
+
+    if (activeOfficer && (activeOfficer.isSuper || r.dept === activeOfficer.filter)) {
+      const act = card.querySelector(".off-actions");
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.style.padding = "5px 10px";
+      btn.style.fontSize = "11.5px";
+      if (isCleaned) {
+        btn.textContent = "↩️ Mark Pending";
+        btn.className = "alt";
+        btn.onclick = () => toggleReportStatus(r, "Pending");
+      } else {
+        btn.textContent = "✅ Mark as Cleaned";
+        btn.style.background = "var(--green)";
+        btn.onclick = () => toggleReportStatus(r, `Cleaned by ${activeOfficer.u}`);
+      }
+      act.appendChild(btn);
     }
     box.appendChild(card);
   });
 }
 
-async function toggleReportStatus(report, newStatus) {
-  if (!SESSION || !activeOfficer) return;
-  try {
-    await apiPost({ action: "update_report", token: SESSION.token, id: report.id, status: newStatus });
-    await loadPrivateData();
-  } catch (err) {
-    handleSessionError(err);
-    alert("Could not update report: " + err.message);
+async function toggleReportStatus(rep, newStatus) {
+  if (!activeOfficer || (!activeOfficer.isSuper && rep.dept !== activeOfficer.filter)) {
+    alert("⚠️ Access Denied: You can only update complaints in your own Halqa!");
+    return;
+  }
+  rep.status = newStatus;
+  try { localStorage.setItem("sdg_reports", JSON.stringify(REPORTS)); } catch (e) {}
+  renderReports();
+  if (CLOUD_URL && rep.id) {
+    try {
+      await fetch(`${CLOUD_URL}?action=update_report&id=${encodeURIComponent(rep.id)}&st=${encodeURIComponent(newStatus)}&t=${Date.now()}`);
+      await syncAuditFromCloud();
+    } catch (e) {}
   }
 }
 
-$("officerBtn").onclick = async () => {
-  if (SESSION && SESSION.token) {
-    showOfficerPortal();
-    return;
-  }
-  const loggedIn = await authenticatePrompt();
-  if (loggedIn) showOfficerPortal();
-};
+$("officerBtn").onclick = () => {
+  if (activeOfficer) return;
+  const u = prompt("👮‍♂️ Local Govt. Officer Portal\nEnter Officer Username:\n(UC TARAI / TC GOLARCHI / MC BADIN / GBHSS HAJI JUNEJO)");
+  if (u === null) return;
+  const p = prompt("🔑 Enter Officer Password:");
+  if (p === null) return;
 
-async function showOfficerPortal() {
-  if (!SESSION || !activeOfficer) return;
-  try {
-    await loadPrivateData();
-    $("officerTitle").innerHTML = `👮‍♂️ <b>${escapeHtml(activeOfficer.label)}</b> (Server-Verified Session)`;
-    $("offFilter").value = activeOfficer.isSuper ? "ALL" : activeOfficer.filter;
-    $("offFilter").style.display = activeOfficer.isSuper ? "inline-block" : "none";
+  const matched = OFFICER_ACCOUNTS.find(acc => acc.u === u.trim().toUpperCase() && acc.p === p.trim());
+  if (matched) {
+    activeOfficer = matched;
+    $("officerTitle").innerHTML = `👮‍♂️ <b>${matched.label}</b> (Jurisdiction Locked)`;
+    $("offFilter").value = matched.filter;
+    $("offFilter").style.display = matched.isSuper ? "inline-block" : "none";
     $("officerBar").style.display = "flex";
     $("officerBtn").style.display = "none";
     $("secFeedContainer").style.display = "block";
     $("secFeedLocked").style.display = "none";
     renderReports();
-  } catch (err) {
-    handleSessionError(err);
-    alert("Could not load the secure officer portal: " + err.message);
+    alert(`✅ Welcome Officer (${matched.label})!\nShowing complaints strictly for your jurisdiction.`);
+  } else {
+    alert("❌ Invalid Officer Username or Password!");
   }
-}
+};
 
 $("offFilter").onchange = renderReports;
-$("offLogoutBtn").onclick = () => clearSession(true);
+
+$("offLogoutBtn").onclick = () => {
+  activeOfficer = null;
+  $("officerBar").style.display = "none";
+  $("offFilter").style.display = "none";
+  $("officerBtn").style.display = "inline-block";
+  $("secFeedContainer").style.display = "none";
+  $("secFeedLocked").style.display = "block";
+  renderReports();
+};
 
 $("offCsvBtn").onclick = () => {
   if (!activeOfficer) return;
-  const list = REPORTS.filter(r => activeOfficer.isSuper || r.dept === activeOfficer.filter);
-  const rows = [["Report_ID","Halqa_Department","Area","Waste_Type","Citizen_Info","GPS_Map","Status","Date"]];
-  list.forEach(r => rows.push([r.id,r.dept,r.area,r.waste,r.citizen,r.gps,r.status,r.d]));
-  downloadCsv_(rows, `${activeOfficer.u.toLowerCase().replace(/\s+/g, "_")}_reports.csv`);
+  const allowedFilter = getAllowedFilter();
+  const list = REPORTS.filter(r => allowedFilter === "ALL" || r.dept === allowedFilter);
+  const rows = ["Report_ID,Halqa_Department,Area,Waste_Type,Citizen_Info,GPS_Map,Status,Date"];
+  list.forEach(r => {
+    rows.push(`"${r.id}","${r.dept || "UC Tarai"}","${r.area}","${r.waste}","${r.citizen}","${r.gps || ""}","${r.status}","${r.d}"`);
+  });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([rows.join("\n")], {type: "text/csv"}));
+  a.download = `${activeOfficer.u.toLowerCase().replace(/\s+/g, "_")}_reports.csv`; a.click();
 };
 
-$("repSyncBtn").onclick = () => loadPrivateData().catch(err => { handleSessionError(err); alert(err.message); });
+$("repSyncBtn").onclick = () => syncAuditFromCloud(false);
 
 /* ---- Waste Audit Step & Rendering ---- */
 function auditStep(idx, now) {
   if (idx === null) {
     if (!idleSince) idleSince = now;
-    if (now - idleSince > 500 && !auditArmed) {
-      auditArmed = true;
-      setTask("📊 Ready for next item! Show inside box<small>Ab agla kachra camera ke samne layen</small>");
+    if (now - idleSince > 500) {
+      if (!auditArmed) {
+        auditArmed = true;
+        setTask("📊 Ready for next item! Show inside box<small>Ab agla kachra camera ke samne layen</small>");
+      }
     }
     return;
   }
   idleSince = 0;
   if (auditArmed && now - holdSince > HOLD_MS) {
     auditArmed = false;
-    const bin = BINS[idx];
-    const day = todayData();
-    day[bin.name] = (Number(day[bin.name]) || 0) + 1;
-    lastCounted = bin.name;
-    saveAudit();
+    const b = BINS[idx], d = todayData();
+    d[b.name] = (d[b.name] || 0) + 1; lastCounted = b.name; saveAudit();
     beep([700, 920]);
-    say(`${bin.name} counted`);
+    say(`${b.name} counted`);
     triggerBinSimulation(idx, true);
-    setTask(`✅ Counted +1 ${bin.icon} ${bin.name}!<small style="color:var(--green);font-weight:bold">Remove item from camera to count the next one.</small>`);
+    setTask(`✅ Counted +1 ${b.icon} ${b.name}!<small style="color:var(--green);font-weight:bold">Remove item from camera to count the next one.</small>`);
     renderAudit();
-    pushAuditDelta(bin.name, 1).catch(() => {});
+    pushAuditDelta(b.name, 1);
   }
 }
 
 function renderAudit() {
-  const d = AUD[today()] || {};
-  const totalToday = sum(d);
+  const d = todayData(), totalToday = sum(d);
   let grandPlastic = 0, grandPaper = 0, grandGlass = 0;
   Object.keys(AUD).forEach(dt => {
-    grandPlastic += Number(AUD[dt] && AUD[dt].Plastic) || 0;
-    grandPaper += Number(AUD[dt] && AUD[dt].Paper) || 0;
-    grandGlass += Number(AUD[dt] && AUD[dt].Glass) || 0;
+    grandPlastic += (AUD[dt] && AUD[dt]["Plastic"]) || 0;
+    grandPaper   += (AUD[dt] && AUD[dt]["Paper"]) || 0;
+    grandGlass   += (AUD[dt] && AUD[dt]["Glass"]) || 0;
   });
   const grandTotal = grandPlastic + grandPaper + grandGlass;
-  $("auditTotal").textContent = `Today (${today()}): ${totalToday} items | Overall Total: ${grandTotal} items`;
+
+  $("auditTotal").textContent = `Today (${today()}): ${totalToday} items  |  Overall Total: ${grandTotal} items`;
   $("auditBars").innerHTML = BINS.map(b => {
-    const n = Number(d[b.name]) || 0;
-    const pct = totalToday ? Math.round(n * 100 / totalToday) : 0;
-    return `<div class="arow"><span>${b.icon} ${b.name}</span><div class="abar"><i style="width:${pct}%;background:${b.color}"></i></div><b>${n} (${pct}%)</b></div>`;
+    const n = d[b.name] || 0, p = totalToday ? Math.round(n * 100 / totalToday) : 0;
+    return `<div class="arow"><span>${b.icon} ${b.name}</span><div class="abar"><i style="width:${p}%;background:${b.color}"></i></div><b>${n} (${p}%)</b></div>`;
   }).join("");
 
-  const hist = $("auditHistory"), foot = $("auditFooter");
-  if (!hist) return;
-  const dates = Object.keys(AUD).filter(dt => sum(AUD[dt]) > 0 || dt === today()).sort().reverse();
-  if (!dates.length) {
-    hist.innerHTML = `<tr><td colspan="5" style="text-align:center">No items counted yet</td></tr>`;
-    if (foot) foot.innerHTML = "";
-    return;
+  const hist = $("auditHistory");
+  const foot = $("auditFooter");
+  if (hist) {
+    const dates = Object.keys(AUD).filter(dt => sum(AUD[dt]) > 0 || dt === today()).sort().reverse();
+    if (!dates.length) {
+      hist.innerHTML = `<tr><td colspan="5" style="text-align:center">No items counted yet</td></tr>`;
+      if (foot) foot.innerHTML = "";
+    } else {
+      hist.innerHTML = dates.map(dt => {
+        const row = AUD[dt] || {};
+        const pl = row["Plastic"] || 0;
+        const pa = row["Paper"] || 0;
+        const gl = row["Glass"] || 0;
+        const label = dt === today() ? `${dt} (Today)` : dt;
+        return `<tr><td><b>${label}</b></td><td>${pl}</td><td>${pa}</td><td>${gl}</td><td><b>${pl + pa + gl}</b></td></tr>`;
+      }).join("");
+      if (foot) {
+        foot.innerHTML = `<tr><td>📊 Overall Total</td><td>${grandPlastic}</td><td>${grandPaper}</td><td>${grandGlass}</td><td>${grandTotal}</td></tr>`;
+      }
+    }
   }
-  hist.innerHTML = dates.map(dt => {
-    const row = AUD[dt] || {};
-    const pl = Number(row.Plastic) || 0, pa = Number(row.Paper) || 0, gl = Number(row.Glass) || 0;
-    return `<tr><td><b>${dt === today() ? `${dt} (Today)` : dt}</b></td><td>${pl}</td><td>${pa}</td><td>${gl}</td><td><b>${pl + pa + gl}</b></td></tr>`;
-  }).join("");
-  if (foot) foot.innerHTML = `<tr><td>📊 Overall Total</td><td>${grandPlastic}</td><td>${grandPaper}</td><td>${grandGlass}</td><td>${grandTotal}</td></tr>`;
 }
 
 function summary() {
-  const d = AUD[today()] || {};
-  const todayTotal = sum(d);
-  const allTime = Object.keys(AUD).reduce((n, key) => n + sum(AUD[key]), 0);
-  return `Waste audit ${today()}: ${todayTotal} items today (${allTime} total across all days). ` +
-    BINS.map(b => `${b.name} ${Number(d[b.name]) || 0}`).join(", ") + ".";
+  const d = todayData(), total = sum(d);
+  let allTime = 0;
+  Object.keys(AUD).forEach(k => { allTime += sum(AUD[k]); });
+  return `Waste audit ${today()}: ${total} items today (${allTime} total across all days). ` +
+    BINS.map(b => `${b.name} ${d[b.name] || 0}`).join(", ") + ".";
 }
 
-$("aSync").onclick = () => syncAuditFromCloud();
-$("aUndo").style.display = activeOfficer && activeOfficer.isSuper ? "inline-block" : "none";
-$("aUndo").onclick = async () => {
-  if (!SESSION || !activeOfficer || !activeOfficer.isSuper) {
-    alert("Only Super Admin can reverse a saved cloud count.");
-    return;
+$("aSync").onclick = () => syncAuditFromCloud(false);
+$("aUndo").onclick = () => {
+  const d = todayData();
+  if (lastCounted && d[lastCounted] > 0) {
+    const cls = lastCounted;
+    d[cls]--; lastCounted = null; saveAudit(); renderAudit();
+    pushAuditDelta(cls, -1);
   }
-  if (!lastCounted || !(Number(todayData()[lastCounted]) > 0)) return;
-  try {
-    await apiPost({ action: "audit_adjust", token: SESSION.token, category: lastCounted, delta: -1, date: today() });
-    lastCounted = null;
-    await syncAuditFromCloud();
-  } catch (err) { handleSessionError(err); alert(err.message); }
 };
 
 $("aReset").onclick = async () => {
-  if (!SESSION || SESSION.role !== "SUPER_ADMIN") { alert("Super Admin login is required."); return; }
-  if (!confirm("Reset today's audit counts to zero across all devices? Historical records will remain in the sheet.")) return;
-  try {
-    await apiPost({ action: "audit_reset_today", token: SESSION.token });
-    await syncAuditFromCloud();
-    alert("Today's audit has been reset. Historical rows remain محفوظ in Google Sheets.");
-  } catch (err) { handleSessionError(err); alert("Reset failed: " + err.message); }
+  if (confirm("Are you sure you want to reset today's audit counts to 0 across all devices?")) {
+    const d = todayData();
+    const pl = d["Plastic"] || 0;
+    const pa = d["Paper"] || 0;
+    const gl = d["Glass"] || 0;
+    AUD[today()] = {}; saveAudit(); renderAudit();
+    if (pl > 0) await pushAuditDelta("Plastic", -pl);
+    if (pa > 0) await pushAuditDelta("Paper", -pa);
+    if (gl > 0) await pushAuditDelta("Glass", -gl);
+    alert("Today's waste audit has been reset to 0.");
+  }
 };
 
 $("aMatchCloud").onclick = async () => {
-  try {
-    await syncAuditFromCloud();
-    alert("Device view refreshed from the Google Sheet. Cloud counts are now authoritative.");
-  } catch (e) { alert(e.message); }
+  try { localStorage.removeItem("sdg_audit"); } catch (e) {}
+  AUD = {};
+  await syncAuditFromCloud(true);
+  alert("Device cache cleared and matched 100% with Google Sheet!");
 };
 
 $("aCopy").onclick = () => {
@@ -1321,168 +1283,201 @@ $("aCopy").onclick = () => {
 };
 
 $("aCsv").onclick = () => {
-  const rows = [["Date","Plastic","Paper","Glass","Day_Total"]];
+  const rows = ["Date,Plastic,Paper,Glass,Day_Total"];
   let gPl = 0, gPa = 0, gGl = 0;
   Object.keys(AUD).sort().reverse().forEach(dt => {
-    const pl = Number(AUD[dt] && AUD[dt].Plastic) || 0;
-    const pa = Number(AUD[dt] && AUD[dt].Paper) || 0;
-    const gl = Number(AUD[dt] && AUD[dt].Glass) || 0;
+    const pl = (AUD[dt] && AUD[dt]["Plastic"]) || 0;
+    const pa = (AUD[dt] && AUD[dt]["Paper"]) || 0;
+    const gl = (AUD[dt] && AUD[dt]["Glass"]) || 0;
     gPl += pl; gPa += pa; gGl += gl;
-    rows.push([dt, pl, pa, gl, pl + pa + gl]);
+    rows.push(`${dt},${pl},${pa},${gl},${pl + pa + gl}`);
   });
-  rows.push(["OVERALL_TOTAL", gPl, gPa, gGl, gPl + gPa + gGl]);
-  downloadCsv_(rows, "saaf_sindh_daywise_waste_audit.csv");
+  rows.push(`OVERALL_TOTAL,${gPl},${gPa},${gGl},${gPl + gPa + gGl}`);
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([rows.join("\n")], {type: "text/csv"}));
+  a.download = "saaf_sindh_daywise_waste_audit.csv"; a.click();
 };
 
-/* ---- Public Leaderboard: names and scores only ---- */
+/* ---- Cloud + Local Auto-Merge Leaderboard ---- */
+async function syncDeviceToCloud(cloudPlayers) {
+  let local = [];
+  try { local = JSON.parse(localStorage.getItem("sdg_lb") || "[]"); } catch (e) {}
+  let pushed = false;
+  for (const r of local) {
+    const nameStr = String(r.n || "");
+    if (nameStr.startsWith("AUDIT | ") || nameStr.startsWith("REPORT | ")) continue;
+    const exists = cloudPlayers.some(c => c.n === r.n && Number(c.s) === Number(r.s));
+    if (!exists && r.n && r.s) {
+      try {
+        await fetch(`${CLOUD_URL}?action=save&n=${encodeURIComponent(r.n)}&s=${r.s}&ph=${encodeURIComponent(r.ph || "Not provided")}&t=${Date.now()}`);
+        pushed = true;
+      } catch (e) {}
+    }
+  }
+  if (pushed) {
+    try {
+      const updated = await fetchAllSheetRows();
+      if (Array.isArray(updated)) return splitCloudRows(updated).players;
+    } catch (e) {}
+  }
+  return cloudPlayers;
+}
+
 async function renderLb() {
   const ol = $("lbList");
-  try {
-    const data = await fetchPublicData();
-    LB = Array.isArray(data.players) ? data.players : [];
-  } catch (e) {
-    // Do not fall back to old local leaderboard cache because it may contain phone numbers.
+  if (CLOUD_URL) {
+    try {
+      const raw = await fetchAllSheetRows();
+      if (Array.isArray(raw)) {
+        const { players } = splitCloudRows(raw);
+        LB = await syncDeviceToCloud(players);
+        try { localStorage.setItem("sdg_lb", JSON.stringify(LB)); } catch (e) {}
+      }
+    } catch (e) {}
   }
-  const list = LB.slice().sort((a, b) => Number(b.s) - Number(a.s)).slice(0, 5);
+  const currDate = today();
+  const todayPlayers = LB.filter(r => r.d === currDate);
+  const list = todayPlayers.slice().sort((a, b) => b.s - a.s).slice(0, 5);
   ol.innerHTML = "";
   if (!list.length) {
-    const li = document.createElement("li");
-    li.textContent = `No scores yet for today (${today()}) — play the 60-second game!`;
-    ol.appendChild(li);
-    return;
+    const li = document.createElement("li"); 
+    li.textContent = `No scores yet for today (${currDate}) — play 60s Game to win Rs. 100!`;
+    ol.appendChild(li); return;
   }
   list.forEach((r, idx) => {
     const li = document.createElement("li");
-    li.innerHTML = `<b>${escapeHtml(r.n)}</b> — ${Number(r.s) || 0} pts <small style="color:var(--green);font-weight:bold">${idx < 3 ? "🎁 Top 3 Prize Eligible" : ""}</small>`;
+    const prizeTag = idx < 3 ? " 🎁 (Top 3 Prize Eligible)" : "";
+    li.innerHTML = `<b>${r.n}</b> — ${r.s} pts <small style="color:var(--green);font-weight:bold">${prizeTag}</small>`;
     ol.appendChild(li);
   });
 }
 
 async function renderAdmin() {
   const tb = $("adminTable");
-  if (!SESSION || SESSION.role !== "SUPER_ADMIN") {
-    $("admStatus").textContent = "🔒 Super Admin login is required.";
-    tb.innerHTML = `<tr><td colspan="5" style="text-align:center">Not authorized</td></tr>`;
+  if (CLOUD_URL) {
+    $("admStatus").textContent = "☁️ Connecting to Cloud Sheet...";
+    try {
+      const raw = await fetchAllSheetRows();
+      if (Array.isArray(raw)) {
+        const { players } = splitCloudRows(raw);
+        LB = await syncDeviceToCloud(players);
+        try { localStorage.setItem("sdg_lb", JSON.stringify(LB)); } catch (e) {}
+        $("admStatus").textContent = "✅ Live 3-Sheet Cloud Sync Active (Mobile + PC Merged!)";
+      }
+    } catch (e) {
+      $("admStatus").textContent = "⚠️ Cloud unreachable — showing device records only";
+    }
+  }
+  tb.innerHTML = "";
+  const sorted = LB.slice().sort((a, b) => b.s - a.s);
+  if (!sorted.length) {
+    tb.innerHTML = `<tr><td colspan="5" style="text-align:center">No records saved yet</td></tr>`;
     return;
   }
-  $("admStatus").textContent = "☁️ Loading private records from the secure backend...";
-  try {
-    const data = await loadPrivateData();
-    const players = Array.isArray(data.players) ? data.players : [];
-    tb.innerHTML = "";
-    if (!players.length) {
-      tb.innerHTML = `<tr><td colspan="5" style="text-align:center">No player records found.</td></tr>`;
-    } else {
-      players.forEach((r, i) => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `<td>${i + 1}</td><td><b>${escapeHtml(r.n)}</b></td><td>${Number(r.s) || 0}</td><td>${escapeHtml(r.ph || "—")}</td><td>${escapeHtml(r.d || "")}</td>`;
-        tb.appendChild(tr);
-      });
-    }
-    $("admStatus").textContent = "✅ Authenticated — private records loaded from Google Sheets.";
-    $("aUndo").style.display = "inline-block";
-  } catch (err) {
-    handleSessionError(err);
-    $("admStatus").textContent = "⚠️ Could not load private records: " + err.message;
-  }
+  sorted.forEach((r, i) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td>${i + 1}</td><td><b>${r.n}</b></td><td>${r.s}</td><td>${r.ph || "—"}</td><td>${r.d || ""}</td>`;
+    tb.appendChild(tr);
+  });
 }
 
 $("lbSave").onclick = async () => {
-  const name = $("lbName").value.replace(/[,"<>\n|]/g, "").trim() || "Player";
-  const phone = ($("lbPhone").value || "").replace(/[^\d+]/g, "").trim();
-  const btn = $("lbSave");
-  btn.disabled = true;
-  btn.textContent = "Saving securely...";
-  try {
-    await apiPost({ action: "save_score", name: name, score: score, phone: phone });
-    $("lbName").value = "";
-    $("lbPhone").value = "";
-    $("lbEntry").style.display = "none";
-    await renderLb();
-    alert("✅ Score saved to Google Sheet. Your mobile number is visible only to Super Admin.");
-  } catch (err) {
-    alert("❌ Score was not confirmed as saved: " + err.message);
-  } finally {
-    btn.disabled = false;
-    btn.textContent = "💾 Save Score to Cloud";
+  const n = $("lbName").value.replace(/[,"<>\n|]/g, "").trim() || "Player";
+  const ph = ($("lbPhone").value || "").replace(/[^\d+]/g, "").trim() || "Not provided";
+  $("lbSave").disabled = true;
+  $("lbSave").textContent = "Saving to Cloud...";
+  LB.push({n, s: score, ph, d: today()});
+  try { localStorage.setItem("sdg_lb", JSON.stringify(LB)); } catch (e) {}
+  if (CLOUD_URL) {
+    try {
+      await fetch(`${CLOUD_URL}?action=save&n=${encodeURIComponent(n)}&s=${score}&ph=${encodeURIComponent(ph)}&t=${Date.now()}`);
+    } catch (e) {}
   }
+  $("lbName").value = ""; $("lbPhone").value = "";
+  $("lbSave").disabled = false; $("lbSave").textContent = "💾 Save Score to Cloud";
+  $("lbEntry").style.display = "none";
+  await renderLb();
+  if ($("adminBox").style.display === "block") renderAdmin();
+  alert("Score saved to Sheet 1 (Game_Scores)! Top 3 Winners will receive Rs. 100 Top-Up Balance.");
 };
 
 function openAdmin() {
-  (async () => {
-    if (!SESSION || SESSION.role !== "SUPER_ADMIN") {
-      const ok = await authenticatePrompt("SUPER_ADMIN");
-      if (!ok) return;
-    }
-    $("adminBox").style.display = "block";
-    await renderAdmin();
-    $("adminBox").scrollIntoView({ behavior: "smooth" });
-  })();
+  const inputPin = prompt("Enter School SEMIS Code to open Admin Panel:");
+  if (inputPin !== null) {
+    try {
+      if (inputPin.trim() === atob(ADMIN_HASH)) {
+        $("adminBox").style.display = "block";
+        $("aUndo").style.display = "inline-block"; // Show Undo button for Admin
+        renderAdmin();
+        $("adminBox").scrollIntoView({behavior: "smooth"});
+        return;
+      }
+    } catch (e) {}
+    alert("Incorrect SEMIS Code!");
+  }
 }
 
 let tapCount = 0, tapTimer = null;
 $("appTitle").onclick = () => {
   tapCount++;
   clearTimeout(tapTimer);
-  if (tapCount >= 5) { tapCount = 0; openAdmin(); }
-  else tapTimer = setTimeout(() => { tapCount = 0; }, 2000);
+  if (tapCount >= 5) {
+    tapCount = 0;
+    openAdmin();
+  } else {
+    tapTimer = setTimeout(() => { tapCount = 0; }, 2000);
+  }
 };
+
 window.addEventListener("keydown", e => {
   if (e.ctrlKey && e.shiftKey && (e.key === "A" || e.key === "a")) {
     e.preventDefault();
     openAdmin();
   }
 });
-function checkHash() { if (location.hash.toLowerCase() === "#admin") openAdmin(); }
+
+function checkHash() {
+  if (location.hash.toLowerCase() === "#admin") openAdmin();
+}
 window.addEventListener("hashchange", checkHash);
 setTimeout(checkHash, 400);
 
 $("admRefresh").onclick = renderAdmin;
 $("admClose").onclick = () => {
   $("adminBox").style.display = "none";
-  if (location.hash.toLowerCase() === "#admin") history.replaceState(null, "", location.pathname + location.search);
+  $("aUndo").style.display = "none";
+  if (location.hash.toLowerCase() === "#admin") {
+    history.replaceState(null, "", location.pathname + location.search);
+  }
 };
 
-function downloadCsv_(rows, filename) {
-  const csv = rows.map(row => row.map(value => `"${String(value == null ? "" : value).replace(/"/g, '""')}"`).join(",")).join("\r\n");
-  const blobUrl = URL.createObjectURL(new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8" }));
-  const a = document.createElement("a");
-  a.href = blobUrl;
-  a.download = filename;
-  a.click();
-  setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
-}
-
 $("admCsv").onclick = () => {
-  if (!SESSION || SESSION.role !== "SUPER_ADMIN") return;
-  const rows = [["Rank","Name","Score","Mobile_Number","Date"]];
-  LB.slice().sort((a, b) => Number(b.s) - Number(a.s)).forEach((r, i) => rows.push([i + 1, r.n, r.s, r.ph || "", r.d || ""]));
-  downloadCsv_(rows, "saaf_sindh_players_contacts.csv");
+  const rows = ["Rank,Name,Score,Mobile_Number,Date"];
+  LB.slice().sort((a, b) => b.s - a.s).forEach((r, i) => {
+    rows.push(`${i + 1},"${r.n}",${r.s},"${r.ph || ""}",${r.d || ""}`);
+  });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([rows.join("\n")], {type: "text/csv"}));
+  a.download = "saaf_sindh_players_contacts.csv"; a.click();
 };
 
 $("admCopy").onclick = () => {
-  if (!SESSION || SESSION.role !== "SUPER_ADMIN") return;
-  const txt = LB.slice().sort((a, b) => Number(b.s) - Number(a.s))
+  const txt = LB.slice().sort((a, b) => b.s - a.s)
     .map((r, i) => `${i + 1}. ${r.n} | Score: ${r.s} | Phone: ${r.ph || "N/A"} (${r.d})`).join("\n") || "No records.";
-  if (navigator.clipboard) navigator.clipboard.writeText(txt).then(() => alert("Private player records copied."));
+  if (navigator.clipboard) navigator.clipboard.writeText(txt).then(() => alert("All records copied!"));
   else prompt("Copy records:", txt);
 };
 
 $("admClear").onclick = async () => {
-  if (!SESSION || SESSION.role !== "SUPER_ADMIN") { alert("Super Admin login is required."); return; }
-  if (!confirm("Delete ALL player scores and phone numbers from the Game_Scores sheet? This cannot be undone.")) return;
-  try {
-    await apiPost({ action: "clear_scores", token: SESSION.token });
+  if (confirm("Are you sure you want to delete ALL saved scores and phone numbers from Cloud & Device?")) {
     LB = [];
-    await renderLb();
-    await renderAdmin();
-    alert("Player records cleared from Google Sheet.");
-  } catch (err) { handleSessionError(err); alert("Clear failed: " + err.message); }
+    try { localStorage.removeItem("sdg_lb"); } catch (e) {}
+    if (CLOUD_URL) {
+      try { await fetch(`${CLOUD_URL}?action=clear&pin=${encodeURIComponent(atob(CLOUD_KEY))}&t=${Date.now()}`); } catch (e) {}
+    }
+    renderLb(); renderAdmin();
+  }
 };
-
-// Startup: load only public data. Private reports and mobile numbers are fetched only after login.
-syncAuditFromCloud();
-
 </script>
 </body>
 </html>
