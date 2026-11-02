@@ -36,7 +36,7 @@ main{max-width:800px;margin:0 auto;padding:12px}
 .how-strip{background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:8px 12px;margin-bottom:12px;display:flex;justify-content:space-around;align-items:center;flex-wrap:wrap;gap:6px;font-size:12.5px;font-weight:bold;text-align:center}
 .how-strip span{background:#f4faf8;padding:4px 10px;border-radius:16px;border:1px solid var(--line)}
 
-/* ---- JUDGE DEMO MODE PANEL ---- */
+/* ---- PRESENTATION DEMO PANEL ---- */
 #judgePanel{display:none;background:linear-gradient(135deg,#0f2930,#1b434d);color:#fff;border:2.5px solid var(--gold);border-radius:16px;padding:14px;margin-bottom:12px;box-shadow:0 6px 18px rgba(0,0,0,.18)}
 .jp-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;border-bottom:1px solid rgba(255,255,255,.18);padding-bottom:8px;margin-bottom:10px}
 .jp-head h3{margin:0;color:var(--gold);font-size:16px}
@@ -62,18 +62,22 @@ button.on{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:
 .prize-banner span{display:inline-block;background:var(--coral);color:#fff;padding:2px 8px;border-radius:12px;font-size:11px;margin-right:5px}
 
 /* ---- SIDE-BY-SIDE CAMERA & PROTOTYPE GRID ---- */
-.live-grid{display:grid;grid-template-columns:1.1fr 0.9fr;gap:12px;align-items:stretch;margin-bottom:10px}
+.live-grid{display:grid;grid-template-columns:1.1fr 0.9fr;gap:12px;align-items:start;margin-bottom:10px}
 @media(max-width:660px){.live-grid{grid-template-columns:1fr}}
 .cam-col{display:flex;flex-direction:column}
 
-/* ---- CAMERA STAGE & CONTROLS ---- */
+/* ---- CAMERA STAGE & IN-CAMERA GAME TARGET BANNER ---- */
 .stage{position:relative;background:#111;border-radius:16px 16px 0 0;overflow:hidden;aspect-ratio:4/3;width:100%;box-shadow:0 4px 14px rgba(0,0,0,.18);border:3px solid #fff;border-bottom:0}
 canvas{width:100%;height:100%;display:block;object-fit:cover}
-.guide{position:absolute;inset:15% 18%;border:2.5px dashed rgba(255,255,255,.8);border-radius:14px;pointer-events:none;transition:border-color .2s}
+.guide{position:absolute;inset:18% 18% 14%;border:2.5px dashed rgba(255,255,255,.8);border-radius:14px;pointer-events:none;transition:border-color .2s}
 .guide.locking{border-color:var(--gold)}
-.cam-tools{position:absolute;top:8px;right:8px;display:none;gap:6px;z-index:4}
-.cam-tools button{padding:6px 10px;font-size:12px;border-radius:8px;background:rgba(15,41,48,.85);color:#fff}
-#startOverlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;background:rgba(15,41,48,.86);color:#fff;padding:16px;text-align:center;z-index:3}
+
+/* Live Game Target Banner right inside the top of the Camera */
+#camTargetBanner{display:none;position:absolute;top:8px;left:8px;right:8px;z-index:5;background:rgba(15,41,48,.92);color:#fff;border:2px solid var(--gold);border-radius:10px;padding:6px 10px;font-size:14px;font-weight:bold;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,.35);pointer-events:none}
+
+.cam-tools{position:absolute;bottom:12px;right:8px;display:none;gap:6px;z-index:5}
+.cam-tools button{padding:5px 9px;font-size:11.5px;border-radius:8px;background:rgba(15,41,48,.85);color:#fff}
+#startOverlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;background:rgba(15,41,48,.86);color:#fff;padding:16px;text-align:center;z-index:6}
 #start{font-size:16.5px;padding:13px 26px;background:var(--green);border-radius:30px;box-shadow:0 4px 16px rgba(30,142,62,.55);border:2px solid #fff}
 .step-pills{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;margin-bottom:10px;font-size:11px}
 .step-pills span{background:rgba(255,255,255,.15);padding:3px 8px;border-radius:12px}
@@ -83,11 +87,19 @@ canvas{width:100%;height:100%;display:block;object-fit:cover}
 /* ---- AI CONFIDENCE BAR DIRECTLY UNDER CAMERA ---- */
 #probs{margin:0;font-size:12.5px;font-weight:bold;color:#fff;text-align:center;background:var(--ink);padding:8px 10px;border-radius:0 0 16px 16px;border:3px solid #fff;border-top:1px solid rgba(255,255,255,.2);box-shadow:0 4px 12px rgba(0,0,0,.12)}
 
+/* ---- GAME HUD & AI TASK BOX (DIRECTLY UNDER CAMERA FOR ZERO MOBILE SCROLL) ---- */
+.hud{display:none;gap:6px;margin:8px 0 0}
+.hud div{flex:1;background:var(--card);border:2px solid var(--line);border-radius:10px;padding:5px 4px;text-align:center;font-size:11.5px}
+.hud b{display:block;font-size:18px;color:var(--blue)}
+
+#task{margin:8px 0 0;background:var(--card);border:2.5px solid var(--line);border-radius:14px;padding:10px 12px;text-align:center;font-size:17px;font-weight:bold;min-height:66px;display:flex;flex-direction:column;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.05)}
+#task small{display:block;font-size:13px;font-weight:normal;color:#456;margin-top:3px}
+
 /* ---- DIGITAL TWIN SMART BIN PROTOTYPE ---- */
 #protoBox{margin:0;background:var(--card);border:2px solid var(--line);border-radius:16px;padding:10px 12px;text-align:center;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 4px 12px rgba(0,0,0,.06)}
 .proto-head{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;font-weight:bold;gap:4px}
 .proto-badge{background:var(--ink);color:var(--gold);padding:3px 8px;border-radius:6px;font-family:monospace;font-size:11px;white-space:nowrap}
-.proto-stage{position:relative;height:155px;background:#f4faf8;border:2px dashed var(--line);border-radius:12px;overflow:hidden;margin:6px 0;flex:1}
+.proto-stage{position:relative;height:165px;background:#f4faf8;border:2px dashed var(--line);border-radius:12px;overflow:hidden;margin:6px 0;flex:1}
 .chute{width:86px;height:22px;border-left:3px solid var(--ink);border-right:3px solid var(--ink);margin:0 auto;background:rgba(16,38,46,0.06);font-size:10px;color:#456;line-height:22px}
 #dropItem{position:absolute;top:2px;left:50%;transform:translate(-50%,0);font-size:24px;opacity:0;transition:transform 0.6s ease-in, opacity 0.2s}
 .pivot-axle{width:14px;height:14px;background:var(--gold);border:3px solid var(--ink);border-radius:50%;margin:12px auto 0;position:relative;z-index:3}
@@ -103,15 +115,6 @@ canvas{width:100%;height:100%;display:block;object-fit:cover}
 .cap-wrap{width:100%;height:6px;background:rgba(0,0,0,.1);border-radius:4px;overflow:hidden;margin-top:2px}
 .cap-fill{height:100%;width:0%;transition:width .3s}
 #overflowAlert{display:none;background:#ffebee;border:1.5px solid var(--coral);color:#b71c1c;border-radius:9px;padding:5px 8px;font-size:11.5px;font-weight:bold;margin:4px 0;text-align:left}
-
-/* ---- GAME HUD ---- */
-.hud{display:none;gap:8px;margin:10px 0}
-.hud div{flex:1;background:var(--card);border:2px solid var(--line);border-radius:12px;padding:6px;text-align:center;font-size:12.5px}
-.hud b{display:block;font-size:20px;color:var(--blue)}
-
-/* ---- AI STATUS TASK BOX ---- */
-#task{margin:10px 0;background:var(--card);border:2px solid var(--line);border-radius:14px;padding:12px;text-align:center;font-size:17.5px;font-weight:bold;min-height:72px;display:flex;flex-direction:column;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.04)}
-#task small{display:block;font-size:13.5px;font-weight:normal;color:#456;margin-top:4px}
 
 /* ---- 3 BINS (Plastic, Paper, Glass) ---- */
 .bins{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}
@@ -162,7 +165,7 @@ canvas{width:100%;height:100%;display:block;object-fit:cover}
 .dept-tag{display:inline-block;background:#e3efec;color:var(--ink);padding:2px 7px;border-radius:6px;font-size:11px;font-weight:bold;margin-bottom:3px}
 #officerBar{display:none;background:linear-gradient(135deg,#0f2930,#1b434d);color:#fff;padding:10px 12px;border-radius:10px;margin-bottom:10px;font-size:12.5px;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
 
-/* ---- DEDICATED TEAM, GLOSSARY & FOR JUDGES SECTION ---- */
+/* ---- DEDICATED TEAM, PROJECT HIGHLIGHTS & EASY GLOSSARY SECTION ---- */
 .info-section{margin:16px 0;background:var(--card);border:2px solid var(--line);border-radius:16px;padding:14px;box-shadow:0 2px 8px rgba(0,0,0,.04)}
 .info-section h3{margin:0 0 10px;font-size:16px;color:var(--ink);border-bottom:2px solid var(--bg);padding-bottom:6px}
 .team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
@@ -222,9 +225,9 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
   <a href="#demoSection" onclick="setMode('learn')">📷 Live AI Demo</a>
   <a href="#demoSection" onclick="setMode('audit')">📊 Census Dashboard</a>
   <a href="#demoSection" onclick="setMode('civic')">🚨 Civic Portal</a>
-  <a href="#teamSection">👥 Team & Judges</a>
-  <button id="judgeBtn" class="nav-judge" type="button">🏆 3-Min Judge Pitch</button>
-  <button id="blindModeBtn" type="button" title="Toggle School Name vs Official Project Code for Unbiased Judging">🕶️ Code Mode</button>
+  <a href="#teamSection">👥 Team & Project Info</a>
+  <button id="judgeBtn" class="nav-judge" type="button">🎬 Presentation Demo</button>
+  <button id="blindModeBtn" type="button" title="Toggle School Name vs Official Project Code">🕶️ Code Mode</button>
 </nav>
 
 <header>
@@ -244,7 +247,7 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
   <div class="intro-grid">
     <div class="intro-card">
       <b>⚠️ The Local Problem (Hamara Masla)</b>
-      In schools and towns (Tarai, Golarchi, Badin), recyclable <b>Plastic, Paper & Glass</b> get mixed in open dumps with zero daily waste data and no fast way to alert Union Council / Municipal officers.
+      In schools and towns (Tarai, Golarchi, Badin), recyclable <b>Plastic, Paper & Glass</b> get mixed in open dumps with zero daily waste count data and no fast way to alert Union Council / Municipal officers.
     </div>
     <div class="intro-card sol">
       <b>💡 Our Integrated AI Solution (Hamara Hal)</b>
@@ -260,10 +263,10 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
     <span>4️⃣ Cloud Census & Civic Action</span>
   </div>
 
-  <!-- JUDGE DEMO & 3-MINUTE PITCH PANEL -->
+  <!-- PRESENTATION DEMO & PITCH PANEL -->
   <div id="judgePanel">
     <div class="jp-head">
-      <h3>🏆 Competition Judge Demo Mode (3-Minute Live Pitch Guide)</h3>
+      <h3>🎬 Live Project Presentation Guide (3-Minute Team Overview)</h3>
       <div style="display:flex;gap:6px;flex-wrap:wrap">
         <button id="runAutoDemoBtn" type="button" style="background:var(--gold);color:#0f2930;padding:6px 12px;font-size:12px">▶️ Run 15s Auto-Simulation</button>
         <button id="closeJudgeBtn" type="button" class="alt" style="padding:5px 10px;font-size:11.5px">✖ Close</button>
@@ -272,11 +275,11 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
     <div class="jp-grid">
       <div class="jp-card">
         <b>🎤 1. Zahid Ali (AI & Smart Bin)</b>
-        "Assalam-o-Alaikum Judges! Our Edge AI model identifies Plastic, Paper & Glass in real time (91.1% tested accuracy). Watch our Smart Bin sort Plastic left (35°), Glass center (90°), and Paper right (145°)!"
+        "Assalam-o-Alaikum! Our Edge AI model identifies Plastic, Paper & Glass in real time (91.1% tested accuracy). Watch our Smart Bin sort Plastic left (35°), Glass center (90°), and Paper right (145°)!"
       </div>
       <div class="jp-card">
         <b>🎤 2. Dost Ali (Waste Census & Game)</b>
-        "Every scan updates our live Google Cloud Waste Census, calculating recyclable weight (g/kg) and AI Insights. Students also play our 60-second challenge to win Rs. 100 balance!"
+        "Every scan updates our live Google Cloud Waste Census and generates real-time AI Insights. Students also play our 60-second challenge to win Rs. 100 balance!"
       </div>
       <div class="jp-card">
         <b>🎤 3. Shahmeer (Civic Action Portal)</b>
@@ -284,7 +287,7 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
       </div>
     </div>
     <div style="font-size:12px;color:#c3e3dc;text-align:center">
-      💡 <b>For Judges:</b> Click <b>"▶️ Run 15s Auto-Simulation"</b> above to watch the complete AI ➔ Smart Bin ➔ Overflow Alert ➔ Impact Census workflow automatically!
+      💡 <b>Quick Demo:</b> Click <b>"▶️ Run 15s Auto-Simulation"</b> above to watch the complete AI ➔ Smart Bin ➔ Overflow Alert ➔ Impact Census workflow automatically!
     </div>
   </div>
 
@@ -309,15 +312,17 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
     <span id="bannerText">👉 <b>Learn Mode:</b> Niche green button daba kar camera kholen aur Plastic, Paper ya Glass dikhayen.</span>
   </div>
 
-  <!-- SIDE-BY-SIDE LIVE CAMERA + CONFIDENCE BAR & DIGITAL TWIN PROTOTYPE -->
+  <!-- SIDE-BY-SIDE LIVE CAMERA + TARGET HUD & DIGITAL TWIN PROTOTYPE -->
   <div class="live-grid">
-    <!-- LEFT COLUMN: CAMERA + AI CONFIDENCE DIRECTLY BELOW -->
+    <!-- LEFT COLUMN: CAMERA + CONFIDENCE + GAME HUD & TARGET TASK (NO SCROLL ON MOBILE!) -->
     <div class="cam-col">
       <div class="stage">
         <canvas id="cv" width="320" height="240"></canvas>
+        <!-- LIVE GAME TARGET OVERLAY INSIDE CAMERA -->
+        <div id="camTargetBanner">🎯 Find & Show: 🧴 PLASTIC</div>
         <div class="guide" id="guideBox"></div>
         <div class="cam-tools" id="camTools">
-          <button id="flipBtn" type="button" title="Switch Front/Back Camera">🔄 Flip Camera</button>
+          <button id="flipBtn" type="button" title="Switch Front/Back Camera">🔄 Flip</button>
           <button id="stopBtn" type="button" title="Pause Camera" style="background:rgba(217,48,37,.85)">⏹️ Off</button>
         </div>
         <div id="startOverlay">
@@ -332,7 +337,21 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
         <div class="hold-wrap"><div id="holdBar"></div></div>
       </div>
       <!-- AI CONFIDENCE ATTACHED DIRECTLY UNDER CAMERA -->
-      <div id="probs">🎯 Step 1: Tap "📷 Start AI Camera" above (or use Demo buttons on the right)</div>
+      <div id="probs">🎯 Step 1: Tap "📷 Start AI Camera" above (or use Demo buttons)</div>
+
+      <!-- GAME SCOREBOARD (DIRECTLY UNDER CAMERA) -->
+      <div class="hud" id="hudBox">
+        <div>Score<b id="score">0</b></div>
+        <div>Streak<b id="streak">0</b></div>
+        <div>Time Left<b id="time">60s</b></div>
+        <div>Best<b id="best">0</b></div>
+      </div>
+
+      <!-- AI INSTRUCTION / "FIND & SHOW" BOX (DIRECTLY UNDER CAMERA FOR MOBILE) -->
+      <div id="task">
+        Tap "📷 Start AI Camera" above to begin!
+        <small>Camera kholne ke liye upar harey (Green) button ko dabayen.</small>
+      </div>
     </div>
 
     <!-- RIGHT COLUMN: DIGITAL TWIN SMART BIN + CAPACITY & OVERFLOW -->
@@ -376,20 +395,6 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
     </div>
   </div>
 
-  <!-- GAME SCOREBOARD -->
-  <div class="hud" id="hudBox">
-    <div>Score<b id="score">0</b></div>
-    <div>Streak<b id="streak">0</b></div>
-    <div>Time Left<b id="time">60s</b></div>
-    <div>Best<b id="best">0</b></div>
-  </div>
-
-  <!-- AI INSTRUCTION / RESULT BOX -->
-  <div id="task">
-    Tap "📷 Start AI Camera" above to begin!
-    <small>Camera kholne ke liye upar harey (Green) button ko dabayen, ya right side par ▶️ Plastic / Glass / Paper test karen.</small>
-  </div>
-
   <!-- COLOR-CODED BINS (Plastic, Paper, Glass) -->
   <div class="bins" id="bins"></div>
 
@@ -421,7 +426,7 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
     <p class="note">🔒 <b>Privacy Protected:</b> Only player names and scores are shown publicly.</p>
   </div>
 
-  <!-- SMART WASTE CENSUS & LIVE IMPACT DASHBOARD -->
+  <!-- SMART WASTE CENSUS & LIVE IMPACT DASHBOARD (PURE COUNTS - NO KG) -->
   <div id="audit">
     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px">
       <h3 style="margin:0;font-size:16px;color:var(--ink)">📊 Smart Waste Census & Live Impact Dashboard</h3>
@@ -441,17 +446,17 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
       <div class="flow-step" id="fl6"><span>✅</span>6. Resolved</div>
     </div>
 
-    <!-- 4 REAL-TIME IMPACT KPI CARDS -->
+    <!-- 4 REAL-TIME IMPACT KPI CARDS (PURE NUMBERS ONLY) -->
     <div class="kpi-grid">
       <div class="kpi-card" style="border-top-color:var(--blue)">
-        <small>Total Waste Counted</small>
+        <small>Overall Waste Count</small>
         <b id="kpiTotalItems">0</b>
-        <span id="kpiTodayItems">Today: 0 items</span>
+        <span id="kpiDays">Across 0 census days</span>
       </div>
       <div class="kpi-card" style="border-top-color:var(--green)">
-        <small>Est. Mass Diverted</small>
-        <b id="kpiWeight">0 g</b>
-        <span id="kpiDays">Across 0 census days</span>
+        <small>Today's Waste Count</small>
+        <b id="kpiTodayBig">0</b>
+        <span id="kpiTodayItems">Scanned today</span>
       </div>
       <div class="kpi-card" style="border-top-color:var(--gold)">
         <small>Most Common Waste</small>
@@ -469,7 +474,7 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
     <div class="insight-box">
       <div class="insight-head">
         <span>🧠 Live AI Census, Bin Route & Civic Intelligence</span>
-        <span style="font-size:11px;color:#c3e3dc;font-weight:normal">100% Real Google Sheet Data</span>
+        <span style="font-size:11px;color:#c3e3dc;font-weight:normal">100% Real Google Sheet Counts</span>
       </div>
       <ul class="insight-list" id="aiInsightsList">
         <li>Scanning live Google Sheet data to generate waste & civic insights...</li>
@@ -491,8 +496,8 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
     <div class="abtns" style="margin-top:10px">
       <button class="alt" id="aSync" type="button" style="border-color:var(--green);color:var(--green)">🔄 Retry / Refresh Live Data</button>
       <button class="alt" id="aUndo" type="button" style="display:none">↩️ Undo Last (Admin)</button>
-      <button class="alt" id="aCopy" type="button">📋 Copy Impact Summary</button>
-      <button class="alt" id="aPrint" type="button" style="border-color:var(--ink)">🖨️ Print Impact Report</button>
+      <button class="alt" id="aCopy" type="button">📋 Copy Census Summary</button>
+      <button class="alt" id="aPrint" type="button" style="border-color:var(--ink)">🖨️ Print Census Report</button>
     </div>
 
     <h4 style="margin:14px 0 4px;font-size:13.5px">📅 Day-Wise Waste Census Trend (Mobile + PC Combined)</h4>
@@ -505,7 +510,7 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
         <tfoot id="auditFooter"></tfoot>
       </table>
     </div>
-    <p class="note">Est. Recyclable Mass Formula: Plastic = 25g/item, Paper = 15g/item, Glass = 180g/item. All counts sync live with Google Sheets.</p>
+    <p class="note">All item counts from Mobile & PC are synced live with the <b>Waste_Audit</b> sheet in Google Sheets.</p>
   </div>
 
   <!-- CIVIC GARBAGE REPORTING & LOCAL GOVT PORTAL -->
@@ -594,9 +599,9 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
     </div>
   </div>
 
-  <!-- DEDICATED TEAM, JURY RUBRIC ALIGNMENT & EASY GLOSSARY SECTION -->
+  <!-- DEDICATED TEAM, PROJECT HIGHLIGHTS & EASY GLOSSARY SECTION (NO MARKS OR RUBRIC LABELS) -->
   <section class="info-section" id="teamSection">
-    <h3>👥 About Our Student Team & STREAM Jury Rubric Readiness</h3>
+    <h3>👥 About Our Student Team & Project Overview</h3>
     <div class="team-grid">
       <div class="member-card">
         <span>🤖 AI & Hardware Lead</span>
@@ -606,7 +611,7 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
       <div class="member-card" style="border-top-color:var(--green)">
         <span>📊 Data & Census Lead</span>
         <b>Dost Ali</b>
-        Designed the Google Sheets Day-Wise Waste Census, recyclable mass calculations (25g/15g/180g), 45-sample accuracy testing log (91.1%), and 60s student quiz game.
+        Designed the Google Sheets Day-Wise Waste Census, 45-sample accuracy testing log (91.1%), and 60s student quiz game.
       </div>
       <div class="member-card" style="border-top-color:var(--coral)">
         <span>🚨 Civic & Security Lead</span>
@@ -615,31 +620,31 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
       </div>
     </div>
 
-    <h4 style="margin:10px 0 6px;font-size:14px;color:var(--ink)">🏅 How We Meet the 5 STREAM Jury Assessment Indicators (100 Marks)</h4>
+    <h4 style="margin:10px 0 6px;font-size:14px;color:var(--ink)">🌟 Key Project Highlights & Testing Summary</h4>
     <div class="rubric-grid">
       <div class="rub-item">
-        <b>1. Originality & Local Relevance (20 Marks)</b>
-        Combines 4 systems (Edge AI + IoT Smart Bin + Live Waste Census + Halqa Civic Portal) tailored specifically for Tarai, Golarchi & Badin.
+        <b>1. Integrated 4-in-1 Local Solution</b>
+        Combines Edge AI Vision + IoT Smart Bin + Live Google Sheet Waste Census + Halqa Civic Portal for Tarai, Golarchi & Badin.
       </div>
       <div class="rub-item">
-        <b>2. Technical & Scientific Soundness (20 Marks — Tie-Breaker #1)</b>
-        Tested across <b>45 real waste samples</b> achieving <b>91.1% accuracy</b> (41/45 correct sorts in 0.76s avg). White chart backdrop controls glass glare.
+        <b>2. Recorded Testing (91.1% Accuracy)</b>
+        Tested across <b>45 real waste samples</b> achieving <b>41/45 correct sorts</b> (0.76s avg response). White chart backdrop controls glass reflection.
       </div>
       <div class="rub-item">
-        <b>3. Execution, Safety & Craftsmanship (20 Marks)</b>
-        Powered by safe 5V laptop USB (zero 220V hazard), protected by 220-Ohm current-limiting resistors, with color-coded Blue/Red/Green compartments.
+        <b>3. Safe 5V Design & Clean Build</b>
+        Powered by safe 5V laptop USB (zero 220V AC mains hazard), protected by 220-Ohm resistors, with color-coded Blue, Red & Green compartments.
       </div>
       <div class="rub-item">
-        <b>4. Cost-Effectiveness & Recycling (20 Marks)</b>
-        Built from <b>Rs. 0 recycled cardboard cartons</b>, wooden skewers & 100% free open-source web tools, keeping total electronics reusable and low-cost.
+        <b>4. Recycled & Low-Cost Materials</b>
+        Built using <b>reused cardboard cartons</b>, wooden skewers, and free open-source web tools to keep the prototype affordable for any school.
       </div>
     </div>
 
-    <h4 style="margin:12px 0 6px;font-size:14px;color:var(--ink)">📖 Easy Technical Glossary (Bachon Aur Visitors Ke Liye Asaan Lafzon Mein)</h4>
+    <h4 style="margin:12px 0 6px;font-size:14px;color:var(--ink)">📖 Easy Technical Glossary (Asaan Lafzon Mein)</h4>
     <div class="glossary-grid">
       <div class="gloss-item"><b>🧠 Edge AI (TensorFlow.js):</b> AI model jo internet server ke bajaye seedha aapke mobile/laptop ke browser ke andar chalta hai—tez aur safe!</div>
       <div class="gloss-item"><b>⚙️ Digital Twin:</b> Screen par bana hua Smart Bin jo bilkul asli Arduino Servo motor (35°, 90°, 145°) ki tarah live ghum kar dikhata hai.</div>
-      <div class="gloss-item"><b>📊 Waste Census:</b> Kachre ki rozana ginti aur wazan (g/kg) ka hisab jo khud-ba-khud Google Sheet mein jama hota hai.</div>
+      <div class="gloss-item"><b>📊 Waste Census:</b> Kachre ki rozana ginti (Plastic, Paper, Glass numbers) jo khud-ba-khud Google Sheet mein jama hoti hai.</div>
       <div class="gloss-item"><b>🔌 Web Serial IoT:</b> Bina mehnge Wi-Fi module ke seedha USB cable se browser ko Arduino Uno ke sath jorne wali modern technology.</div>
     </div>
   </section>
@@ -697,7 +702,7 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
 <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8.5/dist/teachablemachine-image.min.js"></script>
 <script>
 /* ========================================================= */
-/* SAAF SINDH AI: WASTE CENSUS - v8.5 (USER-FRIENDLY FINAL)  */
+/* SAAF SINDH AI: WASTE CENSUS - v8.7 (CLEAN FINAL EDITION)  */
 /* Student Team: Zahid Ali, Dost Ali & Shahmeer              */
 /* Guide Teacher: Ghulam Hussain Memon (BCS - Univ of Sindh) */
 /* ========================================================= */
@@ -707,9 +712,9 @@ const CLOUD_URL = "https://script.google.com/macros/s/AKfycbxSl2q2L2PoYqatesWrVI
 const BIN_MAX_CAP = 20;
 
 const BINS = [
-  {keys:["plastic"], name:"Plastic", ur:"پلاسٹک", bin:"Blue Bin",  color:"#1967d2", icon:"🧴", cmd:"P", angle:35,  tilt:-28, dropX:"-95px", grams:25,  tip:"Clean plastic bottles & wrappers can be recycled."},
-  {keys:["paper","papar"], name:"Paper", ur:"کاغذ", bin:"Green Bin", color:"#1e8e3e", icon:"📄", cmd:"A", angle:145, tilt:28,  dropX:"75px",  grams:15,  tip:"Keep paper dry and clean for recycling."},
-  {keys:["glass","sheesha","mirror","jar","kanch","bottle"], name:"Glass", ur:"شیشہ", bin:"Red Bin", color:"#d93025", icon:"🫙", cmd:"G", angle:90,  tilt:0,   dropX:"-12px", grams:180, tip:"Handle glass carefully! Glass jars & bottles can be recycled endlessly."}
+  {keys:["plastic"], name:"Plastic", ur:"پلاسٹک", bin:"Blue Bin",  color:"#1967d2", icon:"🧴", cmd:"P", angle:35,  tilt:-28, dropX:"-95px", tip:"Clean plastic bottles & wrappers can be recycled."},
+  {keys:["paper","papar"], name:"Paper", ur:"کاغذ", bin:"Green Bin", color:"#1e8e3e", icon:"📄", cmd:"A", angle:145, tilt:28,  dropX:"75px",  tip:"Keep paper dry and clean for recycling."},
+  {keys:["glass","sheesha","mirror","jar","kanch","bottle"], name:"Glass", ur:"شیشہ", bin:"Red Bin", color:"#d93025", icon:"🫙", cmd:"G", angle:90,  tilt:0,   dropX:"-12px", tip:"Handle glass carefully! Glass jars & bottles can be recycled endlessly."}
 ];
 
 const MIN_CONF = 0.65, HOLD_MS = 650, ROUND_S = 60, AI_INTERVAL_MS = 110;
@@ -728,6 +733,19 @@ function setTask(html) {
   }
 }
 
+function updateCamTargetBanner() {
+  const banner = $("camTargetBanner");
+  if (!banner) return;
+  if (mode === "play" && timeLeft > 0 && target !== null && BINS[target]) {
+    const b = BINS[target];
+    banner.style.display = "block";
+    banner.style.borderColor = b.color;
+    banner.innerHTML = `🎯 SHOW: ${b.icon} <span style="color:var(--gold)">${b.name.toUpperCase()} (${b.ur})</span> &nbsp;|&nbsp; ⏱️ ${timeLeft}s &nbsp;|&nbsp; ⭐ ${score}`;
+  } else {
+    banner.style.display = "none";
+  }
+}
+
 function highlightFlow(stepNum) {
   for (let i = 1; i <= 6; i++) {
     const el = $("fl" + i);
@@ -735,12 +753,12 @@ function highlightFlow(stepNum) {
   }
 }
 
-/* ---- Blind Jury Project Code Toggle (Rubric Compliance) ---- */
+/* ---- Project Code Toggle ---- */
 $("blindModeBtn").onclick = () => {
   blindMode = !blindMode;
   if (blindMode) {
-    const code = prompt("Enter Official STREAM Project Code for Blind Judging:", "BD-M-T2-G-001") || "BD-M-T2-G-001";
-    $("credit").innerHTML = `🆔 <b>Official STREAM Project Code: ${code}</b><br><span style="color:#eaf4f1;font-weight:normal;font-size:12px">Unbiased Jury Assessment Mode Active (School Identity Hidden)</span>`;
+    const code = prompt("Enter Official STREAM Project Code:", "BD-M-T2-G-001") || "BD-M-T2-G-001";
+    $("credit").innerHTML = `🆔 <b>Official STREAM Project Code: ${code}</b><br><span style="color:#eaf4f1;font-weight:normal;font-size:12px">Project Code Display Mode Active</span>`;
     $("footerCredits").innerHTML = `<b>Project Code:</b> ${code} | <b>Theme 2:</b> AI, Digital Solution, Gamification & IoT`;
     $("blindModeBtn").textContent = "🏫 Show School";
   } else {
@@ -869,7 +887,7 @@ function updateBinCapacityUI() {
   }
 }
 
-/* ---- Judge Demo Mode & 15s Auto-Simulation ---- */
+/* ---- Presentation Demo Mode & 15s Auto-Simulation ---- */
 $("judgeBtn").onclick = () => {
   const p = $("judgePanel");
   p.style.display = p.style.display === "block" ? "none" : "block";
@@ -882,18 +900,18 @@ $("runAutoDemoBtn").onclick = () => {
   btn.disabled = true;
   btn.textContent = "⏳ Running Live Demo...";
   highlightFlow(1);
-  setTask("🏆 Judge Demo Step 1/4: AI Detecting PLASTIC Bottle 🧴...<small>Flap rotating to 35° Left (Blue Bin)</small>");
+  setTask("🎬 Demo Step 1/4: AI Detecting PLASTIC Bottle 🧴...<small>Flap rotating to 35° Left (Blue Bin)</small>");
   beep([660]); triggerBinSimulation(0, true);
 
   setTimeout(() => {
     highlightFlow(2);
-    setTask("🏆 Judge Demo Step 2/4: AI Detecting GLASS Jar 🫙...<small>Flap holding at 90° Center (Red Bin)</small>");
+    setTask("🎬 Demo Step 2/4: AI Detecting GLASS Jar 🫙...<small>Flap holding at 90° Center (Red Bin)</small>");
     beep([820]); triggerBinSimulation(2, true);
   }, 2400);
 
   setTimeout(() => {
     highlightFlow(3);
-    setTask("🏆 Judge Demo Step 3/4: AI Detecting Dry PAPER 📄...<small>Flap rotating to 145° Right (Green Bin)</small>");
+    setTask("🎬 Demo Step 3/4: AI Detecting Dry PAPER 📄...<small>Flap rotating to 145° Right (Green Bin)</small>");
     beep([740]); triggerBinSimulation(1, true);
   }, 4800);
 
@@ -902,7 +920,7 @@ $("runAutoDemoBtn").onclick = () => {
     simOverflowActive = true;
     updateBinCapacityUI();
     setMode("audit");
-    setTask("✅ Judge Demo Step 4/4: Smart Bin Overflow Alert & Impact Census!<small>Scroll down to see live Google Sheet KPIs, Mass Diverted & AI Insights</small>");
+    setTask("✅ Demo Step 4/4: Smart Bin Overflow Alert & Impact Census!<small>Scroll down to see live Google Sheet KPIs & AI Insights</small>");
     beep([523, 659, 784]);
     btn.disabled = false;
     btn.textContent = "▶️ Run 15s Auto-Simulation";
@@ -976,7 +994,7 @@ async function startCamera() {
   } catch (err) {
     $("start").disabled = false;
     $("start").textContent = "📷 Start AI Camera";
-    setTask("⚠️ Please allow Camera access in your browser!<small>Tip: You can still test the Smart Bin using the ▶️ Plastic / Glass / Paper buttons on the right.</small>");
+    setTask("⚠️ Please allow Camera access in your browser!<small>Tip: You can still test the Smart Bin using the ▶️ Plastic / Glass / Paper buttons.</small>");
   }
 }
 
@@ -994,6 +1012,7 @@ function stopCamera() {
     $("start").textContent = "📷 Start AI Camera";
     setTask("Camera paused.<small>Tap 'Start AI Camera' whenever you are ready.</small>");
   }
+  updateCamTargetBanner();
   if (StreamRef) StreamRef.getTracks().forEach(t => t.stop());
   $("startOverlay").style.display = "flex";
   $("camTools").style.display = "none";
@@ -1094,7 +1113,7 @@ function handle(p) {
     setTimeout(nextTarget, 1500);
   } else {
     streak = 0; beep([300, 200]); say("Try again.");
-    setTask(`❌ That is ${b.name}! Please show <b>${BINS[target].name}</b>`);
+    setTask(`❌ That is ${b.name}! Please show <b>${BINS[target].name} (${BINS[target].ur})</b>`);
     cooldownUntil = now + 1300;
     setTimeout(showTarget, 1300);
   }
@@ -1104,7 +1123,8 @@ function handle(p) {
 function showTarget() {
   if (mode !== "play" || !timeLeft) return;
   const b = BINS[target];
-  setTask(`🎯 Find & Show: ${b.icon} ${b.name.toUpperCase()} (${b.ur})<small>Hold steady in the camera box to score!</small>`);
+  setTask(`🎯 Find & Show: ${b.icon} ${b.name.toUpperCase()} (${b.ur})<small>Camera ke samne <b>${b.name} (${b.ur})</b> dikhayen!</small>`);
+  updateCamTargetBanner();
   holdKey = null; lastSaid = "";
 }
 function nextTarget() {
@@ -1117,6 +1137,7 @@ function nextTarget() {
 function updateHud() {
   $("score").textContent = score; $("streak").textContent = streak;
   $("time").textContent = mode === "play" ? timeLeft + "s" : "--"; $("best").textContent = best;
+  updateCamTargetBanner();
 }
 function startRound() {
   score = 0; streak = 0; timeLeft = ROUND_S; gamePaused = false;
@@ -1133,6 +1154,7 @@ function resumeRound() {
 }
 function endRound() {
   clearInterval(timer); timer = null; timeLeft = 0; gamePaused = false;
+  updateCamTargetBanner();
   if (score > best) { best = score; try { localStorage.setItem("sdg_best", best); } catch (e) {} }
   const rank = score >= 150 ? "🏆 Sindh Eco Champion" : score >= 100 ? "🌟 Green Hero" : score >= 50 ? "♻️ Waste Warrior" : "🌱 Eco Starter";
   $("endTitle").textContent = rank;
@@ -1149,6 +1171,7 @@ function setMode(m) {
   if (switchingMode) {
     clearInterval(timer); timer = null; timeLeft = 0; gamePaused = false;
   }
+  updateCamTargetBanner();
   $("end").style.display = "none";
   $("hudBox").style.display = m === "play" ? "flex" : "none";
   $("audit").style.display = m === "audit" ? "block" : "none";
@@ -1163,10 +1186,10 @@ function setMode(m) {
   if (m === "learn") {
     $("bannerText").innerHTML = "👉 <b>Learn Mode:</b> Camera kholen aur Plastic, Paper ya Glass dikhayen.";
   } else if (m === "play") {
-    $("bannerText").innerHTML = "🎮 <b>60s Challenge:</b> Top 3 Winners will receive <b>Rs. 100 Top-Up Balance!</b>";
+    $("bannerText").innerHTML = "🎮 <b>60s Challenge:</b> Camera ke upar/neeche likhi hui cheez dikhayen aur Rs. 100 jeeten!";
     renderLb();
   } else if (m === "audit") {
-    $("bannerText").innerHTML = "📊 <b>Smart Waste Census & Impact Dashboard:</b> Live Google Sheet analytics.";
+    $("bannerText").innerHTML = "📊 <b>Smart Waste Census & Impact Dashboard:</b> Live Google Sheet item counts.";
     renderAudit(); syncAuditFromCloud();
   } else if (m === "civic") {
     $("bannerText").innerHTML = "🚨 <b>Civic Report:</b> Send photo & location to UC Tarai, TC Golarchi, or MC Badin.";
@@ -1665,7 +1688,7 @@ $("offCsvBtn").onclick = () => {
 
 $("repSyncBtn").onclick = () => loadPrivateData().catch(err => { handleSessionError(err); alert(err.message); });
 
-/* ---- Waste Audit Step & Smart Dashboard Rendering ---- */
+/* ---- Waste Audit Step & Smart Dashboard Rendering (PURE NUMBERS) ---- */
 function auditStep(idx, now) {
   if (idx === null) {
     if (!idleSince) idleSince = now;
@@ -1708,11 +1731,6 @@ function renderAudit() {
   });
   const grandTotal = grandPlastic + grandPaper + grandGlass;
 
-  const totalGrams = (grandPlastic * 25) + (grandPaper * 15) + (grandGlass * 180);
-  const weightText = totalGrams >= 1000
-    ? `${(totalGrams / 1000).toFixed(2)} kg`
-    : `${totalGrams} g`;
-
   const catTotals = [
     { name: "Plastic", icon: "🧴", count: grandPlastic },
     { name: "Paper",   icon: "📄", count: grandPaper },
@@ -1723,9 +1741,9 @@ function renderAudit() {
   const topCatPct = grandTotal ? Math.round((topCat.count * 100) / grandTotal) : 0;
 
   $("kpiTotalItems").textContent = grandTotal.toLocaleString();
-  $("kpiTodayItems").textContent = `Today: ${totalToday} items`;
-  $("kpiWeight").textContent = weightText;
   $("kpiDays").textContent = `Across ${activeDates.length || 1} active day(s)`;
+  $("kpiTodayBig").textContent = totalToday.toLocaleString();
+  $("kpiTodayItems").textContent = `Items counted today`;
 
   if (grandTotal > 0) {
     $("kpiTopWaste").textContent = `${topCat.icon} ${topCat.name}`;
@@ -1751,9 +1769,9 @@ function renderAudit() {
   const insights = [];
   if (grandTotal > 0) {
     insights.push(`<b>Dominant Waste Insight:</b> <b>${topCat.name}</b> is currently the most frequently detected waste category (<b>${topCatPct}%</b> share — ${topCat.count} of ${grandTotal} total items).`);
-    insights.push(`<b>Recycling & Route Impact:</b> An estimated <b>${weightText}</b> of recyclable material (${grandPlastic} Plastic, ${grandPaper} Paper, ${grandGlass} Glass) has been sorted across <b>${activeDates.length || 1}</b> census day(s).`);
+    insights.push(`<b>Category Census Breakdown:</b> Total <b>${grandTotal}</b> items classified across <b>${activeDates.length || 1}</b> day(s) — Plastic: <b>${grandPlastic}</b>, Paper: <b>${grandPaper}</b>, Glass: <b>${grandGlass}</b>.`);
   } else {
-    insights.push(`<b>Waste Census Ready:</b> Scan Plastic, Paper, or Glass items with the AI camera to generate live category dominance & mass diversion insights.`);
+    insights.push(`<b>Waste Census Ready:</b> Scan Plastic, Paper, or Glass items with the AI camera to generate live category counts.`);
   }
 
   if (cs.total > 0) {
@@ -1787,7 +1805,7 @@ function renderAudit() {
     const pl = Number(row.Plastic) || 0, pa = Number(row.Paper) || 0, gl = Number(row.Glass) || 0;
     return `<tr><td><b>${dt === today() ? `${dt} (Today)` : dt}</b></td><td>${pl}</td><td>${pa}</td><td>${gl}</td><td><b>${pl + pa + gl}</b></td></tr>`;
   }).join("");
-  if (foot) foot.innerHTML = `<tr><td>📊 Overall Total</td><td>${grandPlastic}</td><td>${grandPaper}</td><td>${grandGlass}</td><td>${grandTotal} (${weightText})</td></tr>`;
+  if (foot) foot.innerHTML = `<tr><td>📊 Overall Total</td><td>${grandPlastic}</td><td>${grandPaper}</td><td>${grandGlass}</td><td><b>${grandTotal}</b></td></tr>`;
 }
 
 function summary() {
@@ -1800,9 +1818,8 @@ function summary() {
     gGl += Number(AUD[dt] && AUD[dt].Glass) || 0;
   });
   const allTime = gPl + gPa + gGl;
-  const grams = (gPl * 25) + (gPa * 15) + (gGl * 180);
   const cs = CIVIC_STATS || { total: 0, resolved: 0 };
-  return `Saaf Sindh AI Impact (${today()}): ${todayTotal} items today | ${allTime} total items (${grams >= 1000 ? (grams/1000).toFixed(2)+" kg" : grams+" g"} est. recyclable mass: Plastic ${gPl}, Paper ${gPa}, Glass ${gGl}) | Civic Reports: ${cs.total || 0} total (${cs.resolved || 0} resolved).`;
+  return `Saaf Sindh AI Census (${today()}): ${todayTotal} items today | ${allTime} total items (Plastic ${gPl}, Paper ${gPa}, Glass ${gGl}) | Civic Reports: ${cs.total || 0} total (${cs.resolved || 0} resolved).`;
 }
 
 $("aSync").onclick = () => syncAuditFromCloud();
@@ -1839,7 +1856,7 @@ $("aMatchCloud").onclick = async () => {
 };
 
 $("aCopy").onclick = () => {
-  if (navigator.clipboard) navigator.clipboard.writeText(summary()).then(() => alert("Impact Summary copied!"));
+  if (navigator.clipboard) navigator.clipboard.writeText(summary()).then(() => alert("Census Summary copied!"));
   else prompt("Copy this summary:", summary());
 };
 
@@ -1857,7 +1874,7 @@ $("aCsv").onclick = () => {
   downloadCsv_(rows, "saaf_sindh_daywise_waste_audit.csv");
 };
 
-/* ---- Public Leaderboard: names and scores only ---- */
+/* ---- Public Leaderboard: Tie-Aware Top 3 Prize Eligibility ---- */
 async function renderLb() {
   const ol = $("lbList");
   try {
@@ -1865,17 +1882,20 @@ async function renderLb() {
     LB = Array.isArray(data.players) ? data.players : [];
     if (data.civicStats) CIVIC_STATS = data.civicStats;
   } catch (e) {}
-  const list = LB.slice().sort((a, b) => Number(b.s) - Number(a.s)).slice(0, 5);
+  const sorted = LB.slice().sort((a, b) => Number(b.s) - Number(a.s));
   ol.innerHTML = "";
-  if (!list.length) {
+  if (!sorted.length) {
     const li = document.createElement("li");
     li.textContent = `No scores yet for today (${today()}) — play the 60-second game!`;
     ol.appendChild(li);
     return;
   }
-  list.forEach((r, idx) => {
+  const thirdPlaceScore = Number(sorted[Math.min(2, sorted.length - 1)].s) || 0;
+  sorted.forEach((r, idx) => {
+    const sc = Number(r.s) || 0;
+    const isTop3OrTied = sc > 0 && (idx < 3 || sc >= thirdPlaceScore);
     const li = document.createElement("li");
-    li.innerHTML = `<b>${escapeHtml(r.n)}</b> — ${Number(r.s) || 0} pts <small style="color:var(--green);font-weight:bold">${idx < 3 ? "🎁 Top 3 Prize Eligible" : ""}</small>`;
+    li.innerHTML = `<b>${escapeHtml(r.n)}</b> — ${sc} pts <small style="color:var(--green);font-weight:bold">${isTop3OrTied ? "🎁 Top 3 Prize Eligible" : ""}</small>`;
     ol.appendChild(li);
   });
 }
