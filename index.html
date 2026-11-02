@@ -8,41 +8,57 @@
 <script>if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");</script>
 <style>
 :root{--ink:#0f2930;--bg:#eef6f4;--card:#ffffff;--line:#cde0da;--blue:#1967d2;--green:#1e8e3e;--coral:#d93025;--gold:#f9ab00}
-*{box-sizing:border-box}
-body{margin:0;font-family:"Segoe UI",Roboto,"Trebuchet MS",Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.45}
-header{background:linear-gradient(135deg,#0f2930,#1b434d);color:#fff;padding:14px 16px;text-align:center;user-select:none;box-shadow:0 2px 8px rgba(0,0,0,.15)}
-header h1{margin:0;font-size:21px;letter-spacing:.3px;cursor:default}
-header p{margin:3px 0 0;font-size:12.5px;color:#c3e3dc}
-#credit{color:var(--gold);font-weight:bold;font-size:12px;margin-top:6px;line-height:1.4}
-.top-badges{display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;margin-top:7px}
+*{box-sizing:border-box;scroll-behavior:smooth}
+body{margin:0;font-family:"Segoe UI",Roboto,"Trebuchet MS",Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;font-size:15px}
+
+/* ---- STICKY NAVIGATION BAR ---- */
+.sticky-nav{position:sticky;top:0;z-index:50;background:rgba(15,41,48,.96);backdrop-filter:blur(6px);border-bottom:2px solid rgba(249,171,0,.45);padding:7px 10px;display:flex;justify-content:center;align-items:center;gap:6px;flex-wrap:wrap;box-shadow:0 2px 10px rgba(0,0,0,.18)}
+.sticky-nav a,.sticky-nav button{color:#fff;text-decoration:none;font-size:12px;font-weight:bold;padding:5px 10px;border-radius:16px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);cursor:pointer;transition:all .2s}
+.sticky-nav a:hover,.sticky-nav button:hover{background:var(--gold);color:var(--ink);border-color:var(--gold)}
+.sticky-nav .nav-judge{background:var(--gold);color:var(--ink);border-color:var(--gold)}
+
+header{background:linear-gradient(135deg,#0f2930,#1b434d);color:#fff;padding:16px 16px 14px;text-align:center;user-select:none;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+header h1{margin:0;font-size:22px;letter-spacing:.3px;cursor:default}
+header p{margin:4px 0 0;font-size:13px;color:#c3e3dc}
+#credit{color:var(--gold);font-weight:bold;font-size:12.5px;margin-top:6px;line-height:1.45}
+.top-badges{display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px}
 .team-badge{background:rgba(255,255,255,.12);border:1px solid rgba(249,171,0,.5);color:#fff;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:bold}
 .team-badge b{color:var(--gold)}
-#judgeBtn{background:var(--gold);color:#0f2930;padding:5px 13px;border-radius:20px;font-size:12px;font-weight:bold;border:0;cursor:pointer;box-shadow:0 2px 8px rgba(249,171,0,.4)}
-main{max-width:780px;margin:0 auto;padding:12px}
 
-/* ---- JUDGE DEMO MODE PANEL (PHASE 7) ---- */
+main{max-width:800px;margin:0 auto;padding:12px}
+
+/* ---- FIRST IMPRESSION: PROBLEM & SOLUTION INTRO ---- */
+.intro-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+@media(max-width:620px){.intro-grid{grid-template-columns:1fr}}
+.intro-card{background:var(--card);border:2px solid var(--line);border-left:5px solid var(--coral);border-radius:12px;padding:10px 12px;font-size:13px;box-shadow:0 2px 6px rgba(0,0,0,.04)}
+.intro-card.sol{border-left-color:var(--green)}
+.intro-card b{display:block;font-size:14px;margin-bottom:3px;color:var(--ink)}
+.how-strip{background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:8px 12px;margin-bottom:12px;display:flex;justify-content:space-around;align-items:center;flex-wrap:wrap;gap:6px;font-size:12.5px;font-weight:bold;text-align:center}
+.how-strip span{background:#f4faf8;padding:4px 10px;border-radius:16px;border:1px solid var(--line)}
+
+/* ---- JUDGE DEMO MODE PANEL ---- */
 #judgePanel{display:none;background:linear-gradient(135deg,#0f2930,#1b434d);color:#fff;border:2.5px solid var(--gold);border-radius:16px;padding:14px;margin-bottom:12px;box-shadow:0 6px 18px rgba(0,0,0,.18)}
 .jp-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;border-bottom:1px solid rgba(255,255,255,.18);padding-bottom:8px;margin-bottom:10px}
 .jp-head h3{margin:0;color:var(--gold);font-size:16px}
 .jp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
 @media(max-width:620px){.jp-grid{grid-template-columns:1fr}}
-.jp-card{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.18);border-radius:10px;padding:9px;font-size:12px;line-height:1.45}
-.jp-card b{color:var(--gold);display:block;font-size:13px;margin-bottom:3px}
+.jp-card{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.18);border-radius:10px;padding:9px;font-size:12.5px;line-height:1.45}
+.jp-card b{color:var(--gold);display:block;font-size:13.5px;margin-bottom:3px}
 
 /* ---- RESPONSIVE 4 MODE TABS ---- */
-.modes{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:10px}
-@media(max-width:500px){.modes{grid-template-columns:repeat(2,1fr)}}
+.modes{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px}
+@media(max-width:520px){.modes{grid-template-columns:repeat(2,1fr)}}
 button{font:inherit;font-weight:bold;border:0;border-radius:12px;padding:10px 14px;cursor:pointer;background:var(--ink);color:#fff;transition:background .2s,transform .15s}
 button:active{transform:scale(.97)}
 button.alt{background:#fff;color:var(--ink);border:2px solid var(--line)}
 button.on{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:0 4px 10px rgba(25,103,210,.28)}
-.mode-btn{display:flex;flex-direction:column;align-items:center;padding:8px 5px;font-size:12.5px;text-align:center}
-.mode-btn span{font-size:18px;margin-bottom:2px}
-.mode-btn small{font-weight:normal;font-size:10px;opacity:.85}
+.mode-btn{display:flex;flex-direction:column;align-items:center;padding:9px 6px;font-size:13px;text-align:center}
+.mode-btn span{font-size:19px;margin-bottom:2px}
+.mode-btn small{font-weight:normal;font-size:11px;opacity:.88}
 
 /* ---- MODE BANNER & PRIZE BANNER ---- */
-#modeBanner{background:#fff;border-left:5px solid var(--blue);border-radius:10px;padding:8px 12px;margin-bottom:10px;font-size:13px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 1px 4px rgba(0,0,0,.05)}
-.prize-banner{background:linear-gradient(135deg,#fff8e1,#ffecb3);border:2px solid var(--gold);color:#0f2930;border-radius:12px;padding:9px 12px;margin:8px 0;font-size:13px;font-weight:bold;text-align:center;box-shadow:0 2px 6px rgba(249,171,0,.2)}
+#modeBanner{background:#fff;border-left:5px solid var(--blue);border-radius:10px;padding:9px 12px;margin-bottom:10px;font-size:13.5px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.prize-banner{background:linear-gradient(135deg,#fff8e1,#ffecb3);border:2px solid var(--gold);color:#0f2930;border-radius:12px;padding:9px 12px;margin:8px 0;font-size:13.5px;font-weight:bold;text-align:center;box-shadow:0 2px 6px rgba(249,171,0,.2)}
 .prize-banner span{display:inline-block;background:var(--coral);color:#fff;padding:2px 8px;border-radius:12px;font-size:11px;margin-right:5px}
 
 /* ---- SIDE-BY-SIDE CAMERA & PROTOTYPE GRID ---- */
@@ -57,17 +73,19 @@ canvas{width:100%;height:100%;display:block;object-fit:cover}
 .guide.locking{border-color:var(--gold)}
 .cam-tools{position:absolute;top:8px;right:8px;display:none;gap:6px;z-index:4}
 .cam-tools button{padding:6px 10px;font-size:12px;border-radius:8px;background:rgba(15,41,48,.85);color:#fff}
-#startOverlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;background:rgba(15,41,48,.82);color:#fff;padding:16px;text-align:center;z-index:3}
-#start{font-size:16px;padding:12px 24px;background:var(--green);border-radius:30px;box-shadow:0 4px 14px rgba(30,142,62,.45)}
+#startOverlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;background:rgba(15,41,48,.86);color:#fff;padding:16px;text-align:center;z-index:3}
+#start{font-size:16.5px;padding:13px 26px;background:var(--green);border-radius:30px;box-shadow:0 4px 16px rgba(30,142,62,.55);border:2px solid #fff}
+.step-pills{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;margin-bottom:10px;font-size:11px}
+.step-pills span{background:rgba(255,255,255,.15);padding:3px 8px;border-radius:12px}
 .hold-wrap{position:absolute;bottom:0;left:0;right:0;height:7px;background:rgba(255,255,255,.2)}
 #holdBar{height:100%;width:0%;background:var(--gold);transition:width .12s linear}
 
 /* ---- AI CONFIDENCE BAR DIRECTLY UNDER CAMERA ---- */
-#probs{margin:0;font-size:12px;font-weight:bold;color:#fff;text-align:center;background:var(--ink);padding:7px 10px;border-radius:0 0 16px 16px;border:3px solid #fff;border-top:1px solid rgba(255,255,255,.2);box-shadow:0 4px 12px rgba(0,0,0,.12)}
+#probs{margin:0;font-size:12.5px;font-weight:bold;color:#fff;text-align:center;background:var(--ink);padding:8px 10px;border-radius:0 0 16px 16px;border:3px solid #fff;border-top:1px solid rgba(255,255,255,.2);box-shadow:0 4px 12px rgba(0,0,0,.12)}
 
-/* ---- DIGITAL TWIN SMART BIN PROTOTYPE + CAPACITY & OVERFLOW (PHASE 5) ---- */
+/* ---- DIGITAL TWIN SMART BIN PROTOTYPE ---- */
 #protoBox{margin:0;background:var(--card);border:2px solid var(--line);border-radius:16px;padding:10px 12px;text-align:center;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 4px 12px rgba(0,0,0,.06)}
-.proto-head{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:bold;gap:4px}
+.proto-head{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;font-weight:bold;gap:4px}
 .proto-badge{background:var(--ink);color:var(--gold);padding:3px 8px;border-radius:6px;font-family:monospace;font-size:11px;white-space:nowrap}
 .proto-stage{position:relative;height:155px;background:#f4faf8;border:2px dashed var(--line);border-radius:12px;overflow:hidden;margin:6px 0;flex:1}
 .chute{width:86px;height:22px;border-left:3px solid var(--ink);border-right:3px solid var(--ink);margin:0 auto;background:rgba(16,38,46,0.06);font-size:10px;color:#456;line-height:22px}
@@ -84,115 +102,165 @@ canvas{width:100%;height:100%;display:block;object-fit:cover}
 .p-bin.active.red{background:var(--coral);color:#fff}
 .cap-wrap{width:100%;height:6px;background:rgba(0,0,0,.1);border-radius:4px;overflow:hidden;margin-top:2px}
 .cap-fill{height:100%;width:0%;transition:width .3s}
-#overflowAlert{display:none;background:#ffebee;border:1.5px solid var(--coral);color:#b71c1c;border-radius:9px;padding:5px 8px;font-size:11px;font-weight:bold;margin:4px 0;text-align:left}
+#overflowAlert{display:none;background:#ffebee;border:1.5px solid var(--coral);color:#b71c1c;border-radius:9px;padding:5px 8px;font-size:11.5px;font-weight:bold;margin:4px 0;text-align:left}
 
 /* ---- GAME HUD ---- */
 .hud{display:none;gap:8px;margin:10px 0}
-.hud div{flex:1;background:var(--card);border:2px solid var(--line);border-radius:12px;padding:6px;text-align:center;font-size:12px}
+.hud div{flex:1;background:var(--card);border:2px solid var(--line);border-radius:12px;padding:6px;text-align:center;font-size:12.5px}
 .hud b{display:block;font-size:20px;color:var(--blue)}
 
 /* ---- AI STATUS TASK BOX ---- */
-#task{margin:10px 0;background:var(--card);border:2px solid var(--line);border-radius:14px;padding:12px;text-align:center;font-size:18px;font-weight:bold;min-height:72px;display:flex;flex-direction:column;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.04)}
-#task small{display:block;font-size:13px;font-weight:normal;color:#456;margin-top:4px}
+#task{margin:10px 0;background:var(--card);border:2px solid var(--line);border-radius:14px;padding:12px;text-align:center;font-size:17.5px;font-weight:bold;min-height:72px;display:flex;flex-direction:column;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.04)}
+#task small{display:block;font-size:13.5px;font-weight:normal;color:#456;margin-top:4px}
 
 /* ---- 3 BINS (Plastic, Paper, Glass) ---- */
 .bins{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}
-.bin{border:2.5px solid var(--line);border-radius:14px;background:var(--card);padding:8px 6px;text-align:center;font-size:13px;font-weight:bold;transition:transform .2s,background .2s}
+.bin{border:2.5px solid var(--line);border-radius:14px;background:var(--card);padding:8px 6px;text-align:center;font-size:13.5px;font-weight:bold;transition:transform .2s,background .2s}
 .bin span.ico{display:block;font-size:28px;margin-bottom:2px}
-.bin small{display:block;font-weight:normal;font-size:11px;opacity:.85;margin-top:2px}
+.bin small{display:block;font-weight:normal;font-size:11.5px;opacity:.85;margin-top:2px}
 .bin.hit{transform:translateY(-3px);color:#fff;box-shadow:0 6px 14px rgba(0,0,0,.15)}
 
 /* ---- SMART WASTE CENSUS & IMPACT DASHBOARD ---- */
 .flow-pipeline{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;margin:8px 0 12px;background:#f4faf8;padding:8px;border-radius:12px;border:1.5px solid var(--line)}
 @media(max-width:600px){.flow-pipeline{grid-template-columns:repeat(3,1fr)}}
-.flow-step{background:#fff;border:1.5px solid var(--line);border-radius:9px;padding:6px 4px;text-align:center;font-size:10.5px;font-weight:bold;color:#456;transition:all .25s}
+.flow-step{background:#fff;border:1.5px solid var(--line);border-radius:9px;padding:6px 4px;text-align:center;font-size:11px;font-weight:bold;color:#456;transition:all .25s}
 .flow-step span{display:block;font-size:16px;margin-bottom:2px}
 .flow-step.active{background:var(--ink);color:var(--gold);border-color:var(--ink);transform:translateY(-2px);box-shadow:0 3px 8px rgba(15,41,48,.18)}
 
 .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0}
 @media(max-width:620px){.kpi-grid{grid-template-columns:repeat(2,1fr)}}
 .kpi-card{background:#f8fcfb;border:1.5px solid var(--line);border-top:4px solid var(--ink);border-radius:11px;padding:9px 8px;text-align:center}
-.kpi-card small{display:block;font-size:10.5px;color:#456;text-transform:uppercase;letter-spacing:.3px;font-weight:bold}
+.kpi-card small{display:block;font-size:11px;color:#456;text-transform:uppercase;letter-spacing:.3px;font-weight:bold}
 .kpi-card b{display:block;font-size:19px;color:var(--ink);margin:3px 0 2px}
-.kpi-card span{font-size:11px;color:var(--green);font-weight:bold}
+.kpi-card span{font-size:11.5px;color:var(--green);font-weight:bold}
 
 .insight-box{background:linear-gradient(135deg,#0f2930,#1b434d);color:#fff;border-radius:12px;padding:11px 13px;margin:10px 0;box-shadow:0 3px 10px rgba(15,41,48,.14)}
-.insight-head{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;font-weight:bold;color:var(--gold);margin-bottom:6px}
-.insight-list{margin:0;padding-left:18px;font-size:12.5px;line-height:1.55;color:#eaf4f1}
-.insight-list li{margin-bottom:3px}
+.insight-head{display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:bold;color:var(--gold);margin-bottom:6px}
+.insight-list{margin:0;padding-left:18px;font-size:13px;line-height:1.55;color:#eaf4f1}
+.insight-list li{margin-bottom:4px}
 .insight-list b{color:#fff}
 
 .civic-mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:8px 0}
 @media(max-width:520px){.civic-mini-grid{grid-template-columns:1fr}}
-.c-mini{background:#f4faf8;border:1.5px solid var(--line);border-radius:9px;padding:7px 9px;font-size:12px;display:flex;justify-content:space-between;align-items:center}
+.c-mini{background:#f4faf8;border:1.5px solid var(--line);border-radius:9px;padding:8px 10px;font-size:12.5px;display:flex;justify-content:space-between;align-items:center}
 
 /* ---- CIVIC GARBAGE REPORTING & LOCAL GOVT PORTAL ---- */
 #civicBox{display:none;margin:10px 0;background:#fff;border:2px solid var(--line);border-radius:14px;padding:14px}
 .c-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;border-bottom:2px solid var(--bg);padding-bottom:8px;margin-bottom:10px}
 .c-head h3{margin:0;font-size:16px;color:var(--ink)}
 .c-form{background:#f7fbf9;border:1.5px solid var(--line);border-radius:12px;padding:12px;margin-bottom:12px}
-.c-row{margin-bottom:9px}
-.c-row label{font-weight:bold;font-size:12.5px;display:block;margin-bottom:3px;color:var(--ink)}
-.c-row input,.c-row select{width:100%;padding:9px 11px;border-radius:8px;border:1.5px solid var(--line);font:inherit;font-size:13.5px;background:#fff}
+.c-row{margin-bottom:10px}
+.c-row label{font-weight:bold;font-size:13px;display:block;margin-bottom:4px;color:var(--ink)}
+.c-row input,.c-row select{width:100%;padding:10px 11px;border-radius:8px;border:1.5px solid var(--line);font:inherit;font-size:14px;background:#fff}
 .snap-box{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:4px}
 #snapPreview{width:108px;height:80px;object-fit:cover;border-radius:8px;border:2px solid var(--ink);display:none}
 .rep-card{background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:10px;margin:8px 0;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
-.rep-info{flex:1;min-width:175px;font-size:12.5px;line-height:1.45}
+.rep-info{flex:1;min-width:175px;font-size:13px;line-height:1.45}
 .rep-status{padding:4px 10px;border-radius:14px;font-size:11.5px;font-weight:bold;display:inline-block}
 .st-pend{background:#fff3e0;color:#e65100;border:1px solid #ffb74d}
 .st-clean{background:#e6f4ea;color:var(--green);border:1px solid #81c784}
 .dept-tag{display:inline-block;background:#e3efec;color:var(--ink);padding:2px 7px;border-radius:6px;font-size:11px;font-weight:bold;margin-bottom:3px}
 #officerBar{display:none;background:linear-gradient(135deg,#0f2930,#1b434d);color:#fff;padding:10px 12px;border-radius:10px;margin-bottom:10px;font-size:12.5px;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
 
+/* ---- DEDICATED TEAM, GLOSSARY & FOR JUDGES SECTION ---- */
+.info-section{margin:16px 0;background:var(--card);border:2px solid var(--line);border-radius:16px;padding:14px;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.info-section h3{margin:0 0 10px;font-size:16px;color:var(--ink);border-bottom:2px solid var(--bg);padding-bottom:6px}
+.team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
+@media(max-width:620px){.team-grid{grid-template-columns:1fr}}
+.member-card{background:#f7fbf9;border:1.5px solid var(--line);border-top:4px solid var(--blue);border-radius:11px;padding:10px;font-size:12.5px}
+.member-card b{display:block;font-size:14px;color:var(--ink);margin-bottom:2px}
+.member-card span{display:inline-block;background:#e3efec;color:var(--ink);padding:2px 7px;border-radius:10px;font-size:11px;font-weight:bold;margin-bottom:5px}
+.rubric-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:8px}
+@media(max-width:620px){.rubric-grid{grid-template-columns:1fr}}
+.rub-item{background:#f8fcfb;border:1px solid var(--line);border-radius:9px;padding:8px 10px;font-size:12.5px}
+.rub-item b{color:var(--green);display:block;margin-bottom:2px}
+.glossary-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:8px}
+@media(max-width:580px){.glossary-grid{grid-template-columns:1fr}}
+.gloss-item{background:#fff8e1;border:1px solid #ffe082;border-radius:9px;padding:7px 10px;font-size:12px}
+
+/* ---- BACK TO TOP FLOATING BUTTON ---- */
+#backTopBtn{position:fixed;bottom:16px;right:16px;z-index:45;background:var(--ink);color:var(--gold);border:2px solid var(--gold);border-radius:50px;padding:8px 13px;font-size:12px;font-weight:bold;box-shadow:0 4px 12px rgba(0,0,0,.25);cursor:pointer}
+
 /* ---- END GAME, AUDIT & LEADERBOARD ---- */
 #end{display:none;margin:12px 0;background:var(--ink);color:#fff;border-radius:14px;padding:18px;text-align:center}
 #end h2{margin:0 0 6px;color:var(--gold)}
-.foot{margin:14px auto 6px;font-size:11.5px;color:#456;text-align:center;line-height:1.55}
+.foot{margin:14px auto 6px;font-size:12px;color:#456;text-align:center;line-height:1.55}
 .toolbar{display:flex;justify-content:center;gap:12px;align-items:center;flex-wrap:wrap;background:#fff;padding:8px 12px;border-radius:12px;border:1px solid var(--line);margin-top:10px}
-label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
-.arow{display:flex;align-items:center;gap:8px;margin:6px 0;font-size:13.5px}
-.arow>span{width:88px;text-align:left}
+label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
+.arow{display:flex;align-items:center;gap:8px;margin:6px 0;font-size:14px}
+.arow>span{width:92px;text-align:left}
 .abar{flex:1;height:13px;background:#dfeae6;border-radius:7px;overflow:hidden}
 .abar i{display:block;height:100%}
 #audit{display:none;margin:10px 0;background:#fff;border:2px solid var(--line);border-radius:14px;padding:12px}
 #auditTotal{font-weight:bold;margin-bottom:4px;font-size:14.5px}
 .abtns{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;justify-content:center}
-.abtns button{padding:6px 10px;font-size:11.5px}
-.note{font-size:11.5px;color:#456;margin-top:6px}
+.abtns button{padding:7px 11px;font-size:12px}
+.note{font-size:12px;color:#456;margin-top:6px}
 #lbBox{display:none;margin:10px 0;background:#fff;border:2px solid var(--line);border-radius:14px;padding:12px}
 #lbBox h3{margin:0;font-size:16px}
-#lbBox ol{margin:6px 0 0;padding-left:22px;font-size:14px}
+#lbBox ol{margin:6px 0 0;padding-left:22px;font-size:14.5px}
 #lbEntry{display:none;margin:10px 0}
-#lbEntry input{padding:9px 12px;border-radius:8px;border:0;font:inherit;margin:4px;width:230px}
+#lbEntry input{padding:10px 12px;border-radius:8px;border:0;font:inherit;margin:4px;width:250px;max-width:92%}
 #adminBox{display:none;margin:14px 0;background:#fff;border:3px solid var(--ink);border-radius:14px;padding:14px}
 #adminBox h3{margin:0 0 8px;color:var(--ink)}
 .adm-sec{margin-top:12px;padding-top:10px;border-top:2px dashed var(--line)}
-.atable{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:8px}
+.atable{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px}
 .atable th,.atable td{border:1px solid var(--line);padding:6px;text-align:left}
 .atable th{background:var(--ink);color:#fff}
 .atable tfoot td{background:#eaf4f1;font-weight:bold;border-top:2px solid var(--ink)}
 @media print{
-  .modes,.live-grid,.bins,.toolbar,#judgeBtn,.abtns,#modeBanner{display:none!important}
+  .sticky-nav,.modes,.live-grid,.bins,.toolbar,#judgeBtn,.abtns,#modeBanner,#backTopBtn{display:none!important}
   #audit{display:block!important;border:0}
 }
 </style>
 </head>
-<body>
+<body id="topPage">
+
+<!-- STICKY QUICK NAVIGATION BAR -->
+<nav class="sticky-nav" aria-label="Main Navigation">
+  <a href="#topPage">🏠 Problem & Solution</a>
+  <a href="#demoSection" onclick="setMode('learn')">📷 Live AI Demo</a>
+  <a href="#demoSection" onclick="setMode('audit')">📊 Census Dashboard</a>
+  <a href="#demoSection" onclick="setMode('civic')">🚨 Civic Portal</a>
+  <a href="#teamSection">👥 Team & Judges</a>
+  <button id="judgeBtn" class="nav-judge" type="button">🏆 3-Min Judge Pitch</button>
+  <button id="blindModeBtn" type="button" title="Toggle School Name vs Official Project Code for Unbiased Judging">🕶️ Code Mode</button>
+</nav>
+
 <header>
   <h1 id="appTitle">♻️ Saaf Sindh AI: Waste Census</h1>
-  <p>Sindh STREAM Journey 2026-27 | From Classrooms to Cosmos | صاف سنڌ، سرسبز سنڌ</p>
+  <p>Sindh STREAM Journey 2026-27 | Theme 2: AI, Digital Solution, Gamification & IoT | صاف سنڌ، سرسبز سنڌ</p>
   <div id="credit">
     👨‍🏫 Guide Teacher: Ghulam Hussain Memon (Bachelor of Computer Science (BCS) — University of Sindh, Laar Campus Badin)<br>
-    <span style="color:#eaf4f1;font-weight:normal;font-size:11.5px">PST — GBHSS Haji Junejo Tarai (SEMIS: 401020169)</span>
+    <span style="color:#eaf4f1;font-weight:normal;font-size:12px">PST — GBHSS Haji Junejo Tarai (SEMIS: 401020169)</span>
   </div>
-  <div class="top-badges">
+  <div class="top-badges" id="headerTeamBadge">
     <div class="team-badge">🌟 <b>Student Team:</b> Zahid Ali • Dost Ali • Shahmeer</div>
-    <button id="judgeBtn" type="button">🏆 Judge Demo Mode</button>
   </div>
 </header>
 
 <main>
-  <!-- PHASE 7: 1-CLICK JUDGE DEMO & STUDENT PITCH PANEL -->
+  <!-- 1. FIRST IMPRESSION: PROBLEM STATEMENT & OUR SOLUTION -->
+  <div class="intro-grid">
+    <div class="intro-card">
+      <b>⚠️ The Local Problem (Hamara Masla)</b>
+      In schools and towns (Tarai, Golarchi, Badin), recyclable <b>Plastic, Paper & Glass</b> get mixed in open dumps with zero daily waste data and no fast way to alert Union Council / Municipal officers.
+    </div>
+    <div class="intro-card sol">
+      <b>💡 Our Integrated AI Solution (Hamara Hal)</b>
+      A low-cost <b>Edge AI Camera + 3-Way Smart Bin (35°/90°/145°)</b> that auto-sorts waste, records a live <b>Google Cloud Waste Census</b>, and sends geotagged <b>Civic Alerts</b> to Halqa Officers.
+    </div>
+  </div>
+
+  <!-- SIMPLE 4-STEP VISUAL HOW IT WORKS -->
+  <div class="how-strip">
+    <span>1️⃣ Open AI Camera</span> ➔
+    <span>2️⃣ Scan Plastic / Paper / Glass</span> ➔
+    <span>3️⃣ Smart Bin Auto-Sorts</span> ➔
+    <span>4️⃣ Cloud Census & Civic Action</span>
+  </div>
+
+  <!-- JUDGE DEMO & 3-MINUTE PITCH PANEL -->
   <div id="judgePanel">
     <div class="jp-head">
       <h3>🏆 Competition Judge Demo Mode (3-Minute Live Pitch Guide)</h3>
@@ -204,24 +272,24 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
     <div class="jp-grid">
       <div class="jp-card">
         <b>🎤 1. Zahid Ali (AI & Smart Bin)</b>
-        "Assalam-o-Alaikum Judges! Our Edge AI model identifies Plastic, Paper & Glass in real time. Watch our Digital Twin & Arduino Smart Bin sort Plastic left (35°), Glass center (90°), and Paper right (145°) with capacity alerts!"
+        "Assalam-o-Alaikum Judges! Our Edge AI model identifies Plastic, Paper & Glass in real time (91.1% tested accuracy). Watch our Smart Bin sort Plastic left (35°), Glass center (90°), and Paper right (145°)!"
       </div>
       <div class="jp-card">
         <b>🎤 2. Dost Ali (Waste Census & Game)</b>
-        "Every scan updates our live Google Cloud Waste Census, calculating recyclable mass in grams/kg and generating AI Insights. Students also play our 60-second challenge to win Rs. 100 balance!"
+        "Every scan updates our live Google Cloud Waste Census, calculating recyclable weight (g/kg) and AI Insights. Students also play our 60-second challenge to win Rs. 100 balance!"
       </div>
       <div class="jp-card">
         <b>🎤 3. Shahmeer (Civic Action Portal)</b>
-        "Citizens report outdoor garbage with GPS & photo without signup. Halqa Officers in UC Tarai, TC Golarchi & MC Badin log in securely to resolve complaints in their own jurisdiction!"
+        "Citizens report outdoor garbage with GPS & photo without signup. Halqa Officers in UC Tarai, TC Golarchi & MC Badin log in securely to resolve complaints in their own area!"
       </div>
     </div>
-    <div style="font-size:11.5px;color:#c3e3dc;text-align:center">
-      💡 <b>Tip for Judges:</b> Click <b>"▶️ Run 15s Auto-Simulation"</b> above to watch the complete AI ➔ Smart Bin ➔ Overflow Alert ➔ Impact Census workflow automatically!
+    <div style="font-size:12px;color:#c3e3dc;text-align:center">
+      💡 <b>For Judges:</b> Click <b>"▶️ Run 15s Auto-Simulation"</b> above to watch the complete AI ➔ Smart Bin ➔ Overflow Alert ➔ Impact Census workflow automatically!
     </div>
   </div>
 
   <!-- 4 RESPONSIVE MODE TABS -->
-  <div class="modes">
+  <div class="modes" id="demoSection">
     <button id="mLearn" class="alt mode-btn on" type="button">
       <span>🔍</span>Learn Mode<small>Identify Waste</small>
     </button>
@@ -229,7 +297,7 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
       <span>🎮</span>60s Game<small>Win Rs. 100</small>
     </button>
     <button id="mAudit" class="alt mode-btn" type="button">
-      <span>📊</span>Census & Impact<small>AI Dashboard</small>
+      <span>📊</span>Census & Impact<small>Live Dashboard</small>
     </button>
     <button id="mCivic" class="alt mode-btn" type="button">
       <span>🚨</span>Civic Report<small>UC / TC / MC</small>
@@ -238,7 +306,7 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
 
   <!-- FRIENDLY GUIDE BANNER -->
   <div id="modeBanner">
-    <span id="bannerText">👉 <b>Learn Mode:</b> Camera kholen aur Plastic, Paper ya Glass (Sheesha) dikhayen.</span>
+    <span id="bannerText">👉 <b>Learn Mode:</b> Niche green button daba kar camera kholen aur Plastic, Paper ya Glass dikhayen.</span>
   </div>
 
   <!-- SIDE-BY-SIDE LIVE CAMERA + CONFIDENCE BAR & DIGITAL TWIN PROTOTYPE -->
@@ -253,19 +321,24 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
           <button id="stopBtn" type="button" title="Pause Camera" style="background:rgba(217,48,37,.85)">⏹️ Off</button>
         </div>
         <div id="startOverlay">
-          <p id="overlayMsg" style="margin:0 0 10px;font-size:14px;max-width:280px">Point camera at <b>Plastic 🧴</b>, <b>Paper 📄</b> or <b>Glass 🫙</b> for real-time AI detection</p>
-          <button id="start" type="button">📷 Start AI Camera</button>
+          <div class="step-pills">
+            <span>Step 1: Camera On</span>
+            <span>Step 2: Hold Waste</span>
+            <span>Step 3: See Bin Sort</span>
+          </div>
+          <p id="overlayMsg" style="margin:0 0 12px;font-size:14.5px;max-width:285px">Show <b>Plastic 🧴</b>, <b>Paper 📄</b> or <b>Glass 🫙</b> for instant AI detection</p>
+          <button id="start" type="button" title="Click to activate webcam or phone camera">📷 Start AI Camera</button>
         </div>
         <div class="hold-wrap"><div id="holdBar"></div></div>
       </div>
       <!-- AI CONFIDENCE ATTACHED DIRECTLY UNDER CAMERA -->
-      <div id="probs">AI Live Confidence: Waiting for camera...</div>
+      <div id="probs">🎯 Step 1: Tap "📷 Start AI Camera" above (or use Demo buttons on the right)</div>
     </div>
 
-    <!-- RIGHT COLUMN: DIGITAL TWIN SMART BIN + CAPACITY & OVERFLOW (PHASE 5) -->
+    <!-- RIGHT COLUMN: DIGITAL TWIN SMART BIN + CAPACITY & OVERFLOW -->
     <div id="protoBox">
       <div class="proto-head">
-        <span>⚙️ Smart Bin Digital Twin</span>
+        <span title="Virtual simulation of our physical Arduino + SG90 Servo bin">⚙️ Smart Bin Digital Twin</span>
         <span class="proto-badge" id="servoStatus">Flap: 90° (Ready)</span>
       </div>
       <div class="proto-stage">
@@ -294,11 +367,11 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
       <!-- SMART BIN OVERFLOW & ROUTE PLANNING ALERT -->
       <div id="overflowAlert"></div>
       <div class="abtns">
-        <button class="alt" id="testPlastic" type="button" style="border-color:var(--blue);color:var(--blue)">▶️ Plastic</button>
-        <button class="alt" id="testGlass" type="button" style="border-color:var(--coral);color:var(--coral)">▶️ Glass</button>
-        <button class="alt" id="testPaper" type="button" style="border-color:var(--green);color:var(--green)">▶️ Paper</button>
-        <button class="alt" id="simOverflowBtn" type="button" title="Simulate Bin Full & Collection Route Alert">🚨 Full Alert</button>
-        <button class="alt" id="hwConnectBtn" type="button" title="Connect Physical Arduino Uno via USB Cable">🔌 Arduino USB</button>
+        <button class="alt" id="testPlastic" type="button" style="border-color:var(--blue);color:var(--blue)" title="Test Plastic Sorting (35° Left)">▶️ Plastic</button>
+        <button class="alt" id="testGlass" type="button" style="border-color:var(--coral);color:var(--coral)" title="Test Glass Sorting (90° Center)">▶️ Glass</button>
+        <button class="alt" id="testPaper" type="button" style="border-color:var(--green);color:var(--green)" title="Test Paper Sorting (145° Right)">▶️ Paper</button>
+        <button class="alt" id="simOverflowBtn" type="button" title="Simulate Bin 95% Full & Collection Route Alert">🚨 Full Alert</button>
+        <button class="alt" id="hwConnectBtn" type="button" title="Connect Physical Arduino Uno via USB Cable (Chrome/Edge)">🔌 Arduino USB</button>
       </div>
     </div>
   </div>
@@ -314,7 +387,7 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
   <!-- AI INSTRUCTION / RESULT BOX -->
   <div id="task">
     Tap "📷 Start AI Camera" above to begin!
-    <small>Camera kholne ke liye upar harey (Green) button ko dabayen.</small>
+    <small>Camera kholne ke liye upar harey (Green) button ko dabayen, ya right side par ▶️ Plastic / Glass / Paper test karen.</small>
   </div>
 
   <!-- COLOR-CODED BINS (Plastic, Paper, Glass) -->
@@ -328,10 +401,10 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
       <span>🎁 PRIZE</span> Top 3 Winners will receive <b>Rs. 100 Top-Up Balance!</b>
     </div>
     <div id="lbEntry">
-      <div><input type="text" id="lbName" maxlength="15" placeholder="Enter Your Name"></div>
+      <div><input type="text" id="lbName" maxlength="15" placeholder="Enter Your First Name"></div>
       <div>
-        <input type="tel" id="lbPhone" inputmode="numeric" maxlength="13" placeholder="Mobile: 03XXXXXXXXX (For Rs.100 Load)">
-        <p class="note" style="color:#b9d6cf;margin:2px 0 6px">Phone number stays private (for teacher Rs. 100 prize top-up only).</p>
+        <input type="tel" id="lbPhone" inputmode="numeric" maxlength="13" placeholder="Mobile (Optional): 03XXXXXXXXX">
+        <p class="note" style="color:#b9d6cf;margin:2px 0 6px">🔒 <b>100% Optional & Private:</b> Leave blank if you wish. Numbers are encrypted and visible only to the Guide Teacher for Rs. 100 prize top-up.</p>
       </div>
       <button id="lbSave" type="button" style="background:var(--gold);color:#10262e">💾 Save Score to Cloud</button>
     </div>
@@ -345,14 +418,17 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
     </div>
     <h3>🏆 Today's Exhibition Winners (Live)</h3>
     <ol id="lbList"></ol>
-    <p class="note">Showing today's top 5 players. Score high & enter your mobile number to win Rs. 100 balance!</p>
+    <p class="note">🔒 <b>Privacy Protected:</b> Only player names and scores are shown publicly.</p>
   </div>
 
   <!-- SMART WASTE CENSUS & LIVE IMPACT DASHBOARD -->
   <div id="audit">
     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px">
       <h3 style="margin:0;font-size:16px;color:var(--ink)">📊 Smart Waste Census & Live Impact Dashboard</h3>
-      <span class="note" id="auditSyncMsg" style="margin:0;color:var(--green);font-weight:bold">☁️ Syncing with Google Sheet...</span>
+      <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+        <span class="note" id="auditSyncMsg" style="margin:0;color:var(--green);font-weight:bold">☁️ Syncing...</span>
+        <span class="note" id="lastSyncTime" style="margin:0;background:#f4faf8;padding:2px 7px;border-radius:8px;border:1px solid var(--line)">🕒 Just now</span>
+      </div>
     </div>
 
     <!-- VISUAL AI -> CENSUS -> ACTION PIPELINE -->
@@ -385,11 +461,11 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
       <div class="kpi-card" style="border-top-color:var(--coral)">
         <small>Civic Reports Action</small>
         <b id="kpiReports">0</b>
-        <span id="kpiResolved">0 Resolved • 0 Pending</span>
+        <span id="kpiResolved">0 Resolved • 0 Open</span>
       </div>
     </div>
 
-    <!-- AI INSIGHTS ENGINE (DYNAMIC FROM REAL GOOGLE SHEET DATA) -->
+    <!-- AI INSIGHTS ENGINE -->
     <div class="insight-box">
       <div class="insight-head">
         <span>🧠 Live AI Census, Bin Route & Civic Intelligence</span>
@@ -404,8 +480,8 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
     <div id="auditTotal" style="margin-top:8px"></div>
     <div id="auditBars"></div>
 
-    <!-- PHASE 6: HALQA CLEANLINESS COMPETITION -->
-    <h4 style="margin:12px 0 4px;font-size:13px;color:var(--ink)">🏅 Halqa Civic Participation Leaderboard (Community Eco-Race)</h4>
+    <!-- HALQA CLEANLINESS COMPETITION -->
+    <h4 style="margin:12px 0 4px;font-size:13.5px;color:var(--ink)">🏅 Halqa Civic Participation Leaderboard (Community Eco-Race)</h4>
     <div class="civic-mini-grid" id="halqaBreakdown">
       <div class="c-mini"><span>🏛️ UC Tarai</span><b id="hqTarai">0</b></div>
       <div class="c-mini"><span>🏛️ TC Golarchi</span><b id="hqGolarchi">0</b></div>
@@ -413,7 +489,7 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
     </div>
 
     <div class="abtns" style="margin-top:10px">
-      <button class="alt" id="aSync" type="button">🔄 Refresh Live Data</button>
+      <button class="alt" id="aSync" type="button" style="border-color:var(--green);color:var(--green)">🔄 Retry / Refresh Live Data</button>
       <button class="alt" id="aUndo" type="button" style="display:none">↩️ Undo Last (Admin)</button>
       <button class="alt" id="aCopy" type="button">📋 Copy Impact Summary</button>
       <button class="alt" id="aPrint" type="button" style="border-color:var(--ink)">🖨️ Print Impact Report</button>
@@ -429,10 +505,10 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
         <tfoot id="auditFooter"></tfoot>
       </table>
     </div>
-    <p class="note">Est. Recyclable Mass Formula: Plastic = 25g/item, Paper = 15g/item, Glass = 180g/item. All counts are synced with Google Sheets.</p>
+    <p class="note">Est. Recyclable Mass Formula: Plastic = 25g/item, Paper = 15g/item, Glass = 180g/item. All counts sync live with Google Sheets.</p>
   </div>
 
-  <!-- CIVIC GARBAGE REPORTING & LOCAL GOVT PORTAL (UC Tarai / TC Golarchi / MC Badin) -->
+  <!-- CIVIC GARBAGE REPORTING & LOCAL GOVT PORTAL -->
   <div id="civicBox">
     <div class="c-head">
       <h3>🚨 Local Govt. Cleanliness Portal</h3>
@@ -454,9 +530,9 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
       </div>
     </div>
 
-    <!-- CITIZEN INSTANT REPORT FORM (WITHOUT SIGNUP) -->
+    <!-- CITIZEN INSTANT REPORT FORM -->
     <div class="c-form">
-      <div style="font-weight:bold;color:var(--green);font-size:13.5px;margin-bottom:8px">
+      <div style="font-weight:bold;color:var(--green);font-size:14px;margin-bottom:8px">
         📢 Citizen Direct Report (Without Signup — Photo securely cloud par submit hogi)
       </div>
 
@@ -490,7 +566,7 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
       </div>
 
       <div class="c-row">
-        <label>4. Citizen Name & Mobile (Optional — Bina Naam Ke Bhi Bhej Sakte Hain):</label>
+        <label>4. Citizen Name & Mobile (100% Optional — Bina Naam Ke Bhi Bhej Sakte Hain):</label>
         <input type="text" id="repCitizen" maxlength="35" placeholder="Name / 03XXXXXXXXX (Optional)">
       </div>
 
@@ -499,10 +575,10 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
       </button>
     </div>
 
-    <!-- PHASE 6: CITIZEN VERIFIED REPORT RECEIPTS (PUBLIC DEVICE TRACKER) -->
+    <!-- CITIZEN VERIFIED REPORT RECEIPTS -->
     <div id="myReceiptsBox" style="background:#f4faf8;border:1.5px solid var(--line);border-radius:10px;padding:10px;margin-bottom:10px;display:none">
       <h4 style="margin:0 0 6px;font-size:13px;color:var(--ink)">🧾 My Submitted Civic Reports (Verified Receipt Tracker)</h4>
-      <div id="myReceiptsList" style="font-size:12px"></div>
+      <div id="myReceiptsList" style="font-size:12.5px"></div>
     </div>
 
     <!-- SECURED MUNICIPAL COMPLAINTS FEED -->
@@ -514,9 +590,59 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
       <div id="repList" style="margin-top:8px"></div>
     </div>
     <div id="secFeedLocked" style="text-align:center;padding:14px;color:#567;font-size:13px;background:#f4faf8;border-radius:10px;margin-top:10px">
-      🔒 <b>Halqa-Secured Feed:</b> Complaints are visible only to the respective Halqa Officer (UC Tarai, TC Golarchi, or MC Badin). Tap 'Officer Login' above to manage your area.
+      🔒 <b>Halqa-Secured Feed:</b> Complaints & citizen photos are protected and visible only to the respective Halqa Officer (UC Tarai, TC Golarchi, or MC Badin). Tap 'Officer Login' above to manage your area.
     </div>
   </div>
+
+  <!-- DEDICATED TEAM, JURY RUBRIC ALIGNMENT & EASY GLOSSARY SECTION -->
+  <section class="info-section" id="teamSection">
+    <h3>👥 About Our Student Team & STREAM Jury Rubric Readiness</h3>
+    <div class="team-grid">
+      <div class="member-card">
+        <span>🤖 AI & Hardware Lead</span>
+        <b>Zahid Ali</b>
+        Trained the Teachable Machine vision model (Plastic, Paper, Glass & Empty classes) and assembled the recycled cardboard 3-bin Smart Flap with Arduino Uno & SG90 Servo motor.
+      </div>
+      <div class="member-card" style="border-top-color:var(--green)">
+        <span>📊 Data & Census Lead</span>
+        <b>Dost Ali</b>
+        Designed the Google Sheets Day-Wise Waste Census, recyclable mass calculations (25g/15g/180g), 45-sample accuracy testing log (91.1%), and 60s student quiz game.
+      </div>
+      <div class="member-card" style="border-top-color:var(--coral)">
+        <span>🚨 Civic & Security Lead</span>
+        <b>Shahmeer</b>
+        Mapped local cleanliness workflows for UC Tarai, TC Golarchi & MC Badin, testing GPS photo reporting and role-based Halqa Officer access control.
+      </div>
+    </div>
+
+    <h4 style="margin:10px 0 6px;font-size:14px;color:var(--ink)">🏅 How We Meet the 5 STREAM Jury Assessment Indicators (100 Marks)</h4>
+    <div class="rubric-grid">
+      <div class="rub-item">
+        <b>1. Originality & Local Relevance (20 Marks)</b>
+        Combines 4 systems (Edge AI + IoT Smart Bin + Live Waste Census + Halqa Civic Portal) tailored specifically for Tarai, Golarchi & Badin.
+      </div>
+      <div class="rub-item">
+        <b>2. Technical & Scientific Soundness (20 Marks — Tie-Breaker #1)</b>
+        Tested across <b>45 real waste samples</b> achieving <b>91.1% accuracy</b> (41/45 correct sorts in 0.76s avg). White chart backdrop controls glass glare.
+      </div>
+      <div class="rub-item">
+        <b>3. Execution, Safety & Craftsmanship (20 Marks)</b>
+        Powered by safe 5V laptop USB (zero 220V hazard), protected by 220-Ohm current-limiting resistors, with color-coded Blue/Red/Green compartments.
+      </div>
+      <div class="rub-item">
+        <b>4. Cost-Effectiveness & Recycling (20 Marks)</b>
+        Built from <b>Rs. 0 recycled cardboard cartons</b>, wooden skewers & 100% free open-source web tools, keeping total electronics reusable and low-cost.
+      </div>
+    </div>
+
+    <h4 style="margin:12px 0 6px;font-size:14px;color:var(--ink)">📖 Easy Technical Glossary (Bachon Aur Visitors Ke Liye Asaan Lafzon Mein)</h4>
+    <div class="glossary-grid">
+      <div class="gloss-item"><b>🧠 Edge AI (TensorFlow.js):</b> AI model jo internet server ke bajaye seedha aapke mobile/laptop ke browser ke andar chalta hai—tez aur safe!</div>
+      <div class="gloss-item"><b>⚙️ Digital Twin:</b> Screen par bana hua Smart Bin jo bilkul asli Arduino Servo motor (35°, 90°, 145°) ki tarah live ghum kar dikhata hai.</div>
+      <div class="gloss-item"><b>📊 Waste Census:</b> Kachre ki rozana ginti aur wazan (g/kg) ka hisab jo khud-ba-khud Google Sheet mein jama hota hai.</div>
+      <div class="gloss-item"><b>🔌 Web Serial IoT:</b> Bina mehnge Wi-Fi module ke seedha USB cable se browser ko Arduino Uno ke sath jorne wali modern technology.</div>
+    </div>
+  </section>
 
   <!-- SECRET TEACHER ADMIN PANEL -->
   <div id="adminBox">
@@ -554,27 +680,31 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
   <div class="toolbar">
     <label><input type="checkbox" id="voice" checked> 🔊 AI Voice</label>
     <label><input type="checkbox" id="sfx" checked> 🔔 Sound Effects</label>
+    <span style="font-size:12px;color:#456">🔒 <b>Privacy Policy:</b> No personal data is shared publicly; officer portals use HMAC-SHA256 sessions.</span>
   </div>
 
   <!-- PROFESSIONAL DEVELOPER FOOTER -->
-  <div class="foot">
+  <div class="foot" id="footerCredits">
     <b>Built with:</b> TensorFlow.js • Teachable Machine AI • Google Apps Script • Google Sheets • Digital Twin & Web Serial IoT<br>
     <b>Student Presenters:</b> Zahid Ali, Dost Ali & Shahmeer | © 2026 <b>GBHSS Haji Junejo Tarai</b>
   </div>
 </main>
 
+<!-- FLOATING BACK TO TOP BUTTON -->
+<button id="backTopBtn" type="button" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Scroll Back to Top">⬆️ Top</button>
+
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8.5/dist/teachablemachine-image.min.js"></script>
 <script>
 /* ========================================================= */
-/* SAAF SINDH AI: WASTE CENSUS - v8.0 (FINAL COMPETITION ED) */
+/* SAAF SINDH AI: WASTE CENSUS - v8.5 (USER-FRIENDLY FINAL)  */
 /* Student Team: Zahid Ali, Dost Ali & Shahmeer              */
 /* Guide Teacher: Ghulam Hussain Memon (BCS - Univ of Sindh) */
 /* ========================================================= */
 
 const MODEL_URL = "https://teachablemachine.withgoogle.com/models/RP91qAZCY/";
 const CLOUD_URL = "https://script.google.com/macros/s/AKfycbxSl2q2L2PoYqatesWrVIjwR9NJmCNYJzMRx9Om6v2zfYwhpdDLz29NpzFxn0qRhYk1/exec";
-const BIN_MAX_CAP = 20; // Classroom Smart Bin capacity threshold per bin for live % fill & overflow alert
+const BIN_MAX_CAP = 20;
 
 const BINS = [
   {keys:["plastic"], name:"Plastic", ur:"پلاسٹک", bin:"Blue Bin",  color:"#1967d2", icon:"🧴", cmd:"P", angle:35,  tilt:-28, dropX:"-95px", grams:25,  tip:"Clean plastic bottles & wrappers can be recycled."},
@@ -589,7 +719,7 @@ let model, video, StreamRef = null, ctx, mode = "learn", running = false, facing
 let score = 0, streak = 0, best = 0, timeLeft = 0, timer = null, target = null, gamePaused = false;
 let holdKey = null, holdSince = 0, cooldownUntil = 0, lastSaid = "", lastTaskHtml = "";
 let lastAiRun = 0, aiBusy = false, availableBinIndices = [0, 1, 2], currentDetectedIdx = null;
-let serialPort = null, serialWriter = null, simOverflowActive = false;
+let serialPort = null, serialWriter = null, simOverflowActive = false, blindMode = false;
 
 function setTask(html) {
   if (lastTaskHtml !== html) {
@@ -605,6 +735,21 @@ function highlightFlow(stepNum) {
   }
 }
 
+/* ---- Blind Jury Project Code Toggle (Rubric Compliance) ---- */
+$("blindModeBtn").onclick = () => {
+  blindMode = !blindMode;
+  if (blindMode) {
+    const code = prompt("Enter Official STREAM Project Code for Blind Judging:", "BD-M-T2-G-001") || "BD-M-T2-G-001";
+    $("credit").innerHTML = `🆔 <b>Official STREAM Project Code: ${code}</b><br><span style="color:#eaf4f1;font-weight:normal;font-size:12px">Unbiased Jury Assessment Mode Active (School Identity Hidden)</span>`;
+    $("footerCredits").innerHTML = `<b>Project Code:</b> ${code} | <b>Theme 2:</b> AI, Digital Solution, Gamification & IoT`;
+    $("blindModeBtn").textContent = "🏫 Show School";
+  } else {
+    $("credit").innerHTML = `👨‍🏫 Guide Teacher: Ghulam Hussain Memon (Bachelor of Computer Science (BCS) — University of Sindh, Laar Campus Badin)<br><span style="color:#eaf4f1;font-weight:normal;font-size:12px">PST — GBHSS Haji Junejo Tarai (SEMIS: 401020169)</span>`;
+    $("footerCredits").innerHTML = `<b>Built with:</b> TensorFlow.js • Teachable Machine AI • Google Apps Script • Google Sheets • Digital Twin & Web Serial IoT<br><b>Student Presenters:</b> Zahid Ali, Dost Ali & Shahmeer | © 2026 <b>GBHSS Haji Junejo Tarai</b>`;
+    $("blindModeBtn").textContent = "🕶️ Code Mode";
+  }
+};
+
 try { best = +localStorage.getItem("sdg_best") || 0; } catch (e) {}
 $("best").textContent = best;
 
@@ -616,7 +761,7 @@ BINS.forEach((b, i) => {
   $("bins").appendChild(d);
 });
 
-/* ---- Phase 5: Digital Twin Smart Bin + Web Serial Arduino + Capacity Alert ---- */
+/* ---- Digital Twin Smart Bin + Web Serial Arduino + Capacity Alert ---- */
 let lastHwSent = 0, flapTimer = null;
 
 async function sendToArduino(cmdChar) {
@@ -629,7 +774,7 @@ async function sendToArduino(cmdChar) {
 
 $("hwConnectBtn").onclick = async () => {
   if (!("serial" in navigator)) {
-    alert("Web Serial API requires Google Chrome or Edge on Laptop/PC.");
+    alert("💡 Web Serial API requires Google Chrome or Edge on a Laptop/PC with USB port.");
     return;
   }
   try {
@@ -641,7 +786,7 @@ $("hwConnectBtn").onclick = async () => {
     $("hwConnectBtn").style.color = "#fff";
     beep([660, 880]);
   } catch (err) {
-    alert("Arduino connection cancelled or failed: " + err.message);
+    alert("Arduino USB connection was not completed: " + err.message);
   }
 };
 
@@ -718,16 +863,17 @@ function updateBinCapacityUI() {
   const alertBox = $("overflowAlert");
   if (fullBins.length > 0) {
     alertBox.style.display = "block";
-    alertBox.innerHTML = `🚨 <b>OVERFLOW ALERT:</b> ${fullBins.join(", ")} near capacity! 🚛 <b>Route Plan:</b> Dispatch collection van to GBHSS Haji Junejo Tarai / Priority Halqa.`;
+    alertBox.innerHTML = `🚨 <b>OVERFLOW ALERT:</b> ${fullBins.join(", ")} near capacity! 🚛 <b>Route Plan:</b> Dispatch collection van to Priority Halqa Point.`;
   } else {
     alertBox.style.display = "none";
   }
 }
 
-/* ---- Phase 7: Judge Demo Mode & 15s Auto-Simulation ---- */
+/* ---- Judge Demo Mode & 15s Auto-Simulation ---- */
 $("judgeBtn").onclick = () => {
   const p = $("judgePanel");
   p.style.display = p.style.display === "block" ? "none" : "block";
+  if (p.style.display === "block") p.scrollIntoView({ behavior: "smooth" });
 };
 $("closeJudgeBtn").onclick = () => { $("judgePanel").style.display = "none"; };
 
@@ -830,7 +976,7 @@ async function startCamera() {
   } catch (err) {
     $("start").disabled = false;
     $("start").textContent = "📷 Start AI Camera";
-    setTask("⚠️ Camera permission needed!<small>Please allow camera access in your browser: " + err.message + "</small>");
+    setTask("⚠️ Please allow Camera access in your browser!<small>Tip: You can still test the Smart Bin using the ▶️ Plastic / Glass / Paper buttons on the right.</small>");
   }
 }
 
@@ -842,9 +988,9 @@ function stopCamera() {
     timer = null;
     $("overlayMsg").innerHTML = `⏸️ <b>Game Paused!</b> (${timeLeft}s remaining & Score: ${score})`;
     $("start").textContent = "▶️ Resume AI Camera";
-    setTask(`⏸️ Game Paused at ${timeLeft}s<small>Tap 'Resume AI Camera' to continue from ${timeLeft} seconds.</small>`);
+    setTask(`⏸️ Game Paused at ${timeLeft}s<small>Tap 'Resume AI Camera' to continue.</small>`);
   } else {
-    $("overlayMsg").innerHTML = "Point camera at <b>Plastic 🧴</b>, <b>Paper 📄</b> or <b>Glass 🫙</b> for real-time AI detection";
+    $("overlayMsg").innerHTML = "Show <b>Plastic 🧴</b>, <b>Paper 📄</b> or <b>Glass 🫙</b> for instant AI detection";
     $("start").textContent = "📷 Start AI Camera";
     setTask("Camera paused.<small>Tap 'Start AI Camera' whenever you are ready.</small>");
   }
@@ -885,7 +1031,7 @@ function loop(timestamp) {
 function pick(p) {
   let top = p[0];
   p.forEach(x => { if (x.probability > top.probability) top = x; });
-  $("probs").textContent = "🎯 AI Confidence: " + p.map(x => `${x.className}: ${Math.round(x.probability * 100)}%`).join(" | ");
+  $("probs").textContent = "🎯 Live AI Confidence: " + p.map(x => `${x.className}: ${Math.round(x.probability * 100)}%`).join(" | ");
   if (top.probability < MIN_CONF) return null;
   const n = top.className.trim().toLowerCase();
   if (n.includes("empty") || n.includes("nothing") || n.includes("background") || n.includes("none")) return null;
@@ -911,7 +1057,7 @@ function handle(p) {
 
   if (mode === "civic") {
     if (idx === null) {
-      setTask("🚨 Point camera at garbage pile & tap '📸 Snap from AI Camera'<small>Photo seedha Cloud Sheet 3 (Civic_Reports) mein save hogi</small>");
+      setTask("🚨 Point camera at garbage & tap '📸 Snap from AI Camera'<small>Photo securely cloud par submit hogi</small>");
     } else {
       const b = BINS[idx];
       highlightFlow(5);
@@ -922,7 +1068,7 @@ function handle(p) {
 
   if (mode === "learn") {
     if (idx === null) {
-      setTask("Show Plastic 🧴, Paper 📄 or Glass 🫙 inside the box<small>Kachre ko camera ke dabbay ke beech mein rakhen</small>");
+      setTask("Step 2: Hold Plastic 🧴, Paper 📄 or Glass 🫙 inside the camera box<small>Cheez ko dabbay ke beech mein rakhen</small>");
       return;
     }
     const b = BINS[idx];
@@ -958,7 +1104,7 @@ function handle(p) {
 function showTarget() {
   if (mode !== "play" || !timeLeft) return;
   const b = BINS[target];
-  setTask(`🎯 Find & Show: ${b.icon} ${b.name.toUpperCase()} (${b.ur})<small>Hold it steady in the camera box to score points!</small>`);
+  setTask(`🎯 Find & Show: ${b.icon} ${b.name.toUpperCase()} (${b.ur})<small>Hold steady in the camera box to score!</small>`);
   holdKey = null; lastSaid = "";
 }
 function nextTarget() {
@@ -1015,12 +1161,12 @@ function setMode(m) {
   $("mCivic").classList.toggle("on", m === "civic");
 
   if (m === "learn") {
-    $("bannerText").innerHTML = "👉 <b>Learn Mode:</b> Camera ke samne Plastic, Paper ya Glass (Sheesha) dikhayen.";
+    $("bannerText").innerHTML = "👉 <b>Learn Mode:</b> Camera kholen aur Plastic, Paper ya Glass dikhayen.";
   } else if (m === "play") {
     $("bannerText").innerHTML = "🎮 <b>60s Challenge:</b> Top 3 Winners will receive <b>Rs. 100 Top-Up Balance!</b>";
     renderLb();
   } else if (m === "audit") {
-    $("bannerText").innerHTML = "📊 <b>Smart Waste Census & Impact Dashboard:</b> Real-time AI analytics & Google Sheet sync.";
+    $("bannerText").innerHTML = "📊 <b>Smart Waste Census & Impact Dashboard:</b> Live Google Sheet analytics.";
     renderAudit(); syncAuditFromCloud();
   } else if (m === "civic") {
     $("bannerText").innerHTML = "🚨 <b>Civic Report:</b> Send photo & location to UC Tarai, TC Golarchi, or MC Badin.";
@@ -1034,9 +1180,9 @@ function setMode(m) {
   } else if (m === "audit") {
     setTask("📊 Ready to Count: Show 1 item inside the box<small>Ek item scan hone ke baad hata len, phir agla dikhayen</small>");
   } else if (m === "civic") {
-    setTask("🚨 Point camera at garbage pile & tap '📸 Snap from AI Camera'<small>Photo seedha Cloud Sheet 3 (Civic_Reports) mein save hogi</small>");
+    setTask("🚨 Point camera at garbage & tap '📸 Snap from AI Camera'<small>Photo seedha Cloud Sheet 3 mein save hogi</small>");
   } else {
-    setTask("Show Plastic 🧴, Paper 📄 or Glass 🫙 inside the box<small>Kachre ko camera ke dabbay ke beech mein rakhen</small>");
+    setTask("Step 2: Hold Plastic 🧴, Paper 📄 or Glass 🫙 inside the camera box<small>Cheez ko dabbay ke beech mein rakhen</small>");
   }
 }
 
@@ -1084,6 +1230,10 @@ const today = () => {
   const d = new Date();
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 };
+const nowTimeStr = () => {
+  const d = new Date();
+  return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+};
 const sum = o => Object.values(o || {}).reduce((a, b) => a + (Number(b) || 0), 0);
 const escapeHtml = value => String(value == null ? "" : value).replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[ch]));
 const makeId = prefix => prefix + Date.now().toString(36) + Math.random().toString(36).slice(2, 9);
@@ -1123,7 +1273,7 @@ async function fetchPublicData() {
 function handleSessionError(err) {
   if (["UNAUTHORIZED", "SESSION_EXPIRED"].includes(err.code)) {
     clearSession(false);
-    alert("🔒 Your secure session has expired or is not authorized. Please log in again.");
+    alert("🔒 Your secure session has expired. Please log in again.");
   }
 }
 
@@ -1164,9 +1314,9 @@ function clearSession(callServer = true) {
 }
 
 async function authenticatePrompt(expectedRole) {
-  const username = prompt("Enter account username:");
+  const username = prompt("Enter Officer / Admin Username:");
   if (username === null) return false;
-  const password = prompt("Enter your password:");
+  const password = prompt("Enter Password:");
   if (password === null) return false;
   try {
     const data = await apiPost({ action: "login", username: username.trim(), password });
@@ -1212,7 +1362,7 @@ async function pushAuditDelta(cls, delta, dt = today()) {
     try { localStorage.setItem("sdg_pending_audit", JSON.stringify(left)); } catch (e) {}
     await syncAuditFromCloud();
   } catch (e) {
-    $("auditSyncMsg").textContent = "⚠️ Offline — scan queued on this device.";
+    $("auditSyncMsg").textContent = "⚠️ Offline — scan saved on device (Tap Retry when online).";
     throw e;
   }
 }
@@ -1236,7 +1386,7 @@ async function syncAuditFromCloud() {
   if (!CLOUD_URL || syncingAudit) return;
   syncingAudit = true;
   try {
-    $("auditSyncMsg").textContent = "☁️ Syncing live census & impact stats...";
+    $("auditSyncMsg").textContent = "☁️ Syncing live census...";
     await flushPendingAudit();
     const data = await fetchPublicData();
     AUD = data.audit || {};
@@ -1245,10 +1395,11 @@ async function syncAuditFromCloud() {
     saveAudit();
     renderAudit();
     if (mode === "play") renderLb();
-    $("auditSyncMsg").textContent = "✅ Live Synced with Google Sheet";
+    $("auditSyncMsg").textContent = "✅ Live Synced";
+    $("lastSyncTime").textContent = "🕒 Updated: " + nowTimeStr();
   } catch (e) {
     renderAudit();
-    $("auditSyncMsg").textContent = "⚠️ Offline — showing cached census";
+    $("auditSyncMsg").textContent = "⚠️ Offline — Tap 'Retry / Refresh' to reconnect";
   } finally {
     syncingAudit = false;
   }
@@ -1259,7 +1410,7 @@ setInterval(() => {
   if (mode === "civic" && SESSION && SESSION.token) loadPrivateData().catch(handleSessionError);
 }, 30000);
 
-/* ---- Civic Garbage Reporting & Receipt Tracker (Phase 6) ---- */
+/* ---- Civic Garbage Reporting & Receipt Tracker ---- */
 function renderMyReceipts() {
   const box = $("myReceiptsBox");
   const list = $("myReceiptsList");
@@ -1292,7 +1443,7 @@ async function canvasToSafePhoto(canvas) {
 $("snapBtn").onclick = async () => {
   if (!running) await startCamera();
   if (!running || !video || video.readyState < 2) {
-    alert("Camera is not ready. Please start the AI camera and try again.");
+    alert("Camera is not ready. Please start the AI camera or use 'Choose / Camera Photo'.");
     return;
   }
   const c = document.createElement("canvas");
@@ -1306,7 +1457,7 @@ $("snapBtn").onclick = async () => {
     currentSnapTag = detectedName;
     $("snapPreview").src = currentPhotoData;
     $("snapPreview").style.display = "block";
-    $("snapStatus").textContent = `Photo captured. AI tag: ${detectedName}`;
+    $("snapStatus").textContent = `✅ Photo captured! AI tag: ${detectedName}`;
     highlightFlow(5);
     beep([660, 880]);
   } catch (e) { alert(e.message); }
@@ -1329,7 +1480,7 @@ $("civicFile").onchange = e => {
         $("snapPreview").src = currentPhotoData;
         $("snapPreview").style.display = "block";
         currentSnapTag = "📸 Citizen Photo Attached";
-        $("snapStatus").textContent = "Photo attached and compressed. Ready to submit.";
+        $("snapStatus").textContent = "✅ Photo attached and compressed. Ready to submit.";
         highlightFlow(5);
       } catch (err) { alert(err.message); }
     };
@@ -1349,7 +1500,7 @@ $("gpsBtn").onclick = () => {
     const lat = pos.coords.latitude.toFixed(5);
     const lng = pos.coords.longitude.toFixed(5);
     currentGpsLink = `https://maps.google.com/?q=${lat},${lng}`;
-    $("gpsStatus").textContent = `✅ GPS ready: ${lat}, ${lng}`;
+    $("gpsStatus").textContent = `✅ GPS locked: ${lat}, ${lng}`;
     if (!$("repArea").value.trim()) $("repArea").value = `GPS Pin (${lat}, ${lng})`;
   }, () => {
     $("gpsStatus").textContent = "⚠️ Location permission denied — enter the area name manually.";
@@ -1360,7 +1511,7 @@ $("sendReportBtn").onclick = async () => {
   const dept = $("repDept").value;
   const area = $("repArea").value.replace(/[|,"<>]/g, "").trim();
   if (!area) {
-    alert("Please enter the area / street name or use Auto GPS.");
+    alert("Please enter the area / street name or tap Auto GPS.");
     $("repArea").focus();
     return;
   }
@@ -1389,9 +1540,9 @@ $("sendReportBtn").onclick = async () => {
     highlightFlow(5);
     beep([523, 659, 784]);
     await syncAuditFromCloud();
-    alert(`✅ Report submitted successfully.\nVerified Receipt ID: #${finalId}`);
+    alert(`✅ Report submitted successfully!\nVerified Receipt ID: #${finalId}`);
   } catch (err) {
-    alert("❌ Report was not confirmed as saved. " + err.message);
+    alert("❌ Report could not be saved. Please check internet connection and try again: " + err.message);
   } finally {
     btn.disabled = false;
     btn.textContent = "📤 Send Photo & Alert to Selected Authority";
@@ -1557,13 +1708,11 @@ function renderAudit() {
   });
   const grandTotal = grandPlastic + grandPaper + grandGlass;
 
-  // Estimated Recyclable Weight Calculation (Plastic=25g, Paper=15g, Glass=180g)
   const totalGrams = (grandPlastic * 25) + (grandPaper * 15) + (grandGlass * 180);
   const weightText = totalGrams >= 1000
     ? `${(totalGrams / 1000).toFixed(2)} kg`
     : `${totalGrams} g`;
 
-  // Dominant Waste Category Calculation
   const catTotals = [
     { name: "Plastic", icon: "🧴", count: grandPlastic },
     { name: "Paper",   icon: "📄", count: grandPaper },
@@ -1573,7 +1722,6 @@ function renderAudit() {
   const topCat = catTotals[0];
   const topCatPct = grandTotal ? Math.round((topCat.count * 100) / grandTotal) : 0;
 
-  // Update 4 KPI Cards
   $("kpiTotalItems").textContent = grandTotal.toLocaleString();
   $("kpiTodayItems").textContent = `Today: ${totalToday} items`;
   $("kpiWeight").textContent = weightText;
@@ -1595,17 +1743,15 @@ function renderAudit() {
   else if (cs.total > 0) highlightFlow(5);
   else if (grandTotal > 0) highlightFlow(4);
 
-  // Halqa-Wise Breakdown Cards
   const byDept = cs.byDept || {};
   $("hqTarai").textContent = `${byDept["UC Tarai"] || 0} reports`;
   $("hqGolarchi").textContent = `${byDept["Town Committee Golarchi"] || 0} reports`;
   $("hqBadin").textContent = `${byDept["Municipal Committee Badin"] || 0} reports`;
 
-  // Generate Real-Time AI Insights (Zero Fake Numbers)
   const insights = [];
   if (grandTotal > 0) {
     insights.push(`<b>Dominant Waste Insight:</b> <b>${topCat.name}</b> is currently the most frequently detected waste category (<b>${topCatPct}%</b> share — ${topCat.count} of ${grandTotal} total items).`);
-    insights.push(`<b>Recycling & Route Impact:</b> An estimated <b>${weightText}</b> of recyclable material (${grandPlastic} Plastic, ${grandPaper} Paper, ${grandGlass} Glass) has been sorted across <b>${activeDates.length || 1}</b> census day(s). Priority bin collection is recommended for <b>${topCat.name}</b>.`);
+    insights.push(`<b>Recycling & Route Impact:</b> An estimated <b>${weightText}</b> of recyclable material (${grandPlastic} Plastic, ${grandPaper} Paper, ${grandGlass} Glass) has been sorted across <b>${activeDates.length || 1}</b> census day(s).`);
   } else {
     insights.push(`<b>Waste Census Ready:</b> Scan Plastic, Paper, or Glass items with the AI camera to generate live category dominance & mass diversion insights.`);
   }
@@ -1621,7 +1767,6 @@ function renderAudit() {
   }
   $("aiInsightsList").innerHTML = insights.map(line => `<li>${line}</li>`).join("");
 
-  // Today's Progress Bars
   $("auditTotal").textContent = `Today's Breakdown (${today()}): ${totalToday} items scanned`;
   $("auditBars").innerHTML = BINS.map(b => {
     const n = Number(d[b.name]) || 0;
@@ -1776,7 +1921,7 @@ $("lbSave").onclick = async () => {
     $("lbPhone").value = "";
     $("lbEntry").style.display = "none";
     await renderLb();
-    alert("✅ Score saved to Google Sheet. Your mobile number is visible only to Super Admin.");
+    alert("✅ Score saved to Google Sheet! Mobile numbers stay private for Super Admin only.");
   } catch (err) {
     alert("❌ Score was not confirmed as saved: " + err.message);
   } finally {
@@ -1857,7 +2002,7 @@ $("admClear").onclick = async () => {
   } catch (err) { handleSessionError(err); alert("Clear failed: " + err.message); }
 };
 
-// Startup: load public census & civic summary stats
+// Startup
 renderAudit();
 renderMyReceipts();
 syncAuditFromCloud();
