@@ -14,9 +14,20 @@ header{background:linear-gradient(135deg,#0f2930,#1b434d);color:#fff;padding:14p
 header h1{margin:0;font-size:21px;letter-spacing:.3px;cursor:default}
 header p{margin:3px 0 0;font-size:12.5px;color:#c3e3dc}
 #credit{color:var(--gold);font-weight:bold;font-size:12px;margin-top:6px;line-height:1.4}
-.team-badge{display:inline-block;margin-top:6px;background:rgba(255,255,255,.12);border:1px solid rgba(249,171,0,.5);color:#fff;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:bold;letter-spacing:.2px}
+.top-badges{display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;margin-top:7px}
+.team-badge{background:rgba(255,255,255,.12);border:1px solid rgba(249,171,0,.5);color:#fff;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:bold}
 .team-badge b{color:var(--gold)}
+#judgeBtn{background:var(--gold);color:#0f2930;padding:5px 13px;border-radius:20px;font-size:12px;font-weight:bold;border:0;cursor:pointer;box-shadow:0 2px 8px rgba(249,171,0,.4)}
 main{max-width:780px;margin:0 auto;padding:12px}
+
+/* ---- JUDGE DEMO MODE PANEL (PHASE 7) ---- */
+#judgePanel{display:none;background:linear-gradient(135deg,#0f2930,#1b434d);color:#fff;border:2.5px solid var(--gold);border-radius:16px;padding:14px;margin-bottom:12px;box-shadow:0 6px 18px rgba(0,0,0,.18)}
+.jp-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;border-bottom:1px solid rgba(255,255,255,.18);padding-bottom:8px;margin-bottom:10px}
+.jp-head h3{margin:0;color:var(--gold);font-size:16px}
+.jp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+@media(max-width:620px){.jp-grid{grid-template-columns:1fr}}
+.jp-card{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.18);border-radius:10px;padding:9px;font-size:12px;line-height:1.45}
+.jp-card b{color:var(--gold);display:block;font-size:13px;margin-bottom:3px}
 
 /* ---- RESPONSIVE 4 MODE TABS ---- */
 .modes{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:10px}
@@ -54,23 +65,26 @@ canvas{width:100%;height:100%;display:block;object-fit:cover}
 /* ---- AI CONFIDENCE BAR DIRECTLY UNDER CAMERA ---- */
 #probs{margin:0;font-size:12px;font-weight:bold;color:#fff;text-align:center;background:var(--ink);padding:7px 10px;border-radius:0 0 16px 16px;border:3px solid #fff;border-top:1px solid rgba(255,255,255,.2);box-shadow:0 4px 12px rgba(0,0,0,.12)}
 
-/* ---- DIGITAL TWIN SMART BIN PROTOTYPE (SIDE OF CAMERA) ---- */
+/* ---- DIGITAL TWIN SMART BIN PROTOTYPE + CAPACITY & OVERFLOW (PHASE 5) ---- */
 #protoBox{margin:0;background:var(--card);border:2px solid var(--line);border-radius:16px;padding:10px 12px;text-align:center;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 4px 12px rgba(0,0,0,.06)}
 .proto-head{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:bold;gap:4px}
 .proto-badge{background:var(--ink);color:var(--gold);padding:3px 8px;border-radius:6px;font-family:monospace;font-size:11px;white-space:nowrap}
-.proto-stage{position:relative;height:165px;background:#f4faf8;border:2px dashed var(--line);border-radius:12px;overflow:hidden;margin:8px 0 6px;flex:1}
-.chute{width:86px;height:24px;border-left:3px solid var(--ink);border-right:3px solid var(--ink);margin:0 auto;background:rgba(16,38,46,0.06);font-size:10.5px;color:#456;line-height:24px}
+.proto-stage{position:relative;height:155px;background:#f4faf8;border:2px dashed var(--line);border-radius:12px;overflow:hidden;margin:6px 0;flex:1}
+.chute{width:86px;height:22px;border-left:3px solid var(--ink);border-right:3px solid var(--ink);margin:0 auto;background:rgba(16,38,46,0.06);font-size:10px;color:#456;line-height:22px}
 #dropItem{position:absolute;top:2px;left:50%;transform:translate(-50%,0);font-size:24px;opacity:0;transition:transform 0.6s ease-in, opacity 0.2s}
-.pivot-axle{width:14px;height:14px;background:var(--gold);border:3px solid var(--ink);border-radius:50%;margin:14px auto 0;position:relative;z-index:3}
+.pivot-axle{width:14px;height:14px;background:var(--gold);border:3px solid var(--ink);border-radius:50%;margin:12px auto 0;position:relative;z-index:3}
 #flapArm{width:104px;height:7px;background:var(--ink);border-radius:4px;margin:-10px auto 0;transform:rotate(0deg);transition:transform 0.35s cubic-bezier(.4,1.4,.6,1);position:relative;z-index:2}
-.p-bins{position:absolute;bottom:6px;left:6px;right:6px;display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
-.p-bin{height:58px;border-radius:0 0 10px 10px;border:2.5px solid;display:flex;flex-direction:column;justify-content:center;align-items:center;font-size:10.5px;font-weight:bold;background:#fff;transition:background .25s,color .25s;padding:2px}
+.p-bins{position:absolute;bottom:5px;left:5px;right:5px;display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
+.p-bin{height:64px;border-radius:0 0 10px 10px;border:2.5px solid;display:flex;flex-direction:column;justify-content:space-between;align-items:center;font-size:10px;font-weight:bold;background:#fff;transition:background .25s,color .25s;padding:3px 4px;overflow:hidden}
 .p-bin.blue{border-color:var(--blue);color:var(--blue)}
 .p-bin.green{border-color:var(--green);color:var(--green)}
 .p-bin.red{border-color:var(--coral);color:var(--coral)}
 .p-bin.active.blue{background:var(--blue);color:#fff}
 .p-bin.active.green{background:var(--green);color:#fff}
 .p-bin.active.red{background:var(--coral);color:#fff}
+.cap-wrap{width:100%;height:6px;background:rgba(0,0,0,.1);border-radius:4px;overflow:hidden;margin-top:2px}
+.cap-fill{height:100%;width:0%;transition:width .3s}
+#overflowAlert{display:none;background:#ffebee;border:1.5px solid var(--coral);color:#b71c1c;border-radius:9px;padding:5px 8px;font-size:11px;font-weight:bold;margin:4px 0;text-align:left}
 
 /* ---- GAME HUD ---- */
 .hud{display:none;gap:8px;margin:10px 0}
@@ -87,6 +101,30 @@ canvas{width:100%;height:100%;display:block;object-fit:cover}
 .bin span.ico{display:block;font-size:28px;margin-bottom:2px}
 .bin small{display:block;font-weight:normal;font-size:11px;opacity:.85;margin-top:2px}
 .bin.hit{transform:translateY(-3px);color:#fff;box-shadow:0 6px 14px rgba(0,0,0,.15)}
+
+/* ---- SMART WASTE CENSUS & IMPACT DASHBOARD ---- */
+.flow-pipeline{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;margin:8px 0 12px;background:#f4faf8;padding:8px;border-radius:12px;border:1.5px solid var(--line)}
+@media(max-width:600px){.flow-pipeline{grid-template-columns:repeat(3,1fr)}}
+.flow-step{background:#fff;border:1.5px solid var(--line);border-radius:9px;padding:6px 4px;text-align:center;font-size:10.5px;font-weight:bold;color:#456;transition:all .25s}
+.flow-step span{display:block;font-size:16px;margin-bottom:2px}
+.flow-step.active{background:var(--ink);color:var(--gold);border-color:var(--ink);transform:translateY(-2px);box-shadow:0 3px 8px rgba(15,41,48,.18)}
+
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0}
+@media(max-width:620px){.kpi-grid{grid-template-columns:repeat(2,1fr)}}
+.kpi-card{background:#f8fcfb;border:1.5px solid var(--line);border-top:4px solid var(--ink);border-radius:11px;padding:9px 8px;text-align:center}
+.kpi-card small{display:block;font-size:10.5px;color:#456;text-transform:uppercase;letter-spacing:.3px;font-weight:bold}
+.kpi-card b{display:block;font-size:19px;color:var(--ink);margin:3px 0 2px}
+.kpi-card span{font-size:11px;color:var(--green);font-weight:bold}
+
+.insight-box{background:linear-gradient(135deg,#0f2930,#1b434d);color:#fff;border-radius:12px;padding:11px 13px;margin:10px 0;box-shadow:0 3px 10px rgba(15,41,48,.14)}
+.insight-head{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;font-weight:bold;color:var(--gold);margin-bottom:6px}
+.insight-list{margin:0;padding-left:18px;font-size:12.5px;line-height:1.55;color:#eaf4f1}
+.insight-list li{margin-bottom:3px}
+.insight-list b{color:#fff}
+
+.civic-mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:8px 0}
+@media(max-width:520px){.civic-mini-grid{grid-template-columns:1fr}}
+.c-mini{background:#f4faf8;border:1.5px solid var(--line);border-radius:9px;padding:7px 9px;font-size:12px;display:flex;justify-content:space-between;align-items:center}
 
 /* ---- CIVIC GARBAGE REPORTING & LOCAL GOVT PORTAL ---- */
 #civicBox{display:none;margin:10px 0;background:#fff;border:2px solid var(--line);border-radius:14px;padding:14px}
@@ -133,22 +171,55 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
 .atable th,.atable td{border:1px solid var(--line);padding:6px;text-align:left}
 .atable th{background:var(--ink);color:#fff}
 .atable tfoot td{background:#eaf4f1;font-weight:bold;border-top:2px solid var(--ink)}
+@media print{
+  .modes,.live-grid,.bins,.toolbar,#judgeBtn,.abtns,#modeBanner{display:none!important}
+  #audit{display:block!important;border:0}
+}
 </style>
 </head>
 <body>
 <header>
   <h1 id="appTitle">♻️ Saaf Sindh AI: Waste Census</h1>
-  <p>Sindh STREAM Journey 2026-27 | From Classrooms to Cosmos</p>
+  <p>Sindh STREAM Journey 2026-27 | From Classrooms to Cosmos | صاف سنڌ، سرسبز سنڌ</p>
   <div id="credit">
     👨‍🏫 Guide Teacher: Ghulam Hussain Memon (Bachelor of Computer Science (BCS) — University of Sindh, Laar Campus Badin)<br>
-    <span style="color:#eaf4f1;font-weight:normal;font-size:11.5px">PST — GBHSS Haji Junejo Tarai</span>
+    <span style="color:#eaf4f1;font-weight:normal;font-size:11.5px">PST — GBHSS Haji Junejo Tarai (SEMIS: 401020169)</span>
   </div>
-  <div class="team-badge">
-    🌟 <b>Student Team:</b> Zahid Ali • Dost Ali • Shahmeer
+  <div class="top-badges">
+    <div class="team-badge">🌟 <b>Student Team:</b> Zahid Ali • Dost Ali • Shahmeer</div>
+    <button id="judgeBtn" type="button">🏆 Judge Demo Mode</button>
   </div>
 </header>
 
 <main>
+  <!-- PHASE 7: 1-CLICK JUDGE DEMO & STUDENT PITCH PANEL -->
+  <div id="judgePanel">
+    <div class="jp-head">
+      <h3>🏆 Competition Judge Demo Mode (3-Minute Live Pitch Guide)</h3>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button id="runAutoDemoBtn" type="button" style="background:var(--gold);color:#0f2930;padding:6px 12px;font-size:12px">▶️ Run 15s Auto-Simulation</button>
+        <button id="closeJudgeBtn" type="button" class="alt" style="padding:5px 10px;font-size:11.5px">✖ Close</button>
+      </div>
+    </div>
+    <div class="jp-grid">
+      <div class="jp-card">
+        <b>🎤 1. Zahid Ali (AI & Smart Bin)</b>
+        "Assalam-o-Alaikum Judges! Our Edge AI model identifies Plastic, Paper & Glass in real time. Watch our Digital Twin & Arduino Smart Bin sort Plastic left (35°), Glass center (90°), and Paper right (145°) with capacity alerts!"
+      </div>
+      <div class="jp-card">
+        <b>🎤 2. Dost Ali (Waste Census & Game)</b>
+        "Every scan updates our live Google Cloud Waste Census, calculating recyclable mass in grams/kg and generating AI Insights. Students also play our 60-second challenge to win Rs. 100 balance!"
+      </div>
+      <div class="jp-card">
+        <b>🎤 3. Shahmeer (Civic Action Portal)</b>
+        "Citizens report outdoor garbage with GPS & photo without signup. Halqa Officers in UC Tarai, TC Golarchi & MC Badin log in securely to resolve complaints in their own jurisdiction!"
+      </div>
+    </div>
+    <div style="font-size:11.5px;color:#c3e3dc;text-align:center">
+      💡 <b>Tip for Judges:</b> Click <b>"▶️ Run 15s Auto-Simulation"</b> above to watch the complete AI ➔ Smart Bin ➔ Overflow Alert ➔ Impact Census workflow automatically!
+    </div>
+  </div>
+
   <!-- 4 RESPONSIVE MODE TABS -->
   <div class="modes">
     <button id="mLearn" class="alt mode-btn on" type="button">
@@ -158,7 +229,7 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
       <span>🎮</span>60s Game<small>Win Rs. 100</small>
     </button>
     <button id="mAudit" class="alt mode-btn" type="button">
-      <span>📊</span>Waste Audit<small>Day-Wise Count</small>
+      <span>📊</span>Census & Impact<small>AI Dashboard</small>
     </button>
     <button id="mCivic" class="alt mode-btn" type="button">
       <span>🚨</span>Civic Report<small>UC / TC / MC</small>
@@ -191,10 +262,10 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
       <div id="probs">AI Live Confidence: Waiting for camera...</div>
     </div>
 
-    <!-- RIGHT COLUMN: DIGITAL TWIN SMART BIN PROTOTYPE RIGHT NEXT TO CAMERA -->
+    <!-- RIGHT COLUMN: DIGITAL TWIN SMART BIN + CAPACITY & OVERFLOW (PHASE 5) -->
     <div id="protoBox">
       <div class="proto-head">
-        <span>⚙️ Smart Bin Flap (Digital Twin)</span>
+        <span>⚙️ Smart Bin Digital Twin</span>
         <span class="proto-badge" id="servoStatus">Flap: 90° (Ready)</span>
       </div>
       <div class="proto-stage">
@@ -203,15 +274,31 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
         <div class="pivot-axle" title="Smart Sorting Flap Axle"></div>
         <div id="flapArm"></div>
         <div class="p-bins">
-          <div class="p-bin blue" id="pBin0">🧴 BLUE BIN<small>Plastic (35° Left)</small></div>
-          <div class="p-bin red" id="pBin2">🫙 RED BIN<small>Glass (90° Center)</small></div>
-          <div class="p-bin green" id="pBin1">📄 GREEN BIN<small>Paper (145° Right)</small></div>
+          <div class="p-bin blue" id="pBin0">
+            <span>🧴 PLASTIC</span>
+            <small id="capTxt0">35° • 0% Full</small>
+            <div class="cap-wrap"><div class="cap-fill" id="capBar0" style="background:var(--blue)"></div></div>
+          </div>
+          <div class="p-bin red" id="pBin2">
+            <span>🫙 GLASS</span>
+            <small id="capTxt2">90° • 0% Full</small>
+            <div class="cap-wrap"><div class="cap-fill" id="capBar2" style="background:var(--coral)"></div></div>
+          </div>
+          <div class="p-bin green" id="pBin1">
+            <span>📄 PAPER</span>
+            <small id="capTxt1">145° • 0% Full</small>
+            <div class="cap-wrap"><div class="cap-fill" id="capBar1" style="background:var(--green)"></div></div>
+          </div>
         </div>
       </div>
+      <!-- SMART BIN OVERFLOW & ROUTE PLANNING ALERT -->
+      <div id="overflowAlert"></div>
       <div class="abtns">
         <button class="alt" id="testPlastic" type="button" style="border-color:var(--blue);color:var(--blue)">▶️ Plastic</button>
         <button class="alt" id="testGlass" type="button" style="border-color:var(--coral);color:var(--coral)">▶️ Glass</button>
         <button class="alt" id="testPaper" type="button" style="border-color:var(--green);color:var(--green)">▶️ Paper</button>
+        <button class="alt" id="simOverflowBtn" type="button" title="Simulate Bin Full & Collection Route Alert">🚨 Full Alert</button>
+        <button class="alt" id="hwConnectBtn" type="button" title="Connect Physical Arduino Uno via USB Cable">🔌 Arduino USB</button>
       </div>
     </div>
   </div>
@@ -261,17 +348,78 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
     <p class="note">Showing today's top 5 players. Score high & enter your mobile number to win Rs. 100 balance!</p>
   </div>
 
-  <!-- WASTE AUDIT (Public View) -->
+  <!-- SMART WASTE CENSUS & LIVE IMPACT DASHBOARD -->
   <div id="audit">
-    <div id="auditTotal"></div>
-    <p class="note" id="auditSyncMsg" style="margin:0 0 6px;color:var(--green);font-weight:bold">☁️ Syncing Day-Wise Audit with Google Sheet...</p>
-    <div id="auditBars"></div>
-    <div class="abtns">
-      <button class="alt" id="aSync" type="button">🔄 Refresh Cloud</button>
-      <button class="alt" id="aUndo" type="button" style="display:none">↩️ Undo Last (Admin)</button>
-      <button class="alt" id="aCopy" type="button">📋 Copy Summary</button>
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px">
+      <h3 style="margin:0;font-size:16px;color:var(--ink)">📊 Smart Waste Census & Live Impact Dashboard</h3>
+      <span class="note" id="auditSyncMsg" style="margin:0;color:var(--green);font-weight:bold">☁️ Syncing with Google Sheet...</span>
     </div>
-    <h4 style="margin:14px 0 4px;font-size:13.5px">📅 Day-Wise Waste Census (Mobile + PC Combined)</h4>
+
+    <!-- VISUAL AI -> CENSUS -> ACTION PIPELINE -->
+    <div class="flow-pipeline" title="End-to-End Civic Waste Management Flow">
+      <div class="flow-step active" id="fl1"><span>📷</span>1. Capture</div>
+      <div class="flow-step" id="fl2"><span>🤖</span>2. AI Classify</div>
+      <div class="flow-step" id="fl3"><span>📊</span>3. Census Log</div>
+      <div class="flow-step" id="fl4"><span>⚙️</span>4. Smart Bin</div>
+      <div class="flow-step" id="fl5"><span>🚨</span>5. Civic Alert</div>
+      <div class="flow-step" id="fl6"><span>✅</span>6. Resolved</div>
+    </div>
+
+    <!-- 4 REAL-TIME IMPACT KPI CARDS -->
+    <div class="kpi-grid">
+      <div class="kpi-card" style="border-top-color:var(--blue)">
+        <small>Total Waste Counted</small>
+        <b id="kpiTotalItems">0</b>
+        <span id="kpiTodayItems">Today: 0 items</span>
+      </div>
+      <div class="kpi-card" style="border-top-color:var(--green)">
+        <small>Est. Mass Diverted</small>
+        <b id="kpiWeight">0 g</b>
+        <span id="kpiDays">Across 0 census days</span>
+      </div>
+      <div class="kpi-card" style="border-top-color:var(--gold)">
+        <small>Most Common Waste</small>
+        <b id="kpiTopWaste">—</b>
+        <span id="kpiTopPct">Waiting for scans</span>
+      </div>
+      <div class="kpi-card" style="border-top-color:var(--coral)">
+        <small>Civic Reports Action</small>
+        <b id="kpiReports">0</b>
+        <span id="kpiResolved">0 Resolved • 0 Pending</span>
+      </div>
+    </div>
+
+    <!-- AI INSIGHTS ENGINE (DYNAMIC FROM REAL GOOGLE SHEET DATA) -->
+    <div class="insight-box">
+      <div class="insight-head">
+        <span>🧠 Live AI Census, Bin Route & Civic Intelligence</span>
+        <span style="font-size:11px;color:#c3e3dc;font-weight:normal">100% Real Google Sheet Data</span>
+      </div>
+      <ul class="insight-list" id="aiInsightsList">
+        <li>Scanning live Google Sheet data to generate waste & civic insights...</li>
+      </ul>
+    </div>
+
+    <!-- TODAY'S CATEGORY BARS -->
+    <div id="auditTotal" style="margin-top:8px"></div>
+    <div id="auditBars"></div>
+
+    <!-- PHASE 6: HALQA CLEANLINESS COMPETITION -->
+    <h4 style="margin:12px 0 4px;font-size:13px;color:var(--ink)">🏅 Halqa Civic Participation Leaderboard (Community Eco-Race)</h4>
+    <div class="civic-mini-grid" id="halqaBreakdown">
+      <div class="c-mini"><span>🏛️ UC Tarai</span><b id="hqTarai">0</b></div>
+      <div class="c-mini"><span>🏛️ TC Golarchi</span><b id="hqGolarchi">0</b></div>
+      <div class="c-mini"><span>🏛️ MC Badin</span><b id="hqBadin">0</b></div>
+    </div>
+
+    <div class="abtns" style="margin-top:10px">
+      <button class="alt" id="aSync" type="button">🔄 Refresh Live Data</button>
+      <button class="alt" id="aUndo" type="button" style="display:none">↩️ Undo Last (Admin)</button>
+      <button class="alt" id="aCopy" type="button">📋 Copy Impact Summary</button>
+      <button class="alt" id="aPrint" type="button" style="border-color:var(--ink)">🖨️ Print Impact Report</button>
+    </div>
+
+    <h4 style="margin:14px 0 4px;font-size:13.5px">📅 Day-Wise Waste Census Trend (Mobile + PC Combined)</h4>
     <div style="overflow-x:auto">
       <table class="atable">
         <thead>
@@ -281,7 +429,7 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
         <tfoot id="auditFooter"></tfoot>
       </table>
     </div>
-    <p class="note">All scans from Mobile & PC are saved in the dedicated <b>Waste_Audit</b> sheet with automatic daily headings.</p>
+    <p class="note">Est. Recyclable Mass Formula: Plastic = 25g/item, Paper = 15g/item, Glass = 180g/item. All counts are synced with Google Sheets.</p>
   </div>
 
   <!-- CIVIC GARBAGE REPORTING & LOCAL GOVT PORTAL (UC Tarai / TC Golarchi / MC Badin) -->
@@ -295,7 +443,6 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
     <div id="officerBar">
       <span id="officerTitle">👮‍♂️ <b>Officer Mode:</b> Verified</span>
       <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
-        <!-- Dropdown only visible to Super Admin (GBHSS HAJI JUNEJO) -->
         <select id="offFilter" style="display:none;padding:4px 8px;border-radius:6px;border:0;font-size:11.5px;font-weight:bold">
           <option value="ALL">Show All Halqas (Super Admin)</option>
           <option value="UC Tarai">UC Tarai Only</option>
@@ -352,7 +499,13 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
       </button>
     </div>
 
-    <!-- SECURED MUNICIPAL COMPLAINTS FEED (Only shown after Officer Login, locked to Officer's Halqa) -->
+    <!-- PHASE 6: CITIZEN VERIFIED REPORT RECEIPTS (PUBLIC DEVICE TRACKER) -->
+    <div id="myReceiptsBox" style="background:#f4faf8;border:1.5px solid var(--line);border-radius:10px;padding:10px;margin-bottom:10px;display:none">
+      <h4 style="margin:0 0 6px;font-size:13px;color:var(--ink)">🧾 My Submitted Civic Reports (Verified Receipt Tracker)</h4>
+      <div id="myReceiptsList" style="font-size:12px"></div>
+    </div>
+
+    <!-- SECURED MUNICIPAL COMPLAINTS FEED -->
     <div id="secFeedContainer" style="display:none">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
         <h4 id="feedHeading" style="margin:0;font-size:14px">📋 Live Area Cleanliness Requests</h4>
@@ -405,7 +558,7 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
 
   <!-- PROFESSIONAL DEVELOPER FOOTER -->
   <div class="foot">
-    <b>Built with:</b> TensorFlow.js • Teachable Machine AI • Google Apps Script • Google Sheets • Digital Twin Simulation<br>
+    <b>Built with:</b> TensorFlow.js • Teachable Machine AI • Google Apps Script • Google Sheets • Digital Twin & Web Serial IoT<br>
     <b>Student Presenters:</b> Zahid Ali, Dost Ali & Shahmeer | © 2026 <b>GBHSS Haji Junejo Tarai</b>
   </div>
 </main>
@@ -414,28 +567,19 @@ label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
 <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8.5/dist/teachablemachine-image.min.js"></script>
 <script>
 /* ========================================================= */
-/* SAAF SINDH AI: WASTE CENSUS - v7.0 (SECURITY PHASE 1)     */
+/* SAAF SINDH AI: WASTE CENSUS - v8.0 (FINAL COMPETITION ED) */
 /* Student Team: Zahid Ali, Dost Ali & Shahmeer              */
 /* Guide Teacher: Ghulam Hussain Memon (BCS - Univ of Sindh) */
 /* ========================================================= */
 
-const MODEL_URL  = "https://teachablemachine.withgoogle.com/models/RP91qAZCY/";
-const ADMIN_HASH = "NDAxMDIwMTY5"; // Encrypted Teacher SEMIS PIN (401020169)
-const CLOUD_KEY  = "NDAxMDIwMTY5";
-const CLOUD_URL  = "https://script.google.com/macros/s/AKfycbxSl2q2L2PoYqatesWrVIjwR9NJmCNYJzMRx9Om6v2zfYwhpdDLz29NpzFxn0qRhYk1/exec";
-
-// 4 Official Officer Accounts (Each Halqa Officer is strictly locked to their own jurisdiction)
-const OFFICER_ACCOUNTS = [
-  { u: "GBHSS HAJI JUNEJO", p: "401020169HJ", label: "Super Admin (All Halqas)", filter: "ALL", isSuper: true },
-  { u: "UC TARAI",          p: "401020169T",  label: "Union Council (UC) Tarai", filter: "UC Tarai", isSuper: false },
-  { u: "TC GOLARCHI",       p: "401020169G",  label: "Town Committee Golarchi",  filter: "Town Committee Golarchi", isSuper: false },
-  { u: "MC BADIN",          p: "401020169B",  label: "Municipal Committee Badin",filter: "Municipal Committee Badin", isSuper: false }
-];
+const MODEL_URL = "https://teachablemachine.withgoogle.com/models/RP91qAZCY/";
+const CLOUD_URL = "https://script.google.com/macros/s/AKfycbxSl2q2L2PoYqatesWrVIjwR9NJmCNYJzMRx9Om6v2zfYwhpdDLz29NpzFxn0qRhYk1/exec";
+const BIN_MAX_CAP = 20; // Classroom Smart Bin capacity threshold per bin for live % fill & overflow alert
 
 const BINS = [
-  {keys:["plastic"], name:"Plastic", ur:"پلاسٹک", bin:"Blue Bin",  color:"#1967d2", icon:"🧴", cmd:"P", angle:35,  tilt:-28, dropX:"-95px", tip:"Clean plastic bottles & wrappers can be recycled."},
-  {keys:["paper","papar"], name:"Paper", ur:"کاغذ", bin:"Green Bin", color:"#1e8e3e", icon:"📄", cmd:"A", angle:145, tilt:28,  dropX:"75px",  tip:"Keep paper dry and clean for recycling."},
-  {keys:["glass","sheesha","mirror","jar","kanch","bottle"], name:"Glass", ur:"شیشہ", bin:"Red Bin", color:"#d93025", icon:"🫙", cmd:"G", angle:90,  tilt:0,   dropX:"-12px", tip:"Handle glass carefully! Glass jars & bottles can be recycled endlessly."}
+  {keys:["plastic"], name:"Plastic", ur:"پلاسٹک", bin:"Blue Bin",  color:"#1967d2", icon:"🧴", cmd:"P", angle:35,  tilt:-28, dropX:"-95px", grams:25,  tip:"Clean plastic bottles & wrappers can be recycled."},
+  {keys:["paper","papar"], name:"Paper", ur:"کاغذ", bin:"Green Bin", color:"#1e8e3e", icon:"📄", cmd:"A", angle:145, tilt:28,  dropX:"75px",  grams:15,  tip:"Keep paper dry and clean for recycling."},
+  {keys:["glass","sheesha","mirror","jar","kanch","bottle"], name:"Glass", ur:"شیشہ", bin:"Red Bin", color:"#d93025", icon:"🫙", cmd:"G", angle:90,  tilt:0,   dropX:"-12px", grams:180, tip:"Handle glass carefully! Glass jars & bottles can be recycled endlessly."}
 ];
 
 const MIN_CONF = 0.65, HOLD_MS = 650, ROUND_S = 60, AI_INTERVAL_MS = 110;
@@ -445,11 +589,19 @@ let model, video, StreamRef = null, ctx, mode = "learn", running = false, facing
 let score = 0, streak = 0, best = 0, timeLeft = 0, timer = null, target = null, gamePaused = false;
 let holdKey = null, holdSince = 0, cooldownUntil = 0, lastSaid = "", lastTaskHtml = "";
 let lastAiRun = 0, aiBusy = false, availableBinIndices = [0, 1, 2], currentDetectedIdx = null;
+let serialPort = null, serialWriter = null, simOverflowActive = false;
 
 function setTask(html) {
   if (lastTaskHtml !== html) {
     $("task").innerHTML = html;
     lastTaskHtml = html;
+  }
+}
+
+function highlightFlow(stepNum) {
+  for (let i = 1; i <= 6; i++) {
+    const el = $("fl" + i);
+    if (el) el.classList.toggle("active", i <= stepNum);
   }
 }
 
@@ -464,8 +616,34 @@ BINS.forEach((b, i) => {
   $("bins").appendChild(d);
 });
 
-/* ---- Digital Twin Smart Bin Simulation ---- */
+/* ---- Phase 5: Digital Twin Smart Bin + Web Serial Arduino + Capacity Alert ---- */
 let lastHwSent = 0, flapTimer = null;
+
+async function sendToArduino(cmdChar) {
+  if (!serialWriter) return;
+  try {
+    const data = new TextEncoder().encode(cmdChar + "\n");
+    await serialWriter.write(data);
+  } catch (e) {}
+}
+
+$("hwConnectBtn").onclick = async () => {
+  if (!("serial" in navigator)) {
+    alert("Web Serial API requires Google Chrome or Edge on Laptop/PC.");
+    return;
+  }
+  try {
+    serialPort = await navigator.serial.requestPort();
+    await serialPort.open({ baudRate: 9600 });
+    serialWriter = serialPort.writable.getWriter();
+    $("hwConnectBtn").textContent = "✅ Arduino Linked";
+    $("hwConnectBtn").style.background = "var(--green)";
+    $("hwConnectBtn").style.color = "#fff";
+    beep([660, 880]);
+  } catch (err) {
+    alert("Arduino connection cancelled or failed: " + err.message);
+  }
+};
 
 function animatePrototype(idx) {
   const b = BINS[idx];
@@ -484,7 +662,7 @@ function animatePrototype(idx) {
   item.style.transform = "translate(-50%, 0)";
   setTimeout(() => {
     item.style.transition = "transform 0.55s ease-in, opacity 0.2s 0.45s";
-    item.style.transform = `translate(${b.dropX}, 95px)`;
+    item.style.transform = `translate(${b.dropX}, 88px)`;
     item.style.opacity = "0";
   }, 40);
 
@@ -502,11 +680,88 @@ function triggerBinSimulation(idx, force = false) {
   if (!force && now - lastHwSent < 2500) return;
   lastHwSent = now;
   animatePrototype(idx);
+  if (BINS[idx]) sendToArduino(BINS[idx].cmd);
 }
 
 $("testPlastic").onclick = () => { beep([660]); triggerBinSimulation(0, true); };
 $("testPaper").onclick = () => { beep([740]); triggerBinSimulation(1, true); };
 $("testGlass").onclick = () => { beep([820]); triggerBinSimulation(2, true); };
+
+$("simOverflowBtn").onclick = () => {
+  simOverflowActive = !simOverflowActive;
+  updateBinCapacityUI();
+  if (simOverflowActive) {
+    beep([880, 660, 880]);
+    say("Alert! Smart Bin capacity reached 95 percent. Dispatch collection van.");
+  }
+};
+
+function updateBinCapacityUI() {
+  const d = (AUD && AUD[today()]) || {};
+  const counts = [
+    simOverflowActive ? 19 : (Number(d.Plastic) || 0),
+    simOverflowActive ? 14 : (Number(d.Paper) || 0),
+    simOverflowActive ? 9  : (Number(d.Glass) || 0)
+  ];
+  const angles = [35, 145, 90];
+  const fullBins = [];
+
+  counts.forEach((cnt, idx) => {
+    const pct = Math.min(100, Math.round(((cnt % (BIN_MAX_CAP + 1)) / BIN_MAX_CAP) * 100));
+    const bar = $("capBar" + idx);
+    const txt = $("capTxt" + idx);
+    if (bar) bar.style.width = pct + "%";
+    if (txt) txt.textContent = `${angles[idx]}° • ${pct}% Full`;
+    if (pct >= 80) fullBins.push(`${BINS[idx].icon} ${BINS[idx].bin} (${pct}%)`);
+  });
+
+  const alertBox = $("overflowAlert");
+  if (fullBins.length > 0) {
+    alertBox.style.display = "block";
+    alertBox.innerHTML = `🚨 <b>OVERFLOW ALERT:</b> ${fullBins.join(", ")} near capacity! 🚛 <b>Route Plan:</b> Dispatch collection van to GBHSS Haji Junejo Tarai / Priority Halqa.`;
+  } else {
+    alertBox.style.display = "none";
+  }
+}
+
+/* ---- Phase 7: Judge Demo Mode & 15s Auto-Simulation ---- */
+$("judgeBtn").onclick = () => {
+  const p = $("judgePanel");
+  p.style.display = p.style.display === "block" ? "none" : "block";
+};
+$("closeJudgeBtn").onclick = () => { $("judgePanel").style.display = "none"; };
+
+$("runAutoDemoBtn").onclick = () => {
+  const btn = $("runAutoDemoBtn");
+  btn.disabled = true;
+  btn.textContent = "⏳ Running Live Demo...";
+  highlightFlow(1);
+  setTask("🏆 Judge Demo Step 1/4: AI Detecting PLASTIC Bottle 🧴...<small>Flap rotating to 35° Left (Blue Bin)</small>");
+  beep([660]); triggerBinSimulation(0, true);
+
+  setTimeout(() => {
+    highlightFlow(2);
+    setTask("🏆 Judge Demo Step 2/4: AI Detecting GLASS Jar 🫙...<small>Flap holding at 90° Center (Red Bin)</small>");
+    beep([820]); triggerBinSimulation(2, true);
+  }, 2400);
+
+  setTimeout(() => {
+    highlightFlow(3);
+    setTask("🏆 Judge Demo Step 3/4: AI Detecting Dry PAPER 📄...<small>Flap rotating to 145° Right (Green Bin)</small>");
+    beep([740]); triggerBinSimulation(1, true);
+  }, 4800);
+
+  setTimeout(() => {
+    highlightFlow(6);
+    simOverflowActive = true;
+    updateBinCapacityUI();
+    setMode("audit");
+    setTask("✅ Judge Demo Step 4/4: Smart Bin Overflow Alert & Impact Census!<small>Scroll down to see live Google Sheet KPIs, Mass Diverted & AI Insights</small>");
+    beep([523, 659, 784]);
+    btn.disabled = false;
+    btn.textContent = "▶️ Run 15s Auto-Simulation";
+  }, 7200);
+};
 
 /* ---- Sound and Voice ---- */
 let ac;
@@ -659,6 +914,7 @@ function handle(p) {
       setTask("🚨 Point camera at garbage pile & tap '📸 Snap from AI Camera'<small>Photo seedha Cloud Sheet 3 (Civic_Reports) mein save hogi</small>");
     } else {
       const b = BINS[idx];
+      highlightFlow(5);
       setTask(`🚨 AI Detected ${b.icon} ${b.name} Waste!<small>Tap '📸 Snap from AI Camera' below to attach photo & send alert</small>`);
     }
     return;
@@ -764,11 +1020,11 @@ function setMode(m) {
     $("bannerText").innerHTML = "🎮 <b>60s Challenge:</b> Top 3 Winners will receive <b>Rs. 100 Top-Up Balance!</b>";
     renderLb();
   } else if (m === "audit") {
-    $("bannerText").innerHTML = "📊 <b>Waste Audit:</b> Saved in Sheet 2 (Waste_Audit) with Daily Date Headings.";
+    $("bannerText").innerHTML = "📊 <b>Smart Waste Census & Impact Dashboard:</b> Real-time AI analytics & Google Sheet sync.";
     renderAudit(); syncAuditFromCloud();
   } else if (m === "civic") {
     $("bannerText").innerHTML = "🚨 <b>Civic Report:</b> Send photo & location to UC Tarai, TC Golarchi, or MC Badin.";
-    renderReports(); syncAuditFromCloud();
+    renderMyReceipts(); renderReports(); syncAuditFromCloud();
   }
 
   if (!running) return;
@@ -794,173 +1050,290 @@ $("mPlay").onclick = () => {
   setMode("play");
 };
 $("mAudit").onclick = () => { setMode("audit"); if (!running) startCamera(); };
-$("mCivic").onclick = () => { setMode("civic"); };
+$("mCivic").onclick = () => {
+  setMode("civic");
+  if (SESSION && SESSION.token) loadPrivateData().catch(err => { handleSessionError(err); });
+};
 $("again").onclick = () => {
   timeLeft = 0; gamePaused = false;
   if (running) startRound();
   else startCamera();
 };
 
-/* ---- 3-Sheet Cloud Sync ---- */
-let AUD = {}, auditArmed = true, idleSince = 0, lastCounted = null, syncingAudit = false;
-let LB = [], REPORTS = [];
+/* ---- Secure Google Apps Script API + Impact Dashboard ---- */
+let AUD = {}, CIVIC_STATS = { total: 0, pending: 0, inProgress: 0, resolved: 0, byDept: {}, topArea: "", topAreaCount: 0, topDept: "" };
+let auditArmed = true, idleSince = 0, lastCounted = null, syncingAudit = false;
+let LB = [], REPORTS = [], MY_RECEIPTS = [];
 let activeOfficer = null, currentSnapTag = "Mixed Waste", currentGpsLink = "", currentPhotoData = "";
+let SESSION = null;
 
-try { AUD = JSON.parse(localStorage.getItem("sdg_audit") || "{}"); } catch (e) {}
-try { LB = JSON.parse(localStorage.getItem("sdg_lb") || "[]"); } catch (e) {}
-try { REPORTS = JSON.parse(localStorage.getItem("sdg_reports") || "[]"); } catch (e) {}
+try { AUD = JSON.parse(localStorage.getItem("sdg_audit") || "{}"); } catch (e) { AUD = {}; }
+try { CIVIC_STATS = JSON.parse(localStorage.getItem("sdg_civic_stats") || "null") || CIVIC_STATS; } catch (e) {}
+try { MY_RECEIPTS = JSON.parse(localStorage.getItem("sdg_my_receipts") || "[]"); } catch (e) { MY_RECEIPTS = []; }
+try { SESSION = JSON.parse(sessionStorage.getItem("saaf_session") || "null"); } catch (e) { SESSION = null; }
+if (SESSION && SESSION.token) {
+  activeOfficer = {
+    u: SESSION.username,
+    label: SESSION.role === "SUPER_ADMIN" ? "Super Admin (All Halqas)" : SESSION.dept,
+    filter: SESSION.dept,
+    isSuper: SESSION.role === "SUPER_ADMIN"
+  };
+}
 
 const today = () => {
   const d = new Date();
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 };
-const sum = o => Object.values(o || {}).reduce((a, b) => a + b, 0);
+const sum = o => Object.values(o || {}).reduce((a, b) => a + (Number(b) || 0), 0);
+const escapeHtml = value => String(value == null ? "" : value).replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[ch]));
+const makeId = prefix => prefix + Date.now().toString(36) + Math.random().toString(36).slice(2, 9);
 
-function saveAudit() { try { localStorage.setItem("sdg_audit", JSON.stringify(AUD)); } catch (e) {} }
-function todayData() { return AUD[today()] || (AUD[today()] = {}); }
-
-async function fetchAllSheetRows() {
-  const res = await fetch(`${CLOUD_URL}?action=admin&pin=${encodeURIComponent(atob(CLOUD_KEY))}&t=${Date.now()}`);
-  return await res.json();
+function saveAudit() {
+  try { localStorage.setItem("sdg_audit", JSON.stringify(AUD)); } catch (e) {}
+  try { localStorage.setItem("sdg_civic_stats", JSON.stringify(CIVIC_STATS)); } catch (e) {}
+}
+function todayData() {
+  if (!AUD[today()]) AUD[today()] = { Plastic: 0, Paper: 0, Glass: 0 };
+  return AUD[today()];
 }
 
-function splitCloudRows(rows) {
-  const players = [];
-  const auditMap = {};
-  const reportsList = [];
-
-  rows.forEach(r => {
-    if (r.type === "report") {
-      reportsList.push({
-        id: r.id,
-        dept: r.dept || "UC Tarai",
-        area: r.area || "Unknown Area",
-        waste: r.waste || "Mixed Waste",
-        citizen: r.citizen || "Anonymous",
-        gps: r.gps || "",
-        status: r.status || "Pending",
-        d: r.d || today(),
-        photo: r.photo || ""
-      });
-      return;
-    }
-    const nameStr = String(r.n || "");
-    if (nameStr.startsWith("AUDIT | ")) {
-      const parts = nameStr.split(" | ");
-      const dt = (parts[1] || today()).trim();
-      const cls = (parts[2] || "Plastic").trim();
-      const val = Number(r.s) || 0;
-      if (!auditMap[dt]) auditMap[dt] = {};
-      auditMap[dt][cls] = Math.max(0, (auditMap[dt][cls] || 0) + val);
-    } else if (nameStr) {
-      players.push(r);
-    }
+async function apiPost(payload) {
+  if (!CLOUD_URL) throw new Error("Cloud API URL is not configured.");
+  const response = await fetch(CLOUD_URL, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify(payload)
   });
-  return { players, auditMap, reports: reportsList };
+  const result = await response.json();
+  if (!result || result.status !== "ok") {
+    const err = new Error(result && result.message ? result.message : "Cloud request failed.");
+    err.code = result && result.code ? result.code : "API_ERROR";
+    throw err;
+  }
+  return result.data || {};
+}
+
+async function fetchPublicData() {
+  const response = await fetch(`${CLOUD_URL}?action=public&t=${Date.now()}`, { cache: "no-store" });
+  const result = await response.json();
+  if (!result || result.status !== "ok") throw new Error(result && result.message ? result.message : "Could not read public data.");
+  return result.data || { players: [], audit: {}, civicStats: null };
+}
+
+function handleSessionError(err) {
+  if (["UNAUTHORIZED", "SESSION_EXPIRED"].includes(err.code)) {
+    clearSession(false);
+    alert("🔒 Your secure session has expired or is not authorized. Please log in again.");
+  }
+}
+
+function setSession(data) {
+  if (data.role !== "SUPER_ADMIN") LB = [];
+  SESSION = {
+    token: data.token,
+    username: data.username,
+    role: data.role,
+    dept: data.dept,
+    expiresIn: data.expiresIn
+  };
+  try { sessionStorage.setItem("saaf_session", JSON.stringify(SESSION)); } catch (e) {}
+  activeOfficer = {
+    u: data.username,
+    label: data.role === "SUPER_ADMIN" ? "Super Admin (All Halqas)" : data.dept,
+    filter: data.dept,
+    isSuper: data.role === "SUPER_ADMIN"
+  };
+}
+
+function clearSession(callServer = true) {
+  const token = SESSION && SESSION.token;
+  if (callServer && token) apiPost({ action: "logout", token }).catch(() => {});
+  SESSION = null;
+  activeOfficer = null;
+  REPORTS = [];
+  LB = [];
+  try { sessionStorage.removeItem("saaf_session"); } catch (e) {}
+  $("officerBar").style.display = "none";
+  $("offFilter").style.display = "none";
+  $("officerBtn").style.display = "inline-block";
+  $("secFeedContainer").style.display = "none";
+  $("secFeedLocked").style.display = "block";
+  $("adminBox").style.display = "none";
+  $("aUndo").style.display = "none";
+  renderReports();
+}
+
+async function authenticatePrompt(expectedRole) {
+  const username = prompt("Enter account username:");
+  if (username === null) return false;
+  const password = prompt("Enter your password:");
+  if (password === null) return false;
+  try {
+    const data = await apiPost({ action: "login", username: username.trim(), password });
+    if (expectedRole === "SUPER_ADMIN" && data.role !== "SUPER_ADMIN") {
+      await apiPost({ action: "logout", token: data.token }).catch(() => {});
+      alert("This account does not have Super Admin permission.");
+      return false;
+    }
+    setSession(data);
+    return true;
+  } catch (err) {
+    alert("Login failed: " + err.message);
+    return false;
+  }
+}
+
+async function loadPrivateData() {
+  if (!SESSION || !SESSION.token) throw new Error("Please log in first.");
+  const data = await apiPost({ action: "admin_data", token: SESSION.token });
+  REPORTS = Array.isArray(data.reports) ? data.reports : [];
+  if (SESSION.role === "SUPER_ADMIN") LB = Array.isArray(data.players) ? data.players : [];
+  if (data.audit) AUD = data.audit;
+  if (data.civicStats) CIVIC_STATS = data.civicStats;
+  saveAudit();
+  renderAudit();
+  if (mode === "civic") renderReports();
+  return data;
 }
 
 async function pushAuditDelta(cls, delta, dt = today()) {
-  if (!CLOUD_URL || !delta) return;
+  if (delta !== 1) {
+    if (!SESSION || SESSION.role !== "SUPER_ADMIN") throw new Error("Only Super Admin can reverse or adjust audit counts.");
+    return apiPost({ action: "audit_adjust", token: SESSION.token, category: cls, delta, date: dt });
+  }
+  const eventId = makeId("scan_");
+  const pending = (() => { try { return JSON.parse(localStorage.getItem("sdg_pending_audit") || "[]"); } catch (e) { return []; } })();
+  pending.push({ category: cls, eventId });
+  try { localStorage.setItem("sdg_pending_audit", JSON.stringify(pending)); } catch (e) {}
   try {
-    $("auditSyncMsg").textContent = "☁️ Saving item to Sheet 2 (Waste_Audit)...";
-    const tag = `AUDIT | ${dt} | ${cls}`;
-    await fetch(`${CLOUD_URL}?action=save&n=${encodeURIComponent(tag)}&s=${delta}&ph=Waste_Audit&t=${Date.now()}`);
+    $("auditSyncMsg").textContent = "☁️ Saving item to Google Sheet...";
+    await apiPost({ action: "audit_increment", category: cls, eventId });
+    const left = pending.filter(x => x.eventId !== eventId);
+    try { localStorage.setItem("sdg_pending_audit", JSON.stringify(left)); } catch (e) {}
     await syncAuditFromCloud();
   } catch (e) {
-    $("auditSyncMsg").textContent = "⚠️ Offline — saved on device";
+    $("auditSyncMsg").textContent = "⚠️ Offline — scan queued on this device.";
+    throw e;
   }
 }
 
-async function syncAuditFromCloud(forceCloudOnly = false) {
+async function flushPendingAudit() {
+  let pending = [];
+  try { pending = JSON.parse(localStorage.getItem("sdg_pending_audit") || "[]"); } catch (e) { pending = []; }
+  if (!pending.length) return;
+  const remaining = [];
+  for (const item of pending) {
+    try {
+      await apiPost({ action: "audit_increment", category: item.category, eventId: item.eventId });
+    } catch (e) {
+      remaining.push(item);
+    }
+  }
+  try { localStorage.setItem("sdg_pending_audit", JSON.stringify(remaining)); } catch (e) {}
+}
+
+async function syncAuditFromCloud() {
   if (!CLOUD_URL || syncingAudit) return;
   syncingAudit = true;
   try {
-    $("auditSyncMsg").textContent = "☁️ Syncing 3 Sheets with Google Cloud...";
-    const raw = await fetchAllSheetRows();
-    if (Array.isArray(raw)) {
-      const { auditMap, reports } = splitCloudRows(raw);
-
-      if (reports.length || forceCloudOnly) {
-        REPORTS = reports;
-        try { localStorage.setItem("sdg_reports", JSON.stringify(REPORTS)); } catch (e) {}
-        if (mode === "civic") renderReports();
-      }
-
-      if (forceCloudOnly) {
-        AUD = auditMap;
-      } else {
-        for (const dt of Object.keys(auditMap)) {
-          if (!AUD[dt]) AUD[dt] = {};
-          for (const cls of Object.keys(auditMap[dt])) {
-            AUD[dt][cls] = Math.max(AUD[dt][cls] || 0, auditMap[dt][cls]);
-          }
-        }
-        for (const dt of Object.keys(AUD)) {
-          for (const cls of Object.keys(AUD[dt] || {})) {
-            const localVal = Number(AUD[dt][cls]) || 0;
-            const cloudVal = (auditMap[dt] && Number(auditMap[dt][cls])) || 0;
-            if (localVal > cloudVal) {
-              const diff = localVal - cloudVal;
-              const tag = `AUDIT | ${dt} | ${cls}`;
-              try {
-                await fetch(`${CLOUD_URL}?action=save&n=${encodeURIComponent(tag)}&s=${diff}&ph=Waste_Audit&t=${Date.now()}`);
-              } catch (e) {}
-            }
-          }
-        }
-      }
-
-      saveAudit();
-      renderAudit();
-      $("auditSyncMsg").textContent = "✅ Live Synced with Google Sheet (Shared Across All Users & Devices)";
-    }
+    $("auditSyncMsg").textContent = "☁️ Syncing live census & impact stats...";
+    await flushPendingAudit();
+    const data = await fetchPublicData();
+    AUD = data.audit || {};
+    LB = data.players || [];
+    if (data.civicStats) CIVIC_STATS = data.civicStats;
+    saveAudit();
+    renderAudit();
+    if (mode === "play") renderLb();
+    $("auditSyncMsg").textContent = "✅ Live Synced with Google Sheet";
   } catch (e) {
     renderAudit();
-    $("auditSyncMsg").textContent = "⚠️ Cloud unreachable — showing saved counts";
+    $("auditSyncMsg").textContent = "⚠️ Offline — showing cached census";
+  } finally {
+    syncingAudit = false;
   }
-  syncingAudit = false;
 }
 
 setInterval(() => {
   if (mode === "audit" || mode === "civic") syncAuditFromCloud();
-}, 15000);
+  if (mode === "civic" && SESSION && SESSION.token) loadPrivateData().catch(handleSessionError);
+}, 30000);
 
-/* ---- Civic Garbage Reporting & Strict Halqa Jurisdiction Control ---- */
+/* ---- Civic Garbage Reporting & Receipt Tracker (Phase 6) ---- */
+function renderMyReceipts() {
+  const box = $("myReceiptsBox");
+  const list = $("myReceiptsList");
+  if (!MY_RECEIPTS.length) {
+    box.style.display = "none";
+    return;
+  }
+  box.style.display = "block";
+  list.innerHTML = MY_RECEIPTS.slice().reverse().slice(0, 4).map(r => {
+    const matched = REPORTS.find(x => x.id === r.id);
+    const st = matched ? matched.status : r.status || "Submitted to Cloud";
+    return `<div style="padding:4px 0;border-bottom:1px dashed var(--line);display:flex;justify-content:space-between">
+      <span><b>#${escapeHtml(r.id)}</b> • ${escapeHtml(r.dept)} (${escapeHtml(r.area)})</span>
+      <b style="color:var(--green)">✅ ${escapeHtml(st)}</b>
+    </div>`;
+  }).join("");
+}
+
+async function canvasToSafePhoto(canvas) {
+  let quality = 0.62;
+  let data = canvas.toDataURL("image/jpeg", quality);
+  while (data.length > 44000 && quality > 0.25) {
+    quality -= 0.08;
+    data = canvas.toDataURL("image/jpeg", quality);
+  }
+  if (data.length > 45000) throw new Error("Photo is too large. Please capture a smaller image.");
+  return data;
+}
+
 $("snapBtn").onclick = async () => {
-  if (!running) {
-    await startCamera();
+  if (!running) await startCamera();
+  if (!running || !video || video.readyState < 2) {
+    alert("Camera is not ready. Please start the AI camera and try again.");
+    return;
   }
   const c = document.createElement("canvas");
   c.width = 160; c.height = 120;
   c.getContext("2d").drawImage($("cv"), 0, 0, 160, 120);
-  currentPhotoData = c.toDataURL("image/jpeg", 0.6);
-  $("snapPreview").src = currentPhotoData;
-  $("snapPreview").style.display = "block";
-  const detectedName = currentDetectedIdx !== null && BINS[currentDetectedIdx]
-    ? `${BINS[currentDetectedIdx].icon} ${BINS[currentDetectedIdx].name} Dominant`
-    : "♻️ Mixed Area Waste";
-  currentSnapTag = detectedName;
-  $("snapStatus").innerHTML = `✅ <b>Photo Captured!</b> AI Tag: <b>${detectedName}</b> (Will save to Sheet 3)`;
-  beep([660, 880]);
+  try {
+    currentPhotoData = await canvasToSafePhoto(c);
+    const detectedName = currentDetectedIdx !== null && BINS[currentDetectedIdx]
+      ? `${BINS[currentDetectedIdx].icon} ${BINS[currentDetectedIdx].name} Dominant`
+      : "♻️ Mixed Area Waste";
+    currentSnapTag = detectedName;
+    $("snapPreview").src = currentPhotoData;
+    $("snapPreview").style.display = "block";
+    $("snapStatus").textContent = `Photo captured. AI tag: ${detectedName}`;
+    highlightFlow(5);
+    beep([660, 880]);
+  } catch (e) { alert(e.message); }
 };
 
 $("uploadPhotoBtn").onclick = () => $("civicFile").click();
 $("civicFile").onchange = e => {
-  const file = e.target.files[0];
+  const file = e.target.files && e.target.files[0];
   if (!file) return;
+  if (!file.type.startsWith("image/")) { alert("Please select an image file."); return; }
   const reader = new FileReader();
   reader.onload = ev => {
     const img = new Image();
-    img.onload = () => {
+    img.onload = async () => {
       const c = document.createElement("canvas");
       c.width = 160; c.height = 120;
       c.getContext("2d").drawImage(img, 0, 0, 160, 120);
-      currentPhotoData = c.toDataURL("image/jpeg", 0.6);
-      $("snapPreview").src = currentPhotoData;
-      $("snapPreview").style.display = "block";
-      currentSnapTag = "📸 Citizen Photo Attached";
-      $("snapStatus").innerHTML = "✅ <b>Photo Attached!</b> Ready to upload to Sheet 3.";
+      try {
+        currentPhotoData = await canvasToSafePhoto(c);
+        $("snapPreview").src = currentPhotoData;
+        $("snapPreview").style.display = "block";
+        currentSnapTag = "📸 Citizen Photo Attached";
+        $("snapStatus").textContent = "Photo attached and compressed. Ready to submit.";
+        highlightFlow(5);
+      } catch (err) { alert(err.message); }
     };
+    img.onerror = () => alert("Could not read this image.");
     img.src = ev.target.result;
   };
   reader.readAsDataURL(file);
@@ -968,72 +1341,61 @@ $("civicFile").onchange = e => {
 
 $("gpsBtn").onclick = () => {
   if (!navigator.geolocation) {
-    $("gpsStatus").textContent = "⚠️ GPS not supported on this browser.";
+    $("gpsStatus").textContent = "⚠️ GPS is not supported in this browser.";
     return;
   }
-  $("gpsStatus").textContent = "🛰️ Getting live GPS coordinates...";
+  $("gpsStatus").textContent = "🛰️ Getting GPS coordinates...";
   navigator.geolocation.getCurrentPosition(pos => {
     const lat = pos.coords.latitude.toFixed(5);
     const lng = pos.coords.longitude.toFixed(5);
     currentGpsLink = `https://maps.google.com/?q=${lat},${lng}`;
-    $("gpsStatus").innerHTML = `✅ <b>GPS Locked:</b> <a href="${currentGpsLink}" target="_blank">View on Google Maps (${lat}, ${lng})</a>`;
+    $("gpsStatus").textContent = `✅ GPS ready: ${lat}, ${lng}`;
     if (!$("repArea").value.trim()) $("repArea").value = `GPS Pin (${lat}, ${lng})`;
   }, () => {
-    $("gpsStatus").textContent = "⚠️ Location permission denied — please type Area name manually.";
-  });
+    $("gpsStatus").textContent = "⚠️ Location permission denied — enter the area name manually.";
+  }, { enableHighAccuracy: true, timeout: 12000, maximumAge: 60000 });
 };
 
 $("sendReportBtn").onclick = async () => {
   const dept = $("repDept").value;
   const area = $("repArea").value.replace(/[|,"<>]/g, "").trim();
   if (!area) {
-    alert("Please enter the Area / Mohalla name (or tap Auto GPS)!");
+    alert("Please enter the area / street name or use Auto GPS.");
     $("repArea").focus();
     return;
   }
   const citizen = $("repCitizen").value.replace(/[|,"<>]/g, "").trim() || "Anonymous Citizen";
-  const id = "R" + Date.now().toString().slice(-6);
+  const id = makeId("R");
+  const btn = $("sendReportBtn");
+  btn.disabled = true;
+  btn.textContent = "⏳ Submitting report securely...";
+  try {
+    const data = await apiPost({
+      action: "save_report", id, dept, area,
+      waste: currentSnapTag, citizen, gps: currentGpsLink,
+      photo: currentPhotoData
+    });
+    const finalId = data.id || id;
+    MY_RECEIPTS.push({ id: finalId, dept, area, status: "Pending", d: today() });
+    try { localStorage.setItem("sdg_my_receipts", JSON.stringify(MY_RECEIPTS)); } catch (e) {}
+    renderMyReceipts();
 
-  $("sendReportBtn").disabled = true;
-  $("sendReportBtn").textContent = "⏳ Uploading Photo & Report to Sheet 3...";
-
-  const payload = {
-    action: "save_report",
-    id,
-    dept,
-    area,
-    waste: currentSnapTag,
-    citizen,
-    gps: currentGpsLink,
-    status: "Pending",
-    d: today(),
-    photo: currentPhotoData
-  };
-
-  REPORTS.push(payload);
-  try { localStorage.setItem("sdg_reports", JSON.stringify(REPORTS)); } catch (e) {}
-
-  if (CLOUD_URL) {
-    try {
-      await fetch(CLOUD_URL, {
-        method: "POST",
-        headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify(payload)
-      });
-      await syncAuditFromCloud();
-    } catch (e) {}
+    $("repArea").value = "";
+    $("repCitizen").value = "";
+    currentPhotoData = "";
+    currentGpsLink = "";
+    $("snapPreview").style.display = "none";
+    $("snapStatus").textContent = "Ready to capture or attach a report photo.";
+    highlightFlow(5);
+    beep([523, 659, 784]);
+    await syncAuditFromCloud();
+    alert(`✅ Report submitted successfully.\nVerified Receipt ID: #${finalId}`);
+  } catch (err) {
+    alert("❌ Report was not confirmed as saved. " + err.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "📤 Send Photo & Alert to Selected Authority";
   }
-
-  $("repArea").value = "";
-  $("repCitizen").value = "";
-  currentPhotoData = "";
-  $("snapPreview").style.display = "none";
-  $("snapStatus").textContent = "AI Tag: Ready to capture waste photo (Saved to Cloud Sheet 3)";
-  $("sendReportBtn").disabled = false;
-  $("sendReportBtn").textContent = "📤 Send Photo & Alert to Selected Authority";
-  beep([523, 659, 784]);
-  renderReports();
-  alert(`✅ Garbage Report & Photo sent to ${dept}!\nComplaint ID: #${id}`);
 };
 
 function getAllowedFilter() {
@@ -1042,442 +1404,464 @@ function getAllowedFilter() {
 }
 
 function renderReports() {
+  renderMyReceipts();
   const box = $("repList");
-  if (!activeOfficer) {
+  if (!activeOfficer || !SESSION) {
     box.innerHTML = "";
     return;
   }
   const allowedFilter = getAllowedFilter();
   const list = REPORTS.filter(r => allowedFilter === "ALL" || r.dept === allowedFilter);
-
   $("feedHeading").textContent = allowedFilter === "ALL"
     ? "📋 All Halqas Cleanliness Requests (Super Admin)"
-    : `📋 ${allowedFilter} — Dedicated Cleanliness Requests`;
-
+    : `📋 ${allowedFilter} — Cleanliness Requests`;
   if (!list.length) {
-    box.innerHTML = `<p class="note" style="text-align:center;padding:12px">No garbage complaints found for <b>${allowedFilter}</b>.</p>`;
+    box.innerHTML = `<p class="note" style="text-align:center;padding:12px">No complaints found for <b>${escapeHtml(allowedFilter)}</b>.</p>`;
     return;
   }
   box.innerHTML = "";
-  list.slice().reverse().forEach(r => {
+  list.forEach(r => {
     const card = document.createElement("div");
     card.className = "rep-card";
-    const imgHtml = r.photo && r.photo.startsWith("data:image")
-      ? `<img src="${r.photo}" style="width:82px;height:62px;object-fit:cover;border-radius:8px;border:1.5px solid var(--ink)">`
+    const safePhoto = typeof r.photo === "string" && /^data:image\/(jpeg|png|webp);base64,/i.test(r.photo)
+      ? `<img src="${r.photo}" alt="Complaint photo" style="width:82px;height:62px;object-fit:cover;border-radius:8px;border:1.5px solid var(--ink)">`
       : `<div style="width:82px;height:62px;border-radius:8px;background:#e3efec;display:flex;align-items:center;justify-content:center;font-size:22px">🗑️</div>`;
-    const gpsHtml = r.gps ? ` • <a href="${r.gps}" target="_blank" style="color:var(--blue);font-weight:bold">📍 Map</a>` : "";
-    const isCleaned = String(r.status || "").toLowerCase().includes("clean");
-    const statusBadge = isCleaned
-      ? `<span class="rep-status st-clean">✅ ${r.status}</span>`
-      : `<span class="rep-status st-pend">⏳ Pending Cleanup</span>`;
-
+    const gps = /^https:\/\/(maps\.google\.com|www\.google\.com\/maps)\//i.test(r.gps || "")
+      ? ` • <a href="${escapeHtml(r.gps)}" rel="noopener" target="_blank" style="color:var(--blue);font-weight:bold">📍 Map</a>` : "";
+    const status = String(r.status || "Pending");
+    const statusClass = status === "Resolved" || status === "Cleaned" ? "st-clean" : "st-pend";
+    const statusBadge = `<span class="rep-status ${statusClass}">${escapeHtml(status)}</span>`;
     card.innerHTML = `
-      ${imgHtml}
+      ${safePhoto}
       <div class="rep-info">
-        <span class="dept-tag">🏛️ ${r.dept || "UC Tarai"}</span><br>
-        <b>📍 ${r.area}</b> <small style="color:#456">(#${r.id})</small><br>
-        <span>${r.waste}</span>${gpsHtml}<br>
-        <small style="color:#567">👤 ${r.citizen} • 📅 ${r.d}</small>
+        <span class="dept-tag">🏛️ ${escapeHtml(r.dept || "UC Tarai")}</span><br>
+        <b>📍 ${escapeHtml(r.area)}</b> <small style="color:#456">(#${escapeHtml(r.id)})</small><br>
+        <span>${escapeHtml(r.waste)}</span>${gps}<br>
+        <small style="color:#567">👤 ${escapeHtml(r.citizen)} • 📅 ${escapeHtml(r.d)}</small>
       </div>
       <div style="text-align:right">
         ${statusBadge}
         <div class="off-actions" style="margin-top:6px"></div>
-      </div>
-    `;
-
-    if (activeOfficer && (activeOfficer.isSuper || r.dept === activeOfficer.filter)) {
-      const act = card.querySelector(".off-actions");
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.style.padding = "5px 10px";
-      btn.style.fontSize = "11.5px";
-      if (isCleaned) {
-        btn.textContent = "↩️ Mark Pending";
-        btn.className = "alt";
-        btn.onclick = () => toggleReportStatus(r, "Pending");
-      } else {
-        btn.textContent = "✅ Mark as Cleaned";
-        btn.style.background = "var(--green)";
-        btn.onclick = () => toggleReportStatus(r, `Cleaned by ${activeOfficer.u}`);
-      }
-      act.appendChild(btn);
+      </div>`;
+    if (activeOfficer.isSuper || r.dept === activeOfficer.filter) {
+      const action = card.querySelector(".off-actions");
+      const statuses = ["Pending", "Assigned", "Cleaning in Progress", "Resolved"];
+      const index = statuses.indexOf(status);
+      const nextStatus = index < 0 || index === statuses.length - 1 ? "Pending" : statuses[index + 1];
+      const button = document.createElement("button");
+      button.type = "button";
+      button.style.padding = "5px 10px";
+      button.style.fontSize = "11.5px";
+      button.textContent = status === "Resolved" ? "↩️ Reopen" : `Update: ${nextStatus}`;
+      button.className = status === "Resolved" ? "alt" : "";
+      if (status !== "Resolved") button.style.background = "var(--green)";
+      button.onclick = () => toggleReportStatus(r, nextStatus);
+      action.appendChild(button);
     }
     box.appendChild(card);
   });
 }
 
-async function toggleReportStatus(rep, newStatus) {
-  if (!activeOfficer || (!activeOfficer.isSuper && rep.dept !== activeOfficer.filter)) {
-    alert("⚠️ Access Denied: You can only update complaints in your own Halqa!");
-    return;
-  }
-  rep.status = newStatus;
-  try { localStorage.setItem("sdg_reports", JSON.stringify(REPORTS)); } catch (e) {}
-  renderReports();
-  if (CLOUD_URL && rep.id) {
-    try {
-      await fetch(`${CLOUD_URL}?action=update_report&id=${encodeURIComponent(rep.id)}&st=${encodeURIComponent(newStatus)}&t=${Date.now()}`);
-      await syncAuditFromCloud();
-    } catch (e) {}
+async function toggleReportStatus(report, newStatus) {
+  if (!SESSION || !activeOfficer) return;
+  try {
+    await apiPost({ action: "update_report", token: SESSION.token, id: report.id, status: newStatus });
+    if (newStatus === "Resolved") highlightFlow(6);
+    await loadPrivateData();
+  } catch (err) {
+    handleSessionError(err);
+    alert("Could not update report: " + err.message);
   }
 }
 
-$("officerBtn").onclick = () => {
-  if (activeOfficer) return;
-  const u = prompt("👮‍♂️ Local Govt. Officer Portal\nEnter Officer Username:\n(UC TARAI / TC GOLARCHI / MC BADIN / GBHSS HAJI JUNEJO)");
-  if (u === null) return;
-  const p = prompt("🔑 Enter Officer Password:");
-  if (p === null) return;
+$("officerBtn").onclick = async () => {
+  if (SESSION && SESSION.token) {
+    showOfficerPortal();
+    return;
+  }
+  const loggedIn = await authenticatePrompt();
+  if (loggedIn) showOfficerPortal();
+};
 
-  const matched = OFFICER_ACCOUNTS.find(acc => acc.u === u.trim().toUpperCase() && acc.p === p.trim());
-  if (matched) {
-    activeOfficer = matched;
-    $("officerTitle").innerHTML = `👮‍♂️ <b>${matched.label}</b> (Jurisdiction Locked)`;
-    $("offFilter").value = matched.filter;
-    $("offFilter").style.display = matched.isSuper ? "inline-block" : "none";
+async function showOfficerPortal() {
+  if (!SESSION || !activeOfficer) return;
+  try {
+    await loadPrivateData();
+    $("officerTitle").innerHTML = `👮‍♂️ <b>${escapeHtml(activeOfficer.label)}</b> (Server-Verified Session)`;
+    $("offFilter").value = activeOfficer.isSuper ? "ALL" : activeOfficer.filter;
+    $("offFilter").style.display = activeOfficer.isSuper ? "inline-block" : "none";
     $("officerBar").style.display = "flex";
     $("officerBtn").style.display = "none";
     $("secFeedContainer").style.display = "block";
     $("secFeedLocked").style.display = "none";
     renderReports();
-    alert(`✅ Welcome Officer (${matched.label})!\nShowing complaints strictly for your jurisdiction.`);
-  } else {
-    alert("❌ Invalid Officer Username or Password!");
+  } catch (err) {
+    handleSessionError(err);
+    alert("Could not load the secure officer portal: " + err.message);
   }
-};
+}
 
 $("offFilter").onchange = renderReports;
-
-$("offLogoutBtn").onclick = () => {
-  activeOfficer = null;
-  $("officerBar").style.display = "none";
-  $("offFilter").style.display = "none";
-  $("officerBtn").style.display = "inline-block";
-  $("secFeedContainer").style.display = "none";
-  $("secFeedLocked").style.display = "block";
-  renderReports();
-};
+$("offLogoutBtn").onclick = () => clearSession(true);
 
 $("offCsvBtn").onclick = () => {
   if (!activeOfficer) return;
-  const allowedFilter = getAllowedFilter();
-  const list = REPORTS.filter(r => allowedFilter === "ALL" || r.dept === allowedFilter);
-  const rows = ["Report_ID,Halqa_Department,Area,Waste_Type,Citizen_Info,GPS_Map,Status,Date"];
-  list.forEach(r => {
-    rows.push(`"${r.id}","${r.dept || "UC Tarai"}","${r.area}","${r.waste}","${r.citizen}","${r.gps || ""}","${r.status}","${r.d}"`);
-  });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(new Blob([rows.join("\n")], {type: "text/csv"}));
-  a.download = `${activeOfficer.u.toLowerCase().replace(/\s+/g, "_")}_reports.csv`; a.click();
+  const list = REPORTS.filter(r => activeOfficer.isSuper || r.dept === activeOfficer.filter);
+  const rows = [["Report_ID","Halqa_Department","Area","Waste_Type","Citizen_Info","GPS_Map","Status","Date"]];
+  list.forEach(r => rows.push([r.id,r.dept,r.area,r.waste,r.citizen,r.gps,r.status,r.d]));
+  downloadCsv_(rows, `${activeOfficer.u.toLowerCase().replace(/\s+/g, "_")}_reports.csv`);
 };
 
-$("repSyncBtn").onclick = () => syncAuditFromCloud(false);
+$("repSyncBtn").onclick = () => loadPrivateData().catch(err => { handleSessionError(err); alert(err.message); });
 
-/* ---- Waste Audit Step & Rendering ---- */
+/* ---- Waste Audit Step & Smart Dashboard Rendering ---- */
 function auditStep(idx, now) {
   if (idx === null) {
     if (!idleSince) idleSince = now;
-    if (now - idleSince > 500) {
-      if (!auditArmed) {
-        auditArmed = true;
-        setTask("📊 Ready for next item! Show inside box<small>Ab agla kachra camera ke samne layen</small>");
-      }
+    if (now - idleSince > 500 && !auditArmed) {
+      auditArmed = true;
+      setTask("📊 Ready for next item! Show inside box<small>Ab agla kachra camera ke samne layen</small>");
     }
     return;
   }
   idleSince = 0;
+  highlightFlow(2);
   if (auditArmed && now - holdSince > HOLD_MS) {
     auditArmed = false;
-    const b = BINS[idx], d = todayData();
-    d[b.name] = (d[b.name] || 0) + 1; lastCounted = b.name; saveAudit();
+    const bin = BINS[idx];
+    const day = todayData();
+    day[bin.name] = (Number(day[bin.name]) || 0) + 1;
+    lastCounted = bin.name;
+    saveAudit();
     beep([700, 920]);
-    say(`${b.name} counted`);
+    say(`${bin.name} counted`);
     triggerBinSimulation(idx, true);
-    setTask(`✅ Counted +1 ${b.icon} ${b.name}!<small style="color:var(--green);font-weight:bold">Remove item from camera to count the next one.</small>`);
+    highlightFlow(4);
+    setTask(`✅ Counted +1 ${bin.icon} ${bin.name}!<small style="color:var(--green);font-weight:bold">Remove item from camera to count the next one.</small>`);
     renderAudit();
-    pushAuditDelta(b.name, 1);
+    pushAuditDelta(bin.name, 1).catch(() => {});
   }
 }
 
 function renderAudit() {
-  const d = todayData(), totalToday = sum(d);
+  updateBinCapacityUI();
+  const d = AUD[today()] || {};
+  const totalToday = sum(d);
   let grandPlastic = 0, grandPaper = 0, grandGlass = 0;
+  const activeDates = Object.keys(AUD).filter(dt => sum(AUD[dt]) > 0);
+
   Object.keys(AUD).forEach(dt => {
-    grandPlastic += (AUD[dt] && AUD[dt]["Plastic"]) || 0;
-    grandPaper   += (AUD[dt] && AUD[dt]["Paper"]) || 0;
-    grandGlass   += (AUD[dt] && AUD[dt]["Glass"]) || 0;
+    grandPlastic += Number(AUD[dt] && AUD[dt].Plastic) || 0;
+    grandPaper   += Number(AUD[dt] && AUD[dt].Paper) || 0;
+    grandGlass   += Number(AUD[dt] && AUD[dt].Glass) || 0;
   });
   const grandTotal = grandPlastic + grandPaper + grandGlass;
 
-  $("auditTotal").textContent = `Today (${today()}): ${totalToday} items  |  Overall Total: ${grandTotal} items`;
+  // Estimated Recyclable Weight Calculation (Plastic=25g, Paper=15g, Glass=180g)
+  const totalGrams = (grandPlastic * 25) + (grandPaper * 15) + (grandGlass * 180);
+  const weightText = totalGrams >= 1000
+    ? `${(totalGrams / 1000).toFixed(2)} kg`
+    : `${totalGrams} g`;
+
+  // Dominant Waste Category Calculation
+  const catTotals = [
+    { name: "Plastic", icon: "🧴", count: grandPlastic },
+    { name: "Paper",   icon: "📄", count: grandPaper },
+    { name: "Glass",   icon: "🫙", count: grandGlass }
+  ].sort((a, b) => b.count - a.count);
+
+  const topCat = catTotals[0];
+  const topCatPct = grandTotal ? Math.round((topCat.count * 100) / grandTotal) : 0;
+
+  // Update 4 KPI Cards
+  $("kpiTotalItems").textContent = grandTotal.toLocaleString();
+  $("kpiTodayItems").textContent = `Today: ${totalToday} items`;
+  $("kpiWeight").textContent = weightText;
+  $("kpiDays").textContent = `Across ${activeDates.length || 1} active day(s)`;
+
+  if (grandTotal > 0) {
+    $("kpiTopWaste").textContent = `${topCat.icon} ${topCat.name}`;
+    $("kpiTopPct").textContent = `${topCat.count} items (${topCatPct}% of total)`;
+  } else {
+    $("kpiTopWaste").textContent = "—";
+    $("kpiTopPct").textContent = "Scan items to begin";
+  }
+
+  const cs = CIVIC_STATS || { total: 0, pending: 0, inProgress: 0, resolved: 0, byDept: {} };
+  $("kpiReports").textContent = (cs.total || 0).toLocaleString();
+  $("kpiResolved").textContent = `${cs.resolved || 0} Resolved • ${(cs.pending || 0) + (cs.inProgress || 0)} Open`;
+
+  if (cs.resolved > 0) highlightFlow(6);
+  else if (cs.total > 0) highlightFlow(5);
+  else if (grandTotal > 0) highlightFlow(4);
+
+  // Halqa-Wise Breakdown Cards
+  const byDept = cs.byDept || {};
+  $("hqTarai").textContent = `${byDept["UC Tarai"] || 0} reports`;
+  $("hqGolarchi").textContent = `${byDept["Town Committee Golarchi"] || 0} reports`;
+  $("hqBadin").textContent = `${byDept["Municipal Committee Badin"] || 0} reports`;
+
+  // Generate Real-Time AI Insights (Zero Fake Numbers)
+  const insights = [];
+  if (grandTotal > 0) {
+    insights.push(`<b>Dominant Waste Insight:</b> <b>${topCat.name}</b> is currently the most frequently detected waste category (<b>${topCatPct}%</b> share — ${topCat.count} of ${grandTotal} total items).`);
+    insights.push(`<b>Recycling & Route Impact:</b> An estimated <b>${weightText}</b> of recyclable material (${grandPlastic} Plastic, ${grandPaper} Paper, ${grandGlass} Glass) has been sorted across <b>${activeDates.length || 1}</b> census day(s). Priority bin collection is recommended for <b>${topCat.name}</b>.`);
+  } else {
+    insights.push(`<b>Waste Census Ready:</b> Scan Plastic, Paper, or Glass items with the AI camera to generate live category dominance & mass diversion insights.`);
+  }
+
+  if (cs.total > 0) {
+    const resRate = Math.round(((cs.resolved || 0) * 100) / cs.total);
+    const hotspotStr = cs.topArea
+      ? `Area <b>"${escapeHtml(cs.topArea)}"</b> (${cs.topAreaCount} report${cs.topAreaCount > 1 ? "s" : ""}) under <b>${escapeHtml(cs.topDept || "Local Govt")}</b> shows the highest reported concentration.`
+      : `<b>${escapeHtml(cs.topDept || "UC Tarai")}</b> currently leads in reported civic activity.`;
+    insights.push(`<b>Civic Hotspot & Action:</b> Out of <b>${cs.total}</b> civic reports, <b>${cs.resolved} (${resRate}%)</b> are resolved and <b>${cs.inProgress || 0}</b> are in progress. ${hotspotStr}`);
+  } else {
+    insights.push(`<b>Civic Reporting Active:</b> Citizens can submit geotagged waste alerts to <b>UC Tarai</b>, <b>TC Golarchi</b>, and <b>MC Badin</b> without signup.`);
+  }
+  $("aiInsightsList").innerHTML = insights.map(line => `<li>${line}</li>`).join("");
+
+  // Today's Progress Bars
+  $("auditTotal").textContent = `Today's Breakdown (${today()}): ${totalToday} items scanned`;
   $("auditBars").innerHTML = BINS.map(b => {
-    const n = d[b.name] || 0, p = totalToday ? Math.round(n * 100 / totalToday) : 0;
-    return `<div class="arow"><span>${b.icon} ${b.name}</span><div class="abar"><i style="width:${p}%;background:${b.color}"></i></div><b>${n} (${p}%)</b></div>`;
+    const n = Number(d[b.name]) || 0;
+    const pct = totalToday ? Math.round(n * 100 / totalToday) : 0;
+    return `<div class="arow"><span>${b.icon} ${b.name}</span><div class="abar"><i style="width:${pct}%;background:${b.color}"></i></div><b>${n} (${pct}%)</b></div>`;
   }).join("");
 
-  const hist = $("auditHistory");
-  const foot = $("auditFooter");
-  if (hist) {
-    const dates = Object.keys(AUD).filter(dt => sum(AUD[dt]) > 0 || dt === today()).sort().reverse();
-    if (!dates.length) {
-      hist.innerHTML = `<tr><td colspan="5" style="text-align:center">No items counted yet</td></tr>`;
-      if (foot) foot.innerHTML = "";
-    } else {
-      hist.innerHTML = dates.map(dt => {
-        const row = AUD[dt] || {};
-        const pl = row["Plastic"] || 0;
-        const pa = row["Paper"] || 0;
-        const gl = row["Glass"] || 0;
-        const label = dt === today() ? `${dt} (Today)` : dt;
-        return `<tr><td><b>${label}</b></td><td>${pl}</td><td>${pa}</td><td>${gl}</td><td><b>${pl + pa + gl}</b></td></tr>`;
-      }).join("");
-      if (foot) {
-        foot.innerHTML = `<tr><td>📊 Overall Total</td><td>${grandPlastic}</td><td>${grandPaper}</td><td>${grandGlass}</td><td>${grandTotal}</td></tr>`;
-      }
-    }
+  const hist = $("auditHistory"), foot = $("auditFooter");
+  if (!hist) return;
+  const dates = Object.keys(AUD).filter(dt => sum(AUD[dt]) > 0 || dt === today()).sort().reverse();
+  if (!dates.length) {
+    hist.innerHTML = `<tr><td colspan="5" style="text-align:center">No items counted yet</td></tr>`;
+    if (foot) foot.innerHTML = "";
+    return;
   }
+  hist.innerHTML = dates.map(dt => {
+    const row = AUD[dt] || {};
+    const pl = Number(row.Plastic) || 0, pa = Number(row.Paper) || 0, gl = Number(row.Glass) || 0;
+    return `<tr><td><b>${dt === today() ? `${dt} (Today)` : dt}</b></td><td>${pl}</td><td>${pa}</td><td>${gl}</td><td><b>${pl + pa + gl}</b></td></tr>`;
+  }).join("");
+  if (foot) foot.innerHTML = `<tr><td>📊 Overall Total</td><td>${grandPlastic}</td><td>${grandPaper}</td><td>${grandGlass}</td><td>${grandTotal} (${weightText})</td></tr>`;
 }
 
 function summary() {
-  const d = todayData(), total = sum(d);
-  let allTime = 0;
-  Object.keys(AUD).forEach(k => { allTime += sum(AUD[k]); });
-  return `Waste audit ${today()}: ${total} items today (${allTime} total across all days). ` +
-    BINS.map(b => `${b.name} ${d[b.name] || 0}`).join(", ") + ".";
+  const d = AUD[today()] || {};
+  const todayTotal = sum(d);
+  let gPl = 0, gPa = 0, gGl = 0;
+  Object.keys(AUD).forEach(dt => {
+    gPl += Number(AUD[dt] && AUD[dt].Plastic) || 0;
+    gPa += Number(AUD[dt] && AUD[dt].Paper) || 0;
+    gGl += Number(AUD[dt] && AUD[dt].Glass) || 0;
+  });
+  const allTime = gPl + gPa + gGl;
+  const grams = (gPl * 25) + (gPa * 15) + (gGl * 180);
+  const cs = CIVIC_STATS || { total: 0, resolved: 0 };
+  return `Saaf Sindh AI Impact (${today()}): ${todayTotal} items today | ${allTime} total items (${grams >= 1000 ? (grams/1000).toFixed(2)+" kg" : grams+" g"} est. recyclable mass: Plastic ${gPl}, Paper ${gPa}, Glass ${gGl}) | Civic Reports: ${cs.total || 0} total (${cs.resolved || 0} resolved).`;
 }
 
-$("aSync").onclick = () => syncAuditFromCloud(false);
-$("aUndo").onclick = () => {
-  const d = todayData();
-  if (lastCounted && d[lastCounted] > 0) {
-    const cls = lastCounted;
-    d[cls]--; lastCounted = null; saveAudit(); renderAudit();
-    pushAuditDelta(cls, -1);
+$("aSync").onclick = () => syncAuditFromCloud();
+$("aPrint").onclick = () => window.print();
+$("aUndo").style.display = activeOfficer && activeOfficer.isSuper ? "inline-block" : "none";
+$("aUndo").onclick = async () => {
+  if (!SESSION || !activeOfficer || !activeOfficer.isSuper) {
+    alert("Only Super Admin can reverse a saved cloud count.");
+    return;
   }
+  if (!lastCounted || !(Number(todayData()[lastCounted]) > 0)) return;
+  try {
+    await apiPost({ action: "audit_adjust", token: SESSION.token, category: lastCounted, delta: -1, date: today() });
+    lastCounted = null;
+    await syncAuditFromCloud();
+  } catch (err) { handleSessionError(err); alert(err.message); }
 };
 
 $("aReset").onclick = async () => {
-  if (confirm("Are you sure you want to reset today's audit counts to 0 across all devices?")) {
-    const d = todayData();
-    const pl = d["Plastic"] || 0;
-    const pa = d["Paper"] || 0;
-    const gl = d["Glass"] || 0;
-    AUD[today()] = {}; saveAudit(); renderAudit();
-    if (pl > 0) await pushAuditDelta("Plastic", -pl);
-    if (pa > 0) await pushAuditDelta("Paper", -pa);
-    if (gl > 0) await pushAuditDelta("Glass", -gl);
-    alert("Today's waste audit has been reset to 0.");
-  }
+  if (!SESSION || SESSION.role !== "SUPER_ADMIN") { alert("Super Admin login is required."); return; }
+  if (!confirm("Reset today's audit counts to zero across all devices? Historical records will remain in the sheet.")) return;
+  try {
+    await apiPost({ action: "audit_reset_today", token: SESSION.token });
+    await syncAuditFromCloud();
+    alert("Today's audit has been reset. Historical rows remain safe in Google Sheets.");
+  } catch (err) { handleSessionError(err); alert("Reset failed: " + err.message); }
 };
 
 $("aMatchCloud").onclick = async () => {
-  try { localStorage.removeItem("sdg_audit"); } catch (e) {}
-  AUD = {};
-  await syncAuditFromCloud(true);
-  alert("Device cache cleared and matched 100% with Google Sheet!");
+  try {
+    await syncAuditFromCloud();
+    alert("Device view refreshed from the Google Sheet. Cloud counts are now authoritative.");
+  } catch (e) { alert(e.message); }
 };
 
 $("aCopy").onclick = () => {
-  if (navigator.clipboard) navigator.clipboard.writeText(summary()).then(() => alert("Summary copied!"));
+  if (navigator.clipboard) navigator.clipboard.writeText(summary()).then(() => alert("Impact Summary copied!"));
   else prompt("Copy this summary:", summary());
 };
 
 $("aCsv").onclick = () => {
-  const rows = ["Date,Plastic,Paper,Glass,Day_Total"];
+  const rows = [["Date","Plastic","Paper","Glass","Day_Total"]];
   let gPl = 0, gPa = 0, gGl = 0;
   Object.keys(AUD).sort().reverse().forEach(dt => {
-    const pl = (AUD[dt] && AUD[dt]["Plastic"]) || 0;
-    const pa = (AUD[dt] && AUD[dt]["Paper"]) || 0;
-    const gl = (AUD[dt] && AUD[dt]["Glass"]) || 0;
+    const pl = Number(AUD[dt] && AUD[dt].Plastic) || 0;
+    const pa = Number(AUD[dt] && AUD[dt].Paper) || 0;
+    const gl = Number(AUD[dt] && AUD[dt].Glass) || 0;
     gPl += pl; gPa += pa; gGl += gl;
-    rows.push(`${dt},${pl},${pa},${gl},${pl + pa + gl}`);
+    rows.push([dt, pl, pa, gl, pl + pa + gl]);
   });
-  rows.push(`OVERALL_TOTAL,${gPl},${gPa},${gGl},${gPl + gPa + gGl}`);
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(new Blob([rows.join("\n")], {type: "text/csv"}));
-  a.download = "saaf_sindh_daywise_waste_audit.csv"; a.click();
+  rows.push(["OVERALL_TOTAL", gPl, gPa, gGl, gPl + gPa + gGl]);
+  downloadCsv_(rows, "saaf_sindh_daywise_waste_audit.csv");
 };
 
-/* ---- Cloud + Local Auto-Merge Leaderboard ---- */
-async function syncDeviceToCloud(cloudPlayers) {
-  let local = [];
-  try { local = JSON.parse(localStorage.getItem("sdg_lb") || "[]"); } catch (e) {}
-  let pushed = false;
-  for (const r of local) {
-    const nameStr = String(r.n || "");
-    if (nameStr.startsWith("AUDIT | ") || nameStr.startsWith("REPORT | ")) continue;
-    const exists = cloudPlayers.some(c => c.n === r.n && Number(c.s) === Number(r.s));
-    if (!exists && r.n && r.s) {
-      try {
-        await fetch(`${CLOUD_URL}?action=save&n=${encodeURIComponent(r.n)}&s=${r.s}&ph=${encodeURIComponent(r.ph || "Not provided")}&t=${Date.now()}`);
-        pushed = true;
-      } catch (e) {}
-    }
-  }
-  if (pushed) {
-    try {
-      const updated = await fetchAllSheetRows();
-      if (Array.isArray(updated)) return splitCloudRows(updated).players;
-    } catch (e) {}
-  }
-  return cloudPlayers;
-}
-
+/* ---- Public Leaderboard: names and scores only ---- */
 async function renderLb() {
   const ol = $("lbList");
-  if (CLOUD_URL) {
-    try {
-      const raw = await fetchAllSheetRows();
-      if (Array.isArray(raw)) {
-        const { players } = splitCloudRows(raw);
-        LB = await syncDeviceToCloud(players);
-        try { localStorage.setItem("sdg_lb", JSON.stringify(LB)); } catch (e) {}
-      }
-    } catch (e) {}
-  }
-  const currDate = today();
-  const todayPlayers = LB.filter(r => r.d === currDate);
-  const list = todayPlayers.slice().sort((a, b) => b.s - a.s).slice(0, 5);
+  try {
+    const data = await fetchPublicData();
+    LB = Array.isArray(data.players) ? data.players : [];
+    if (data.civicStats) CIVIC_STATS = data.civicStats;
+  } catch (e) {}
+  const list = LB.slice().sort((a, b) => Number(b.s) - Number(a.s)).slice(0, 5);
   ol.innerHTML = "";
   if (!list.length) {
-    const li = document.createElement("li"); 
-    li.textContent = `No scores yet for today (${currDate}) — play 60s Game to win Rs. 100!`;
-    ol.appendChild(li); return;
+    const li = document.createElement("li");
+    li.textContent = `No scores yet for today (${today()}) — play the 60-second game!`;
+    ol.appendChild(li);
+    return;
   }
   list.forEach((r, idx) => {
     const li = document.createElement("li");
-    const prizeTag = idx < 3 ? " 🎁 (Top 3 Prize Eligible)" : "";
-    li.innerHTML = `<b>${r.n}</b> — ${r.s} pts <small style="color:var(--green);font-weight:bold">${prizeTag}</small>`;
+    li.innerHTML = `<b>${escapeHtml(r.n)}</b> — ${Number(r.s) || 0} pts <small style="color:var(--green);font-weight:bold">${idx < 3 ? "🎁 Top 3 Prize Eligible" : ""}</small>`;
     ol.appendChild(li);
   });
 }
 
 async function renderAdmin() {
   const tb = $("adminTable");
-  if (CLOUD_URL) {
-    $("admStatus").textContent = "☁️ Connecting to Cloud Sheet...";
-    try {
-      const raw = await fetchAllSheetRows();
-      if (Array.isArray(raw)) {
-        const { players } = splitCloudRows(raw);
-        LB = await syncDeviceToCloud(players);
-        try { localStorage.setItem("sdg_lb", JSON.stringify(LB)); } catch (e) {}
-        $("admStatus").textContent = "✅ Live 3-Sheet Cloud Sync Active (Mobile + PC Merged!)";
-      }
-    } catch (e) {
-      $("admStatus").textContent = "⚠️ Cloud unreachable — showing device records only";
-    }
-  }
-  tb.innerHTML = "";
-  const sorted = LB.slice().sort((a, b) => b.s - a.s);
-  if (!sorted.length) {
-    tb.innerHTML = `<tr><td colspan="5" style="text-align:center">No records saved yet</td></tr>`;
+  if (!SESSION || SESSION.role !== "SUPER_ADMIN") {
+    $("admStatus").textContent = "🔒 Super Admin login is required.";
+    tb.innerHTML = `<tr><td colspan="5" style="text-align:center">Not authorized</td></tr>`;
     return;
   }
-  sorted.forEach((r, i) => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `<td>${i + 1}</td><td><b>${r.n}</b></td><td>${r.s}</td><td>${r.ph || "—"}</td><td>${r.d || ""}</td>`;
-    tb.appendChild(tr);
-  });
+  $("admStatus").textContent = "☁️ Loading private records from the secure backend...";
+  try {
+    const data = await loadPrivateData();
+    const players = Array.isArray(data.players) ? data.players : [];
+    tb.innerHTML = "";
+    if (!players.length) {
+      tb.innerHTML = `<tr><td colspan="5" style="text-align:center">No player records found.</td></tr>`;
+    } else {
+      players.forEach((r, i) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td>${i + 1}</td><td><b>${escapeHtml(r.n)}</b></td><td>${Number(r.s) || 0}</td><td>${escapeHtml(r.ph || "—")}</td><td>${escapeHtml(r.d || "")}</td>`;
+        tb.appendChild(tr);
+      });
+    }
+    $("admStatus").textContent = "✅ Authenticated — private records loaded from Google Sheets.";
+    $("aUndo").style.display = "inline-block";
+  } catch (err) {
+    handleSessionError(err);
+    $("admStatus").textContent = "⚠️ Could not load private records: " + err.message;
+  }
 }
 
 $("lbSave").onclick = async () => {
-  const n = $("lbName").value.replace(/[,"<>\n|]/g, "").trim() || "Player";
-  const ph = ($("lbPhone").value || "").replace(/[^\d+]/g, "").trim() || "Not provided";
-  $("lbSave").disabled = true;
-  $("lbSave").textContent = "Saving to Cloud...";
-  LB.push({n, s: score, ph, d: today()});
-  try { localStorage.setItem("sdg_lb", JSON.stringify(LB)); } catch (e) {}
-  if (CLOUD_URL) {
-    try {
-      await fetch(`${CLOUD_URL}?action=save&n=${encodeURIComponent(n)}&s=${score}&ph=${encodeURIComponent(ph)}&t=${Date.now()}`);
-    } catch (e) {}
+  const name = $("lbName").value.replace(/[,"<>\n|]/g, "").trim() || "Player";
+  const phone = ($("lbPhone").value || "").replace(/[^\d+]/g, "").trim();
+  const btn = $("lbSave");
+  btn.disabled = true;
+  btn.textContent = "Saving securely...";
+  try {
+    await apiPost({ action: "save_score", name: name, score: score, phone: phone });
+    $("lbName").value = "";
+    $("lbPhone").value = "";
+    $("lbEntry").style.display = "none";
+    await renderLb();
+    alert("✅ Score saved to Google Sheet. Your mobile number is visible only to Super Admin.");
+  } catch (err) {
+    alert("❌ Score was not confirmed as saved: " + err.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "💾 Save Score to Cloud";
   }
-  $("lbName").value = ""; $("lbPhone").value = "";
-  $("lbSave").disabled = false; $("lbSave").textContent = "💾 Save Score to Cloud";
-  $("lbEntry").style.display = "none";
-  await renderLb();
-  if ($("adminBox").style.display === "block") renderAdmin();
-  alert("Score saved to Sheet 1 (Game_Scores)! Top 3 Winners will receive Rs. 100 Top-Up Balance.");
 };
 
 function openAdmin() {
-  const inputPin = prompt("Enter School SEMIS Code to open Admin Panel:");
-  if (inputPin !== null) {
-    try {
-      if (inputPin.trim() === atob(ADMIN_HASH)) {
-        $("adminBox").style.display = "block";
-        $("aUndo").style.display = "inline-block"; // Show Undo button for Admin
-        renderAdmin();
-        $("adminBox").scrollIntoView({behavior: "smooth"});
-        return;
-      }
-    } catch (e) {}
-    alert("Incorrect SEMIS Code!");
-  }
+  (async () => {
+    if (!SESSION || SESSION.role !== "SUPER_ADMIN") {
+      const ok = await authenticatePrompt("SUPER_ADMIN");
+      if (!ok) return;
+    }
+    $("adminBox").style.display = "block";
+    await renderAdmin();
+    $("adminBox").scrollIntoView({ behavior: "smooth" });
+  })();
 }
 
 let tapCount = 0, tapTimer = null;
 $("appTitle").onclick = () => {
   tapCount++;
   clearTimeout(tapTimer);
-  if (tapCount >= 5) {
-    tapCount = 0;
-    openAdmin();
-  } else {
-    tapTimer = setTimeout(() => { tapCount = 0; }, 2000);
-  }
+  if (tapCount >= 5) { tapCount = 0; openAdmin(); }
+  else tapTimer = setTimeout(() => { tapCount = 0; }, 2000);
 };
-
 window.addEventListener("keydown", e => {
   if (e.ctrlKey && e.shiftKey && (e.key === "A" || e.key === "a")) {
     e.preventDefault();
     openAdmin();
   }
 });
-
-function checkHash() {
-  if (location.hash.toLowerCase() === "#admin") openAdmin();
-}
+function checkHash() { if (location.hash.toLowerCase() === "#admin") openAdmin(); }
 window.addEventListener("hashchange", checkHash);
 setTimeout(checkHash, 400);
 
 $("admRefresh").onclick = renderAdmin;
 $("admClose").onclick = () => {
   $("adminBox").style.display = "none";
-  $("aUndo").style.display = "none";
-  if (location.hash.toLowerCase() === "#admin") {
-    history.replaceState(null, "", location.pathname + location.search);
-  }
+  if (location.hash.toLowerCase() === "#admin") history.replaceState(null, "", location.pathname + location.search);
 };
 
-$("admCsv").onclick = () => {
-  const rows = ["Rank,Name,Score,Mobile_Number,Date"];
-  LB.slice().sort((a, b) => b.s - a.s).forEach((r, i) => {
-    rows.push(`${i + 1},"${r.n}",${r.s},"${r.ph || ""}",${r.d || ""}`);
-  });
+function downloadCsv_(rows, filename) {
+  const csv = rows.map(row => row.map(value => `"${String(value == null ? "" : value).replace(/"/g, '""')}"`).join(",")).join("\r\n");
+  const blobUrl = URL.createObjectURL(new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8" }));
   const a = document.createElement("a");
-  a.href = URL.createObjectURL(new Blob([rows.join("\n")], {type: "text/csv"}));
-  a.download = "saaf_sindh_players_contacts.csv"; a.click();
+  a.href = blobUrl;
+  a.download = filename;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
+}
+
+$("admCsv").onclick = () => {
+  if (!SESSION || SESSION.role !== "SUPER_ADMIN") return;
+  const rows = [["Rank","Name","Score","Mobile_Number","Date"]];
+  LB.slice().sort((a, b) => Number(b.s) - Number(a.s)).forEach((r, i) => rows.push([i + 1, r.n, r.s, r.ph || "", r.d || ""]));
+  downloadCsv_(rows, "saaf_sindh_players_contacts.csv");
 };
 
 $("admCopy").onclick = () => {
-  const txt = LB.slice().sort((a, b) => b.s - a.s)
+  if (!SESSION || SESSION.role !== "SUPER_ADMIN") return;
+  const txt = LB.slice().sort((a, b) => Number(b.s) - Number(a.s))
     .map((r, i) => `${i + 1}. ${r.n} | Score: ${r.s} | Phone: ${r.ph || "N/A"} (${r.d})`).join("\n") || "No records.";
-  if (navigator.clipboard) navigator.clipboard.writeText(txt).then(() => alert("All records copied!"));
+  if (navigator.clipboard) navigator.clipboard.writeText(txt).then(() => alert("Private player records copied."));
   else prompt("Copy records:", txt);
 };
 
 $("admClear").onclick = async () => {
-  if (confirm("Are you sure you want to delete ALL saved scores and phone numbers from Cloud & Device?")) {
+  if (!SESSION || SESSION.role !== "SUPER_ADMIN") { alert("Super Admin login is required."); return; }
+  if (!confirm("Delete ALL player scores and phone numbers from the Game_Scores sheet? This cannot be undone.")) return;
+  try {
+    await apiPost({ action: "clear_scores", token: SESSION.token });
     LB = [];
-    try { localStorage.removeItem("sdg_lb"); } catch (e) {}
-    if (CLOUD_URL) {
-      try { await fetch(`${CLOUD_URL}?action=clear&pin=${encodeURIComponent(atob(CLOUD_KEY))}&t=${Date.now()}`); } catch (e) {}
-    }
-    renderLb(); renderAdmin();
-  }
+    await renderLb();
+    await renderAdmin();
+    alert("Player records cleared from Google Sheet.");
+  } catch (err) { handleSessionError(err); alert("Clear failed: " + err.message); }
 };
+
+// Startup: load public census & civic summary stats
+renderAudit();
+renderMyReceipts();
+syncAuditFromCloud();
+
 </script>
 </body>
 </html>
