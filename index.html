@@ -17,7 +17,7 @@ body{margin:0;font-family:"Segoe UI",Roboto,"Trebuchet MS",Arial,sans-serif;back
 .sticky-nav a:hover,.sticky-nav button:hover{background:var(--gold);color:var(--ink);border-color:var(--gold)}
 
 header{background:linear-gradient(135deg,#0f2930,#1b434d);color:#fff;padding:14px 16px 12px;text-align:center;user-select:none;box-shadow:0 2px 8px rgba(0,0,0,.15)}
-header h1{margin:0;font-size:21px;letter-spacing:.3px;cursor:default}
+header h1{margin:0;font-size:21px;letter-spacing:.3px;cursor:pointer}
 header p{margin:3px 0 0;font-size:12.5px;color:#c3e3dc}
 #credit{color:var(--gold);font-weight:bold;font-size:12px;margin-top:5px;line-height:1.4}
 .top-badges{display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;margin-top:6px}
@@ -88,24 +88,22 @@ canvas{width:100%;height:100%;display:block;object-fit:cover}
 /* ---- AI CONFIDENCE BAR DIRECTLY UNDER CAMERA ---- */
 #probs{margin:0;font-size:12px;font-weight:bold;color:#fff;text-align:center;background:var(--ink);padding:8px 10px;border-radius:0 0 16px 16px;border:3px solid #fff;border-top:1px solid rgba(255,255,255,.2);box-shadow:0 4px 12px rgba(0,0,0,.12)}
 
-/* ---- DIGITAL TWIN SMART BIN (EXACT SAME HEIGHT AS CAMERA BOX) ---- */
+/* ---- 2-BIN SEE-SAW DIGITAL TWIN (EXACT SAME HEIGHT AS CAMERA BOX) ---- */
 #protoBox{margin:0;background:var(--card);border:2px solid var(--line);border-radius:16px;padding:10px 12px;text-align:center;display:flex;flex-direction:column;justify-content:space-between;height:100%;box-shadow:0 4px 12px rgba(0,0,0,.06)}
 .proto-head{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;font-weight:bold;gap:4px}
 .proto-badge{background:var(--ink);color:var(--gold);padding:3px 8px;border-radius:6px;font-family:monospace;font-size:11px;white-space:nowrap}
 .proto-stage{position:relative;min-height:175px;background:#f4faf8;border:2px dashed var(--line);border-radius:12px;overflow:hidden;margin:8px 0;flex:1}
-.chute{width:86px;height:22px;border-left:3px solid var(--ink);border-right:3px solid var(--ink);margin:0 auto;background:rgba(16,38,46,0.06);font-size:10px;color:#456;line-height:22px}
-#dropItem{position:absolute;top:2px;left:50%;transform:translate(-50%,0);font-size:24px;opacity:0;transition:transform 0.6s ease-in, opacity 0.2s}
-.pivot-axle{width:14px;height:14px;background:var(--gold);border:3px solid var(--ink);border-radius:50%;margin:14px auto 0;position:relative;z-index:3}
-#flapArm{width:104px;height:7px;background:var(--ink);border-radius:4px;margin:-10px auto 0;transform:rotate(0deg);transition:transform 0.35s cubic-bezier(.4,1.4,.6,1);position:relative;z-index:2}
-.p-bins{position:absolute;bottom:6px;left:6px;right:6px;display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
-.p-bin{height:58px;border-radius:0 0 10px 10px;border:2.5px solid;display:flex;flex-direction:column;justify-content:center;align-items:center;font-size:10.5px;font-weight:bold;background:#fff;transition:background .25s,color .25s;padding:3px}
-.p-bin small{font-size:9.5px;font-weight:normal;margin-top:2px;opacity:.9}
+.chute{width:96px;height:22px;border-left:3px solid var(--ink);border-right:3px solid var(--ink);margin:0 auto;background:rgba(16,38,46,0.06);font-size:10px;color:#456;line-height:22px}
+#dropItem{position:absolute;top:2px;left:50%;transform:translate(-50%,0);font-size:24px;opacity:0;transition:transform 0.6s ease-in, opacity 0.2s;z-index:4}
+.pivot-axle{width:14px;height:14px;background:var(--gold);border:3px solid var(--ink);border-radius:50%;margin:16px auto 0;position:relative;z-index:3}
+#flapArm{width:136px;height:8px;background:#b8864b;border:1.5px solid var(--ink);border-radius:4px;margin:-11px auto 0;transform:rotate(0deg);transition:transform 0.35s cubic-bezier(.4,1.4,.6,1);position:relative;z-index:2}
+.p-bins{position:absolute;bottom:6px;left:6px;right:6px;display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.p-bin{height:62px;border-radius:0 0 10px 10px;border:2.5px solid;display:flex;flex-direction:column;justify-content:center;align-items:center;font-size:11px;font-weight:bold;background:#fff;transition:background .25s,color .25s;padding:4px}
+.p-bin small{font-size:10px;font-weight:normal;margin-top:2px;opacity:.9}
 .p-bin.blue{border-color:var(--blue);color:var(--blue)}
 .p-bin.green{border-color:var(--green);color:var(--green)}
-.p-bin.red{border-color:var(--coral);color:var(--coral)}
 .p-bin.active.blue{background:var(--blue);color:#fff}
 .p-bin.active.green{background:var(--green);color:#fff}
-.p-bin.active.red{background:var(--coral);color:#fff}
 
 /* ---- GAME HUD & AI TASK BOX ---- */
 .hud{display:none;gap:6px;margin:8px 0}
@@ -115,11 +113,11 @@ canvas{width:100%;height:100%;display:block;object-fit:cover}
 #task{margin:8px 0;background:var(--card);border:2.5px solid var(--line);border-radius:14px;padding:10px 12px;text-align:center;font-size:16.5px;font-weight:bold;min-height:62px;display:flex;flex-direction:column;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.05)}
 #task small{display:block;font-size:12.5px;font-weight:normal;color:#456;margin-top:3px}
 
-/* ---- 3 BINS (Plastic, Paper, Glass) ---- */
-.bins{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}
-.bin{border:2.5px solid var(--line);border-radius:14px;background:var(--card);padding:8px 6px;text-align:center;font-size:13.5px;font-weight:bold;transition:transform .2s,background .2s}
-.bin span.ico{display:block;font-size:26px;margin-bottom:2px}
-.bin small{display:block;font-weight:normal;font-size:11.5px;opacity:.85;margin-top:2px}
+/* ---- 2 BINS (Plastic & Paper) ---- */
+.bins{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:10px 0}
+.bin{border:2.5px solid var(--line);border-radius:14px;background:var(--card);padding:10px 8px;text-align:center;font-size:14px;font-weight:bold;transition:transform .2s,background .2s}
+.bin span.ico{display:block;font-size:28px;margin-bottom:2px}
+.bin small{display:block;font-weight:normal;font-size:12px;opacity:.85;margin-top:2px}
 .bin.hit{transform:translateY(-3px);color:#fff;box-shadow:0 6px 14px rgba(0,0,0,.15)}
 
 /* ---- SMART WASTE CENSUS & IMPACT DASHBOARD ---- */
@@ -231,7 +229,7 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
 </nav>
 
 <header>
-  <h1 id="appTitle">♻️ Saaf Sindh AI: Waste Census</h1>
+  <h1 id="appTitle" title="Tap 5 times for Teacher Admin Panel">♻️ Saaf Sindh AI: Waste Census</h1>
   <p>Sindh STREAM Journey 2026-27 | Theme 2: AI, Digital Solution, Gamification & IoT | صاف سنڌ، سرسبز سنڌ</p>
   <div id="credit">
     👨‍🏫 Guide Teacher: Ghulam Hussain Memon (Bachelor of Computer Science (BCS) — University of Sindh, Laar Campus Badin)<br>
@@ -261,10 +259,10 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
 
   <!-- FRIENDLY GUIDE BANNER -->
   <div id="modeBanner">
-    <span id="bannerText">👉 <b>Learn Mode:</b> Niche green button daba kar camera kholen aur Plastic, Paper ya Glass dikhayen.</span>
+    <span id="bannerText">👉 <b>Learn Mode:</b> Niche green button daba kar camera kholen aur Plastic ya Paper dikhayen.</span>
   </div>
 
-  <!-- EQUAL-SIZE SIDE-BY-SIDE CAMERA & DIGITAL TWIN PROTOTYPE -->
+  <!-- EQUAL-SIZE SIDE-BY-SIDE CAMERA & 2-BIN SEE-SAW DIGITAL TWIN -->
   <div class="live-grid">
     <!-- LEFT COLUMN: CAMERA + AI CONFIDENCE DIRECTLY BELOW -->
     <div class="cam-col">
@@ -281,9 +279,9 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
           <div class="step-pills">
             <span>Step 1: Camera On</span>
             <span>Step 2: Hold Waste</span>
-            <span>Step 3: See Bin Sort</span>
+            <span>Step 3: See-Saw Sorts</span>
           </div>
-          <p id="overlayMsg" style="margin:0 0 12px;font-size:14.5px;max-width:285px">Show <b>Plastic 🧴</b>, <b>Paper 📄</b> or <b>Glass 🫙</b> for instant AI detection</p>
+          <p id="overlayMsg" style="margin:0 0 12px;font-size:14.5px;max-width:285px">Show <b>Plastic 🧴</b> or <b>Paper 📄</b> for instant AI detection</p>
           <button id="start" type="button" title="Click to activate webcam or phone camera">📷 Start AI Camera</button>
         </div>
         <div class="hold-wrap"><div id="holdBar"></div></div>
@@ -292,25 +290,21 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
       <div id="probs">🎯 Step 1: Tap "📷 Start AI Camera" above (or test bins on right)</div>
     </div>
 
-    <!-- RIGHT COLUMN: DIGITAL TWIN SMART BIN (EXACT SAME SIZE AS CAMERA BOX) -->
+    <!-- RIGHT COLUMN: 2-BIN SEE-SAW SMART BIN (EXACT SAME SIZE AS CAMERA BOX) -->
     <div id="protoBox">
       <div class="proto-head">
-        <span title="Virtual simulation of our physical Arduino + SG90 Servo bin">⚙️ Smart Bin Digital Twin</span>
-        <span class="proto-badge" id="servoStatus">Flap: 90° (Ready)</span>
+        <span title="Virtual simulation of our physical Arduino + SG90 See-Saw Smart Bin">⚙️ See-Saw Smart Bin Twin</span>
+        <span class="proto-badge" id="servoStatus">See-Saw: 90° (Ready)</span>
       </div>
       <div class="proto-stage">
-        <div class="chute">AI Drop Chute</div>
+        <div class="chute">See-Saw Drop Zone</div>
         <div id="dropItem">🧴</div>
-        <div class="pivot-axle" title="Smart Sorting Flap Axle"></div>
+        <div class="pivot-axle" title="SG90 Servo Center Pivot"></div>
         <div id="flapArm"></div>
         <div class="p-bins">
           <div class="p-bin blue" id="pBin0">
             <span>🧴 BLUE BIN</span>
             <small>Plastic (35° Left)</small>
-          </div>
-          <div class="p-bin red" id="pBin2">
-            <span>🫙 RED BIN</span>
-            <small>Glass (90° Center)</small>
           </div>
           <div class="p-bin green" id="pBin1">
             <span>📄 GREEN BIN</span>
@@ -319,9 +313,8 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
         </div>
       </div>
       <div class="abtns">
-        <button class="alt" id="testPlastic" type="button" style="border-color:var(--blue);color:var(--blue)">▶️ Plastic</button>
-        <button class="alt" id="testGlass" type="button" style="border-color:var(--coral);color:var(--coral)">▶️ Glass</button>
-        <button class="alt" id="testPaper" type="button" style="border-color:var(--green);color:var(--green)">▶️ Paper</button>
+        <button class="alt" id="testPlastic" type="button" style="border-color:var(--blue);color:var(--blue)">▶️ Plastic (35°)</button>
+        <button class="alt" id="testPaper" type="button" style="border-color:var(--green);color:var(--green)">▶️ Paper (145°)</button>
         <button class="alt" id="hwConnectBtn" type="button" title="Connect Physical Arduino Uno via USB Cable">🔌 Arduino USB</button>
       </div>
     </div>
@@ -341,7 +334,7 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
     <small>Camera kholne ke liye upar harey (Green) button ko dabayen.</small>
   </div>
 
-  <!-- COLOR-CODED BINS (Plastic, Paper, Glass) -->
+  <!-- 2 COLOR-CODED BINS (Plastic & Paper) -->
   <div class="bins" id="bins"></div>
 
   <!-- END OF 60s GAME POPUP -->
@@ -387,7 +380,7 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
       <div class="flow-step active" id="fl1"><span>📷</span>1. Capture</div>
       <div class="flow-step" id="fl2"><span>🤖</span>2. AI Classify</div>
       <div class="flow-step" id="fl3"><span>📊</span>3. Census Log</div>
-      <div class="flow-step" id="fl4"><span>⚙️</span>4. Smart Bin</div>
+      <div class="flow-step" id="fl4"><span>⚙️</span>4. See-Saw Bin</div>
       <div class="flow-step" id="fl5"><span>🚨</span>5. Civic Alert</div>
       <div class="flow-step" id="fl6"><span>✅</span>6. Resolved</div>
     </div>
@@ -454,7 +447,7 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
           <div style="overflow-x:auto">
             <table class="atable">
               <thead>
-                <tr><th>Date</th><th>🧴 Plastic</th><th>📄 Paper</th><th>🫙 Glass</th><th>Day Total</th></tr>
+                <tr><th>Date</th><th>🧴 Plastic</th><th>📄 Paper</th><th>Day Total</th></tr>
               </thead>
               <tbody id="auditHistory"></tbody>
               <tfoot id="auditFooter"></tfoot>
@@ -473,7 +466,7 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
       <button class="alt" id="officerBtn" type="button" style="padding:6px 11px;font-size:12px;border-color:var(--ink)">🔐 Officer Login</button>
     </div>
 
-    <!-- EASY INLINE OFFICER LOGIN BOX (NO MORE SPELLING MISTAKES) -->
+    <!-- EASY INLINE OFFICER LOGIN BOX -->
     <div id="officerLoginBox">
       <div style="font-weight:bold;font-size:13.5px;margin-bottom:8px;color:var(--ink)">👮‍♂️ Select Halqa Department & Enter Officer Password:</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
@@ -582,17 +575,17 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
         <div class="intro-grid">
           <div class="intro-card">
             <b>⚠️ The Local Problem (Hamara Masla)</b>
-            In schools and towns (Tarai, Golarchi, Badin), recyclable <b>Plastic, Paper & Glass</b> get mixed in open dumps with zero daily waste count data and no fast way to alert Union Council / Municipal officers.
+            In schools and towns (Tarai, Golarchi, Badin), recyclable <b>Plastic & Paper</b> get mixed in open dumps with zero daily waste count data and no fast way to alert Union Council / Municipal officers.
           </div>
           <div class="intro-card sol">
             <b>💡 Our Integrated AI Solution (Hamara Hal)</b>
-            A low-cost <b>Edge AI Camera + 3-Way Smart Bin (35°/90°/145°)</b> that auto-sorts waste, records a live <b>Google Cloud Waste Census</b>, and sends geotagged <b>Civic Alerts</b> to Halqa Officers.
+            A low-cost <b>Edge AI Camera + 2-Bin See-Saw Smart Bin (35° Left / 145° Right)</b> that auto-sorts waste, records a live <b>Google Cloud Waste Census</b>, and sends geotagged <b>Civic Alerts</b> to Halqa Officers.
           </div>
         </div>
         <div class="how-strip">
           <span>1️⃣ Open AI Camera</span> ➔
-          <span>2️⃣ Scan Plastic / Paper / Glass</span> ➔
-          <span>3️⃣ Smart Bin Auto-Sorts</span> ➔
+          <span>2️⃣ Scan Plastic / Paper</span> ➔
+          <span>3️⃣ See-Saw Bin Sorts</span> ➔
           <span>4️⃣ Cloud Census & Civic Action</span>
         </div>
       </div>
@@ -606,17 +599,17 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
           <div class="member-card">
             <span>🚨 Civic & Security Lead</span>
             <b>Shameer Ali</b>
-            Mapped local cleanliness workflows for UC Tarai, TC Golarchi & MC Badin, testing GPS photo reporting, role-based Halqa Officer access control & recycled cardboard bin structure.
+            Mapped local cleanliness workflows for UC Tarai, TC Golarchi & MC Badin, testing GPS photo reporting, role-based Halqa Officer access control & recycled cardboard See-Saw bin structure.
           </div>
           <div class="member-card" style="border-top-color:var(--green)">
             <span>🤖 AI & Hardware Lead</span>
             <b>Zahid Ali</b>
-            Trained the Teachable Machine vision model (Plastic, Paper, Glass & Empty classes) and assembled the 3-bin Smart Flap with Arduino Uno & SG90 Servo motor.
+            Trained the Teachable Machine vision model (Plastic, Paper & Empty classes) and assembled the 2-bin See-Saw Flap with Arduino Uno & SG90 Servo motor.
           </div>
           <div class="member-card" style="border-top-color:var(--coral)">
             <span>📊 Data & Census Lead</span>
             <b>Farhan</b>
-            Designed the Google Sheets Day-Wise Waste Census, 45-sample accuracy testing log (91.1%), and 60-second student challenge game.
+            Designed the Google Sheets Day-Wise Waste Census, recorded accuracy testing log, and 60-second student challenge game.
           </div>
         </div>
       </div>
@@ -624,24 +617,24 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
 
     <!-- 3. Specifications, Highlights & Testing Summary -->
     <details class="acc-item" id="accSpecs">
-      <summary><span class="chev">⌄</span> 🌟 Specifications, Highlights & Testing Summary (91.1% Accuracy)</summary>
+      <summary><span class="chev">⌄</span> 🌟 Specifications, Highlights & Testing Summary</summary>
       <div class="acc-body">
         <div class="rubric-grid">
           <div class="rub-item">
             <b>1. Integrated 4-in-1 Local Solution</b>
-            Combines Edge AI Vision + IoT Smart Bin + Live Google Sheet Waste Census + Halqa Civic Portal for Tarai, Golarchi & Badin.
+            Combines Edge AI Vision + See-Saw IoT Smart Bin + Live Google Sheet Waste Census + Halqa Civic Portal for Tarai, Golarchi & Badin.
           </div>
           <div class="rub-item">
-            <b>2. Recorded Testing (91.1% Accuracy)</b>
-            Tested across <b>45 real waste samples</b> achieving <b>41/45 correct sorts</b> (0.76s avg response). White chart backdrop controls glass reflection.
+            <b>2. Reliable See-Saw Sorting</b>
+            Uses a center-pivoted See-Saw flap (`35°` Left for Plastic/Blue Bin, `145°` Right for Paper/Green Bin) so items slide smoothly by gravity.
           </div>
           <div class="rub-item">
             <b>3. Safe 5V Design & Clean Build</b>
-            Powered by safe 5V laptop USB (zero 220V AC mains hazard), protected by 220-Ohm resistors, with color-coded Blue, Red & Green compartments.
+            Powered by safe 5V laptop USB (zero 220V AC mains hazard), protected by 220-Ohm resistors, with color-coded Blue & Green compartments.
           </div>
           <div class="rub-item">
             <b>4. Recycled & Low-Cost Materials</b>
-            Built using <b>reused cardboard cartons</b>, wooden skewers, and free open-source web tools to keep the prototype affordable for any school.
+            Built using <b>reused cardboard cartons</b>, wooden sticks, and free open-source web tools to keep the prototype affordable for any school.
           </div>
         </div>
       </div>
@@ -653,8 +646,8 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
       <div class="acc-body">
         <div class="glossary-grid">
           <div class="gloss-item"><b>🧠 Edge AI (TensorFlow.js):</b> AI model jo internet server ke bajaye seedha aapke mobile/laptop ke browser ke andar chalta hai—tez aur safe!</div>
-          <div class="gloss-item"><b>⚙️ Digital Twin:</b> Screen par bana hua Smart Bin jo bilkul asli Arduino Servo motor (35°, 90°, 145°) ki tarah live ghum kar dikhata hai.</div>
-          <div class="gloss-item"><b>📊 Waste Census:</b> Kachre ki rozana ginti (Plastic, Paper, Glass numbers) jo khud-ba-khud Google Sheet mein jama hoti hai.</div>
+          <div class="gloss-item"><b>⚙️ See-Saw Digital Twin:</b> Screen par bana hua Smart Bin jo bilkul asli Arduino Servo motor (35° Left / 145° Right) ki tarah live jhuk kar dikhata hai.</div>
+          <div class="gloss-item"><b>📊 Waste Census:</b> Kachre ki rozana ginti (Plastic aur Paper numbers) jo khud-ba-khud Google Sheet mein jama hoti hai.</div>
           <div class="gloss-item"><b>🔌 Web Serial IoT:</b> Bina mehnge Wi-Fi module ke seedha USB cable se browser ko Arduino Uno ke sath jorne wali modern technology.</div>
         </div>
       </div>
@@ -714,12 +707,13 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
 <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8.5/dist/teachablemachine-image.min.js"></script>
 <script>
 /* ========================================================= */
-/* SAAF SINDH AI: WASTE CENSUS - v8.9 (EQUAL TWIN + LOGIN)   */
+/* SAAF SINDH AI: WASTE CENSUS - v9.1 (2-BIN NEW MODEL)      */
+/* Model URL: https://teachablemachine.withgoogle.com/models/nIz-d7Xw2/ */
 /* Student Team: Shameer Ali, Zahid Ali & Farhan             */
 /* Guide Teacher: Ghulam Hussain Memon (BCS - Univ of Sindh) */
 /* ========================================================= */
 
-const MODEL_URL  = "https://teachablemachine.withgoogle.com/models/RP91qAZCY/";
+const MODEL_URL  = "https://teachablemachine.withgoogle.com/models/nIz-d7Xw2/";
 const CLOUD_URL  = "https://script.google.com/macros/s/AKfycbxSl2q2L2PoYqatesWrVIjwR9NJmCNYJzMRx9Om6v2zfYwhpdDLz29NpzFxn0qRhYk1/exec";
 const ADMIN_HASH = "NDAxMDIwMTY5"; // Base64 SEMIS 401020169
 
@@ -731,10 +725,10 @@ const OFFICER_ACCOUNTS = [
   { u: "MC BADIN",          p: "401020169B",  altP: "",          role: "OFFICER",     dept: "Municipal Committee Badin", label: "Municipal Committee Badin", isSuper: false }
 ];
 
+// 2-Bin See-Saw Configuration (Plastic = Left 35°, Paper = Right 145°)
 const BINS = [
-  {keys:["plastic"], name:"Plastic", ur:"پلاسٹک", bin:"Blue Bin",  color:"#1967d2", icon:"🧴", cmd:"P", angle:35,  tilt:-28, dropX:"-95px", tip:"Clean plastic bottles & wrappers can be recycled."},
-  {keys:["paper","papar"], name:"Paper", ur:"کاغذ", bin:"Green Bin", color:"#1e8e3e", icon:"📄", cmd:"A", angle:145, tilt:28,  dropX:"75px",  tip:"Keep paper dry and clean for recycling."},
-  {keys:["glass","sheesha","mirror","jar","kanch","bottle"], name:"Glass", ur:"شیشہ", bin:"Red Bin", color:"#d93025", icon:"🫙", cmd:"G", angle:90,  tilt:0,   dropX:"-12px", tip:"Handle glass carefully! Glass jars & bottles can be recycled endlessly."}
+  {keys:["plastic","palstic","bottle","wrapper","shopper"], name:"Plastic", ur:"پلاسٹک", bin:"Blue Bin",  color:"#1967d2", icon:"🧴", cmd:"P", angle:35,  tilt:-26, dropX:"-72px", tip:"Clean plastic bottles & wrappers can be recycled."},
+  {keys:["paper","papar","kaghaz","cardboard","cup","page"], name:"Paper",   ur:"کاغذ",   bin:"Green Bin", color:"#1e8e3e", icon:"📄", cmd:"A", angle:145, tilt:26,  dropX:"72px",  tip:"Keep paper dry and clean for recycling."}
 ];
 
 const MIN_CONF = 0.65, HOLD_MS = 650, ROUND_S = 60, AI_INTERVAL_MS = 110;
@@ -743,7 +737,7 @@ const $ = id => document.getElementById(id);
 let model, video, StreamRef = null, ctx, mode = "learn", running = false, facing = "environment";
 let score = 0, streak = 0, best = 0, timeLeft = 0, timer = null, target = null, gamePaused = false;
 let holdKey = null, holdSince = 0, cooldownUntil = 0, lastSaid = "", lastTaskHtml = "";
-let lastAiRun = 0, aiBusy = false, availableBinIndices = [0, 1, 2], currentDetectedIdx = null;
+let lastAiRun = 0, aiBusy = false, availableBinIndices = [0, 1], currentDetectedIdx = null;
 let serialPort = null, serialWriter = null, blindMode = false;
 
 function openAcc(id) {
@@ -804,7 +798,7 @@ BINS.forEach((b, i) => {
   $("bins").appendChild(d);
 });
 
-/* ---- Digital Twin Smart Bin + Web Serial Arduino ---- */
+/* ---- Digital Twin 2-Bin See-Saw + Web Serial Arduino ---- */
 let lastHwSent = 0, flapTimer = null;
 
 async function sendToArduino(cmdChar) {
@@ -839,10 +833,9 @@ function animatePrototype(idx) {
   clearTimeout(flapTimer);
   const item = $("dropItem");
   $("flapArm").style.transform = `rotate(${b.tilt}deg)`;
-  $("servoStatus").textContent = `Flap: ${b.angle}° ➔ ${b.bin}`;
+  $("servoStatus").textContent = `See-Saw: ${b.angle}° ➔ ${b.bin}`;
   $("pBin0").classList.toggle("active", idx === 0);
   $("pBin1").classList.toggle("active", idx === 1);
-  $("pBin2").classList.toggle("active", idx === 2);
 
   item.textContent = b.icon;
   item.style.transition = "none";
@@ -856,10 +849,9 @@ function animatePrototype(idx) {
 
   flapTimer = setTimeout(() => {
     $("flapArm").style.transform = "rotate(0deg)";
-    $("servoStatus").textContent = "Flap: 90° (Ready)";
+    $("servoStatus").textContent = "See-Saw: 90° (Ready)";
     $("pBin0").classList.remove("active");
     $("pBin1").classList.remove("active");
-    $("pBin2").classList.remove("active");
   }, 2000);
 }
 
@@ -873,7 +865,6 @@ function triggerBinSimulation(idx, force = false) {
 
 $("testPlastic").onclick = () => { beep([660]); triggerBinSimulation(0, true); };
 $("testPaper").onclick = () => { beep([740]); triggerBinSimulation(1, true); };
-$("testGlass").onclick = () => { beep([820]); triggerBinSimulation(2, true); };
 
 /* ---- Sound and Voice ---- */
 let ac;
@@ -942,7 +933,7 @@ async function startCamera() {
   } catch (err) {
     $("start").disabled = false;
     $("start").textContent = "📷 Start AI Camera";
-    setTask("⚠️ Please allow Camera access in your browser!<small>Tip: You can still test the Smart Bin using the ▶️ Plastic / Glass / Paper buttons.</small>");
+    setTask("⚠️ Please allow Camera access in your browser!<small>Tip: You can still test the See-Saw Smart Bin using the ▶️ Plastic / Paper buttons.</small>");
   }
 }
 
@@ -956,7 +947,7 @@ function stopCamera() {
     $("start").textContent = "▶️ Resume AI Camera";
     setTask(`⏸️ Game Paused at ${timeLeft}s<small>Tap 'Resume AI Camera' to continue.</small>`);
   } else {
-    $("overlayMsg").innerHTML = "Show <b>Plastic 🧴</b>, <b>Paper 📄</b> or <b>Glass 🫙</b> for instant AI detection";
+    $("overlayMsg").innerHTML = "Show <b>Plastic 🧴</b> or <b>Paper 📄</b> for instant AI detection";
     $("start").textContent = "📷 Start AI Camera";
     setTask("Camera paused.<small>Tap 'Start AI Camera' whenever you are ready.</small>");
   }
@@ -1001,7 +992,7 @@ function pick(p) {
   $("probs").textContent = "🎯 Live AI Confidence: " + p.map(x => `${x.className}: ${Math.round(x.probability * 100)}%`).join(" | ");
   if (top.probability < MIN_CONF) return null;
   const n = top.className.trim().toLowerCase();
-  if (n.includes("empty") || n.includes("nothing") || n.includes("background") || n.includes("none")) return null;
+  if (n.includes("empty") || n.includes("nothing") || n.includes("background") || n.includes("none") || n.includes("khali")) return null;
   return BINS.findIndex(b => b.keys.some(k => n.includes(k)));
 }
 
@@ -1035,7 +1026,7 @@ function handle(p) {
 
   if (mode === "learn") {
     if (idx === null) {
-      setTask("Step 2: Hold Plastic 🧴, Paper 📄 or Glass 🫙 inside the camera box<small>Cheez ko dabbay ke beech mein rakhen</small>");
+      setTask("Step 2: Hold Plastic 🧴 or Paper 📄 inside the camera box<small>Cheez ko dabbay ke beech mein rakhen</small>");
       return;
     }
     const b = BINS[idx];
@@ -1077,7 +1068,7 @@ function showTarget() {
 }
 function nextTarget() {
   if (!timeLeft) return;
-  const pool = availableBinIndices.length ? availableBinIndices : [0, 1, 2];
+  const pool = availableBinIndices.length ? availableBinIndices : [0, 1];
   let n;
   do { n = pool[Math.floor(Math.random() * pool.length)]; } while (pool.length > 1 && n === target);
   target = n; showTarget();
@@ -1132,7 +1123,7 @@ function setMode(m) {
   $("mCivic").classList.toggle("on", m === "civic");
 
   if (m === "learn") {
-    $("bannerText").innerHTML = "👉 <b>Learn Mode:</b> Camera kholen aur Plastic, Paper ya Glass dikhayen.";
+    $("bannerText").innerHTML = "👉 <b>Learn Mode:</b> Camera kholen aur Plastic ya Paper dikhayen.";
   } else if (m === "play") {
     $("bannerText").innerHTML = "🎮 <b>60s Challenge:</b> Camera ke upar/neeche likhi hui cheez dikhayen aur Rs. 100 jeeten!";
     renderLb();
@@ -1153,7 +1144,7 @@ function setMode(m) {
   } else if (m === "civic") {
     setTask("🚨 Point camera at garbage & tap '📸 Snap from AI Camera'<small>Photo seedha Cloud Sheet 3 mein save hogi</small>");
   } else {
-    setTask("Step 2: Hold Plastic 🧴, Paper 📄 or Glass 🫙 inside the camera box<small>Cheez ko dabbay ke beech mein rakhen</small>");
+    setTask("Step 2: Hold Plastic 🧴 or Paper 📄 inside the camera box<small>Cheez ko dabbay ke beech mein rakhen</small>");
   }
 }
 
@@ -1177,7 +1168,7 @@ $("again").onclick = () => {
   else startCamera();
 };
 
-/* ---- Hybrid Authentication & Cloud Sync (Works with Both New & Legacy Sheet Setup) ---- */
+/* ---- Hybrid Authentication & Cloud Sync ---- */
 let AUD = {}, CIVIC_STATS = { total: 0, pending: 0, inProgress: 0, resolved: 0, byDept: {}, topArea: "", topAreaCount: 0, topDept: "" };
 let auditArmed = true, idleSince = 0, lastCounted = null, syncingAudit = false;
 let LB = [], REPORTS = [], MY_RECEIPTS = [];
@@ -1206,7 +1197,7 @@ const nowTimeStr = () => {
   const d = new Date();
   return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
 };
-const sum = o => Object.values(o || {}).reduce((a, b) => a + (Number(b) || 0), 0);
+const sum2Bins = o => (Number(o && o.Plastic) || 0) + (Number(o && o.Paper) || 0);
 const escapeHtml = value => String(value == null ? "" : value).replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[ch]));
 const makeId = prefix => prefix + Date.now().toString(36) + Math.random().toString(36).slice(2, 9);
 
@@ -1215,7 +1206,7 @@ function saveAudit() {
   try { localStorage.setItem("sdg_civic_stats", JSON.stringify(CIVIC_STATS)); } catch (e) {}
 }
 function todayData() {
-  if (!AUD[today()]) AUD[today()] = { Plastic: 0, Paper: 0, Glass: 0 };
+  if (!AUD[today()]) AUD[today()] = { Plastic: 0, Paper: 0 };
   return AUD[today()];
 }
 
@@ -1241,7 +1232,6 @@ async function fetchPublicData() {
   if (result && result.status === "ok" && result.data) {
     return result.data;
   }
-  // Fallback if backend is on legacy GET format
   const legRes = await fetch(`${CLOUD_URL}?action=admin&pin=${encodeURIComponent(atob(ADMIN_HASH))}&t=${Date.now()}`);
   const raw = await legRes.json();
   if (Array.isArray(raw)) return parseLegacySheetRows(raw);
@@ -1273,8 +1263,10 @@ function parseLegacySheetRows(rows) {
       const parts = nameStr.split(" | ");
       const dt = (parts[1] || today()).trim();
       const cls = (parts[2] || "Plastic").trim();
-      if (!audit[dt]) audit[dt] = { Plastic: 0, Paper: 0, Glass: 0 };
-      audit[dt][cls] = Math.max(0, (audit[dt][cls] || 0) + (Number(r.s) || 0));
+      if (cls === "Plastic" || cls === "Paper") {
+        if (!audit[dt]) audit[dt] = { Plastic: 0, Paper: 0 };
+        audit[dt][cls] = Math.max(0, (audit[dt][cls] || 0) + (Number(r.s) || 0));
+      }
     } else if (nameStr && !nameStr.includes("=== DATE:")) {
       players.push(r);
     }
@@ -1333,14 +1325,12 @@ async function performLogin(usernameInput, passwordInput) {
   const canonicalUser = matchedLocal ? matchedLocal.u : String(usernameInput || "").trim().toUpperCase();
   const canonicalPass = matchedLocal ? matchedLocal.p : String(passwordInput || "").trim();
 
-  // Try Server Token Login first
   try {
     const serverData = await apiPost({ action: "login", username: canonicalUser, password: canonicalPass });
     serverData.password = canonicalPass;
     setSession(serverData);
     return true;
   } catch (err) {
-    // If server security properties weren't initialized yet or offline, verify against official account table
     if (matchedLocal) {
       setSession({
         token: "local_verified_token",
@@ -1371,7 +1361,6 @@ async function loadPrivateData() {
       return data;
     } catch (e) {}
   }
-  // Fallback for local_verified_token or legacy backend
   try {
     const legRes = await fetch(`${CLOUD_URL}?action=admin&pin=${encodeURIComponent(atob(ADMIN_HASH))}&t=${Date.now()}`);
     const raw = await legRes.json();
@@ -1636,7 +1625,6 @@ $("sendReportBtn").onclick = async () => {
     await syncAuditFromCloud();
     alert(`✅ Report submitted successfully!\nVerified Receipt ID: #${finalId}`);
   } catch (err) {
-    // Save locally so demo never breaks
     REPORTS.unshift(reportObj);
     try { localStorage.setItem("sdg_reports", JSON.stringify(REPORTS)); } catch (e) {}
     MY_RECEIPTS.push({ id, dept, area, status: "Pending", d: today() });
@@ -1762,13 +1750,13 @@ $("offCsvBtn").onclick = () => {
 
 $("repSyncBtn").onclick = () => loadPrivateData();
 
-/* ---- Waste Audit Step & Smart Dashboard Rendering (PURE NUMBERS) ---- */
+/* ---- Waste Audit Step & Smart Dashboard Rendering (2 BINS: PLASTIC & PAPER) ---- */
 function auditStep(idx, now) {
   if (idx === null) {
     if (!idleSince) idleSince = now;
     if (now - idleSince > 500 && !auditArmed) {
       auditArmed = true;
-      setTask("📊 Ready for next item! Show inside box<small>Ab agla kachra camera ke samne layen</small>");
+      setTask("📊 Ready for next item! Show inside box<small>Ab agla Plastic ya Paper camera ke samne layen</small>");
     }
     return;
   }
@@ -1793,21 +1781,19 @@ function auditStep(idx, now) {
 
 function renderAudit() {
   const d = AUD[today()] || {};
-  const totalToday = sum(d);
-  let grandPlastic = 0, grandPaper = 0, grandGlass = 0;
-  const activeDates = Object.keys(AUD).filter(dt => sum(AUD[dt]) > 0);
+  const totalToday = sum2Bins(d);
+  let grandPlastic = 0, grandPaper = 0;
+  const activeDates = Object.keys(AUD).filter(dt => sum2Bins(AUD[dt]) > 0);
 
   Object.keys(AUD).forEach(dt => {
     grandPlastic += Number(AUD[dt] && AUD[dt].Plastic) || 0;
     grandPaper   += Number(AUD[dt] && AUD[dt].Paper) || 0;
-    grandGlass   += Number(AUD[dt] && AUD[dt].Glass) || 0;
   });
-  const grandTotal = grandPlastic + grandPaper + grandGlass;
+  const grandTotal = grandPlastic + grandPaper;
 
   const catTotals = [
     { name: "Plastic", icon: "🧴", count: grandPlastic },
-    { name: "Paper",   icon: "📄", count: grandPaper },
-    { name: "Glass",   icon: "🫙", count: grandGlass }
+    { name: "Paper",   icon: "📄", count: grandPaper }
   ].sort((a, b) => b.count - a.count);
 
   const topCat = catTotals[0];
@@ -1842,9 +1828,9 @@ function renderAudit() {
   const insights = [];
   if (grandTotal > 0) {
     insights.push(`<b>Dominant Waste Insight:</b> <b>${topCat.name}</b> is currently the most frequently detected waste category (<b>${topCatPct}%</b> share — ${topCat.count} of ${grandTotal} total items).`);
-    insights.push(`<b>Category Census Breakdown:</b> Total <b>${grandTotal}</b> items classified across <b>${activeDates.length || 1}</b> day(s) — Plastic: <b>${grandPlastic}</b>, Paper: <b>${grandPaper}</b>, Glass: <b>${grandGlass}</b>.`);
+    insights.push(`<b>2-Bin Census Breakdown:</b> Total <b>${grandTotal}</b> items classified across <b>${activeDates.length || 1}</b> day(s) — Plastic: <b>${grandPlastic}</b>, Paper: <b>${grandPaper}</b>.`);
   } else {
-    insights.push(`<b>Waste Census Ready:</b> Scan Plastic, Paper, or Glass items with the AI camera to generate live category counts.`);
+    insights.push(`<b>Waste Census Ready:</b> Scan Plastic or Paper items with the AI camera to generate live category counts.`);
   }
 
   if (cs.total > 0) {
@@ -1867,32 +1853,31 @@ function renderAudit() {
 
   const hist = $("auditHistory"), foot = $("auditFooter");
   if (!hist) return;
-  const dates = Object.keys(AUD).filter(dt => sum(AUD[dt]) > 0 || dt === today()).sort().reverse();
+  const dates = Object.keys(AUD).filter(dt => sum2Bins(AUD[dt]) > 0 || dt === today()).sort().reverse();
   if (!dates.length) {
-    hist.innerHTML = `<tr><td colspan="5" style="text-align:center">No items counted yet</td></tr>`;
+    hist.innerHTML = `<tr><td colspan="4" style="text-align:center">No items counted yet</td></tr>`;
     if (foot) foot.innerHTML = "";
     return;
   }
   hist.innerHTML = dates.map(dt => {
     const row = AUD[dt] || {};
-    const pl = Number(row.Plastic) || 0, pa = Number(row.Paper) || 0, gl = Number(row.Glass) || 0;
-    return `<tr><td><b>${dt === today() ? `${dt} (Today)` : dt}</b></td><td>${pl}</td><td>${pa}</td><td>${gl}</td><td><b>${pl + pa + gl}</b></td></tr>`;
+    const pl = Number(row.Plastic) || 0, pa = Number(row.Paper) || 0;
+    return `<tr><td><b>${dt === today() ? `${dt} (Today)` : dt}</b></td><td>${pl}</td><td>${pa}</td><td><b>${pl + pa}</b></td></tr>`;
   }).join("");
-  if (foot) foot.innerHTML = `<tr><td>📊 Overall Total</td><td>${grandPlastic}</td><td>${grandPaper}</td><td>${grandGlass}</td><td><b>${grandTotal}</b></td></tr>`;
+  if (foot) foot.innerHTML = `<tr><td>📊 Overall Total</td><td>${grandPlastic}</td><td>${grandPaper}</td><td><b>${grandTotal}</b></td></tr>`;
 }
 
 function summary() {
   const d = AUD[today()] || {};
-  const todayTotal = sum(d);
-  let gPl = 0, gPa = 0, gGl = 0;
+  const todayTotal = sum2Bins(d);
+  let gPl = 0, gPa = 0;
   Object.keys(AUD).forEach(dt => {
     gPl += Number(AUD[dt] && AUD[dt].Plastic) || 0;
     gPa += Number(AUD[dt] && AUD[dt].Paper) || 0;
-    gGl += Number(AUD[dt] && AUD[dt].Glass) || 0;
   });
-  const allTime = gPl + gPa + gGl;
+  const allTime = gPl + gPa;
   const cs = CIVIC_STATS || { total: 0, resolved: 0 };
-  return `Saaf Sindh AI Census (${today()}): ${todayTotal} items today | ${allTime} total items (Plastic ${gPl}, Paper ${gPa}, Glass ${gGl}) | Civic Reports: ${cs.total || 0} total (${cs.resolved || 0} resolved).`;
+  return `Saaf Sindh AI Census (${today()}): ${todayTotal} items today | ${allTime} total items (Plastic ${gPl}, Paper ${gPa}) | Civic Reports: ${cs.total || 0} total (${cs.resolved || 0} resolved).`;
 }
 
 $("aSync").onclick = () => syncAuditFromCloud();
@@ -1934,16 +1919,15 @@ $("aCopy").onclick = () => {
 };
 
 $("aCsv").onclick = () => {
-  const rows = [["Date","Plastic","Paper","Glass","Day_Total"]];
-  let gPl = 0, gPa = 0, gGl = 0;
+  const rows = [["Date","Plastic","Paper","Day_Total"]];
+  let gPl = 0, gPa = 0;
   Object.keys(AUD).sort().reverse().forEach(dt => {
     const pl = Number(AUD[dt] && AUD[dt].Plastic) || 0;
     const pa = Number(AUD[dt] && AUD[dt].Paper) || 0;
-    const gl = Number(AUD[dt] && AUD[dt].Glass) || 0;
-    gPl += pl; gPa += pa; gGl += gl;
-    rows.push([dt, pl, pa, gl, pl + pa + gl]);
+    gPl += pl; gPa += pa;
+    rows.push([dt, pl, pa, pl + pa]);
   });
-  rows.push(["OVERALL_TOTAL", gPl, gPa, gGl, gPl + gPa + gGl]);
+  rows.push(["OVERALL_TOTAL", gPl, gPa, gPl + gPa]);
   downloadCsv_(rows, "saaf_sindh_daywise_waste_audit.csv");
 };
 
