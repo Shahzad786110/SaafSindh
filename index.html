@@ -38,7 +38,7 @@ details.acc-item[open] > summary .chev{transform:rotate(180deg);color:var(--blue
 details.acc-item[open] > summary{background:#f4faf8;border-bottom:1px solid var(--line)}
 .acc-body{padding:12px 14px;font-size:13.5px;background:#fff}
 
-/* ---- PROBLEM & SOLUTION CARDS (INSIDE ACCORDION) ---- */
+/* ---- PROBLEM & SOLUTION CARDS ---- */
 .intro-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
 @media(max-width:620px){.intro-grid{grid-template-columns:1fr}}
 .intro-card{background:#f8fcfb;border:1.5px solid var(--line);border-left:5px solid var(--coral);border-radius:10px;padding:10px 12px;font-size:13px}
@@ -63,12 +63,11 @@ button.on{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:
 .prize-banner{background:linear-gradient(135deg,#fff8e1,#ffecb3);border:2px solid var(--gold);color:#0f2930;border-radius:12px;padding:9px 12px;margin:8px 0;font-size:13.5px;font-weight:bold;text-align:center;box-shadow:0 2px 6px rgba(249,171,0,.2)}
 .prize-banner span{display:inline-block;background:var(--coral);color:#fff;padding:2px 8px;border-radius:12px;font-size:11px;margin-right:5px}
 
-/* ---- EQUAL SIZE SIDE-BY-SIDE CAMERA & DIGITAL TWIN GRID (1fr : 1fr) ---- */
+/* ---- EQUAL SIZE SIDE-BY-SIDE CAMERA & DIGITAL TWIN GRID ---- */
 .live-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:stretch;margin-bottom:8px}
 @media(max-width:650px){.live-grid{grid-template-columns:1fr}}
 .cam-col{display:flex;flex-direction:column;height:100%}
 
-/* ---- CAMERA STAGE & IN-CAMERA GAME TARGET BANNER ---- */
 .stage{position:relative;background:#111;border-radius:16px 16px 0 0;overflow:hidden;aspect-ratio:4/3;width:100%;flex:1;box-shadow:0 4px 14px rgba(0,0,0,.18);border:3px solid #fff;border-bottom:0}
 canvas{width:100%;height:100%;display:block;object-fit:cover}
 .guide{position:absolute;inset:18% 18% 14%;border:2.5px dashed rgba(255,255,255,.8);border-radius:14px;pointer-events:none;transition:border-color .2s}
@@ -85,10 +84,9 @@ canvas{width:100%;height:100%;display:block;object-fit:cover}
 .hold-wrap{position:absolute;bottom:0;left:0;right:0;height:7px;background:rgba(255,255,255,.2)}
 #holdBar{height:100%;width:0%;background:var(--gold);transition:width .12s linear}
 
-/* ---- AI CONFIDENCE BAR DIRECTLY UNDER CAMERA ---- */
 #probs{margin:0;font-size:12px;font-weight:bold;color:#fff;text-align:center;background:var(--ink);padding:8px 10px;border-radius:0 0 16px 16px;border:3px solid #fff;border-top:1px solid rgba(255,255,255,.2);box-shadow:0 4px 12px rgba(0,0,0,.12)}
 
-/* ---- 2-BIN SEE-SAW DIGITAL TWIN (EXACT SAME HEIGHT AS CAMERA BOX) ---- */
+/* ---- 2-BIN SEE-SAW DIGITAL TWIN ---- */
 #protoBox{margin:0;background:var(--card);border:2px solid var(--line);border-radius:16px;padding:10px 12px;text-align:center;display:flex;flex-direction:column;justify-content:space-between;height:100%;box-shadow:0 4px 12px rgba(0,0,0,.06)}
 .proto-head{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;font-weight:bold;gap:4px}
 .proto-badge{background:var(--ink);color:var(--gold);padding:3px 8px;border-radius:6px;font-family:monospace;font-size:11px;white-space:nowrap}
@@ -164,7 +162,16 @@ canvas{width:100%;height:100%;display:block;object-fit:cover}
 /* ---- EASY INLINE OFFICER LOGIN BOX ---- */
 #officerLoginBox{display:none;background:#fff8e1;border:2px solid var(--gold);border-radius:12px;padding:12px;margin-bottom:12px}
 
-/* ---- TEAM, HIGHLIGHTS & GLOSSARY GRIDS (INSIDE ACCORDIONS) ---- */
+/* ---- CITIZEN REPORT ID TRACKER BOX ---- */
+.track-box{background:#eef6ff;border:1.5px solid #90caf9;border-radius:11px;padding:10px 12px;margin-bottom:12px}
+.track-row{display:flex;gap:6px;margin-top:6px}
+.track-row input{flex:1;padding:8px 10px;border-radius:8px;border:1.5px solid var(--line);font:inherit;font-size:13.5px}
+
+/* ---- PHOTO ZOOM MODAL ---- */
+#photoModal{display:none;position:fixed;inset:0;z-index:99;background:rgba(0,0,0,.85);justify-content:center;align-items:center;padding:16px;flex-direction:column}
+#photoModal img{max-width:95%;max-height:80vh;border-radius:12px;border:3px solid #fff}
+
+/* ---- TEAM, HIGHLIGHTS & GLOSSARY GRIDS ---- */
 .team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 @media(max-width:620px){.team-grid{grid-template-columns:1fr}}
 .member-card{background:#f7fbf9;border:1.5px solid var(--line);border-top:4px solid var(--blue);border-radius:11px;padding:10px;font-size:12.5px}
@@ -178,10 +185,8 @@ canvas{width:100%;height:100%;display:block;object-fit:cover}
 @media(max-width:580px){.glossary-grid{grid-template-columns:1fr}}
 .gloss-item{background:#fff8e1;border:1px solid #ffe082;border-radius:9px;padding:7px 10px;font-size:12px}
 
-/* ---- BACK TO TOP FLOATING BUTTON ---- */
 #backTopBtn{position:fixed;bottom:16px;right:16px;z-index:45;background:var(--ink);color:var(--gold);border:2px solid var(--gold);border-radius:50px;padding:8px 13px;font-size:12px;font-weight:bold;box-shadow:0 4px 12px rgba(0,0,0,.25);cursor:pointer}
 
-/* ---- END GAME, AUDIT & LEADERBOARD ---- */
 #end{display:none;margin:12px 0;background:var(--ink);color:#fff;border-radius:14px;padding:18px;text-align:center}
 #end h2{margin:0 0 6px;color:var(--gold)}
 .foot{margin:12px auto 6px;font-size:12px;color:#456;text-align:center;line-height:1.55}
@@ -268,7 +273,6 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
     <div class="cam-col">
       <div class="stage">
         <canvas id="cv" width="320" height="240"></canvas>
-        <!-- LIVE GAME TARGET OVERLAY INSIDE CAMERA -->
         <div id="camTargetBanner">🎯 Find & Show: 🧴 PLASTIC</div>
         <div class="guide" id="guideBox"></div>
         <div class="cam-tools" id="camTools">
@@ -286,11 +290,10 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
         </div>
         <div class="hold-wrap"><div id="holdBar"></div></div>
       </div>
-      <!-- AI CONFIDENCE ATTACHED DIRECTLY UNDER CAMERA -->
       <div id="probs">🎯 Step 1: Tap "📷 Start AI Camera" above (or test bins on right)</div>
     </div>
 
-    <!-- RIGHT COLUMN: 2-BIN SEE-SAW SMART BIN (EXACT SAME SIZE AS CAMERA BOX) -->
+    <!-- RIGHT COLUMN: 2-BIN SEE-SAW SMART BIN -->
     <div id="protoBox">
       <div class="proto-head">
         <span title="Virtual simulation of our physical Arduino + SG90 See-Saw Smart Bin">⚙️ See-Saw Smart Bin Twin</span>
@@ -320,7 +323,7 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
     </div>
   </div>
 
-  <!-- GAME SCOREBOARD (DIRECTLY UNDER CAMERA & TWIN) -->
+  <!-- GAME SCOREBOARD -->
   <div class="hud" id="hudBox">
     <div>Score<b id="score">0</b></div>
     <div>Streak<b id="streak">0</b></div>
@@ -365,7 +368,7 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
     <p class="note">🔒 <b>Privacy Protected:</b> Only player names and scores are shown publicly.</p>
   </div>
 
-  <!-- SMART WASTE CENSUS & LIVE IMPACT DASHBOARD (PURE COUNTS) -->
+  <!-- SMART WASTE CENSUS & LIVE IMPACT DASHBOARD -->
   <div id="audit">
     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px">
       <h3 style="margin:0;font-size:16px;color:var(--ink)">📊 Smart Waste Census & Live Impact Dashboard</h3>
@@ -375,17 +378,15 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
       </div>
     </div>
 
-    <!-- VISUAL AI -> CENSUS -> ACTION PIPELINE -->
     <div class="flow-pipeline" title="End-to-End Civic Waste Management Flow">
       <div class="flow-step active" id="fl1"><span>📷</span>1. Capture</div>
       <div class="flow-step" id="fl2"><span>🤖</span>2. AI Classify</div>
       <div class="flow-step" id="fl3"><span>📊</span>3. Census Log</div>
       <div class="flow-step" id="fl4"><span>⚙️</span>4. See-Saw Bin</div>
       <div class="flow-step" id="fl5"><span>🚨</span>5. Civic Alert</div>
-      <div class="flow-step" id="fl6"><span>✅</span>6. Resolved</div>
+      <div class="flow-step" id="fl6"><span>✅</span>6. Cleaned</div>
     </div>
 
-    <!-- 4 REAL-TIME IMPACT KPI CARDS (PURE NUMBERS ONLY) -->
     <div class="kpi-grid">
       <div class="kpi-card" style="border-top-color:var(--blue)">
         <small>Overall Waste Count</small>
@@ -405,15 +406,13 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
       <div class="kpi-card" style="border-top-color:var(--coral)">
         <small>Civic Reports Action</small>
         <b id="kpiReports">0</b>
-        <span id="kpiResolved">0 Resolved • 0 Open</span>
+        <span id="kpiResolved">0 Cleaned • 0 Pending</span>
       </div>
     </div>
 
-    <!-- TODAY'S CATEGORY BARS -->
     <div id="auditTotal" style="margin-top:8px"></div>
     <div id="auditBars"></div>
 
-    <!-- HALQA CLEANLINESS COMPETITION -->
     <h4 style="margin:12px 0 4px;font-size:13.5px;color:var(--ink)">🏅 Halqa Civic Participation Leaderboard</h4>
     <div class="civic-mini-grid" id="halqaBreakdown">
       <div class="c-mini"><span>🏛️ UC Tarai</span><b id="hqTarai">0</b></div>
@@ -428,7 +427,6 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
       <button class="alt" id="aPrint" type="button" style="border-color:var(--ink)">🖨️ Print Census Report</button>
     </div>
 
-    <!-- COLLAPSIBLE DASHBOARD DETAILS -->
     <div class="acc-group">
       <details class="acc-item" open>
         <summary><span class="chev">⌄</span> 🧠 Live AI Census & Civic Insights</summary>
@@ -471,12 +469,12 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
       <div style="font-weight:bold;font-size:13.5px;margin-bottom:8px;color:var(--ink)">👮‍♂️ Select Halqa Department & Enter Officer Password:</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
         <select id="loginUserSelect" style="padding:9px;border-radius:8px;border:1.5px solid var(--line);font:inherit;font-size:13px;font-weight:bold">
-          <option value="UC TARAI">🏛️ UC TARAI (Union Council Tarai)</option>
-          <option value="TC GOLARCHI">🏛️ TC GOLARCHI (Town Committee Golarchi)</option>
-          <option value="MC BADIN">🏛️ MC BADIN (Municipal Committee Badin)</option>
-          <option value="GBHSS HAJI JUNEJO">👑 GBHSS HAJI JUNEJO (Super Admin)</option>
+          <option value="UC TARAI">🏛️ Union Council (UC) Tarai</option>
+          <option value="TC GOLARCHI">🏛️ Town Committee (TC) Golarchi</option>
+          <option value="MC BADIN">🏛️ Municipal Committee (MC) Badin</option>
+          <option value="GBHSS HAJI JUNEJO">👑 Super Admin (All Halqas)</option>
         </select>
-        <input type="password" id="loginPassInput" placeholder="Enter Password (e.g. 401020169T)" style="padding:9px;border-radius:8px;border:1.5px solid var(--line);font:inherit;font-size:13.5px">
+        <input type="password" id="loginPassInput" placeholder="Enter Officer Password" style="padding:9px;border-radius:8px;border:1.5px solid var(--line);font:inherit;font-size:13.5px">
       </div>
       <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
         <label style="font-size:12px"><input type="checkbox" id="showPassChk"> 👁️ Show Password</label>
@@ -511,7 +509,7 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
       <div class="c-row">
         <label>1. Select Local Body / Halqa (Safai Ka Idara Chunen):</label>
         <select id="repDept">
-          <option value="UC Tarai">🏛️ Union Council (UC) Tarai (Haji Junejo Tarai)</option>
+          <option value="UC Tarai">🏛️ Union Council (UC) Tarai</option>
           <option value="Town Committee Golarchi">🏛️ Town Committee (TC) Golarchi (S.F. Rahu)</option>
           <option value="Municipal Committee Badin">🏛️ Municipal Committee (MC) Badin</option>
         </select>
@@ -547,28 +545,37 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
       </button>
     </div>
 
+    <!-- CITIZEN REPORT ID LIVE TRACKER -->
+    <div class="track-box">
+      <div style="font-weight:bold;font-size:13px;color:var(--ink)">🔍 Track Your Complaint Status by Report ID (Apni Report ID Se Safai Check Karen):</div>
+      <div class="track-row">
+        <input type="text" id="trackInput" placeholder="Enter Report ID (e.g. Rmw26xbfc8m9bwsd)">
+        <button id="trackBtn" type="button" style="background:var(--blue);padding:8px 14px;font-size:12.5px">Track Status</button>
+      </div>
+      <div id="trackResult" style="margin-top:6px;font-size:13px"></div>
+    </div>
+
     <!-- CITIZEN VERIFIED REPORT RECEIPTS -->
     <div id="myReceiptsBox" style="background:#f4faf8;border:1.5px solid var(--line);border-radius:10px;padding:10px;margin-bottom:10px;display:none">
-      <h4 style="margin:0 0 6px;font-size:13px;color:var(--ink)">🧾 My Submitted Civic Reports (Verified Receipt Tracker)</h4>
+      <h4 style="margin:0 0 6px;font-size:13px;color:var(--ink)">🧾 My Submitted Civic Reports (Tap ID to Track)</h4>
       <div id="myReceiptsList" style="font-size:12.5px"></div>
     </div>
 
     <!-- SECURED MUNICIPAL COMPLAINTS FEED -->
     <div id="secFeedContainer" style="display:none">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
-        <h4 id="feedHeading" style="margin:0;font-size:14px">📋 Live Area Cleanliness Requests</h4>
+        <h4 id="feedHeading" style="margin:0;font-size:14px">📋 Live Area Cleanliness Requests (Tap Photo to Enlarge)</h4>
         <button class="alt" id="repSyncBtn" type="button" style="padding:5px 10px;font-size:11.5px">🔄 Refresh Cloud</button>
       </div>
       <div id="repList" style="margin-top:8px"></div>
     </div>
     <div id="secFeedLocked" style="text-align:center;padding:14px;color:#567;font-size:13px;background:#f4faf8;border-radius:10px;margin-top:10px">
-      🔒 <b>Halqa-Secured Feed:</b> Complaints & citizen photos are protected and visible only to the respective Halqa Officer (UC Tarai, TC Golarchi, or MC Badin). Tap 'Officer Login' above to manage your area.
+      🔒 <b>Halqa-Secured Feed:</b> Citizen photos & complaints are visible to the respective Halqa Officer (UC Tarai, TC Golarchi, or MC Badin). Tap 'Officer Login' above to view photos & mark complaints as Cleaned.
     </div>
   </div>
 
-  <!-- CLEAN COLLAPSIBLE ACCORDION SECTIONS (⌄ ARROW STYLE) -->
+  <!-- CLEAN COLLAPSIBLE ACCORDION SECTIONS -->
   <div class="acc-group" id="infoAccordions">
-    <!-- 1. Problem, Solution & How It Works -->
     <details class="acc-item" id="accProblem">
       <summary><span class="chev">⌄</span> 💡 Problem Statement, Our AI Solution & How It Works</summary>
       <div class="acc-body">
@@ -591,7 +598,6 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
       </div>
     </details>
 
-    <!-- 2. Student Team Roles -->
     <details class="acc-item" id="accTeam">
       <summary><span class="chev">⌄</span> 👥 Student Team Roles (Shameer Ali • Zahid Ali • Farhan)</summary>
       <div class="acc-body">
@@ -615,7 +621,6 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
       </div>
     </details>
 
-    <!-- 3. Specifications, Highlights & Testing Summary -->
     <details class="acc-item" id="accSpecs">
       <summary><span class="chev">⌄</span> 🌟 Specifications, Highlights & Testing Summary</summary>
       <div class="acc-body">
@@ -626,7 +631,7 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
           </div>
           <div class="rub-item">
             <b>2. Reliable See-Saw Sorting</b>
-            Uses a center-pivoted See-Saw flap (`35°` Left for Plastic/Blue Bin, `145°` Right for Paper/Green Bin) so items slide smoothly by gravity.
+            Uses a center-pivoted See-Saw flap (35° Left for Plastic/Blue Bin, 145° Right for Paper/Green Bin) so items slide smoothly by gravity.
           </div>
           <div class="rub-item">
             <b>3. Safe 5V Design & Clean Build</b>
@@ -640,7 +645,6 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
       </div>
     </details>
 
-    <!-- 4. Easy Technical Glossary -->
     <details class="acc-item" id="accGlossary">
       <summary><span class="chev">⌄</span> 📖 Easy Technical Glossary (Asaan Lafzon Mein)</summary>
       <div class="acc-body">
@@ -654,7 +658,7 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
     </details>
   </div>
 
-  <!-- SECRET TEACHER ADMIN PANEL -->
+  <!-- SECRET TEACHER ADMIN PANEL (PROTECTED BY 401020169Admin) -->
   <div id="adminBox">
     <h3>🔒 Teacher Admin Panel (Secured)</h3>
     <p class="note" id="admStatus" style="margin:0 0 6px;font-weight:bold"></p>
@@ -700,6 +704,12 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
   </div>
 </main>
 
+<!-- FULL-SCREEN PHOTO ZOOM MODAL FOR OFFICERS -->
+<div id="photoModal" onclick="this.style.display='none'">
+  <img id="modalImg" src="" alt="Full Size Garbage Report Photo">
+  <button type="button" style="margin-top:12px;background:var(--gold);color:var(--ink)">✖ Close Photo</button>
+</div>
+
 <!-- FLOATING BACK TO TOP BUTTON -->
 <button id="backTopBtn" type="button" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Scroll Back to Top">⬆️ Top</button>
 
@@ -707,22 +717,23 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
 <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8.5/dist/teachablemachine-image.min.js"></script>
 <script>
 /* ========================================================= */
-/* SAAF SINDH AI: WASTE CENSUS - v9.1 (2-BIN NEW MODEL)      */
-/* Model URL: https://teachablemachine.withgoogle.com/models/nIz-d7Xw2/ */
+/* SAAF SINDH AI: WASTE CENSUS - v9.2 (FINAL POLISHED)       */
+/* Model URL: RP91qAZCY (Saved Drive Model)                  */
 /* Student Team: Shameer Ali, Zahid Ali & Farhan             */
 /* Guide Teacher: Ghulam Hussain Memon (BCS - Univ of Sindh) */
 /* ========================================================= */
 
-const MODEL_URL  = "https://teachablemachine.withgoogle.com/models/nIz-d7Xw2/";
+const MODEL_URL  = "https://teachablemachine.withgoogle.com/models/RP91qAZCY/";
 const CLOUD_URL  = "https://script.google.com/macros/s/AKfycbxSl2q2L2PoYqatesWrVIjwR9NJmCNYJzMRx9Om6v2zfYwhpdDLz29NpzFxn0qRhYk1/exec";
 const ADMIN_HASH = "NDAxMDIwMTY5"; // Base64 SEMIS 401020169
+const TEACHER_ADMIN_PASS = "401020169ADMIN"; // Dedicated 5-click Teacher Admin password
 
 // Verified Halqa Officer & Super Admin Accounts
 const OFFICER_ACCOUNTS = [
-  { u: "GBHSS HAJI JUNEJO", p: "401020169HJ", altP: "401020169", role: "SUPER_ADMIN", dept: "ALL", label: "Super Admin (All Halqas)", isSuper: true },
-  { u: "UC TARAI",          p: "401020169T",  altP: "",          role: "OFFICER",     dept: "UC Tarai", label: "Union Council (UC) Tarai", isSuper: false },
-  { u: "TC GOLARCHI",       p: "401020169G",  altP: "",          role: "OFFICER",     dept: "Town Committee Golarchi", label: "Town Committee Golarchi", isSuper: false },
-  { u: "MC BADIN",          p: "401020169B",  altP: "",          role: "OFFICER",     dept: "Municipal Committee Badin", label: "Municipal Committee Badin", isSuper: false }
+  { u: "GBHSS HAJI JUNEJO", p: "401020169HJ", altP: "401020169ADMIN", role: "SUPER_ADMIN", dept: "ALL", label: "Super Admin (All Halqas)", isSuper: true },
+  { u: "UC TARAI",          p: "401020169T",  altP: "",               role: "OFFICER",     dept: "UC Tarai", label: "Union Council (UC) Tarai", isSuper: false },
+  { u: "TC GOLARCHI",       p: "401020169G",  altP: "",               role: "OFFICER",     dept: "Town Committee Golarchi", label: "Town Committee Golarchi", isSuper: false },
+  { u: "MC BADIN",          p: "401020169B",  altP: "",               role: "OFFICER",     dept: "Municipal Committee Badin", label: "Municipal Committee Badin", isSuper: false }
 ];
 
 // 2-Bin See-Saw Configuration (Plastic = Left 35°, Paper = Right 145°)
@@ -750,6 +761,31 @@ function setTask(html) {
     $("task").innerHTML = html;
     lastTaskHtml = html;
   }
+}
+
+function zoomPhoto(src) {
+  $("modalImg").src = src;
+  $("photoModal").style.display = "flex";
+}
+
+function isInvalidPlayerName(name) {
+  const s = String(name || "").trim();
+  if (!s) return true;
+  // Filter out Date-object strings like "Wed Nov 04 2026 00:00:00 GMT+0500..." or banner rows
+  if (/GMT[+-]\d{4}|Standard Time|00:00:00|===|AUDIT\s*\|/i.test(s)) return true;
+  if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return true;
+  return false;
+}
+
+function cleanDateOnly(val) {
+  const s = String(val || "").trim();
+  const m = s.match(/^(\d{4}-\d{2}-\d{2})/);
+  if (m) return m[1];
+  const d = new Date(s);
+  if (!isNaN(d.getTime())) {
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  }
+  return s.replace(/00:00:00.*$/, "").trim();
 }
 
 function updateCamTargetBanner() {
@@ -985,11 +1021,16 @@ function loop(timestamp) {
   requestAnimationFrame(loop);
 }
 
-/* ---- AI Detection ---- */
+/* ---- AI Detection (Strictly Plastic & Paper; Ignores Glass/Empty) ---- */
 function pick(p) {
-  let top = p[0];
-  p.forEach(x => { if (x.probability > top.probability) top = x; });
-  $("probs").textContent = "🎯 Live AI Confidence: " + p.map(x => `${x.className}: ${Math.round(x.probability * 100)}%`).join(" | ");
+  let validProbs = p.filter(x => {
+    const n = x.className.trim().toLowerCase();
+    return !n.includes("glass") && !n.includes("sheesha");
+  });
+  if (!validProbs.length) validProbs = p;
+  let top = validProbs[0];
+  validProbs.forEach(x => { if (x.probability > top.probability) top = x; });
+  $("probs").textContent = "🎯 Live AI Confidence: " + validProbs.map(x => `${x.className}: ${Math.round(x.probability * 100)}%`).join(" | ");
   if (top.probability < MIN_CONF) return null;
   const n = top.className.trim().toLowerCase();
   if (n.includes("empty") || n.includes("nothing") || n.includes("background") || n.includes("none") || n.includes("khali")) return null;
@@ -1261,13 +1302,14 @@ function parseLegacySheetRows(rows) {
     const nameStr = String(r.n || "");
     if (nameStr.startsWith("AUDIT | ")) {
       const parts = nameStr.split(" | ");
-      const dt = (parts[1] || today()).trim();
+      const dt = cleanDateOnly(parts[1] || today());
       const cls = (parts[2] || "Plastic").trim();
       if (cls === "Plastic" || cls === "Paper") {
         if (!audit[dt]) audit[dt] = { Plastic: 0, Paper: 0 };
         audit[dt][cls] = Math.max(0, (audit[dt][cls] || 0) + (Number(r.s) || 0));
       }
-    } else if (nameStr && !nameStr.includes("=== DATE:")) {
+    } else if (!isInvalidPlayerName(nameStr)) {
+      r.d = cleanDateOnly(r.d);
       players.push(r);
     }
   });
@@ -1341,7 +1383,8 @@ async function performLogin(usernameInput, passwordInput) {
       });
       return true;
     }
-    alert("❌ Incorrect Password! Please check your password:\n• UC TARAI: 401020169T\n• TC GOLARCHI: 401020169G\n• MC BADIN: 401020169B\n• SUPER ADMIN: 401020169HJ (or 401020169)");
+    // Clean popup without exposing any passwords!
+    alert("❌ Wrong Password! Please enter the correct password for the selected department.");
     return false;
   }
 }
@@ -1352,7 +1395,10 @@ async function loadPrivateData() {
     try {
       const data = await apiPost({ action: "admin_data", token: SESSION.token });
       REPORTS = Array.isArray(data.reports) ? data.reports : REPORTS;
-      if (SESSION.role === "SUPER_ADMIN" && Array.isArray(data.players)) LB = data.players;
+      try { localStorage.setItem("sdg_reports", JSON.stringify(REPORTS)); } catch (e) {}
+      if (SESSION.role === "SUPER_ADMIN" && Array.isArray(data.players)) {
+        LB = data.players.filter(r => !isInvalidPlayerName(r.n));
+      }
       if (data.audit) AUD = data.audit;
       if (data.civicStats) CIVIC_STATS = data.civicStats;
       saveAudit();
@@ -1368,7 +1414,7 @@ async function loadPrivateData() {
       const parsed = parseLegacySheetRows(raw);
       AUD = parsed.audit || AUD;
       CIVIC_STATS = parsed.civicStats || CIVIC_STATS;
-      if (SESSION.role === "SUPER_ADMIN") LB = parsed.players || LB;
+      if (SESSION.role === "SUPER_ADMIN") LB = (parsed.players || LB).filter(r => !isInvalidPlayerName(r.n));
       saveAudit();
       renderAudit();
     }
@@ -1428,7 +1474,9 @@ async function syncAuditFromCloud() {
     await flushPendingAudit();
     const data = await fetchPublicData();
     AUD = data.audit || AUD;
-    LB = data.players || LB;
+    if (Array.isArray(data.players)) {
+      LB = data.players.filter(r => !isInvalidPlayerName(r.n));
+    }
     if (data.civicStats) CIVIC_STATS = data.civicStats;
     saveAudit();
     renderAudit();
@@ -1448,7 +1496,7 @@ setInterval(() => {
   if (mode === "civic" && SESSION) loadPrivateData().catch(() => {});
 }, 30000);
 
-/* ---- Civic Garbage Reporting & Easy Officer Login UI ---- */
+/* ---- Civic Garbage Reporting, Report ID Tracker & Officer Login ---- */
 $("showPassChk").onchange = e => {
   $("loginPassInput").type = e.target.checked ? "text" : "password";
 };
@@ -1487,6 +1535,49 @@ $("loginSubmitBtn").onclick = async () => {
   }
 };
 
+// Track Report Status by ID
+async function trackReportById(rawId) {
+  const idClean = String(rawId || "").replace(/^#/, "").trim();
+  const resBox = $("trackResult");
+  if (!idClean) {
+    resBox.innerHTML = `<span style="color:var(--coral)">⚠️ Please enter a Report ID (e.g. Rmw26xbfc8m9bwsd)</span>`;
+    return;
+  }
+  resBox.innerHTML = `⏳ Checking live status for <b>#${escapeHtml(idClean)}</b>...`;
+
+  // 1. Check cloud API if supported
+  try {
+    const resp = await fetch(`${CLOUD_URL}?action=track_report&id=${encodeURIComponent(idClean)}&t=${Date.now()}`);
+    const json = await resp.json();
+    if (json && json.status === "ok" && json.data) {
+      const r = json.data;
+      const isClean = /clean|resolv/i.test(r.status || "");
+      resBox.innerHTML = `<div style="background:#fff;border:1.5px solid var(--line);border-left:4px solid ${isClean ? "var(--green)" : "var(--gold)"};padding:8px 10px;border-radius:8px">
+        <b>Receipt #${escapeHtml(r.id)}</b> • 🏛️ ${escapeHtml(r.dept)}<br>
+        📍 Area: <b>${escapeHtml(r.area)}</b> (${escapeHtml(cleanDateOnly(r.d))})<br>
+        Status: <b style="color:${isClean ? "var(--green)" : "#e65100"}">${isClean ? "✅ CLEANED / SAAF HO GAYA (" + escapeHtml(r.status) + ")" : "⏳ " + escapeHtml(r.status) + " (Action in Progress)"}</b>
+      </div>`;
+      return;
+    }
+  } catch (e) {}
+
+  // 2. Check loaded reports or local receipts
+  const found = REPORTS.find(x => String(x.id).toLowerCase() === idClean.toLowerCase()) ||
+                MY_RECEIPTS.find(x => String(x.id).toLowerCase() === idClean.toLowerCase());
+  if (found) {
+    const isClean = /clean|resolv/i.test(found.status || "");
+    resBox.innerHTML = `<div style="background:#fff;border:1.5px solid var(--line);border-left:4px solid ${isClean ? "var(--green)" : "var(--gold)"};padding:8px 10px;border-radius:8px">
+      <b>Receipt #${escapeHtml(found.id)}</b> • 🏛️ ${escapeHtml(found.dept)}<br>
+      📍 Area: <b>${escapeHtml(found.area)}</b><br>
+      Status: <b style="color:${isClean ? "var(--green)" : "#e65100"}">${isClean ? "✅ CLEANED (" + escapeHtml(found.status) + ")" : "⏳ " + escapeHtml(found.status || "Pending")}</b>
+    </div>`;
+  } else {
+    resBox.innerHTML = `<span style="color:var(--coral)">❌ No report found with ID <b>#${escapeHtml(idClean)}</b>. Please check the ID and try again.</span>`;
+  }
+}
+
+$("trackBtn").onclick = () => trackReportById($("trackInput").value);
+
 function renderMyReceipts() {
   const box = $("myReceiptsBox");
   const list = $("myReceiptsList");
@@ -1497,10 +1588,11 @@ function renderMyReceipts() {
   box.style.display = "block";
   list.innerHTML = MY_RECEIPTS.slice().reverse().slice(0, 4).map(r => {
     const matched = REPORTS.find(x => x.id === r.id);
-    const st = matched ? matched.status : r.status || "Submitted to Cloud";
-    return `<div style="padding:4px 0;border-bottom:1px dashed var(--line);display:flex;justify-content:space-between">
-      <span><b>#${escapeHtml(r.id)}</b> • ${escapeHtml(r.dept)} (${escapeHtml(r.area)})</span>
-      <b style="color:var(--green)">✅ ${escapeHtml(st)}</b>
+    const st = matched ? matched.status : r.status || "Pending";
+    const isClean = /clean|resolv/i.test(st);
+    return `<div style="padding:5px 0;border-bottom:1px dashed var(--line);display:flex;justify-content:space-between;align-items:center">
+      <span style="cursor:pointer;text-decoration:underline" onclick="document.getElementById('trackInput').value='${escapeHtml(r.id)}';trackReportById('${escapeHtml(r.id)}')"><b>#${escapeHtml(r.id)}</b> • ${escapeHtml(r.dept)} (${escapeHtml(r.area)})</span>
+      <b style="color:${isClean ? "var(--green)" : "#e65100"}">${isClean ? "✅ " : "⏳ "}${escapeHtml(st)}</b>
     </div>`;
   }).join("");
 }
@@ -1623,7 +1715,7 @@ $("sendReportBtn").onclick = async () => {
     highlightFlow(5);
     beep([523, 659, 784]);
     await syncAuditFromCloud();
-    alert(`✅ Report submitted successfully!\nVerified Receipt ID: #${finalId}`);
+    alert(`✅ Report submitted successfully!\nYour Tracking Receipt ID is: #${finalId}`);
   } catch (err) {
     REPORTS.unshift(reportObj);
     try { localStorage.setItem("sdg_reports", JSON.stringify(REPORTS)); } catch (e) {}
@@ -1631,7 +1723,7 @@ $("sendReportBtn").onclick = async () => {
     try { localStorage.setItem("sdg_my_receipts", JSON.stringify(MY_RECEIPTS)); } catch (e) {}
     renderMyReceipts();
     renderReports();
-    alert(`✅ Report recorded (#${id})!`);
+    alert(`✅ Report recorded!\nYour Tracking Receipt ID is: #${id}`);
   } finally {
     btn.disabled = false;
     btn.textContent = "📤 Send Photo & Alert to Selected Authority";
@@ -1653,8 +1745,8 @@ function renderReports() {
   const allowedFilter = getAllowedFilter();
   const list = REPORTS.filter(r => allowedFilter === "ALL" || r.dept === allowedFilter);
   $("feedHeading").textContent = allowedFilter === "ALL"
-    ? "📋 All Halqas Cleanliness Requests (Super Admin)"
-    : `📋 ${allowedFilter} — Dedicated Cleanliness Requests`;
+    ? "📋 All Halqas Cleanliness Requests (Tap Photo to Enlarge)"
+    : `📋 ${allowedFilter} — Cleanliness Requests (Tap Photo to Enlarge)`;
   if (!list.length) {
     box.innerHTML = `<p class="note" style="text-align:center;padding:12px">No complaints found for <b>${escapeHtml(allowedFilter)}</b>.</p>`;
     return;
@@ -1663,22 +1755,23 @@ function renderReports() {
   list.forEach(r => {
     const card = document.createElement("div");
     card.className = "rep-card";
-    const safePhoto = typeof r.photo === "string" && /^data:image\/(jpeg|png|webp);base64,/i.test(r.photo)
-      ? `<img src="${r.photo}" alt="Complaint photo" style="width:82px;height:62px;object-fit:cover;border-radius:8px;border:1.5px solid var(--ink)">`
-      : `<div style="width:82px;height:62px;border-radius:8px;background:#e3efec;display:flex;align-items:center;justify-content:center;font-size:22px">🗑️</div>`;
+    const hasPhoto = typeof r.photo === "string" && /^data:image\/(jpeg|png|webp);base64,/i.test(r.photo);
+    const safePhoto = hasPhoto
+      ? `<img src="${r.photo}" title="Tap to view full photo" onclick="zoomPhoto(this.src)" alt="Complaint photo" style="width:86px;height:66px;object-fit:cover;border-radius:8px;border:2px solid var(--ink);cursor:zoom-in">`
+      : `<div style="width:86px;height:66px;border-radius:8px;background:#e3efec;display:flex;align-items:center;justify-content:center;font-size:22px">🗑️</div>`;
     const gps = /^https:\/\/(maps\.google\.com|www\.google\.com\/maps)\//i.test(r.gps || "")
       ? ` • <a href="${escapeHtml(r.gps)}" rel="noopener" target="_blank" style="color:var(--blue);font-weight:bold">📍 Map</a>` : "";
     const status = String(r.status || "Pending");
-    const isResolved = status === "Resolved" || status.toLowerCase().includes("clean");
+    const isResolved = /resolv|clean/i.test(status);
     const statusClass = isResolved ? "st-clean" : "st-pend";
-    const statusBadge = `<span class="rep-status ${statusClass}">${escapeHtml(status)}</span>`;
+    const statusBadge = `<span class="rep-status ${statusClass}">${isResolved ? "✅ " : "⏳ "}${escapeHtml(status)}</span>`;
     card.innerHTML = `
       ${safePhoto}
       <div class="rep-info">
         <span class="dept-tag">🏛️ ${escapeHtml(r.dept || "UC Tarai")}</span><br>
         <b>📍 ${escapeHtml(r.area)}</b> <small style="color:#456">(#${escapeHtml(r.id)})</small><br>
         <span>${escapeHtml(r.waste)}</span>${gps}<br>
-        <small style="color:#567">👤 ${escapeHtml(r.citizen)} • 📅 ${escapeHtml(r.d)}</small>
+        <small style="color:#567">👤 ${escapeHtml(r.citizen)} • 📅 ${escapeHtml(cleanDateOnly(r.d))}</small>
       </div>
       <div style="text-align:right">
         ${statusBadge}
@@ -1686,14 +1779,13 @@ function renderReports() {
       </div>`;
     if (activeOfficer.isSuper || r.dept === activeOfficer.filter) {
       const action = card.querySelector(".off-actions");
-      const statuses = ["Pending", "Assigned", "Cleaning in Progress", "Resolved"];
-      const index = statuses.indexOf(status);
-      const nextStatus = isResolved ? "Pending" : (index < 0 ? "Resolved" : statuses[index + 1]);
+      const cleanedLabel = `Cleaned by ${r.dept || activeOfficer.label}`;
+      const nextStatus = isResolved ? "Pending" : cleanedLabel;
       const button = document.createElement("button");
       button.type = "button";
-      button.style.padding = "5px 10px";
+      button.style.padding = "6px 11px";
       button.style.fontSize = "11.5px";
-      button.textContent = isResolved ? "↩️ Reopen" : `✅ Mark: ${nextStatus}`;
+      button.textContent = isResolved ? "↩️ Mark Pending" : "✅ Mark as Cleaned";
       button.className = isResolved ? "alt" : "";
       if (!isResolved) button.style.background = "var(--green)";
       button.onclick = () => toggleReportStatus(r, nextStatus);
@@ -1711,7 +1803,7 @@ async function toggleReportStatus(report, newStatus) {
   }
   report.status = newStatus;
   try { localStorage.setItem("sdg_reports", JSON.stringify(REPORTS)); } catch (e) {}
-  if (newStatus === "Resolved") highlightFlow(6);
+  if (/resolv|clean/i.test(newStatus)) highlightFlow(6);
   renderReports();
   try {
     if (SESSION.token && SESSION.token !== "local_verified_token") {
@@ -1726,7 +1818,7 @@ async function toggleReportStatus(report, newStatus) {
 async function showOfficerPortal() {
   if (!SESSION || !activeOfficer) return;
   await loadPrivateData();
-  $("officerTitle").innerHTML = `👮‍♂️ <b>${escapeHtml(activeOfficer.label)}</b> (Jurisdiction Locked)`;
+  $("officerTitle").innerHTML = `👮‍♂️ <b>${escapeHtml(activeOfficer.label)}</b> (Verified)`;
   $("offFilter").value = activeOfficer.isSuper ? "ALL" : activeOfficer.filter;
   $("offFilter").style.display = activeOfficer.isSuper ? "inline-block" : "none";
   $("officerBar").style.display = "flex";
@@ -1744,7 +1836,7 @@ $("offCsvBtn").onclick = () => {
   if (!activeOfficer) return;
   const list = REPORTS.filter(r => activeOfficer.isSuper || r.dept === activeOfficer.filter);
   const rows = [["Report_ID","Halqa_Department","Area","Waste_Type","Citizen_Info","GPS_Map","Status","Date"]];
-  list.forEach(r => rows.push([r.id,r.dept,r.area,r.waste,r.citizen,r.gps,r.status,r.d]));
+  list.forEach(r => rows.push([r.id,r.dept,r.area,r.waste,r.citizen,r.gps,r.status,cleanDateOnly(r.d)]));
   downloadCsv_(rows, `${activeOfficer.u.toLowerCase().replace(/\s+/g, "_")}_reports.csv`);
 };
 
@@ -1814,7 +1906,7 @@ function renderAudit() {
 
   const cs = CIVIC_STATS || { total: 0, pending: 0, inProgress: 0, resolved: 0, byDept: {} };
   $("kpiReports").textContent = (cs.total || 0).toLocaleString();
-  $("kpiResolved").textContent = `${cs.resolved || 0} Resolved • ${(cs.pending || 0) + (cs.inProgress || 0)} Open`;
+  $("kpiResolved").textContent = `${cs.resolved || 0} Cleaned • ${(cs.pending || 0) + (cs.inProgress || 0)} Pending`;
 
   if (cs.resolved > 0) highlightFlow(6);
   else if (cs.total > 0) highlightFlow(5);
@@ -1838,7 +1930,7 @@ function renderAudit() {
     const hotspotStr = cs.topArea
       ? `Area <b>"${escapeHtml(cs.topArea)}"</b> (${cs.topAreaCount} report${cs.topAreaCount > 1 ? "s" : ""}) under <b>${escapeHtml(cs.topDept || "Local Govt")}</b> shows the highest reported concentration.`
       : `<b>${escapeHtml(cs.topDept || "UC Tarai")}</b> currently leads in reported civic activity.`;
-    insights.push(`<b>Civic Hotspot & Action:</b> Out of <b>${cs.total}</b> civic reports, <b>${cs.resolved} (${resRate}%)</b> are resolved and <b>${cs.inProgress || 0}</b> are in progress. ${hotspotStr}`);
+    insights.push(`<b>Civic Hotspot & Action:</b> Out of <b>${cs.total}</b> civic reports, <b>${cs.resolved} (${resRate}%)</b> are cleaned/resolved. ${hotspotStr}`);
   } else {
     insights.push(`<b>Civic Reporting Active:</b> Citizens can submit geotagged waste alerts to <b>UC Tarai</b>, <b>TC Golarchi</b>, and <b>MC Badin</b> without signup.`);
   }
@@ -1862,7 +1954,8 @@ function renderAudit() {
   hist.innerHTML = dates.map(dt => {
     const row = AUD[dt] || {};
     const pl = Number(row.Plastic) || 0, pa = Number(row.Paper) || 0;
-    return `<tr><td><b>${dt === today() ? `${dt} (Today)` : dt}</b></td><td>${pl}</td><td>${pa}</td><td><b>${pl + pa}</b></td></tr>`;
+    const cleanDt = cleanDateOnly(dt);
+    return `<tr><td><b>${cleanDt === today() ? `${cleanDt} (Today)` : cleanDt}</b></td><td>${pl}</td><td>${pa}</td><td><b>${pl + pa}</b></td></tr>`;
   }).join("");
   if (foot) foot.innerHTML = `<tr><td>📊 Overall Total</td><td>${grandPlastic}</td><td>${grandPaper}</td><td><b>${grandTotal}</b></td></tr>`;
 }
@@ -1877,7 +1970,7 @@ function summary() {
   });
   const allTime = gPl + gPa;
   const cs = CIVIC_STATS || { total: 0, resolved: 0 };
-  return `Saaf Sindh AI Census (${today()}): ${todayTotal} items today | ${allTime} total items (Plastic ${gPl}, Paper ${gPa}) | Civic Reports: ${cs.total || 0} total (${cs.resolved || 0} resolved).`;
+  return `Saaf Sindh AI Census (${today()}): ${todayTotal} items today | ${allTime} total items (Plastic ${gPl}, Paper ${gPa}) | Civic Reports: ${cs.total || 0} total (${cs.resolved || 0} cleaned).`;
 }
 
 $("aSync").onclick = () => syncAuditFromCloud();
@@ -1925,21 +2018,23 @@ $("aCsv").onclick = () => {
     const pl = Number(AUD[dt] && AUD[dt].Plastic) || 0;
     const pa = Number(AUD[dt] && AUD[dt].Paper) || 0;
     gPl += pl; gPa += pa;
-    rows.push([dt, pl, pa, pl + pa]);
+    rows.push([cleanDateOnly(dt), pl, pa, pl + pa]);
   });
   rows.push(["OVERALL_TOTAL", gPl, gPa, gPl + gPa]);
   downloadCsv_(rows, "saaf_sindh_daywise_waste_audit.csv");
 };
 
-/* ---- Public Leaderboard: Tie-Aware Top 3 Prize Eligibility ---- */
+/* ---- Public Leaderboard: Filters Out Any Date-String Rows & Supports Ties ---- */
 async function renderLb() {
   const ol = $("lbList");
   try {
     const data = await fetchPublicData();
-    LB = Array.isArray(data.players) ? data.players : LB;
+    if (Array.isArray(data.players)) {
+      LB = data.players.filter(r => !isInvalidPlayerName(r.n));
+    }
     if (data.civicStats) CIVIC_STATS = data.civicStats;
   } catch (e) {}
-  const sorted = LB.slice().sort((a, b) => Number(b.s) - Number(a.s));
+  const sorted = LB.filter(r => !isInvalidPlayerName(r.n)).slice().sort((a, b) => Number(b.s) - Number(a.s));
   ol.innerHTML = "";
   if (!sorted.length) {
     const li = document.createElement("li");
@@ -1960,21 +2055,21 @@ async function renderLb() {
 async function renderAdmin() {
   const tb = $("adminTable");
   if (!SESSION || SESSION.role !== "SUPER_ADMIN") {
-    $("admStatus").textContent = "🔒 Super Admin login is required.";
+    $("admStatus").textContent = "🔒 Teacher Admin password is required.";
     tb.innerHTML = `<tr><td colspan="5" style="text-align:center">Not authorized</td></tr>`;
     return;
   }
   $("admStatus").textContent = "☁️ Loading private records from Google Sheets...";
   try {
     const data = await loadPrivateData();
-    const players = Array.isArray(data.players) ? data.players : LB;
+    const players = (Array.isArray(data.players) ? data.players : LB).filter(r => !isInvalidPlayerName(r.n));
     tb.innerHTML = "";
     if (!players.length) {
       tb.innerHTML = `<tr><td colspan="5" style="text-align:center">No player records found.</td></tr>`;
     } else {
       players.slice().sort((a, b) => Number(b.s) - Number(a.s)).forEach((r, i) => {
         const tr = document.createElement("tr");
-        tr.innerHTML = `<td>${i + 1}</td><td><b>${escapeHtml(r.n)}</b></td><td>${Number(r.s) || 0}</td><td>${escapeHtml(r.ph || "—")}</td><td>${escapeHtml(r.d || "")}</td>`;
+        tr.innerHTML = `<td>${i + 1}</td><td><b>${escapeHtml(r.n)}</b></td><td>${Number(r.s) || 0}</td><td>${escapeHtml(r.ph || "—")}</td><td>${escapeHtml(cleanDateOnly(r.d))}</td>`;
         tb.appendChild(tr);
       });
     }
@@ -2005,17 +2100,19 @@ $("lbSave").onclick = async () => {
   btn.textContent = "💾 Save Score to Cloud";
   $("lbEntry").style.display = "none";
   await renderLb();
-  alert("✅ Score saved to Google Sheet! Mobile numbers stay private for Super Admin only.");
+  alert("✅ Score saved to Google Sheet! Mobile numbers stay private for Teacher Admin only.");
 };
 
+/* ---- 5-Click Teacher Admin Panel: ALWAYS Requires 401020169Admin ---- */
 function openAdmin() {
   (async () => {
-    if (!SESSION || SESSION.role !== "SUPER_ADMIN") {
-      const pinOrPass = prompt("🔒 Teacher Admin Panel\nEnter School SEMIS Code (401020169) OR Super Admin Password (401020169HJ):");
-      if (pinOrPass === null) return;
-      const ok = await performLogin("GBHSS HAJI JUNEJO", pinOrPass.trim());
-      if (!ok) return;
+    const passInput = prompt("🔒 Teacher Admin Panel\nEnter Admin Password:");
+    if (passInput === null) return;
+    if (passInput.trim().toUpperCase() !== TEACHER_ADMIN_PASS) {
+      alert("❌ Wrong Admin Password!");
+      return;
     }
+    await performLogin("GBHSS HAJI JUNEJO", "401020169HJ");
     $("adminBox").style.display = "block";
     await renderAdmin();
     $("adminBox").scrollIntoView({ behavior: "smooth" });
@@ -2058,20 +2155,20 @@ function downloadCsv_(rows, filename) {
 $("admCsv").onclick = () => {
   if (!SESSION || SESSION.role !== "SUPER_ADMIN") return;
   const rows = [["Rank","Name","Score","Mobile_Number","Date"]];
-  LB.slice().sort((a, b) => Number(b.s) - Number(a.s)).forEach((r, i) => rows.push([i + 1, r.n, r.s, r.ph || "", r.d || ""]));
+  LB.filter(r => !isInvalidPlayerName(r.n)).slice().sort((a, b) => Number(b.s) - Number(a.s)).forEach((r, i) => rows.push([i + 1, r.n, r.s, r.ph || "", cleanDateOnly(r.d)]));
   downloadCsv_(rows, "saaf_sindh_players_contacts.csv");
 };
 
 $("admCopy").onclick = () => {
   if (!SESSION || SESSION.role !== "SUPER_ADMIN") return;
-  const txt = LB.slice().sort((a, b) => Number(b.s) - Number(a.s))
-    .map((r, i) => `${i + 1}. ${r.n} | Score: ${r.s} | Phone: ${r.ph || "N/A"} (${r.d})`).join("\n") || "No records.";
+  const txt = LB.filter(r => !isInvalidPlayerName(r.n)).slice().sort((a, b) => Number(b.s) - Number(a.s))
+    .map((r, i) => `${i + 1}. ${r.n} | Score: ${r.s} | Phone: ${r.ph || "N/A"} (${cleanDateOnly(r.d)})`).join("\n") || "No records.";
   if (navigator.clipboard) navigator.clipboard.writeText(txt).then(() => alert("Private player records copied."));
   else prompt("Copy records:", txt);
 };
 
 $("admClear").onclick = async () => {
-  if (!SESSION || SESSION.role !== "SUPER_ADMIN") { alert("Super Admin login is required."); return; }
+  if (!SESSION || SESSION.role !== "SUPER_ADMIN") { alert("Teacher Admin login is required."); return; }
   if (!confirm("Delete ALL player scores and phone numbers from the Game_Scores sheet? This cannot be undone.")) return;
   try {
     await apiPost({ action: "clear_scores", token: SESSION.token });
