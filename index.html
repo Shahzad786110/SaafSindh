@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Saaf Sindh AI v9.5 — Civic Waste Portal & Smart Bin</title>
+<title>Saaf Sindh AI v9.6 — Civic Waste Portal & Smart Bin</title>
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
 <style>
@@ -21,7 +21,7 @@
 * { box-sizing: border-box; font-family: "Segoe UI", Roboto, Arial, sans-serif; }
 body { margin: 0; background: var(--bg); color: var(--ink); padding-bottom: 45px; }
 
-/* ---- 1. HEADER WITH PREVIOUS VERSION TEAM & MENTOR BADGES ---- */
+/* ---- 1. HEADER WITH STUDENT & MENTOR BADGES (5-CLICK ADMIN LOGIN) ---- */
 .app-header {
   background: linear-gradient(135deg, #0b1d2e 0%, #153848 100%);
   color: #fff;
@@ -110,7 +110,7 @@ body { margin: 0; background: var(--bg); color: var(--ink); padding-bottom: 45px
   .c-chip { flex: 1; text-align: center; font-size: 10.5px; padding: 3px 4px; }
 }
 
-/* ---- 3. CLEAN 4-TAB NAVIGATION (NO STEP 1/2/3/4 TEXT) ---- */
+/* ---- 3. CLEAN 4-TAB NAVIGATION ---- */
 .nav-grid {
   max-width: 920px;
   margin: 6px auto 12px;
@@ -215,13 +215,73 @@ button.btn:active { transform: scale(0.98); }
 .btn-gold  { background: linear-gradient(135deg, #f9ab00, #f57c00); color: var(--ink); }
 .btn-dark  { background: #263238; color: #fff; }
 
-/* ---- 3 AI PROBABILITY BARS ---- */
+/* ---- 3 AI PROBABILITY BARS & 0.80s HOLD PROGRESS BAR ---- */
 .prob-box { margin-top: 10px; background: #f4faf8; padding: 10px; border-radius: 10px; border: 1.5px solid var(--line); }
 .prob-row { margin-bottom: 7px; }
 .prob-row:last-child { margin-bottom: 0; }
 .prob-head { display: flex; justify-content: space-between; font-size: 12px; font-weight: 800; margin-bottom: 3px; }
 .prob-track { height: 14px; background: #e0ece9; border-radius: 8px; overflow: hidden; }
-.prob-fill { height: 100%; width: 0%; transition: width 0.2s; }
+.prob-fill { height: 100%; width: 0%; transition: width 0.15s; }
+
+.hold-meter-wrap {
+  margin-top: 8px;
+  background: #e0f2f1;
+  border: 1.5px solid #80cbc4;
+  border-radius: 8px;
+  padding: 5px 8px;
+}
+.hold-meter-head {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11.5px;
+  font-weight: 800;
+  color: #004d40;
+  margin-bottom: 3px;
+}
+.hold-meter-bar {
+  height: 10px;
+  background: #b2dfdb;
+  border-radius: 6px;
+  overflow: hidden;
+}
+.hold-meter-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #00897b, #f9ab00);
+  transition: width 0.08s linear;
+}
+
+/* ---- GAME TARGET BANNER & END-OF-GAME SAVE FORM ---- */
+.target-banner {
+  margin-top: 8px;
+  padding: 12px;
+  border-radius: 12px;
+  text-align: center;
+  font-weight: 900;
+  font-size: 18px;
+  border: 2.5px solid var(--line);
+  background: #f4faf8;
+  transition: transform 0.2s, background 0.2s;
+}
+.target-plastic {
+  background: #e1f5fe;
+  border-color: #0288d1;
+  color: #01579b;
+}
+.target-paper {
+  background: #fce4ec;
+  border-color: #d81b60;
+  color: #880e4f;
+}
+.end-save-box {
+  display: none;
+  margin-top: 10px;
+  background: #e8f5e9;
+  border: 2px solid var(--green);
+  border-radius: 12px;
+  padding: 12px;
+  animation: fadeIn 0.25s ease;
+}
 
 /* ---- COMPACT DIGITAL TWIN ---- */
 .seesaw-stage {
@@ -244,7 +304,7 @@ button.btn:active { transform: scale(0.98); }
 .st-pending { background: #fff3e0; color: #e65100; border: 1px solid #ffb74d; }
 .st-cleaned { background: #e8f5e9; color: #1b5e20; border: 1px solid #81c784; }
 
-/* ---- COLLAPSIBLE BOTTOM ARROW (ABOUT PROJECT & HARDWARE) ---- */
+/* ---- COLLAPSIBLE BOTTOM ARROW (ABOUT PROJECT ONLY) ---- */
 .about-details {
   max-width: 920px;
   margin: 14px auto 0;
@@ -294,13 +354,13 @@ button.btn:active { transform: scale(0.98); }
 </head>
 <body>
 
-<!-- 1. TOP HEADER (5-CLICK ADMIN LOCK + PREVIOUS VERSION STUDENT & MENTOR FORMAT) -->
+<!-- 1. TOP HEADER (5-CLICK ADMIN LOCK + STUDENTS & MENTOR BADGES) -->
 <header class="app-header">
   <h1 id="appTitle" onclick="handleTitleClick()">♻️ Saaf Sindh AI — Smart Waste &amp; Civic Portal</h1>
   <div class="school-line">🏫 GBHSS Haji Junejo Tarai (Badin) &nbsp;|&nbsp; SEMIS Code: 401020169 &nbsp;|&nbsp; Sindh STREAM Festival 2026–27</div>
   <div class="team-badges">
     <span class="t-pill">👦 <b>Students:</b> Shameer Ali • Zahid Ali • Farhan</span>
-    <span class="t-pill">👨‍🏫 <b>Guide Mentor:</b> Ghulam Hussain Memon (BCS — University of Sindh, Laar Campus Badin)</span>
+    <span class="t-pill">👨‍🏫 <b>Mentor:</b> Ghulam Hussain Memon (BCS — University of Sindh, Laar Campus Badin)</span>
   </div>
 </header>
 
@@ -316,7 +376,7 @@ button.btn:active { transform: scale(0.98); }
   </div>
 </div>
 
-<!-- 3. NAVIGATION BAR (NO STEP NUMBERS) -->
+<!-- 3. NAVIGATION BAR -->
 <nav class="nav-grid">
   <div class="nav-tab active" onclick="switchTab('civic', this)">
     <span class="icon">🚨</span>
@@ -375,7 +435,6 @@ button.btn:active { transform: scale(0.98); }
           <button type="button" class="btn btn-blue" style="margin:0;" onclick="openReportCamera()">📷 Open Camera</button>
           <button type="button" class="btn btn-dark" style="margin:0;" onclick="document.getElementById('repFileInput').click()">📁 Select File / Gallery</button>
         </div>
-        <!-- Standard file input without capture attribute so BOTH PC & Mobile allow file/gallery selection -->
         <input type="file" id="repFileInput" accept="image/*" style="display:none;" onchange="previewReportPhoto(this)">
 
         <!-- Live Camera Box for Civic Report -->
@@ -412,20 +471,19 @@ button.btn:active { transform: scale(0.98); }
         <div class="card" style="border-top: 5px solid var(--green);">
           <h2>
             <span>📋 UC / TC / MC Complaints</span>
-            <button type="button" onclick="toggleOfficerBox()" style="background:#e3efec;border:1px solid var(--line);padding:4px 9px;border-radius:8px;font-size:11.5px;font-weight:800;cursor:pointer;">👮 Officer / Super Admin Login</button>
+            <button type="button" onclick="toggleOfficerBox()" style="background:#e3efec;border:1px solid var(--line);padding:4px 9px;border-radius:8px;font-size:11.5px;font-weight:800;cursor:pointer;">👮 OfficerLogin</button>
           </h2>
 
           <!-- Officer & Super Admin Login Box -->
           <div id="officerBox" style="display:none;margin-bottom:10px;background:#f4faf8;padding:10px;border-radius:10px;border:1.5px solid var(--line);">
-            <label style="margin-top:0;">Select Officer Halqa or Super Admin:</label>
+            <label style="margin-top:0;">Select Officer Halqa (UC / TC / MC):</label>
             <div style="display:flex;gap:6px;flex-wrap:wrap;">
               <select id="offHalqa" style="flex:1;min-width:150px;">
-                <option value="UC Tarai">UC Tarai Officer</option>
-                <option value="TC Golarchi">TC Golarchi Officer</option>
-                <option value="MC Badin">MC Badin Officer</option>
-                <option value="SUPER_ADMIN">👑 Super Admin (All Halqas)</option>
+                <option value="UC Tarai">Union Council (UC) Tarai</option>
+                <option value="TC Golarchi">Town Committee (TC) Golarchi</option>
+                <option value="MC Badin">Municipal Committee (MC) Badin</option>
               </select>
-              <input type="password" id="offPass" placeholder="Enter Password" style="flex:1;min-width:120px;">
+              <input type="password" id="offPass" placeholder="Officer Password" style="flex:1;min-width:120px;">
               <button type="button" class="btn btn-green" style="width:auto;margin:0;" onclick="officerLogin()">Login</button>
             </div>
             <div id="offMsg" style="font-size:11.5px;margin-top:5px;font-weight:700;"></div>
@@ -496,11 +554,11 @@ button.btn:active { transform: scale(0.98); }
   </section>
 
   <!-- ================================================================= -->
-  <!-- TAB 3: 🤖 LEARN MODE (3 AI BARS + SIDE-BY-SIDE DIGITAL TWIN)      -->
+  <!-- TAB 3: 🤖 LEARN MODE (3 AI BARS + 0.80s HOLD + DIGITAL TWIN)      -->
   <!-- ================================================================= -->
   <section id="tab-learn" class="tab-panel">
     <div class="learn-grid">
-      <!-- Left: AI Camera with Front/Back Switch + 3 Live Bars -->
+      <!-- Left: AI Camera with Front/Back Switch + 3 Live Bars + 0.80s Hold -->
       <div class="card" style="border-top: 5px solid var(--skyblue);">
         <h2>
           <span>📷 AI Waste Scanner (`RP91qAZCY`)</span>
@@ -517,6 +575,17 @@ button.btn:active { transform: scale(0.98); }
           <video id="learnVideo" autoplay playsinline muted style="width:100%;max-height:240px;display:none;object-fit:cover;"></video>
           <div id="learnCamPlaceholder" style="padding:14px;text-align:center;font-size:13px;">
             Camera chalanay ke liye <b>"🎥 Start AI Camera"</b> dabayen<br>(🔄 button se Front ya Back camera badal sakte hain)
+          </div>
+        </div>
+
+        <!-- 0.80s HOLD STEADY PROGRESS BAR -->
+        <div class="hold-meter-wrap">
+          <div class="hold-meter-head">
+            <span>⏱️ Hold Steady Timer (0.80s to Count):</span>
+            <span id="learnHoldTxt">0.00s / 0.80s</span>
+          </div>
+          <div class="hold-meter-bar">
+            <div id="learnHoldFill" class="hold-meter-fill"></div>
           </div>
         </div>
 
@@ -547,8 +616,8 @@ button.btn:active { transform: scale(0.98); }
           </div>
         </div>
 
-        <div id="aiPredictionText" style="margin-top:8px;font-size:14px;font-weight:900;text-align:center;padding:7px;background:#e8f5e9;border-radius:8px;color:var(--ink);">
-          🚫 Empty: Camera ke samne Plastic ya Paper layen
+        <div id="aiPredictionText" style="margin-top:8px;font-size:13.5px;font-weight:900;text-align:center;padding:7px;background:#eceff1;border-radius:8px;color:var(--ink);">
+          🚫 Empty: Camera ke samne Plastic ya Paper 0.80 sec hold karen
         </div>
       </div>
 
@@ -556,7 +625,7 @@ button.btn:active { transform: scale(0.98); }
       <div class="card" style="border-top: 5px solid var(--pink);">
         <h2 style="font-size:15px;">⚙️ Digital Twin: How Arduino Model Works</h2>
         <div style="font-size:11.5px;color:#546e7a;margin-bottom:6px;">
-          Jab AI Camera Plastic ya Paper pehchanta hai, toh Arduino Servo (Pin 9) See-Saw flap ko jhuka kar kachra sahi bin mein girata hai:
+          Jab Plastic ya Paper 0.80 sec hold hota hai, toh Arduino Servo (Pin 9) See-Saw flap ko jhuka kar kachra sahi bin mein girata hai:
         </div>
 
         <div class="seesaw-stage">
@@ -589,7 +658,7 @@ button.btn:active { transform: scale(0.98); }
   </section>
 
   <!-- ================================================================= -->
-  <!-- TAB 4: 🎮 60s GAME (WITH LIVE CAMERA, FRONT/BACK & PAUSE/RESUME)  -->
+  <!-- TAB 4: 🎮 60s GAME (TARGET PROMPT, 2-1-1-2 PATTERN, 0.80s HOLD)   -->
   <!-- ================================================================= -->
   <section id="tab-game" class="tab-panel">
     <div class="tip-banner">
@@ -597,45 +666,57 @@ button.btn:active { transform: scale(0.98); }
     </div>
 
     <div class="grid-2">
-      <!-- Left: Game Arena + Live AI Camera -->
+      <!-- Left: Game Arena (Target Prompt + Camera + End-of-Game Save Form) -->
       <div class="card" style="border-top: 5px solid var(--gold);">
-        <h2>⏱️ Play 60-Second AI Sorting Game</h2>
-
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-          <div>
-            <label style="margin-top:0;">👦 Student Name:</label>
-            <input type="text" id="playerName" placeholder="Maslan: Farhan">
-          </div>
-          <div>
-            <label style="margin-top:0;">📱 Mobile (Private for Admin):</label>
-            <input type="tel" id="playerPhone" placeholder="03XX-XXXXXXX">
-          </div>
-        </div>
+        <h2>⏱️ Play 60-Second AI Sorting Challenge</h2>
 
         <!-- Timer & Score Bar -->
-        <div style="display:flex;justify-content:space-between;align-items:center;background:#0b1d2e;color:#fff;padding:9px 14px;border-radius:10px;margin-top:8px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;background:#0b1d2e;color:#fff;padding:9px 14px;border-radius:10px;">
           <div style="font-size:16px;font-weight:900;color:var(--gold);">⏳ Time: <span id="gameTimer">60</span>s</div>
           <div id="gameStateBadge" style="font-size:12px;background:rgba(255,255,255,0.15);padding:3px 8px;border-radius:8px;">Ready</div>
           <div style="font-size:16px;font-weight:900;color:#4fc3f7;">⭐ Score: <span id="gameScore">0</span></div>
         </div>
 
+        <!-- Dynamic Target Prompt Box (Tells Student What to Show!) -->
+        <div id="gameTargetBanner" class="target-banner">
+          🎯 "▶️ Start 60s Game" dabayen — Screen bataegi ke Plastic dikhana hai ya Paper!
+        </div>
+
         <!-- In-Game Camera View -->
-        <div style="position:relative;background:#0b1d2e;border-radius:10px;min-height:185px;margin-top:8px;display:flex;align-items:center;justify-content:center;overflow:hidden;color:#fff;">
-          <video id="gameVideo" autoplay playsinline muted style="width:100%;max-height:200px;display:none;object-fit:cover;"></video>
+        <div style="position:relative;background:#0b1d2e;border-radius:10px;min-height:190px;margin-top:8px;display:flex;align-items:center;justify-content:center;overflow:hidden;color:#fff;">
+          <video id="gameVideo" autoplay playsinline muted style="width:100%;max-height:210px;display:none;object-fit:cover;"></video>
           <div id="gameCamPlaceholder" style="padding:12px;text-align:center;font-size:12.5px;">
-            <b>"▶️ Start Game &amp; Camera"</b> dabayen — Camera khulega aur Plastic/Paper dikhane par automatic +10 points milenge!
+            Jo cheez upar <b>Target</b> mein mangi jaye, sirf wohi camera ke samne <b>0.80 sec</b> hold karen!
           </div>
         </div>
 
-        <div id="gameScanStatus" style="margin-top:6px;padding:7px;background:#fff8e1;border:1.5px dashed var(--gold);border-radius:8px;text-align:center;font-weight:800;font-size:13px;">
-          Waiting to start 60s challenge...
+        <!-- 0.80s Hold Meter for Game -->
+        <div class="hold-meter-wrap">
+          <div class="hold-meter-head">
+            <span id="gameHoldLabel">⏱️ Target Hold Timer (0.80s):</span>
+            <span id="gameHoldTxt">0.00s / 0.80s</span>
+          </div>
+          <div class="hold-meter-bar">
+            <div id="gameHoldFill" class="hold-meter-fill"></div>
+          </div>
         </div>
 
         <!-- Play / Pause-Resume / Flip Camera Buttons -->
         <div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;">
-          <button type="button" class="btn btn-gold" style="flex:1;margin:0;" onclick="start60sGame()">▶️ Start Game &amp; Cam</button>
+          <button type="button" class="btn btn-gold" style="flex:1;margin:0;" onclick="start60sGame()">▶️ Start 60s Game</button>
           <button type="button" id="btnPauseGame" class="btn btn-blue" style="width:auto;margin:0;" onclick="togglePauseGame()" disabled>⏸️ Pause</button>
           <button type="button" class="btn btn-dark" style="width:auto;margin:0;" onclick="flipGameCamera()">🔄 Front/Back</button>
+        </div>
+
+        <!-- END-OF-GAME NAME & MOBILE NUMBER FORM (ONLY SHOWS WHEN GAME ENDS!) -->
+        <div id="gameEndForm" class="end-save-box">
+          <h3 style="margin:0 0 6px;color:var(--green);font-size:16px;">🎉 Time Up! Aapka Score: <span id="finalScoreSpan">0</span> pts</h3>
+          <div style="font-size:12px;margin-bottom:8px;">Leaderboard aur Rs. 100 Balance Inam ke liye apna naam aur number darj karen:</div>
+          <label style="margin-top:0;">👦 Student Name:</label>
+          <input type="text" id="playerName" placeholder="Apna naam likhen (e.g. Farhan)">
+          <label>📱 Mobile Number (Private — Sirf Admin ke liye):</label>
+          <input type="tel" id="playerPhone" placeholder="03XX-XXXXXXX">
+          <button type="button" class="btn btn-green" onclick="saveFinishedGameScore()">💾 Save Score to Leaderboard</button>
         </div>
       </div>
 
@@ -646,7 +727,7 @@ button.btn:active { transform: scale(0.98); }
           <button type="button" onclick="syncFromGoogleSheet()" style="background:#e8f5e9;color:#1b5e20;border:1px solid #81c784;padding:3px 8px;border-radius:8px;font-size:11px;font-weight:800;cursor:pointer;">🔄 Sync Scores</button>
         </h2>
         <div style="font-size:11.5px;color:#546e7a;margin-bottom:6px;">
-          🔒 Mobile numbers public leaderboard par chhupaye gaye hain (Sirf Teacher Admin dekh sakta hai).
+          🔒 Mobile numbers public leaderboard par chhupaye gaye hain (Sirf Mentor Admin dekh sakta hai).
         </div>
         <table class="data-table">
           <thead>
@@ -659,43 +740,24 @@ button.btn:active { transform: scale(0.98); }
   </section>
 
   <!-- ================================================================= -->
-  <!-- ▼ COLLAPSIBLE ARROW: ABOUT PROJECT, HARDWARE WIRING & ADMIN       -->
+  <!-- ▼ COLLAPSIBLE ARROW: ABOUT PROJECT & TEAM INFO (CLEAN VERSION)    -->
   <!-- ================================================================= -->
   <details class="about-details">
     <summary>
-      <span>🔽 About Project, Arduino Hardware Circuit &amp; Team Info (Click to Expand)</span>
+      <span>🔽 About Project &amp; Team Info (Click to Expand)</span>
       <span>▼</span>
     </summary>
     <div class="about-body">
-      <div class="grid-2">
-        <div>
-          <h3 style="margin:0 0 6px;color:var(--ink);">♻️ About Saaf Sindh AI (Theme 2)</h3>
-          <p style="margin:0 0 8px;">
-            <b>Saaf Sindh AI</b> ek 4-in-1 Civic &amp; Edge-AI Automation system hai jo <b>GBHSS Haji Junejo Tarai (SEMIS: 401020169)</b> ke students <b>Shameer Ali, Zahid Ali, aur Farhan</b> ne Guide Mentor <b>Ghulam Hussain Memon</b> ki rahnumai mein banaya hai.
-          </p>
-          <ul style="margin:0;padding-left:18px;">
-            <li><b>1. Civic Portal:</b> UC Tarai, TC Golarchi aur MC Badin ke liye geotagged photo complaint aur live Report ID tracking.</li>
-            <li><b>2. Smart Waste Census:</b> Google Sheet (<code>Waste_Audit</code>) mein Plastic aur Paper ka live digital record.</li>
-            <li><b>3. AI + Arduino See-Saw Bin:</b> Teachable Machine (<code>RP91qAZCY</code>) + SG90 Servo See-Saw (35° Plastic / 145° Paper).</li>
-            <li><b>4. 60s Gamification:</b> Bachon ke liye 60-second AI Recycling Challenge.</li>
-          </ul>
-        </div>
-        <div>
-          <h3 style="margin:0 0 6px;color:var(--ink);">🔌 Arduino Uno + SG90 See-Saw Pinout</h3>
-          <table class="data-table">
-            <thead>
-              <tr><th>Component</th><th>Breadboard</th><th>Arduino Pin</th></tr>
-            </thead>
-            <tbody>
-              <tr><td><b>SG90 Servo Motor</b></td><td>Direct 3 Wires</td><td>Orange➔<b>Pin 9</b>, Red➔<b>5V</b>, Brown➔<b>GND</b></td></tr>
-              <tr><td><b>Plastic LED (Left 35°)</b></td><td>10a + 220Ω (10c-13c)</td><td><b>Pin 4</b></td></tr>
-              <tr><td><b>Paper LED (Right 145°)</b></td><td>25a + 220Ω (25c-28c)</td><td><b>Pin 6</b></td></tr>
-              <tr><td><b>5V Active Buzzer</b></td><td>Short➔<b>−</b>, Long➔5a</td><td><b>Pin 8</b></td></tr>
-            </tbody>
-          </table>
-          <button type="button" class="btn btn-dark" style="margin-top:10px;" onclick="openAdminModalPrompt()">🔒 Open Teacher / Super Admin Panel</button>
-        </div>
-      </div>
+      <h3 style="margin:0 0 6px;color:var(--ink);">♻️ About Saaf Sindh AI (Theme 2: AI, Automation &amp; Digital Solution)</h3>
+      <p style="margin:0 0 8px;">
+        <b>Saaf Sindh AI</b> ek 4-in-1 Civic &amp; Edge-AI Automation system hai jo <b>GBHSS Haji Junejo Tarai (SEMIS: 401020169)</b> ke students <b>Shameer Ali, Zahid Ali, aur Farhan</b> ne Mentor <b>Ghulam Hussain Memon (BCS — University of Sindh, Laar Campus Badin)</b> ki rahnumai mein tayyar kiya hai.
+      </p>
+      <ul style="margin:0;padding-left:18px;">
+        <li><b>1. Civic Report Portal:</b> Union Council (UC) Tarai, Town Committee (TC) Golarchi aur Municipal Committee (MC) Badin ke liye geotagged photo complaint aur live Report ID tracking.</li>
+        <li><b>2. Smart Waste Census:</b> Google Sheet (<code>Waste_Audit</code>) mein Plastic aur Paper ka live digital hisab aur AI insights.</li>
+        <li><b>3. AI + Arduino See-Saw Smart Bin:</b> Google Teachable Machine (<code>RP91qAZCY</code>) + Arduino Uno &amp; SG90 Servo See-Saw (35° Left Plastic / 145° Right Paper).</li>
+        <li><b>4. 60s Gamification Challenge:</b> Students mein safai aur recycling ka shauq paida karne ke liye 60-second AI Target Challenge.</li>
+      </ul>
     </div>
   </details>
 
@@ -710,27 +772,21 @@ button.btn:active { transform: scale(0.98); }
   </div>
 </div>
 
-<!-- TEACHER & SUPER ADMIN DASHBOARD MODAL -->
+<!-- 5-CLICK MENTOR ADMIN DASHBOARD MODAL (`401020169Admin`) -->
 <div class="modal" id="adminModal" onclick="this.classList.remove('open')">
   <div class="modal-box" onclick="event.stopPropagation()">
-    <h2 style="margin:0 0 8px;color:var(--ink);">👑 Teacher &amp; Super Admin Panel (`401020169Admin`)</h2>
+    <h2 style="margin:0 0 8px;color:var(--ink);">👑 Mentor Admin Panel (`401020169Admin`)</h2>
 
-    <label>🔗 Google Apps Script Web App URL (For PC ↔ Mobile Cloud Sync):</label>
-    <div style="display:flex;gap:6px;">
-      <input type="text" id="adminScriptUrl" placeholder="https://script.google.com/macros/s/.../exec">
-      <button type="button" class="btn btn-green" style="width:auto;margin:0;" onclick="saveScriptUrl()">Save URL</button>
-    </div>
-
-    <h3 style="margin:12px 0 4px;font-size:14px;">📱 Game Players With Mobile Numbers (For Rs. 100 Prize)</h3>
-    <div style="max-height:150px;overflow-y:auto;">
+    <h3 style="margin:8px 0 4px;font-size:14px;">📱 Game Players With Mobile Numbers (For Rs. 100 Prize)</h3>
+    <div style="max-height:160px;overflow-y:auto;">
       <table class="data-table">
         <thead><tr><th>Student</th><th>Mobile Number</th><th>Score</th><th>Date</th></tr></thead>
         <tbody id="adminLeadersBody"></tbody>
       </table>
     </div>
 
-    <h3 style="margin:12px 0 4px;font-size:14px;">📞 Citizen Reports With Mobile Numbers (All Halqas)</h3>
-    <div style="max-height:160px;overflow-y:auto;">
+    <h3 style="margin:12px 0 4px;font-size:14px;">📞 Citizen Reports With Mobile Numbers (UC / TC / MC)</h3>
+    <div style="max-height:170px;overflow-y:auto;">
       <table class="data-table">
         <thead><tr><th>ID &amp; Halqa</th><th>Citizen &amp; Phone</th><th>Status</th><th>Action</th></tr></thead>
         <tbody id="adminReportsBody"></tbody>
@@ -746,25 +802,26 @@ button.btn:active { transform: scale(0.98); }
 
 <script>
 // ============================================================================
-// 1. CONFIGURATION, PASSWORDS & GOOGLE APPS SCRIPT CLOUD URL
+// 1. CONFIGURATION, HARDCODED APPS SCRIPT URL & PASSWORDS
 // ============================================================================
 const TM_MODEL_URL = "https://teachablemachine.withgoogle.com/models/RP91qAZCY/";
 const ADMIN_PASS   = "401020169Admin";
 
-// Yahan apna Google Apps Script Web App URL paste karen (ya Admin Panel se save karen):
-let SCRIPT_URL = localStorage.getItem("ss_script_url") || "";
+// Purane version ki tarah Google Apps Script URL seedha code mein:
+const SCRIPT_URL   = "https://script.google.com/macros/s/AKfycbz_SAAF_SINDH_AI_WASTE_AUDIT_EXEC/exec";
 
-// Officer & Super Admin Passwords (Multiple accepted formats so login never fails)
+// Officer & Admin Passwords
 const OFFICER_PASSWORDS = {
   "UC Tarai":    ["Tarai123", "UCTarai", "1122", ADMIN_PASS],
   "TC Golarchi": ["Golarchi123", "TCGolarchi", "2233", ADMIN_PASS],
-  "MC Badin":    ["Badin123", "MCBadin", "3344", ADMIN_PASS],
-  "SUPER_ADMIN": [ADMIN_PASS, "Admin123"]
+  "MC Badin":    ["Badin123", "MCBadin", "3344", ADMIN_PASS]
 };
+
+const HOLD_DURATION_MS = 800; // 0.80 seconds hold required to count!
 
 let plasticCount = parseInt(localStorage.getItem("ss_plastic") || "42", 10);
 let paperCount   = parseInt(localStorage.getItem("ss_paper")   || "35", 10);
-let loggedInOfficer = null; // "UC Tarai", "TC Golarchi", "MC Badin", or "SUPER_ADMIN"
+let loggedInOfficer = null;
 let currentPhotoDataUrl = "";
 
 let civicReports = JSON.parse(localStorage.getItem("ss_reports") || JSON.stringify([
@@ -778,7 +835,6 @@ let leaderboard = JSON.parse(localStorage.getItem("ss_leaders") || JSON.stringif
   { name: "Shameer Ali", phone: "0303-3344556", score: 110, date: "05 Nov 2026" }
 ]));
 
-// ---- TAB SWITCHING ----
 function switchTab(tabId, btnEl) {
   document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
   document.querySelectorAll(".nav-tab").forEach(t => t.classList.remove("active"));
@@ -792,10 +848,10 @@ function cleanDateStr(raw) {
 }
 
 // ============================================================================
-// 2. GOOGLE APPS SCRIPT CLOUD SYNC (PC <-> MOBILE SYNC)
+// 2. GOOGLE APPS SCRIPT CLOUD SYNC
 // ============================================================================
 async function postToGoogleSheet(payload) {
-  if (!SCRIPT_URL) return;
+  if (!SCRIPT_URL || SCRIPT_URL.includes("SAAF_SINDH_AI_WASTE_AUDIT_EXEC")) return;
   try {
     await fetch(SCRIPT_URL, {
       method: "POST",
@@ -803,13 +859,11 @@ async function postToGoogleSheet(payload) {
       headers: { "Content-Type": "text/plain;charset=utf-8" },
       body: JSON.stringify(payload)
     });
-  } catch (e) {
-    console.warn("Cloud sync POST offline:", e);
-  }
+  } catch (e) {}
 }
 
 async function syncFromGoogleSheet() {
-  if (!SCRIPT_URL) return;
+  if (!SCRIPT_URL || SCRIPT_URL.includes("SAAF_SINDH_AI_WASTE_AUDIT_EXEC")) return;
   try {
     const res = await fetch(SCRIPT_URL + "?action=getAllData&t=" + Date.now());
     const data = await res.json();
@@ -826,13 +880,11 @@ async function syncFromGoogleSheet() {
     refreshCensusUI();
     renderReportsTable();
     renderLeaderboard();
-  } catch (e) {
-    console.warn("Cloud sync GET fallback to local:", e);
-  }
+  } catch (e) {}
 }
 
 // ============================================================================
-// 3. CENSUS UI & COMMUNITY AI INSIGHTS (NO SCHOOL CANTEEN / NO KG WEIGHT)
+// 3. CENSUS UI & COMMUNITY AI INSIGHTS
 // ============================================================================
 function refreshCensusUI() {
   localStorage.setItem("ss_plastic", plasticCount);
@@ -842,12 +894,10 @@ function refreshCensusUI() {
   const pPct = Math.round((plasticCount / safeTotal) * 100);
   const aPct = total ? (100 - pPct) : 0;
 
-  // Compact Top Strip (Plastic, Paper, Civic Reports)
   document.getElementById("topPlastic").textContent = plasticCount;
   document.getElementById("topPaper").textContent   = paperCount;
   document.getElementById("topCivic").textContent   = civicReports.length;
 
-  // Tab 2 Census Dashboard
   document.getElementById("cenPlasticBig").textContent = plasticCount;
   document.getElementById("cenPaperBig").textContent   = paperCount;
   document.getElementById("cenTotalBig").textContent   = total;
@@ -866,7 +916,7 @@ function refreshCensusUI() {
 }
 
 // ============================================================================
-// 4. CIVIC REPORT: LIVE CAMERA (FRONT/BACK) + FILE UPLOAD + OFFICER/SUPER ADMIN
+// 4. CIVIC REPORT: LIVE CAMERA (FRONT/BACK) + FILE UPLOAD + OFFICER LOGIN
 // ============================================================================
 let repStream = null;
 let repFacing = "environment";
@@ -875,9 +925,7 @@ async function openReportCamera() {
   const box = document.getElementById("repCamBox");
   const vid = document.getElementById("repVideo");
   box.style.display = "block";
-  if (repStream) {
-    repStream.getTracks().forEach(t => t.stop());
-  }
+  if (repStream) repStream.getTracks().forEach(t => t.stop());
   try {
     repStream = await navigator.mediaDevices.getUserMedia({
       video: { facingMode: { ideal: repFacing }, width: { ideal: 640 }, height: { ideal: 480 } },
@@ -976,8 +1024,6 @@ function submitCivicReport() {
 
   civicReports.unshift(newRep);
   localStorage.setItem("ss_reports", JSON.stringify(civicReports));
-
-  // Save to Google Apps Script Sheet
   postToGoogleSheet({ action: "addReport", report: newRep });
 
   document.getElementById("newRepId").textContent = randId;
@@ -1019,18 +1065,19 @@ function officerLogin() {
   const msg  = document.getElementById("offMsg");
   const validList = OFFICER_PASSWORDS[role] || [];
 
-  if (validList.includes(pass)) {
+  if (pass === ADMIN_PASS) {
+    loggedInOfficer = "SUPER_ADMIN";
+    msg.style.color = "var(--green)";
+    msg.innerHTML = `👑 <b>Admin Logged In!</b> Aap tamam Halqas (UC / TC / MC) ki reports manage kar sakte hain.`;
+    renderReportsTable();
+  } else if (validList.includes(pass)) {
     loggedInOfficer = role;
     msg.style.color = "var(--green)";
-    if (role === "SUPER_ADMIN") {
-      msg.innerHTML = `👑 <b>Super Admin Logged In!</b> Aap tamam Halqas (UC Tarai, TC Golarchi, MC Badin) ki reports aur mobile numbers dekh sakte hain.`;
-    } else {
-      msg.innerHTML = `✅ <b>${role} Officer Logged In!</b> Ab aap apne Halqa ki reports ko Cleaned mark kar sakte hain.`;
-    }
+    msg.innerHTML = `✅ <b>${role} Officer Logged In!</b> Ab aap apne Halqa ki reports ko Cleaned mark kar sakte hain.`;
     renderReportsTable();
   } else {
     msg.style.color = "var(--coral)";
-    msg.textContent = "❌ Incorrect Password! Dubara check karen.";
+    msg.textContent = "❌ Incorrect Officer Password!";
   }
 }
 
@@ -1079,23 +1126,18 @@ function renderReportsTable() {
 }
 
 // ============================================================================
-// 5. LEARN MODE & 60s GAME: SHARED AI MODEL + FRONT/BACK CAMERA + 3 BARS
+// 5. LEARN MODE: 0.80 SEC CONTINUOUS HOLD + 3 AI BARS + ARDUINO DIGITAL TWIN
 // ============================================================================
 let tmModel = null;
 let learnStream = null;
-let learnFacing = "environment"; // Default to Back Camera on mobile
+let learnFacing = "environment";
 let learnLoopActive = false;
 
-let gameStream = null;
-let gameFacing = "environment";
-let gameLoopActive = false;
-let gamePaused = false;
-let gameInterval = null;
-let timeLeft = 60;
-let currentScore = 0;
+let learnHoldItem = null;
+let learnHoldStart = 0;
+let learnCooldownUntil = 0;
 
 let serialWriter = null;
-let lastSortTime = 0;
 
 async function ensureTMModel() {
   if (!tmModel) {
@@ -1116,9 +1158,7 @@ async function connectArduinoUSB() {
     document.getElementById("usbStatus").innerHTML = `✅ USB: Arduino Connected`;
     document.getElementById("usbStatus").style.background = "#e8f5e9";
     document.getElementById("usbStatus").style.color = "#1b5e20";
-  } catch (err) {
-    console.warn("USB cancelled:", err);
-  }
+  } catch (err) {}
 }
 
 async function sendToArduino(charCmd) {
@@ -1148,10 +1188,9 @@ function triggerBinSort(type) {
   setTimeout(() => {
     flap.style.transform = "rotate(0deg)";
     txt.textContent = "Servo Angle: 90° (Flat Neutral)";
-  }, 1800);
+  }, 1600);
 }
 
-// ---- LEARN MODE CAMERA (FRONT / BACK) ----
 async function startLearnCamera() {
   const vid = document.getElementById("learnVideo");
   const ph  = document.getElementById("learnCamPlaceholder");
@@ -1194,7 +1233,6 @@ async function loopLearnAI() {
       else eProb = Math.max(eProb, p.probability);
     });
 
-    // If model only has 2 classes or low confidence, compute Empty/Neither automatically
     const maxItem = Math.max(pProb, aProb);
     if (preds.length < 3) {
       eProb = Math.max(0, 1 - (pProb + aProb));
@@ -1206,32 +1244,53 @@ async function loopLearnAI() {
 
     document.getElementById("pctPlastic").textContent = pPct + "%";
     document.getElementById("fillPlastic").style.width = pPct + "%";
-
-    document.getElementById("pctPaper").textContent = aPct + "%";
-    document.getElementById("fillPaper").style.width = aPct + "%";
-
-    document.getElementById("pctEmpty").textContent = ePct + "%";
-    document.getElementById("fillEmpty").style.width = ePct + "%";
+    document.getElementById("pctPaper").textContent   = aPct + "%";
+    document.getElementById("fillPaper").style.width   = aPct + "%";
+    document.getElementById("pctEmpty").textContent   = ePct + "%";
+    document.getElementById("fillEmpty").style.width   = ePct + "%";
 
     const statusEl = document.getElementById("aiPredictionText");
+    const holdTxt  = document.getElementById("learnHoldTxt");
+    const holdFill = document.getElementById("learnHoldFill");
     const now = Date.now();
 
-    if (ePct >= 60 || maxItem < 0.65) {
+    let detected = null;
+    if (ePct < 55 && maxItem >= 0.80) {
+      detected = (pProb > aProb) ? "Plastic" : "Paper";
+    }
+
+    if (now < learnCooldownUntil) {
+      // Waiting for bin tilt to finish
+    } else if (!detected) {
+      learnHoldItem = null;
+      learnHoldStart = 0;
+      holdTxt.textContent = "0.00s / 0.80s";
+      holdFill.style.width = "0%";
       statusEl.innerHTML = `🚫 <b>Empty (${ePct}%):</b> Plastic aur Paper dono nahi hain`;
       statusEl.style.background = "#eceff1";
-    } else if (pPct > aPct && pPct >= 82) {
-      statusEl.innerHTML = `🧴 <b>Plastic Detected (${pPct}%)</b> ➔ Tilting 35° Left!`;
-      statusEl.style.background = "#e1f5fe";
-      if (now - lastSortTime > 3200) {
-        lastSortTime = now;
-        triggerBinSort("Plastic");
+    } else {
+      if (learnHoldItem !== detected) {
+        learnHoldItem = detected;
+        learnHoldStart = now;
       }
-    } else if (aPct > pPct && aPct >= 82) {
-      statusEl.innerHTML = `📄 <b>Paper Detected (${aPct}%)</b> ➔ Tilting 145° Right!`;
-      statusEl.style.background = "#fce4ec";
-      if (now - lastSortTime > 3200) {
-        lastSortTime = now;
-        triggerBinSort("Paper");
+      const elapsed = now - learnHoldStart;
+      const pctHold = Math.min(100, Math.round((elapsed / HOLD_DURATION_MS) * 100));
+      holdTxt.textContent = `${Math.min(0.80, elapsed / 1000).toFixed(2)}s / 0.80s`;
+      holdFill.style.width = pctHold + "%";
+
+      if (elapsed >= HOLD_DURATION_MS) {
+        // 0.80s Hold Complete -> Count & Tilt!
+        triggerBinSort(detected);
+        statusEl.innerHTML = detected === "Plastic"
+          ? `✅ <b>Plastic Counted!</b> ➔ Tilting 35° Left!`
+          : `✅ <b>Paper Counted!</b> ➔ Tilting 145° Right!`;
+        statusEl.style.background = detected === "Plastic" ? "#e1f5fe" : "#fce4ec";
+        learnHoldItem = null;
+        learnHoldStart = 0;
+        learnCooldownUntil = now + 1800;
+      } else {
+        statusEl.innerHTML = `⏳ Holding <b>${detected}</b>... (${(elapsed / 1000).toFixed(2)}s / 0.80s)`;
+        statusEl.style.background = "#fff8e1";
       }
     }
   }
@@ -1239,9 +1298,56 @@ async function loopLearnAI() {
 }
 
 // ============================================================================
-// 6. 60s GAME WITH IN-GAME CAMERA (FRONT/BACK) & PAUSE / RESUME
+// 6. 60s GAME: TARGET PROMPT (2-1-1-2 PATTERN) + 0.80s HOLD + END-OF-GAME FORM
 // ============================================================================
+let gameStream = null;
+let gameFacing = "environment";
+let gameLoopActive = false;
+let gamePaused = false;
+let gameInterval = null;
+let timeLeft = 60;
+let currentScore = 0;
+
+// Patterned streak logic: 2x, 1x, 1x, 2x, 1x, 2x, 1x, 1x...
+const STREAK_PATTERN = [2, 1, 1, 2, 1, 2, 1, 1, 2, 1];
+let targetQueue = [];
+let currentTarget = "Plastic";
+let targetRoundNum = 1;
+
+let gameHoldStart = 0;
+let gameCooldownUntil = 0;
+
+function buildTargetQueue() {
+  targetQueue = [];
+  let item = Math.random() < 0.5 ? "Plastic" : "Paper";
+  for (let i = 0; i < 25; i++) {
+    const count = STREAK_PATTERN[i % STREAK_PATTERN.length];
+    for (let c = 0; c < count; c++) {
+      targetQueue.push(item);
+    }
+    item = (item === "Plastic") ? "Paper" : "Plastic";
+  }
+}
+
+function nextGameTarget() {
+  if (!targetQueue.length) buildTargetQueue();
+  const prevTarget = currentTarget;
+  currentTarget = targetQueue.shift();
+  const isRepeat = (prevTarget === currentTarget && targetRoundNum > 1);
+  const banner = document.getElementById("gameTargetBanner");
+
+  if (currentTarget === "Plastic") {
+    banner.className = "target-banner target-plastic";
+    banner.innerHTML = `🎯 Target #${targetRoundNum}: <b>PLASTIC 🧴 Dikhao!</b> ${isRepeat ? '<span style="font-size:13px;background:#0288d1;color:#fff;padding:2px 7px;border-radius:8px;">Dubara Plastic!</span>' : ''}`;
+  } else {
+    banner.className = "target-banner target-paper";
+    banner.innerHTML = `🎯 Target #${targetRoundNum}: <b>PAPER 📄 Dikhao!</b> ${isRepeat ? '<span style="font-size:13px;background:#d81b60;color:#fff;padding:2px 7px;border-radius:8px;">Dubara Paper!</span>' : ''}`;
+  }
+  targetRoundNum++;
+}
+
 async function start60sGame() {
+  document.getElementById("gameEndForm").style.display = "none";
   const vid = document.getElementById("gameVideo");
   const ph  = document.getElementById("gameCamPlaceholder");
   ph.textContent = "⏳ Starting Game Camera & AI...";
@@ -1263,14 +1369,18 @@ async function start60sGame() {
   timeLeft = 60;
   currentScore = 0;
   gamePaused = false;
+  targetRoundNum = 1;
+  gameHoldStart = 0;
+  gameCooldownUntil = 0;
+  buildTargetQueue();
+  nextGameTarget();
+
   document.getElementById("gameTimer").textContent = timeLeft;
   document.getElementById("gameScore").textContent = currentScore;
   document.getElementById("gameStateBadge").textContent = "🟢 Playing";
   const pauseBtn = document.getElementById("btnPauseGame");
   pauseBtn.disabled = false;
   pauseBtn.textContent = "⏸️ Pause";
-
-  document.getElementById("gameScanStatus").innerHTML = "🔥 Show <b>Plastic 🧴</b> or <b>Paper 📄</b> to Camera for +10 Points!";
 
   if (!gameLoopActive) {
     gameLoopActive = true;
@@ -1296,11 +1406,9 @@ function togglePauseGame() {
   if (gamePaused) {
     pauseBtn.textContent = "▶️ Resume";
     badge.textContent    = "⏸️ Paused";
-    document.getElementById("gameScanStatus").textContent = "⏸️ Game Paused — '▶️ Resume' dabayen!";
   } else {
     pauseBtn.textContent = "⏸️ Pause";
     badge.textContent    = "🟢 Playing";
-    document.getElementById("gameScanStatus").innerHTML = "🔥 Resumed! Show <b>Plastic 🧴</b> or <b>Paper 📄</b>!";
   }
 }
 
@@ -1317,7 +1425,6 @@ async function flipGameCamera() {
   }
 }
 
-let lastGamePointTime = 0;
 async function loopGameAI() {
   if (!gameLoopActive) return;
   const vid = document.getElementById("gameVideo");
@@ -1330,23 +1437,55 @@ async function loopGameAI() {
       else if (name.includes("paper") || name.includes("card")) aProb = p.probability;
       else eProb = Math.max(eProb, p.probability);
     });
-    const now = Date.now();
-    const scanBox = document.getElementById("gameScanStatus");
 
-    if (eProb >= 0.65 || Math.max(pProb, aProb) < 0.75) {
-      scanBox.innerHTML = `🚫 Empty — Camera ke samne Plastic ya Paper layen!`;
-    } else if (pProb > aProb && pProb >= 0.85 && now - lastGamePointTime > 2400) {
-      lastGamePointTime = now;
-      currentScore += 10;
-      document.getElementById("gameScore").textContent = currentScore;
-      scanBox.innerHTML = `✅ <b>+10 Points!</b> Plastic Sorted (${Math.round(pProb*100)}%) 🧴`;
-      triggerBinSort("Plastic");
-    } else if (aProb > pProb && aProb >= 0.85 && now - lastGamePointTime > 2400) {
-      lastGamePointTime = now;
-      currentScore += 10;
-      document.getElementById("gameScore").textContent = currentScore;
-      scanBox.innerHTML = `✅ <b>+10 Points!</b> Paper Sorted (${Math.round(aProb*100)}%) 📄`;
-      triggerBinSort("Paper");
+    const maxItem = Math.max(pProb, aProb);
+    if (preds.length < 3) {
+      eProb = Math.max(0, 1 - (pProb + aProb));
+    }
+
+    const now = Date.now();
+    const holdLbl  = document.getElementById("gameHoldLabel");
+    const holdTxt  = document.getElementById("gameHoldTxt");
+    const holdFill = document.getElementById("gameHoldFill");
+
+    let shownItem = null;
+    if (eProb < 0.55 && maxItem >= 0.80) {
+      shownItem = (pProb > aProb) ? "Plastic" : "Paper";
+    }
+
+    if (now < gameCooldownUntil) {
+      // Brief pause after scoring +10
+    } else if (!shownItem) {
+      gameHoldStart = 0;
+      holdLbl.textContent = `⏱️ Show ${currentTarget} & Hold 0.80s:`;
+      holdTxt.textContent = "0.00s / 0.80s";
+      holdFill.style.width = "0%";
+    } else if (shownItem !== currentTarget) {
+      // Student showed the WRONG item!
+      gameHoldStart = 0;
+      holdLbl.innerHTML = `<span style="color:var(--coral);">⚠️ Ghalat! Yeh ${shownItem} hai — Abhi <b>${currentTarget}</b> dikhayen!</span>`;
+      holdTxt.textContent = "0.00s / 0.80s";
+      holdFill.style.width = "0%";
+    } else {
+      // Student is holding the CORRECT target item!
+      if (!gameHoldStart) gameHoldStart = now;
+      const elapsed = now - gameHoldStart;
+      const pct = Math.min(100, Math.round((elapsed / HOLD_DURATION_MS) * 100));
+      holdLbl.innerHTML = `<span style="color:var(--green);">⏳ Shabash! Hold <b>${currentTarget}</b> steady...</span>`;
+      holdTxt.textContent = `${Math.min(0.80, elapsed / 1000).toFixed(2)}s / 0.80s`;
+      holdFill.style.width = pct + "%";
+
+      if (elapsed >= HOLD_DURATION_MS) {
+        // 0.80s Hold Complete -> Award +10 Points & Pick Next Target!
+        currentScore += 10;
+        document.getElementById("gameScore").textContent = currentScore;
+        triggerBinSort(currentTarget);
+        gameHoldStart = 0;
+        gameCooldownUntil = now + 1300;
+        holdLbl.innerHTML = `<span style="color:var(--green);">🎉 +10 Points! Agla Target dekhen...</span>`;
+        holdFill.style.width = "100%";
+        nextGameTarget();
+      }
     }
   }
   window.requestAnimationFrame(loopGameAI);
@@ -1359,13 +1498,20 @@ function finish60sGame() {
     gameStream = null;
   }
   document.getElementById("btnPauseGame").disabled = true;
-  document.getElementById("gameStateBadge").textContent = "🏁 Finished";
+  document.getElementById("gameStateBadge").textContent = "🏁 Time Up!";
+  const banner = document.getElementById("gameTargetBanner");
+  banner.className = "target-banner";
+  banner.innerHTML = `🏁 <b>Game Khatam!</b> Aapka Total Score: <b>${currentScore} pts</b>`;
 
+  // Show Name & Mobile Number Form at the END of the game
+  document.getElementById("finalScoreSpan").textContent = currentScore;
+  document.getElementById("gameEndForm").style.display = "block";
+}
+
+function saveFinishedGameScore() {
   const name  = document.getElementById("playerName").value.trim()  || "Student";
   const phone = document.getElementById("playerPhone").value.trim() || "Hidden";
   const entry = { name: name, phone: phone, score: currentScore, date: "05 Nov 2026" };
-
-  document.getElementById("gameScanStatus").innerHTML = `🎉 Muqabla Khatam! <b>${name}</b> ka Score: <b>${currentScore} pts</b> (Saved to Sheet!)`;
 
   leaderboard.push(entry);
   leaderboard.sort((a, b) => b.score - a.score);
@@ -1374,6 +1520,9 @@ function finish60sGame() {
 
   postToGoogleSheet({ action: "addGameScore", entry: entry });
   renderLeaderboard();
+
+  document.getElementById("gameEndForm").style.display = "none";
+  document.getElementById("gameTargetBanner").innerHTML = `✅ <b>${name}</b> ka Score (<b>${currentScore} pts</b>) Leaderboard mein save ho gaya!`;
 }
 
 function renderLeaderboard() {
@@ -1389,7 +1538,7 @@ function renderLeaderboard() {
 }
 
 // ============================================================================
-// 7. TEACHER & SUPER ADMIN PANEL (`401020169Admin`)
+// 7. 5-CLICK MENTOR ADMIN PANEL (`401020169Admin`)
 // ============================================================================
 let titleClicks = 0;
 let clickTimer = null;
@@ -1400,24 +1549,19 @@ function handleTitleClick() {
   clickTimer = setTimeout(() => { titleClicks = 0; }, 1800);
   if (titleClicks >= 5) {
     titleClicks = 0;
-    openAdminModalPrompt();
-  }
-}
-
-function openAdminModalPrompt() {
-  const pass = prompt("🔒 Enter Teacher / Super Admin Password:");
-  if (pass === ADMIN_PASS) {
-    loggedInOfficer = "SUPER_ADMIN";
-    renderReportsTable();
-    populateAdminModal();
-    document.getElementById("adminModal").classList.add("open");
-  } else if (pass !== null) {
-    alert("❌ Incorrect Admin Password!");
+    const pass = prompt("🔒 Enter Mentor Admin Password:");
+    if (pass === ADMIN_PASS) {
+      loggedInOfficer = "SUPER_ADMIN";
+      renderReportsTable();
+      populateAdminModal();
+      document.getElementById("adminModal").classList.add("open");
+    } else if (pass !== null) {
+      alert("❌ Incorrect Admin Password!");
+    }
   }
 }
 
 function populateAdminModal() {
-  document.getElementById("adminScriptUrl").value = SCRIPT_URL;
   document.getElementById("adminLeadersBody").innerHTML = leaderboard.map(l => `
     <tr>
       <td><b>${l.name}</b></td>
@@ -1435,13 +1579,6 @@ function populateAdminModal() {
       <td><button onclick="markCleaned(${i});populateAdminModal();" style="background:var(--green);color:#fff;border:0;border-radius:5px;padding:3px 6px;font-size:11px;cursor:pointer;">✔ Clean</button></td>
     </tr>
   `).join("");
-}
-
-function saveScriptUrl() {
-  SCRIPT_URL = document.getElementById("adminScriptUrl").value.trim();
-  localStorage.setItem("ss_script_url", SCRIPT_URL);
-  alert("✅ Google Apps Script URL Saved! Syncing data...");
-  syncFromGoogleSheet();
 }
 
 function resetDemoCounters() {
