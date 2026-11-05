@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Saaf Sindh AI v9.7 — Civic Waste Portal & Smart Bin</title>
+<title>Saaf Sindh AI v9.8 — Civic Waste Portal & Smart Bin</title>
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
 <style>
@@ -159,7 +159,7 @@ body { margin: 0; background: var(--bg); color: var(--ink); padding-bottom: 45px
 }
 .card h2 {
   margin: 0 0 8px;
-  font-size: 17px;
+  font-size: 16.5px;
   color: var(--ink);
   display: flex;
   align-items: center;
@@ -185,7 +185,7 @@ body { margin: 0; background: var(--bg); color: var(--ink); padding-bottom: 45px
   .grid-2, .learn-grid { grid-template-columns: 1fr; }
 }
 
-/* ---- FORMS & BUTTONS ---- */
+/* ---- FORMS, PASSWORD EYE TOGGLE & BUTTONS ---- */
 label { display: block; font-size: 12px; font-weight: 800; margin: 8px 0 3px; color: var(--ink); }
 input, select, textarea {
   width: 100%;
@@ -197,14 +197,12 @@ input, select, textarea {
 }
 .pass-wrap {
   position: relative;
-  flex: 1;
-  min-width: 140px;
   display: flex;
   align-items: center;
+  flex: 1;
+  min-width: 140px;
 }
-.pass-wrap input {
-  padding-right: 36px;
-}
+.pass-wrap input { padding-right: 36px; }
 .eye-btn {
   position: absolute;
   right: 6px;
@@ -215,6 +213,7 @@ input, select, textarea {
   padding: 4px;
   line-height: 1;
 }
+
 button.btn {
   font: inherit;
   font-size: 13px;
@@ -228,6 +227,7 @@ button.btn {
   transition: 0.15s;
 }
 button.btn:active { transform: scale(0.98); }
+button.btn:disabled { opacity: 0.55; cursor: not-allowed; }
 .btn-red   { background: linear-gradient(135deg, #d93025, #b71c1c); color: #fff; }
 .btn-blue  { background: linear-gradient(135deg, #0288d1, #01579b); color: #fff; }
 .btn-pink  { background: linear-gradient(135deg, #d81b60, #880e4f); color: #fff; }
@@ -235,12 +235,23 @@ button.btn:active { transform: scale(0.98); }
 .btn-gold  { background: linear-gradient(135deg, #f9ab00, #f57c00); color: var(--ink); }
 .btn-dark  { background: #263238; color: #fff; }
 
+.mini-btn {
+  background: #e1f5fe;
+  color: #01579b;
+  border: 1px solid #4fc3f7;
+  padding: 4px 9px;
+  border-radius: 8px;
+  font-size: 11.5px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
 /* ---- 3 AI PROBABILITY BARS & 0.80s HOLD PROGRESS BAR ---- */
-.prob-box { margin-top: 10px; background: #f4faf8; padding: 10px; border-radius: 10px; border: 1.5px solid var(--line); }
-.prob-row { margin-bottom: 7px; }
+.prob-box { margin-top: 8px; background: #f4faf8; padding: 9px 10px; border-radius: 10px; border: 1.5px solid var(--line); }
+.prob-row { margin-bottom: 6px; }
 .prob-row:last-child { margin-bottom: 0; }
-.prob-head { display: flex; justify-content: space-between; font-size: 12px; font-weight: 800; margin-bottom: 3px; }
-.prob-track { height: 14px; background: #e0ece9; border-radius: 8px; overflow: hidden; }
+.prob-head { display: flex; justify-content: space-between; font-size: 11.5px; font-weight: 800; margin-bottom: 2px; }
+.prob-track { height: 12px; background: #e0ece9; border-radius: 8px; overflow: hidden; }
 .prob-fill { height: 100%; width: 0%; transition: width 0.15s; }
 
 .hold-meter-wrap {
@@ -259,7 +270,7 @@ button.btn:active { transform: scale(0.98); }
   margin-bottom: 3px;
 }
 .hold-meter-bar {
-  height: 10px;
+  height: 9px;
   background: #b2dfdb;
   border-radius: 6px;
   overflow: hidden;
@@ -271,28 +282,45 @@ button.btn:active { transform: scale(0.98); }
   transition: width 0.08s linear;
 }
 
+/* ---- DAY-WISE GRAPH BARS IN CENSUS TAB ---- */
+.day-chart-box {
+  margin-top: 12px;
+  background: #f8fcfb;
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  padding: 12px;
+}
+.day-row {
+  display: grid;
+  grid-template-columns: 92px 1fr 70px;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 12px;
+}
+.day-row:last-child { margin-bottom: 0; }
+.day-bars {
+  display: flex;
+  height: 16px;
+  background: #e2ece9;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
 /* ---- GAME TARGET BANNER & END-OF-GAME SAVE FORM ---- */
 .target-banner {
   margin-top: 8px;
-  padding: 12px;
+  padding: 10px;
   border-radius: 12px;
   text-align: center;
   font-weight: 900;
-  font-size: 18px;
+  font-size: 17px;
   border: 2.5px solid var(--line);
   background: #f4faf8;
   transition: transform 0.2s, background 0.2s;
 }
-.target-plastic {
-  background: #e1f5fe;
-  border-color: #0288d1;
-  color: #01579b;
-}
-.target-paper {
-  background: #fce4ec;
-  border-color: #d81b60;
-  color: #880e4f;
-}
+.target-plastic { background: #e1f5fe; border-color: #0288d1; color: #01579b; }
+.target-paper   { background: #fce4ec; border-color: #d81b60; color: #880e4f; }
 .end-save-box {
   display: none;
   margin-top: 10px;
@@ -300,7 +328,6 @@ button.btn:active { transform: scale(0.98); }
   border: 2px solid var(--green);
   border-radius: 12px;
   padding: 12px;
-  animation: fadeIn 0.25s ease;
 }
 
 /* ---- COMPACT DIGITAL TWIN ---- */
@@ -423,7 +450,7 @@ button.btn:active { transform: scale(0.98); }
 <main class="container">
 
   <!-- ================================================================= -->
-  <!-- TAB 1: 🚨 CIVIC REPORT PORTAL (UC TARAI / TC GOLARCHI / MC BADIN) -->
+  <!-- TAB 1: 🚨 CIVIC REPORT PORTAL (RECENT 5 + SEE MORE + REFRESH)    -->
   <!-- ================================================================= -->
   <section id="tab-civic" class="tab-panel active">
     <div class="grid-2">
@@ -433,24 +460,24 @@ button.btn:active { transform: scale(0.98); }
 
         <label>🏛️ Apna Halqa Chunen (Select UC / TC / MC):</label>
         <select id="repHalqa">
-          <option value="UC Tarai">UC Tarai</option>
-          <option value="Town Committee Golarchi">Town Committee Golarchi</option>
-          <option value="Municipal Committee Badin">Municipal Committee Badin</option>
+          <option value="UC Tarai">Union Council (UC) Tarai</option>
+          <option value="Town Committee Golarchi">Town Committee (TC) Golarchi</option>
+          <option value="Municipal Committee Badin">Municipal Committee (MC) Badin</option>
         </select>
 
         <label>👤 Shehri Ka Naam (Citizen Name):</label>
         <input type="text" id="repName" placeholder="Apna naam likhen...">
 
-        <label>📱 Mobile Number (Private — Saved in Sheet for Officer/Admin):</label>
-        <input type="tel" id="repPhone" placeholder="03XX-XXXXXXX (Aam user ko show nahi hoga)">
+        <label>📱 Mobile Number (Private — Saved in Sheet for Admin/Officer):</label>
+        <input type="tel" id="repPhone" placeholder="03XX-XXXXXXX (Public par show nahi hoga)">
 
-        <label>📍 Jagah Ka Naam &amp; GPS Location:</label>
+        <label>📍 Area Location &amp; GPS Pin:</label>
         <div style="display:flex;gap:6px;">
           <input type="text" id="repLoc" placeholder="Maslan: Main Bazar Tarai / Ward 2">
           <button type="button" class="btn btn-blue" style="width:auto;margin:0;white-space:nowrap;" onclick="grabGPS()">📍 Auto GPS</button>
         </div>
 
-        <label>📷 Kachre Ki Tasveer (Sirf Officer / Admin ko nazar aayegi):</label>
+        <label>📷 Kachre Ki Tasveer (Live Camera ya File/Gallery se chunen):</label>
         <div style="display:flex;gap:6px;">
           <button type="button" class="btn btn-blue" style="margin:0;" onclick="openReportCamera()">📷 Open Camera</button>
           <button type="button" class="btn btn-dark" style="margin:0;" onclick="document.getElementById('repFileInput').click()">📁 Select File / Gallery</button>
@@ -477,12 +504,12 @@ button.btn:active { transform: scale(0.98); }
         </div>
       </div>
 
-      <!-- Right: Live ID Tracker + Halqa Officer & Super Admin Board -->
+      <!-- Right: Live ID Tracker + Halqa Complaints (Recent 5 + See More) -->
       <div>
         <div class="card" style="border-top: 5px solid var(--skyblue);">
           <h2>🧾 Apni Shikayat Track Karen (Report ID Tracker)</h2>
           <div style="display:flex;gap:6px;">
-            <input type="text" id="trackInput" placeholder="Enter Report ID (e.g. R430272)">
+            <input type="text" id="trackInput" placeholder="Enter Report ID (e.g. R776659)">
             <button type="button" class="btn btn-blue" style="width:auto;margin:0;" onclick="trackReportById()">🔍 Track</button>
           </div>
           <div id="trackResult" style="margin-top:8px;font-size:12.5px;"></div>
@@ -490,26 +517,27 @@ button.btn:active { transform: scale(0.98); }
 
         <div class="card" style="border-top: 5px solid var(--green);">
           <h2>
-            <span id="boardTitleTxt">📋 UC / TC / MC Complaints</span>
-            <div style="display:flex;gap:5px;align-items:center;">
-              <button type="button" id="btnToggleOfficer" onclick="toggleOfficerBox()" style="background:#e3efec;border:1px solid var(--line);padding:4px 9px;border-radius:8px;font-size:11.5px;font-weight:800;cursor:pointer;">👮 Officer / Admin Login</button>
-              <button type="button" id="btnLogoutOfficer" onclick="officerLogout()" style="display:none;background:#ffebee;color:#b71c1c;border:1px solid #ef9a9a;padding:4px 9px;border-radius:8px;font-size:11.5px;font-weight:800;cursor:pointer;">🚪 Logout</button>
+            <span id="boardTitleTxt">📋 Recent Complaints (UC / TC / MC)</span>
+            <div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap;">
+              <button type="button" class="mini-btn sync-btn-label" onclick="syncFromGoogleSheet(true)">🔄 Refresh Sheet</button>
+              <button type="button" id="btnToggleOfficer" onclick="toggleOfficerBox()" style="background:#e3efec;border:1px solid var(--line);padding:4px 9px;border-radius:8px;font-size:11.5px;font-weight:800;cursor:pointer;">👮 Officer Login</button>
+              <button type="button" id="btnLogoutOfficer" onclick="officerLogout()" style="display:none;background:var(--coral);color:#fff;border:0;padding:4px 9px;border-radius:8px;font-size:11.5px;font-weight:800;cursor:pointer;">🚪 Logout</button>
             </div>
           </h2>
 
-          <!-- Officer & Super Admin Login Box with See Password Eye Toggle -->
+          <!-- Officer & Super Admin Login Box (with See Password Eye Toggle) -->
           <div id="officerBox" style="display:none;margin-bottom:10px;background:#f4faf8;padding:10px;border-radius:10px;border:1.5px solid var(--line);">
             <label style="margin-top:0;">Select Halqa Officer or Super Admin:</label>
             <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
               <select id="offHalqa" style="flex:1;min-width:155px;">
-                <option value="UC Tarai">UC Tarai Officer</option>
-                <option value="Town Committee Golarchi">Town Committee Golarchi Officer</option>
-                <option value="Municipal Committee Badin">Municipal Committee Badin Officer</option>
+                <option value="UC Tarai">Union Council (UC) Tarai</option>
+                <option value="Town Committee Golarchi">Town Committee (TC) Golarchi</option>
+                <option value="Municipal Committee Badin">Municipal Committee (MC) Badin</option>
                 <option value="SUPER_ADMIN">👑 Super Admin (All Halqas)</option>
               </select>
               <div class="pass-wrap">
-                <input type="password" id="offPass" placeholder="Enter Password">
-                <button type="button" class="eye-btn" onclick="togglePassVisibility('offPass', this)" title="See Password">👁️</button>
+                <input type="password" id="offPass" placeholder="Password">
+                <button type="button" class="eye-btn" onclick="togglePassVisibility('offPass', this)" title="Show/Hide Password">👁️</button>
               </div>
               <button type="button" class="btn btn-green" style="width:auto;margin:0;" onclick="officerLogin()">Login</button>
             </div>
@@ -518,23 +546,35 @@ button.btn:active { transform: scale(0.98); }
 
           <div style="overflow-x:auto;">
             <table class="data-table">
-              <thead id="reportsTableHead"></thead>
+              <thead>
+                <tr id="reportsTableHeadRow">
+                  <th>ID &amp; Halqa</th>
+                  <th>Area Location</th>
+                  <th id="thPhotoCol" style="display:none;">Photo (Officer Only)</th>
+                  <th>Status / Action</th>
+                </tr>
+              </thead>
               <tbody id="reportsTableBody"></tbody>
             </table>
           </div>
+
+          <!-- SEE MORE / SHOW LESS BUTTON FOR COMPLAINTS -->
+          <button type="button" id="btnSeeMoreReports" class="btn btn-dark" style="display:none;margin-top:8px;padding:7px;font-size:12px;" onclick="toggleSeeMoreReports()">
+            🔽 See More Complaints
+          </button>
         </div>
       </div>
     </div>
   </section>
 
   <!-- ================================================================= -->
-  <!-- TAB 2: 📊 CENSUS & IMPACT (LIVE GOOGLE SHEET COUNTS & INSIGHTS)   -->
+  <!-- TAB 2: 📊 CENSUS & IMPACT (LIVE SHEET COUNTS + DAY-WISE GRAPH)    -->
   <!-- ================================================================= -->
   <section id="tab-census" class="tab-panel">
     <div class="card" style="border-top: 5px solid var(--skyblue);">
       <h2>
         <span>📊 Live Smart Waste Census (`Waste_Audit` Sheet)</span>
-        <button type="button" onclick="syncFromGoogleSheet()" style="background:#e1f5fe;color:#01579b;border:1px solid #4fc3f7;padding:4px 10px;border-radius:8px;font-size:11.5px;font-weight:800;cursor:pointer;">🔄 Refresh Sheet Data</button>
+        <button type="button" class="mini-btn sync-btn-label" onclick="syncFromGoogleSheet(true)">🔄 Refresh Sheet Data</button>
       </h2>
 
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0;text-align:center;">
@@ -552,13 +592,14 @@ button.btn:active { transform: scale(0.98); }
         </div>
       </div>
 
+      <!-- Overall Ratio Bars -->
       <div style="margin: 12px 0;">
         <div style="display:flex;justify-content:space-between;font-weight:800;font-size:13px;color:var(--skyblue);margin-bottom:4px;">
           <span>🧴 Plastic Waste Ratio</span>
           <span id="barPlasticTxt">0 Items (0%)</span>
         </div>
         <div style="height:18px;background:#e1f5fe;border-radius:10px;overflow:hidden;">
-          <div id="barPlastic" style="height:100%;width:50%;background:var(--skyblue);transition:width 0.4s;"></div>
+          <div id="barPlastic" style="height:100%;width:0%;background:var(--skyblue);transition:width 0.4s;"></div>
         </div>
       </div>
 
@@ -568,22 +609,33 @@ button.btn:active { transform: scale(0.98); }
           <span id="barPaperTxt">0 Items (0%)</span>
         </div>
         <div style="height:18px;background:#fce4ec;border-radius:10px;overflow:hidden;">
-          <div id="barPaper" style="height:100%;width:50%;background:var(--pink);transition:width 0.4s;"></div>
+          <div id="barPaper" style="height:100%;width:0%;background:var(--pink);transition:width 0.4s;"></div>
         </div>
       </div>
 
-      <div id="censusInsight" style="background:#f4faf8;border:1.5px solid var(--line);border-left:5px solid var(--gold);border-radius:10px;padding:10px;font-size:13px;font-weight:700;line-height:1.45;">
-        💡 <b>AI Census Insight:</b> Google Sheet se live Plastic aur Paper waste data sync ho raha hai...
+      <!-- DAY-WISE GRAPH (PLASTIC VS PAPER BY DATE) -->
+      <div class="day-chart-box">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:6px;">
+          <b style="font-size:13.5px;color:var(--ink);">📅 Day-Wise Waste Graph (Live Google Sheet Trend)</b>
+          <div style="font-size:11.5px;font-weight:800;">
+            <span style="color:var(--skyblue);">🟦 Plastic</span> &nbsp;|&nbsp; <span style="color:var(--pink);">🟥 Paper</span>
+          </div>
+        </div>
+        <div id="dayWiseChartContainer"></div>
+      </div>
+
+      <div id="censusInsight" style="margin-top:12px;background:#f4faf8;border:1.5px solid var(--line);border-left:5px solid var(--gold);border-radius:10px;padding:10px;font-size:13px;font-weight:700;line-height:1.45;">
+        💡 <b>AI Census Insight:</b> Ready for fresh Waste Census scans!
       </div>
     </div>
   </section>
 
   <!-- ================================================================= -->
-  <!-- TAB 3: 🤖 LEARN MODE (3 AI BARS + 0.80s HOLD + ARDUINO ACTIVE)    -->
+  <!-- TAB 3: 🤖 LEARN MODE (WITH PAUSE/RESUME CAMERA + ARDUINO TWIN)    -->
   <!-- ================================================================= -->
   <section id="tab-learn" class="tab-panel">
     <div class="learn-grid">
-      <!-- Left: AI Camera with Front/Back Switch + 3 Live Bars + 0.80s Hold -->
+      <!-- Left: AI Camera with Start / Pause-Resume / Front-Back + 3 Live Bars -->
       <div class="card" style="border-top: 5px solid var(--skyblue);">
         <h2>
           <span>📷 AI Waste Scanner (`RP91qAZCY`)</span>
@@ -591,22 +643,23 @@ button.btn:active { transform: scale(0.98); }
         </h2>
 
         <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
-          <button type="button" class="btn btn-blue" style="flex:1;margin:0;" onclick="startLearnCamera()">🎥 Start AI Camera</button>
-          <button type="button" class="btn btn-dark" style="width:auto;margin:0;" onclick="flipLearnCamera()">🔄 Front / Back Cam</button>
-          <button type="button" class="btn btn-gold" style="width:auto;margin:0;" onclick="connectArduinoUSB()">🔌 Connect Arduino</button>
+          <button type="button" class="btn btn-blue" style="flex:1;margin:0;" onclick="startLearnCamera()">🎥 Start Cam</button>
+          <button type="button" id="btnPauseLearnCam" class="btn btn-gold" style="width:auto;margin:0;" onclick="togglePauseLearnCamera()" disabled>⏸️ Pause Cam</button>
+          <button type="button" class="btn btn-dark" style="width:auto;margin:0;" onclick="flipLearnCamera()">🔄 Front/Back</button>
+          <button type="button" class="btn btn-green" style="width:auto;margin:0;" onclick="connectArduinoUSB()">🔌 Arduino</button>
         </div>
 
         <div style="position:relative;background:#0b1d2e;border-radius:12px;min-height:210px;display:flex;align-items:center;justify-content:center;overflow:hidden;color:#fff;">
           <video id="learnVideo" autoplay playsinline muted style="width:100%;max-height:240px;display:none;object-fit:cover;"></video>
           <div id="learnCamPlaceholder" style="padding:14px;text-align:center;font-size:13px;">
-            Camera chalanay ke liye <b>"🎥 Start AI Camera"</b> dabayen<br>(🔄 button se Front ya Back camera badal sakte hain)
+            Camera chalanay ke liye <b>"🎥 Start Cam"</b> dabayen<br>(Jab zaroorat na ho toh <b>"⏸️ Pause Cam"</b> daba kar camera roken)
           </div>
         </div>
 
         <!-- 0.80s HOLD STEADY PROGRESS BAR -->
         <div class="hold-meter-wrap">
           <div class="hold-meter-head">
-            <span>⏱️ Hold Steady Timer (0.80s to Sort):</span>
+            <span>⏱️ Hold Steady Timer (0.80s to Count &amp; Move Arduino):</span>
             <span id="learnHoldTxt">0.00s / 0.80s</span>
           </div>
           <div class="hold-meter-bar">
@@ -673,17 +726,17 @@ button.btn:active { transform: scale(0.98); }
           </div>
         </div>
 
-        <label style="margin-top:8px;">🧪 Manual Hardware &amp; Sheet Test:</label>
+        <label style="margin-top:8px;">🧪 Manual Test (Learn Mode + Arduino):</label>
         <div style="display:flex;gap:6px;">
-          <button type="button" class="btn btn-blue" style="margin:0;font-size:12px;padding:8px;" onclick="triggerBinSort('Plastic', true)">🧴 Test Plastic (35°)</button>
-          <button type="button" class="btn btn-pink" style="margin:0;font-size:12px;padding:8px;" onclick="triggerBinSort('Paper', true)">📄 Test Paper (145°)</button>
+          <button type="button" class="btn btn-blue" style="margin:0;font-size:12px;padding:8px;" onclick="triggerBinSort('Plastic', 'learn')">🧴 Test Plastic (35°)</button>
+          <button type="button" class="btn btn-pink" style="margin:0;font-size:12px;padding:8px;" onclick="triggerBinSort('Paper', 'learn')">📄 Test Paper (145°)</button>
         </div>
       </div>
     </div>
   </section>
 
   <!-- ================================================================= -->
-  <!-- TAB 4: 🎮 60s GAME (NO TARGET #, 3 AI BARS, NO ARDUINO TRIGGER)   -->
+  <!-- TAB 4: 🎮 60s GAME (NO TARGET #, LIVE AI %, NO ARDUINO TRIGGER)   -->
   <!-- ================================================================= -->
   <section id="tab-game" class="tab-panel">
     <div class="tip-banner">
@@ -691,7 +744,7 @@ button.btn:active { transform: scale(0.98); }
     </div>
 
     <div class="grid-2">
-      <!-- Left: Game Arena (Target Prompt + Camera + 3 AI Bars + End Save Form) -->
+      <!-- Left: Game Arena (Target Prompt + Camera + Live AI % + End Save Form) -->
       <div class="card" style="border-top: 5px solid var(--gold);">
         <h2>⏱️ Play 60-Second AI Sorting Challenge</h2>
 
@@ -702,7 +755,7 @@ button.btn:active { transform: scale(0.98); }
           <div style="font-size:16px;font-weight:900;color:#4fc3f7;">⭐ Score: <span id="gameScore">0</span></div>
         </div>
 
-        <!-- Dynamic Target Prompt Box (NO Target Number! Only Show Plastic or Paper) -->
+        <!-- Clean Target Prompt Box (No Target Number!) -->
         <div id="gameTargetBanner" class="target-banner">
           🎯 "▶️ Start 60s Game" dabayen — Screen bataegi ke Plastic dikhana hai ya Paper!
         </div>
@@ -711,14 +764,14 @@ button.btn:active { transform: scale(0.98); }
         <div style="position:relative;background:#0b1d2e;border-radius:10px;min-height:185px;margin-top:8px;display:flex;align-items:center;justify-content:center;overflow:hidden;color:#fff;">
           <video id="gameVideo" autoplay playsinline muted style="width:100%;max-height:205px;display:none;object-fit:cover;"></video>
           <div id="gameCamPlaceholder" style="padding:12px;text-align:center;font-size:12.5px;">
-            Jo cheez upar mangi jaye, wohi camera ke samne <b>0.80 sec</b> hold karen! (Open Box Game Mode)
+            Jo cheez upar mangi jaye, woh camera ke samne <b>0.80 sec</b> hold karen!
           </div>
         </div>
 
         <!-- 0.80s Hold Meter for Game -->
         <div class="hold-meter-wrap">
           <div class="hold-meter-head">
-            <span id="gameHoldLabel">⏱️ Hold Target Item (0.80s):</span>
+            <span id="gameHoldLabel">⏱️ Target Hold Timer (0.80s):</span>
             <span id="gameHoldTxt">0.00s / 0.80s</span>
           </div>
           <div class="hold-meter-bar">
@@ -726,28 +779,28 @@ button.btn:active { transform: scale(0.98); }
           </div>
         </div>
 
-        <!-- 3 LIVE AI SCAN PERCENTAGES IN GAME MODE -->
-        <div class="prob-box" style="margin-top:8px;padding:8px;">
+        <!-- 3 LIVE AI SCAN PERCENTAGE BARS IN GAME MODE -->
+        <div class="prob-box">
           <div class="prob-row">
             <div class="prob-head" style="color:var(--skyblue);">
-              <span>🧴 Plastic Scan</span>
-              <span id="gPctPlastic">0%</span>
+              <span>🧴 Plastic Scan %</span>
+              <span id="gamePctPlastic">0%</span>
             </div>
-            <div class="prob-track"><div id="gFillPlastic" class="prob-fill" style="background:var(--skyblue);"></div></div>
+            <div class="prob-track"><div id="gameFillPlastic" class="prob-fill" style="background:var(--skyblue);"></div></div>
           </div>
           <div class="prob-row">
             <div class="prob-head" style="color:var(--pink);">
-              <span>📄 Paper Scan</span>
-              <span id="gPctPaper">0%</span>
+              <span>📄 Paper Scan %</span>
+              <span id="gamePctPaper">0%</span>
             </div>
-            <div class="prob-track"><div id="gFillPaper" class="prob-fill" style="background:var(--pink);"></div></div>
+            <div class="prob-track"><div id="gameFillPaper" class="prob-fill" style="background:var(--pink);"></div></div>
           </div>
           <div class="prob-row">
             <div class="prob-head" style="color:#455a64;">
-              <span>🚫 Empty</span>
-              <span id="gPctEmpty">100%</span>
+              <span>🚫 Empty %</span>
+              <span id="gamePctEmpty">100%</span>
             </div>
-            <div class="prob-track"><div id="gFillEmpty" class="prob-fill" style="background:#78909c;width:100%;"></div></div>
+            <div class="prob-track"><div id="gameFillEmpty" class="prob-fill" style="background:#78909c;width:100%;"></div></div>
           </div>
         </div>
 
@@ -758,7 +811,7 @@ button.btn:active { transform: scale(0.98); }
           <button type="button" class="btn btn-dark" style="width:auto;margin:0;" onclick="flipGameCamera()">🔄 Front/Back</button>
         </div>
 
-        <!-- END-OF-GAME NAME & MOBILE NUMBER FORM (ONLY SHOWS WHEN GAME ENDS!) -->
+        <!-- END-OF-GAME NAME & MOBILE NUMBER FORM -->
         <div id="gameEndForm" class="end-save-box">
           <h3 style="margin:0 0 6px;color:var(--green);font-size:16px;">🎉 Time Up! Aapka Score: <span id="finalScoreSpan">0</span> pts</h3>
           <div style="font-size:12px;margin-bottom:8px;">Leaderboard aur Rs. 100 Balance Inam ke liye apna naam aur number darj karen:</div>
@@ -774,7 +827,7 @@ button.btn:active { transform: scale(0.98); }
       <div class="card" style="border-top: 5px solid var(--green);">
         <h2>
           <span>🏆 Live Top Recyclers (Win Rs. 100)</span>
-          <button type="button" onclick="syncFromGoogleSheet()" style="background:#e8f5e9;color:#1b5e20;border:1px solid #81c784;padding:3px 8px;border-radius:8px;font-size:11px;font-weight:800;cursor:pointer;">🔄 Sync Scores</button>
+          <button type="button" class="mini-btn sync-btn-label" onclick="syncFromGoogleSheet(true)">🔄 Refresh Sheet</button>
         </h2>
         <div style="font-size:11.5px;color:#546e7a;margin-bottom:6px;">
           🔒 Mobile numbers public leaderboard par chhupaye gaye hain (Sirf Mentor Admin dekh sakta hai).
@@ -803,8 +856,8 @@ button.btn:active { transform: scale(0.98); }
         <b>Saaf Sindh AI</b> ek 4-in-1 Civic &amp; Edge-AI Automation system hai jo <b>GBHSS Haji Junejo Tarai (SEMIS: 401020169)</b> ke students <b>Shameer Ali, Zahid Ali, aur Farhan</b> ne Mentor <b>Ghulam Hussain Memon (BCS — University of Sindh, Laar Campus Badin)</b> ki rahnumai mein tayyar kiya hai.
       </p>
       <ul style="margin:0;padding-left:18px;">
-        <li><b>1. Civic Report Portal:</b> UC Tarai, Town Committee Golarchi aur Municipal Committee Badin ke liye geotagged photo complaint aur live Report ID tracking.</li>
-        <li><b>2. Smart Waste Census:</b> Google Sheet (<code>Waste_Audit</code>) mein Plastic aur Paper ka live digital hisab aur AI insights.</li>
+        <li><b>1. Civic Report Portal:</b> Union Council (UC) Tarai, Town Committee (TC) Golarchi aur Municipal Committee (MC) Badin ke liye geotagged photo complaint aur live Report ID tracking.</li>
+        <li><b>2. Smart Waste Census:</b> Google Sheet (<code>Waste_Audit</code>) mein Plastic aur Paper ka day-wise live digital hisab, graph aur AI insights.</li>
         <li><b>3. AI + Arduino See-Saw Smart Bin:</b> Google Teachable Machine (<code>RP91qAZCY</code>) + Arduino Uno &amp; SG90 Servo See-Saw (35° Left Plastic / 145° Right Paper).</li>
         <li><b>4. 60s Gamification Challenge:</b> Students mein safai aur recycling ka shauq paida karne ke liye 60-second AI Target Challenge.</li>
       </ul>
@@ -822,23 +875,39 @@ button.btn:active { transform: scale(0.98); }
   </div>
 </div>
 
-<!-- 5-CLICK MENTOR SUPER ADMIN MODAL (`401020169Admin`) -->
+<!-- 5-CLICK MENTOR ADMIN LOGIN MODAL (WITH EYE TOGGLE FOR PASSWORD) -->
+<div class="modal" id="adminLoginModal" onclick="this.classList.remove('open')">
+  <div class="modal-box" style="max-width:380px;" onclick="event.stopPropagation()">
+    <h2 style="margin:0 0 8px;">🔒 Mentor Super Admin Login</h2>
+    <label>Enter Admin Password:</label>
+    <div class="pass-wrap">
+      <input type="password" id="modalAdminPass" placeholder="Enter Password">
+      <button type="button" class="eye-btn" onclick="togglePassVisibility('modalAdminPass', this)">👁️</button>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:12px;">
+      <button type="button" class="btn btn-green" style="margin:0;" onclick="verifyModalAdminLogin()">Login</button>
+      <button type="button" class="btn btn-red" style="margin:0;" onclick="document.getElementById('adminLoginModal').classList.remove('open')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- MENTOR SUPER ADMIN DASHBOARD MODAL (`401020169Admin`) -->
 <div class="modal" id="adminModal" onclick="this.classList.remove('open')">
   <div class="modal-box" onclick="event.stopPropagation()">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-      <h2 style="margin:0;color:var(--ink);">👑 Super Admin Panel (`401020169Admin`)</h2>
-      <button type="button" onclick="officerLogout();document.getElementById('adminModal').classList.remove('open');" style="background:#ffebee;color:#b71c1c;border:1px solid #ef9a9a;padding:5px 10px;border-radius:8px;font-size:12px;font-weight:800;cursor:pointer;">🚪 Logout Admin</button>
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      <h2 style="margin:0;color:var(--ink);">👑 Mentor Super Admin Panel</h2>
+      <button type="button" onclick="officerLogout();document.getElementById('adminModal').classList.remove('open');" style="background:var(--coral);color:#fff;border:0;padding:5px 10px;border-radius:8px;font-size:12px;font-weight:800;cursor:pointer;">🚪 Logout Admin</button>
     </div>
 
-    <h3 style="margin:8px 0 4px;font-size:14px;">📱 Game Players With Mobile Numbers (`Game_Scores` / `Game_Leaders`)</h3>
-    <div style="max-height:160px;overflow-y:auto;">
+    <h3 style="margin:10px 0 4px;font-size:14px;">📱 Game Players With Mobile Numbers (`Game_Scores` / `Game_Leaders`)</h3>
+    <div style="max-height:155px;overflow-y:auto;">
       <table class="data-table">
         <thead><tr><th>Student</th><th>Mobile Number</th><th>Score</th><th>Date</th></tr></thead>
         <tbody id="adminLeadersBody"></tbody>
       </table>
     </div>
 
-    <h3 style="margin:12px 0 4px;font-size:14px;">📞 All Halqa Citizen Reports With Photos &amp; Info (`Civic_Reports`)</h3>
+    <h3 style="margin:12px 0 4px;font-size:14px;">📞 All Halqa Reports With Citizen Info &amp; Photos (`Civic_Reports`)</h3>
     <div style="max-height:180px;overflow-y:auto;">
       <table class="data-table">
         <thead><tr><th>ID &amp; Halqa</th><th>Citizen Info</th><th>Photo</th><th>Status / Action</th></tr></thead>
@@ -847,23 +916,20 @@ button.btn:active { transform: scale(0.98); }
     </div>
 
     <div style="display:flex;gap:8px;margin-top:12px;">
-      <button type="button" class="btn btn-gold" style="margin:0;" onclick="resetDemoCounters()">🔄 Reset Local Counters</button>
-      <button type="button" class="btn btn-red" style="margin:0;" onclick="document.getElementById('adminModal').classList.remove('open')">✖ Close Window</button>
+      <button type="button" class="btn btn-gold" style="margin:0;" onclick="resetDemoCounters()">🧹 Setup / Reset Fresh Sheets &amp; Graph</button>
+      <button type="button" class="btn btn-dark" style="margin:0;" onclick="document.getElementById('adminModal').classList.remove('open')">✖ Close Window</button>
     </div>
   </div>
 </div>
 
 <script>
 // ============================================================================
-// 1. CONFIGURATION, EXACT APPS SCRIPT URL & PASSWORDS
+// 1. HARDCODED GOOGLE APPS SCRIPT URL & PASSWORDS
 // ============================================================================
 const TM_MODEL_URL = "https://teachablemachine.withgoogle.com/models/RP91qAZCY/";
+const SCRIPT_URL   = "https://script.google.com/macros/s/AKfycbxSl2q2L2PoYqatesWrVIjwR9NJmCNYJzMRx9Om6v2zfYwhpdDLz29NpzFxn0qRhYk1/exec";
 const ADMIN_PASS   = "401020169Admin";
 
-// Aapka exact Google Apps Script Web App Link:
-const SCRIPT_URL   = "https://script.google.com/macros/s/AKfycbxSl2q2L2PoYqatesWrVIjwR9NJmCNYJzMRx9Om6v2zfYwhpdDLz29NpzFxn0qRhYk1/exec";
-
-// Officer & Super Admin Passwords
 const OFFICER_PASSWORDS = {
   "UC Tarai":                  ["Tarai123", "UCTarai", "1122", ADMIN_PASS],
   "Town Committee Golarchi":   ["Golarchi123", "TCGolarchi", "2233", ADMIN_PASS],
@@ -871,36 +937,21 @@ const OFFICER_PASSWORDS = {
   "SUPER_ADMIN":               [ADMIN_PASS, "Admin123"]
 };
 
-const HOLD_DURATION_MS = 800; // 0.80 seconds continuous hold
+const HOLD_DURATION_MS = 800; // 0.80 seconds continuous hold required
 
-let plasticCount = parseInt(localStorage.getItem("ss_plastic") || "12", 10);
-let paperCount   = parseInt(localStorage.getItem("ss_paper")   || "10", 10);
-let loggedInOfficer = null; // null, "UC Tarai", "Town Committee Golarchi", "Municipal Committee Badin", or "SUPER_ADMIN"
+let plasticCount = parseInt(localStorage.getItem("ss_plastic") || "0", 10);
+let paperCount   = parseInt(localStorage.getItem("ss_paper")   || "0", 10);
+let dailyStats   = JSON.parse(localStorage.getItem("ss_daily") || "{}");
+let loggedInOfficer = null;
 let currentPhotoDataUrl = "";
-let currentLat = "";
-let currentLng = "";
+let showAllReports = false; // Show only recent 5 by default
 
-let civicReports = JSON.parse(localStorage.getItem("ss_reports") || JSON.stringify([
-  { id: "R520444", halqa: "UC Tarai", name: "Ghulam Hussain", phone: "", loc: "GPS Pin (24.65596 68.82523)", wasteType: "📷 Citizen Photo Attached", mapLink: "https://maps.google.com/?q=24.65596,68.82523", photo: "", status: "Cleaned by UC Tarai", date: "2026-10-29" },
-  { id: "Rmvyvwpn53jj1d73", halqa: "Town Committee Golarchi", name: "Citizen", phone: "8304600", loc: "GPS Pin (24.65749 68.83084)", wasteType: "📷 Citizen Photo Attached", mapLink: "https://maps.google.com/?q=24.65749,68.83084", photo: "", status: "Pending", date: "2026-11-02" },
-  { id: "R430272", halqa: "Municipal Committee Badin", name: "Citizen", phone: "3718073", loc: "GPS Pin (24.65749 68.83084)", wasteType: "📷 Citizen Photo Attached", mapLink: "https://maps.google.com/?q=24.65749,68.83084", photo: "", status: "Cleaned by Municipal Committee Badin", date: "2026-10-29" }
-]));
-
-let leaderboard = JSON.parse(localStorage.getItem("ss_leaders") || JSON.stringify([
-  { name: "Farhan", phone: "0301-1122334", score: 140, date: "2026-11-05" },
-  { name: "Zahid Ali", phone: "0302-2233445", score: 120, date: "2026-11-05" },
-  { name: "Shameer Ali", phone: "0303-3344556", score: 110, date: "2026-11-05" }
-]));
-
-function switchTab(tabId, btnEl) {
-  document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
-  document.querySelectorAll(".nav-tab").forEach(t => t.classList.remove("active"));
-  document.getElementById("tab-" + tabId).classList.add("active");
-  if (btnEl) btnEl.classList.add("active");
-}
+let civicReports = JSON.parse(localStorage.getItem("ss_reports") || "[]");
+let leaderboard  = JSON.parse(localStorage.getItem("ss_leaders") || "[]");
 
 function togglePassVisibility(inputId, btn) {
   const inp = document.getElementById(inputId);
+  if (!inp) return;
   if (inp.type === "password") {
     inp.type = "text";
     btn.textContent = "🙈";
@@ -910,21 +961,28 @@ function togglePassVisibility(inputId, btn) {
   }
 }
 
+function switchTab(tabId, btnEl) {
+  document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+  document.querySelectorAll(".nav-tab").forEach(t => t.classList.remove("active"));
+  document.getElementById("tab-" + tabId).classList.add("active");
+  if (btnEl) btnEl.classList.add("active");
+}
+
 function cleanDateStr(raw) {
-  if (!raw) return "2026-11-05";
+  if (!raw) return new Date().toISOString().slice(0, 10);
   return String(raw).replace(/\d{2}:\d{2}:\d{2}\s*GMT[^\s)]*(\s*\([^)]*\))?/gi, "").trim();
 }
 
-function normalizeHalqa(h) {
-  const s = String(h || "").toLowerCase();
-  if (s.includes("tarai")) return "UC Tarai";
-  if (s.includes("golarchi")) return "Town Committee Golarchi";
-  if (s.includes("badin")) return "Municipal Committee Badin";
-  return h || "UC Tarai";
+function normalizeHalqaName(h) {
+  const s = String(h || "").trim();
+  if (s === "TC Golarchi" || s.toLowerCase().includes("golarchi")) return "Town Committee Golarchi";
+  if (s === "MC Badin" || s.toLowerCase().includes("badin")) return "Municipal Committee Badin";
+  if (s.toLowerCase().includes("tarai")) return "UC Tarai";
+  return s || "UC Tarai";
 }
 
 // ============================================================================
-// 2. GOOGLE APPS SCRIPT CLOUD SYNC (MATCHES YOUR 4 SHEET TABS)
+// 2. GOOGLE APPS SCRIPT CLOUD SYNC (WITH VISUAL REFRESH FEEDBACK)
 // ============================================================================
 async function postToGoogleSheet(payload) {
   try {
@@ -935,37 +993,100 @@ async function postToGoogleSheet(payload) {
       body: JSON.stringify(payload)
     });
   } catch (e) {
-    console.warn("POST error:", e);
+    console.warn("POST sync warning:", e);
   }
 }
 
-async function syncFromGoogleSheet() {
+async function syncFromGoogleSheet(showFeedback) {
+  const btns = document.querySelectorAll(".sync-btn-label");
+  if (showFeedback) {
+    btns.forEach(b => { b.textContent = "⏳ Syncing..."; b.disabled = true; });
+  }
   try {
-    const res = await fetch(SCRIPT_URL + "?action=getAllData&t=" + Date.now());
+    const res = await fetch(SCRIPT_URL + "?action=getAllData&t=" + Date.now(), { cache: "no-store" });
     const data = await res.json();
 
     if (typeof data.plastic === "number") plasticCount = data.plastic;
     if (typeof data.paper === "number")   paperCount   = data.paper;
+    if (data.daily && typeof data.daily === "object") {
+      dailyStats = data.daily;
+      localStorage.setItem("ss_daily", JSON.stringify(dailyStats));
+    }
 
-    if (Array.isArray(data.reports) && data.reports.length) {
-      civicReports = data.reports.filter(r => r && r.id && !String(r.wasteType || "").includes("=== DATE:"));
+    if (Array.isArray(data.reports)) {
+      civicReports = data.reports.filter(r => r.id && !String(r.id).includes("===") && !String(r.area || r.loc || "").includes("==="));
       localStorage.setItem("ss_reports", JSON.stringify(civicReports));
     }
-    if (Array.isArray(data.leaders) && data.leaders.length) {
+    if (Array.isArray(data.leaders)) {
       leaderboard = data.leaders;
       localStorage.setItem("ss_leaders", JSON.stringify(leaderboard));
     }
+
     refreshCensusUI();
     renderReportsTable();
     renderLeaderboard();
+
+    if (showFeedback) {
+      btns.forEach(b => { b.textContent = "✅ Refreshed!"; b.disabled = false; });
+      setTimeout(() => {
+        btns.forEach(b => { b.textContent = "🔄 Refresh Sheet"; });
+      }, 1500);
+    }
   } catch (e) {
-    console.warn("Sync fallback to local cache:", e);
+    console.warn("Sync error:", e);
+    if (showFeedback) {
+      btns.forEach(b => { b.textContent = "⚠️ Retry Sync"; b.disabled = false; });
+    }
   }
 }
 
 // ============================================================================
-// 3. CENSUS UI & COMMUNITY AI INSIGHTS
+// 3. CENSUS UI, DAY-WISE GRAPH & COMMUNITY AI INSIGHTS
 // ============================================================================
+function recordLocalDailyScan(type) {
+  const today = new Date().toISOString().slice(0, 10);
+  if (!dailyStats[today]) dailyStats[today] = { plastic: 0, paper: 0 };
+  if (type === "Plastic") dailyStats[today].plastic++;
+  else dailyStats[today].paper++;
+  localStorage.setItem("ss_daily", JSON.stringify(dailyStats));
+}
+
+function renderDayWiseChart() {
+  const box = document.getElementById("dayWiseChartContainer");
+  const dates = Object.keys(dailyStats).sort().reverse().slice(0, 7);
+  if (!dates.length) {
+    const today = new Date().toISOString().slice(0, 10);
+    if (plasticCount > 0 || paperCount > 0) {
+      dailyStats[today] = { plastic: plasticCount, paper: paperCount };
+      dates.push(today);
+    }
+  }
+  if (!dates.length) {
+    box.innerHTML = `<div style="font-size:12px;color:#546e7a;text-align:center;padding:8px;">Abhi koi scan record nahi hai — Learn Mode ya Game Mode mein Plastic/Paper scan karen!</div>`;
+    return;
+  }
+
+  box.innerHTML = dates.map(d => {
+    const p = dailyStats[d]?.plastic || 0;
+    const a = dailyStats[d]?.paper   || 0;
+    const tot = p + a || 1;
+    const pW = Math.round((p / tot) * 100);
+    const aW = (p + a) ? (100 - pW) : 0;
+    return `
+      <div class="day-row">
+        <div style="font-weight:800;color:var(--ink);">${d}</div>
+        <div class="day-bars">
+          <div style="width:${pW}%;background:var(--skyblue);" title="Plastic: ${p}"></div>
+          <div style="width:${aW}%;background:var(--pink);" title="Paper: ${a}"></div>
+        </div>
+        <div style="text-align:right;font-weight:800;font-size:11px;">
+          <span style="color:var(--skyblue);">${p}P</span> / <span style="color:var(--pink);">${a}A</span>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
 function refreshCensusUI() {
   localStorage.setItem("ss_plastic", plasticCount);
   localStorage.setItem("ss_paper", paperCount);
@@ -987,16 +1108,20 @@ function refreshCensusUI() {
   document.getElementById("barPlastic").style.width    = pPct + "%";
   document.getElementById("barPaper").style.width      = aPct + "%";
 
+  renderDayWiseChart();
+
   const insightEl = document.getElementById("censusInsight");
-  if (plasticCount >= paperCount) {
-    insightEl.innerHTML = `💡 <b>AI Census Insight:</b> Is waqt ilaqay (UC / TC / MC) mein <b>Plastic waste (${pPct}%)</b> zyada hai. Bazar, dukanon aur gharon mein single-use plastic theliyon ki jagah reusable thailay istamal karne aur plastic recycling barhane ki tajweez di jati hai.`;
+  if (total === 0) {
+    insightEl.innerHTML = `💡 <b>AI Census Insight:</b> Google Sheet bilkul clean aur ready hai! Jaise hi aap Plastic ya Paper scan karenge, live Day-Wise Graph aur AI Insights yahan update honge.`;
+  } else if (plasticCount >= paperCount) {
+    insightEl.innerHTML = `💡 <b>AI Census Insight:</b> Is waqt ilaqay (UC Tarai / TC Golarchi / MC Badin) mein <b>Plastic waste (${pPct}%)</b> zyada hai. Bazar, dukanon aur gharon mein single-use plastic theliyon ki jagah kapray ke reusable thailay istamal karne aur plastic recycling barhane ki tajweez di jati hai.`;
   } else {
-    insightEl.innerHTML = `💡 <b>AI Census Insight:</b> Is waqt <b>Paper aur Cardboard waste (${aPct}%)</b> zyada record hua hai. Kagaz aur gattay ko jalane ke bajaye alag rakh kar paper recycling mein bhejne ki tajweez di jati hai.`;
+    insightEl.innerHTML = `💡 <b>AI Census Insight:</b> Is waqt <b>Paper aur Cardboard waste (${aPct}%)</b> zyada record hua hai. Kagaz aur gattay ko kachre mein jalane ke bajaye alag rakh kar paper recycling mein bhejne ki tajweez di jati hai.`;
   }
 }
 
 // ============================================================================
-// 4. CIVIC REPORT: CAMERA + FILE + HALQA FILTERING + PHOTO PRIVACY + LOGOUT
+// 4. CIVIC REPORT: RECENT 5 + SEE MORE + HALQA FILTER + PHOTO PRIVACY
 // ============================================================================
 let repStream = null;
 let repFacing = "environment";
@@ -1034,10 +1159,10 @@ function captureReportFrame() {
   const vid = document.getElementById("repVideo");
   if (!vid.videoWidth) return;
   const cvs = document.createElement("canvas");
-  cvs.width = 380;
-  cvs.height = Math.round((vid.videoHeight / vid.videoWidth) * 380);
+  cvs.width = 400;
+  cvs.height = Math.round((vid.videoHeight / vid.videoWidth) * 400);
   cvs.getContext("2d").drawImage(vid, 0, 0, cvs.width, cvs.height);
-  currentPhotoDataUrl = cvs.toDataURL("image/jpeg", 0.68);
+  currentPhotoDataUrl = cvs.toDataURL("image/jpeg", 0.70);
   const prev = document.getElementById("repPreview");
   prev.src = currentPhotoDataUrl;
   prev.style.display = "block";
@@ -1052,12 +1177,12 @@ function previewReportPhoto(input) {
     const img = new Image();
     img.onload = function() {
       const cvs = document.createElement("canvas");
-      const maxW = 380;
+      const maxW = 400;
       const scale = Math.min(1, maxW / img.width);
       cvs.width = Math.round(img.width * scale);
       cvs.height = Math.round(img.height * scale);
       cvs.getContext("2d").drawImage(img, 0, 0, cvs.width, cvs.height);
-      currentPhotoDataUrl = cvs.toDataURL("image/jpeg", 0.68);
+      currentPhotoDataUrl = cvs.toDataURL("image/jpeg", 0.70);
       const prev = document.getElementById("repPreview");
       prev.src = currentPhotoDataUrl;
       prev.style.display = "block";
@@ -1067,26 +1192,23 @@ function previewReportPhoto(input) {
   reader.readAsDataURL(file);
 }
 
+let lastGpsCoords = "24.65749,68.83084";
 function grabGPS() {
   const locInput = document.getElementById("repLoc");
   if (!navigator.geolocation) {
-    currentLat = "24.65749";
-    currentLng = "68.83084";
-    locInput.value = `GPS Pin (${currentLat} ${currentLng})`;
+    locInput.value = "GPS Pin (24.65749 68.83084)";
     return;
   }
   locInput.value = "Fetching GPS...";
   navigator.geolocation.getCurrentPosition(
     pos => {
-      currentLat = pos.coords.latitude.toFixed(5);
-      currentLng = pos.coords.longitude.toFixed(5);
-      const userTxt = locInput.value.replace("Fetching GPS...", "").trim();
-      locInput.value = (userTxt ? userTxt + " - " : "") + `GPS Pin (${currentLat} ${currentLng})`;
+      const lat = pos.coords.latitude.toFixed(5);
+      const lng = pos.coords.longitude.toFixed(5);
+      lastGpsCoords = `${lat},${lng}`;
+      locInput.value = `GPS Pin (${lat} ${lng})`;
     },
     () => {
-      currentLat = "24.65749";
-      currentLng = "68.83084";
-      locInput.value = `GPS Pin (${currentLat} ${currentLng})`;
+      locInput.value = "GPS Pin (24.65749 68.83084)";
     }
   );
 }
@@ -1095,31 +1217,26 @@ function submitCivicReport() {
   const halqa = document.getElementById("repHalqa").value;
   const name  = document.getElementById("repName").value.trim()  || "Anonymous Citizen";
   const phone = document.getElementById("repPhone").value.trim() || "";
-  const loc   = document.getElementById("repLoc").value.trim()   || `GPS Pin (24.65749 68.83084)`;
-  const randId = "R" + Math.random().toString(36).substring(2, 9) + Math.random().toString(36).substring(2, 7);
-  const todayStr = new Date().toISOString().split("T")[0];
-  const citizenInfo = phone ? `${name} (${phone})` : name;
-  const mapLink = currentLat ? `https://maps.google.com/?q=${currentLat},${currentLng}` : `https://maps.google.com/?q=24.65749,68.83084`;
-  const wasteType = currentPhotoDataUrl ? "📷 Citizen Photo Attached" : "Mixed Waste";
+  const loc   = document.getElementById("repLoc").value.trim()   || "GPS Pin (24.65749 68.83084)";
+  const randId = "R" + Math.random().toString(36).substring(2, 8).toUpperCase();
+  const citizenCombined = phone ? `${name} (${phone})` : name;
+  const mapUrl = `https://maps.google.com/?q=${lastGpsCoords}`;
+  const todayStr = new Date().toISOString().slice(0, 10);
 
   const newRep = {
     id: randId,
     halqa: halqa,
     loc: loc,
-    wasteType: wasteType,
-    citizenInfo: citizenInfo,
-    name: name,
-    phone: phone,
-    mapLink: mapLink,
-    photo: currentPhotoDataUrl,
+    wasteType: currentPhotoDataUrl ? "📷 Citizen Photo Attached" : "♻️ Mixed Area Waste",
+    citizenInfo: citizenCombined,
+    mapLink: mapUrl,
     status: "Pending",
-    date: todayStr
+    date: todayStr,
+    photo: currentPhotoDataUrl
   };
 
   civicReports.unshift(newRep);
   localStorage.setItem("ss_reports", JSON.stringify(civicReports));
-
-  // Send to Google Sheet matching exact columns A-I of Civic_Reports
   postToGoogleSheet({ action: "addReport", report: newRep });
 
   document.getElementById("newRepId").textContent = randId;
@@ -1140,11 +1257,11 @@ function trackReportById() {
   if (!found) {
     box.innerHTML = `<span style="color:var(--coral);">❌ Yeh Report ID nahi mili.</span>`;
   } else {
-    const isClean = String(found.status).toLowerCase().includes("cleaned");
+    const isClean = String(found.status).startsWith("Cleaned");
     box.innerHTML = `
       <div style="padding:8px;border-radius:8px;background:${isClean ? '#e8f5e9' : '#fff3e0'};border:1.5px solid ${isClean ? '#81c784' : '#ffb74d'};">
-        <b>ID:</b> <code>${found.id}</code> | <b>Halqa:</b> ${found.halqa}<br>
-        <b>Area:</b> ${found.loc}<br>
+        <b>Report ID:</b> <code>${found.id}</code> | <b>Halqa:</b> ${found.halqa}<br>
+        <b>Location:</b> ${found.loc || found.area || ''}<br>
         <b>Status:</b> <span class="status-pill ${isClean ? 'st-cleaned' : 'st-pending'}">${isClean ? '✅ ' + found.status : '⏳ Pending Cleanup'}</span>
       </div>`;
   }
@@ -1165,35 +1282,37 @@ function officerLogin() {
     loggedInOfficer = role;
     msg.style.color = "var(--green)";
     document.getElementById("btnLogoutOfficer").style.display = "inline-block";
-    document.getElementById("btnToggleOfficer").style.display = "none";
-    document.getElementById("officerBox").style.display = "none";
 
     if (role === "SUPER_ADMIN") {
-      document.getElementById("boardTitleTxt").innerHTML = `👑 Super Admin: All Halqas`;
+      msg.innerHTML = `👑 <b>Super Admin Logged In!</b> Tamam Halqas, Photos aur Citizen Numbers on hain.`;
+      document.getElementById("boardTitleTxt").textContent = "📋 All Halqas (Super Admin)";
     } else {
-      document.getElementById("boardTitleTxt").innerHTML = `👮 ${role} Dashboard`;
+      msg.innerHTML = `✅ <b>${role} Officer Logged In!</b> Sirf ${role} ki reports aur Photos dikhayi ja rahi hain.`;
+      document.getElementById("boardTitleTxt").textContent = `📋 ${role} Complaints`;
     }
     renderReportsTable();
   } else {
     msg.style.color = "var(--coral)";
-    msg.textContent = "❌ Incorrect Password! Dubara check karen.";
+    msg.textContent = "❌ Incorrect Password! 👁️ icon daba kar password check karen.";
   }
 }
 
 function officerLogout() {
   loggedInOfficer = null;
   document.getElementById("offPass").value = "";
-  document.getElementById("offMsg").textContent = "";
+  document.getElementById("offMsg").textContent = "🔒 Logged Out (Public View Active).";
   document.getElementById("btnLogoutOfficer").style.display = "none";
-  document.getElementById("btnToggleOfficer").style.display = "inline-block";
-  document.getElementById("boardTitleTxt").textContent = "📋 UC / TC / MC Complaints";
+  document.getElementById("officerBox").style.display = "none";
+  document.getElementById("boardTitleTxt").textContent = "📋 Recent Complaints (UC / TC / MC)";
   renderReportsTable();
 }
 
-function markCleaned(reportId) {
-  const rep = civicReports.find(r => String(r.id) === String(reportId));
+function markCleanedById(repId) {
+  const rep = civicReports.find(r => String(r.id) === String(repId));
   if (!rep) return;
-  const cleaner = (loggedInOfficer && loggedInOfficer !== "SUPER_ADMIN") ? loggedInOfficer : normalizeHalqa(rep.halqa);
+  const cleaner = (loggedInOfficer && loggedInOfficer !== "SUPER_ADMIN")
+    ? loggedInOfficer
+    : normalizeHalqaName(rep.halqa);
   rep.status = "Cleaned by " + cleaner;
   localStorage.setItem("ss_reports", JSON.stringify(civicReports));
   postToGoogleSheet({ action: "updateReportStatus", id: rep.id, status: rep.status });
@@ -1201,85 +1320,98 @@ function markCleaned(reportId) {
   refreshCensusUI();
 }
 
-function zoomPhoto(reportId) {
-  const r = civicReports.find(x => String(x.id) === String(reportId));
+function zoomPhotoById(repId) {
+  const r = civicReports.find(x => String(x.id) === String(repId));
   if (!r || !r.photo) return;
   document.getElementById("modalImg").src = r.photo;
-  document.getElementById("modalCaption").textContent = `${r.id} — ${r.loc} (${r.halqa})`;
+  document.getElementById("modalCaption").textContent = `${r.id} — ${r.loc || ''} (${r.halqa})`;
   document.getElementById("photoModal").classList.add("open");
 }
 
+function toggleSeeMoreReports() {
+  showAllReports = !showAllReports;
+  renderReportsTable();
+}
+
 function renderReportsTable() {
-  const thead = document.getElementById("reportsTableHead");
   const tbody = document.getElementById("reportsTableBody");
+  const thPhoto = document.getElementById("thPhotoCol");
+  const btnMore = document.getElementById("btnSeeMoreReports");
+
   const isLogged = Boolean(loggedInOfficer);
+  thPhoto.style.display = isLogged ? "table-cell" : "none";
 
-  // Photo column & Citizen Info only visible when Officer or Super Admin is logged in!
-  if (isLogged) {
-    thead.innerHTML = `<tr><th>ID &amp; Halqa</th><th>Area &amp; Citizen Info</th><th>Photo</th><th>Status / Action</th></tr>`;
-  } else {
-    thead.innerHTML = `<tr><th>ID &amp; Halqa</th><th>Area / Location</th><th>Status</th></tr>`;
-  }
-
-  // Filter rows: If specific Halqa Officer is logged in, show ONLY their Halqa!
-  const visibleReports = civicReports.filter(r => {
+  // Filter rows by Halqa if a specific Halqa Officer is logged in
+  const filteredRows = civicReports.filter(r => {
     if (!loggedInOfficer || loggedInOfficer === "SUPER_ADMIN") return true;
-    return normalizeHalqa(r.halqa) === normalizeHalqa(loggedInOfficer);
+    return normalizeHalqaName(r.halqa) === normalizeHalqaName(loggedInOfficer);
   });
 
-  if (!visibleReports.length) {
-    tbody.innerHTML = `<tr><td colspan="${isLogged ? 4 : 3}" style="text-align:center;padding:12px;">Is Halqa mein koi report mojood nahi hai.</td></tr>`;
+  if (!filteredRows.length) {
+    tbody.innerHTML = `<tr><td colspan="${isLogged ? 4 : 3}" style="text-align:center;padding:12px;">Abhi koi complaint darj nahi hai.</td></tr>`;
+    btnMore.style.display = "none";
     return;
   }
 
-  tbody.innerHTML = visibleReports.map(r => {
-    const isClean = String(r.status).toLowerCase().includes("cleaned");
-    const statusBadge = `<span class="status-pill ${isClean ? 'st-cleaned' : 'st-pending'}">${isClean ? '✅ ' + r.status : '⏳ Pending'}</span>`;
+  // Show only recent 5 unless "See More" is clicked
+  const displayedRows = showAllReports ? filteredRows : filteredRows.slice(0, 5);
 
-    // Public view: Hide Photo & Hide Citizen Phone/Mark Cleaned
-    if (!isLogged) {
-      return `
-        <tr>
-          <td><b>${r.halqa}</b><br><code style="font-size:10.5px;">${r.id}</code></td>
-          <td>${r.loc}<br><small style="color:#78909c;">📅 ${cleanDateStr(r.date)}</small></td>
-          <td>${statusBadge}</td>
-        </tr>`;
-    }
+  if (filteredRows.length > 5) {
+    btnMore.style.display = "block";
+    btnMore.textContent = showAllReports
+      ? `🔼 Show Less (Top 5 Only)`
+      : `🔽 See More Complaints (${filteredRows.length - 5} More)`;
+  } else {
+    btnMore.style.display = "none";
+  }
 
-    // Officer / Super Admin view: Show Photo, Citizen Info, Map Link & Mark Cleaned button
-    const cInfo = r.citizenInfo || (r.phone ? `${r.name || 'Citizen'} (${r.phone})` : (r.name || 'Citizen'));
-    const photoCell = r.photo
-      ? `<img src="${r.photo}" onclick="zoomPhoto('${r.id}')" style="width:42px;height:42px;object-fit:cover;border-radius:6px;cursor:pointer;border:1.5px solid var(--skyblue);" title="Click to View Photo">`
-      : `<span style="font-size:10.5px;color:#0288d1;">${r.wasteType || 'No Photo'}</span>`;
-    const cleanBtn = !isClean
-      ? `<br><button onclick="markCleaned('${r.id}')" style="margin-top:4px;background:var(--green);color:#fff;border:0;border-radius:6px;padding:4px 8px;font-size:10.5px;font-weight:800;cursor:pointer;">✔ Tick Cleaned</button>`
+  tbody.innerHTML = displayedRows.map(r => {
+    const isClean = String(r.status).startsWith("Cleaned");
+    const citizenLine = isLogged
+      ? `<br><small style="color:var(--skyblue);font-weight:700;">👤 ${r.citizenInfo || r.name || 'Citizen'}</small>`
       : "";
     const mapAnchor = r.mapLink
       ? ` <a href="${r.mapLink}" target="_blank" style="font-size:11px;color:var(--skyblue);font-weight:800;">[Map]</a>`
       : "";
 
+    let photoTd = "";
+    if (isLogged) {
+      if (r.photo && String(r.photo).startsWith("data:image")) {
+        photoTd = `<td><img src="${r.photo}" onclick="zoomPhotoById('${r.id}')" style="width:42px;height:42px;object-fit:cover;border-radius:6px;cursor:pointer;border:1.5px solid var(--skyblue);" title="Click to Zoom"></td>`;
+      } else {
+        photoTd = `<td><span style="font-size:11px;color:#546e7a;">${r.wasteType || '📷 Attached'}</span></td>`;
+      }
+    }
+
+    const actionBtn = (!isClean && isLogged)
+      ? `<br><button onclick="markCleanedById('${r.id}')" style="margin-top:4px;background:var(--green);color:#fff;border:0;border-radius:6px;padding:3px 8px;font-size:11px;font-weight:800;cursor:pointer;">✔ Mark Cleaned</button>`
+      : "";
+
     return `
       <tr>
         <td><b>${r.halqa}</b><br><code style="font-size:10.5px;">${r.id}</code></td>
-        <td>${r.loc}${mapAnchor}<br><small style="color:#01579b;font-weight:700;">👤 ${cInfo}</small></td>
-        <td>${photoCell}</td>
-        <td>${statusBadge}${cleanBtn}</td>
+        <td>${r.loc || r.area || ''}${mapAnchor}${citizenLine}</td>
+        ${photoTd}
+        <td>
+          <span class="status-pill ${isClean ? 'st-cleaned' : 'st-pending'}">${isClean ? '✅ ' + r.status : '⏳ Pending'}</span>
+          ${actionBtn}
+        </td>
       </tr>`;
   }).join("");
 }
 
 // ============================================================================
-// 5. LEARN MODE: 0.80 SEC HOLD + 3 AI BARS + ARDUINO ACTIVE ONLY IN LEARN MODE
+// 5. LEARN MODE: PAUSE/RESUME CAMERA + 0.80s HOLD + ARDUINO TWIN
 // ============================================================================
 let tmModel = null;
 let learnStream = null;
 let learnFacing = "environment";
 let learnLoopActive = false;
+let learnCamPaused = false;
 
 let learnHoldItem = null;
 let learnHoldStart = 0;
 let learnCooldownUntil = 0;
-
 let serialWriter = null;
 
 async function ensureTMModel() {
@@ -1311,34 +1443,30 @@ async function sendToArduino(charCmd) {
   } catch (e) {}
 }
 
-// useArduino = true ONLY in Learn Mode; in Game Mode useArduino = false!
-function triggerBinSort(type, useArduino) {
+// Arduino ONLY moves when mode === 'learn'
+function triggerBinSort(type, mode) {
+  const flap = document.getElementById("twinFlap");
+  const txt  = document.getElementById("twinAngleTxt");
   if (type === "Plastic") {
     plasticCount++;
-  } else {
-    paperCount++;
-  }
-  refreshCensusUI();
-  postToGoogleSheet({
-    action: "logWasteScan",
-    type: type,
-    source: useArduino ? "Learn_Mode_SmartBin" : "Game_Mode_OpenBin",
-    plastic: plasticCount,
-    paper: paperCount
-  });
-
-  if (useArduino) {
-    const flap = document.getElementById("twinFlap");
-    const txt  = document.getElementById("twinAngleTxt");
-    if (type === "Plastic") {
+    if (mode === "learn") {
       flap.style.transform = "rotate(-25deg)";
       txt.innerHTML = `<span style="color:var(--skyblue);">🧴 Plastic ➔ 35° Left Tilt (Pin 4 LED + Pin 9 Servo)</span>`;
       sendToArduino("P");
-    } else {
+    }
+  } else {
+    paperCount++;
+    if (mode === "learn") {
       flap.style.transform = "rotate(25deg)";
       txt.innerHTML = `<span style="color:var(--pink);">📄 Paper ➔ 145° Right Tilt (Pin 6 LED + Pin 9 Servo)</span>`;
       sendToArduino("A");
     }
+  }
+  recordLocalDailyScan(type);
+  refreshCensusUI();
+  postToGoogleSheet({ action: "logWasteScan", type: type, mode: mode, plastic: plasticCount, paper: paperCount });
+
+  if (mode === "learn") {
     setTimeout(() => {
       flap.style.transform = "rotate(0deg)";
       txt.textContent = "Servo Angle: 90° (Flat Neutral)";
@@ -1349,6 +1477,7 @@ function triggerBinSort(type, useArduino) {
 async function startLearnCamera() {
   const vid = document.getElementById("learnVideo");
   const ph  = document.getElementById("learnCamPlaceholder");
+  const pauseBtn = document.getElementById("btnPauseLearnCam");
   ph.textContent = "⏳ Loading AI Model & Camera...";
   try {
     await ensureTMModel();
@@ -1360,12 +1489,37 @@ async function startLearnCamera() {
     vid.srcObject = learnStream;
     vid.style.display = "block";
     ph.style.display  = "none";
+    learnCamPaused = false;
+    pauseBtn.disabled = false;
+    pauseBtn.textContent = "⏸️ Pause Cam";
     if (!learnLoopActive) {
       learnLoopActive = true;
       window.requestAnimationFrame(loopLearnAI);
     }
   } catch (err) {
     ph.textContent = "⚠️ Camera Permission Allow karen.";
+  }
+}
+
+function togglePauseLearnCamera() {
+  if (!learnStream) return;
+  const vid = document.getElementById("learnVideo");
+  const pauseBtn = document.getElementById("btnPauseLearnCam");
+  const statusEl = document.getElementById("aiPredictionText");
+  learnCamPaused = !learnCamPaused;
+
+  if (learnCamPaused) {
+    vid.pause();
+    learnStream.getVideoTracks().forEach(t => { t.enabled = false; });
+    pauseBtn.textContent = "▶️ Resume Cam";
+    statusEl.innerHTML = "⏸️ <b>Camera Paused:</b> Dobara scan karne ke liye '▶️ Resume Cam' dabayen";
+    statusEl.style.background = "#fff3e0";
+  } else {
+    learnStream.getVideoTracks().forEach(t => { t.enabled = true; });
+    vid.play();
+    pauseBtn.textContent = "⏸️ Pause Cam";
+    statusEl.innerHTML = "🎥 Camera Resumed — Plastic ya Paper 0.80 sec hold karen";
+    statusEl.style.background = "#e8f5e9";
   }
 }
 
@@ -1377,7 +1531,9 @@ function flipLearnCamera() {
 async function loopLearnAI() {
   if (!learnLoopActive) return;
   const vid = document.getElementById("learnVideo");
-  if (tmModel && vid && vid.readyState >= 2) {
+  const isLearnTabVisible = document.getElementById("tab-learn").classList.contains("active");
+
+  if (!learnCamPaused && isLearnTabVisible && tmModel && vid && vid.readyState >= 2) {
     const preds = await tmModel.predict(vid);
     let pProb = 0, aProb = 0, eProb = 0;
 
@@ -1415,7 +1571,7 @@ async function loopLearnAI() {
     }
 
     if (now < learnCooldownUntil) {
-      // Waiting for servo tilt cycle
+      // Waiting for servo tilt to complete
     } else if (!detected) {
       learnHoldItem = null;
       learnHoldStart = 0;
@@ -1434,11 +1590,10 @@ async function loopLearnAI() {
       holdFill.style.width = pctHold + "%";
 
       if (elapsed >= HOLD_DURATION_MS) {
-        // 0.80s Hold Complete in Learn Mode -> Trigger Arduino & Count!
-        triggerBinSort(detected, true);
+        triggerBinSort(detected, "learn");
         statusEl.innerHTML = detected === "Plastic"
-          ? `✅ <b>Plastic Sorted!</b> ➔ Arduino Servo 35° Left!`
-          : `✅ <b>Paper Sorted!</b> ➔ Arduino Servo 145° Right!`;
+          ? `✅ <b>Plastic Counted!</b> ➔ Arduino Tilting 35° Left!`
+          : `✅ <b>Paper Counted!</b> ➔ Arduino Tilting 145° Right!`;
         statusEl.style.background = detected === "Plastic" ? "#e1f5fe" : "#fce4ec";
         learnHoldItem = null;
         learnHoldStart = 0;
@@ -1453,7 +1608,7 @@ async function loopLearnAI() {
 }
 
 // ============================================================================
-// 6. 60s GAME: NO TARGET #, 3 AI SCAN BARS, NO ARDUINO SERVO, END SAVE FORM
+// 6. 60s GAME: NO TARGET #, LIVE AI %, 2-1-1-2 PATTERN, NO ARDUINO TRIGGER
 // ============================================================================
 let gameStream = null;
 let gameFacing = "environment";
@@ -1463,11 +1618,10 @@ let gameInterval = null;
 let timeLeft = 60;
 let currentScore = 0;
 
-// Patterned streak logic: 2x, 1x, 1x, 2x, 1x, 2x, 1x, 1x...
 const STREAK_PATTERN = [2, 1, 1, 2, 1, 2, 1, 1, 2, 1];
 let targetQueue = [];
 let currentTarget = "Plastic";
-let hasPickedFirstTarget = false;
+let isFirstTarget = true;
 
 let gameHoldStart = 0;
 let gameCooldownUntil = 0;
@@ -1488,16 +1642,16 @@ function nextGameTarget() {
   if (!targetQueue.length) buildTargetQueue();
   const prevTarget = currentTarget;
   currentTarget = targetQueue.shift();
-  const isRepeat = (hasPickedFirstTarget && prevTarget === currentTarget);
-  hasPickedFirstTarget = true;
+  const isRepeat = (!isFirstTarget && prevTarget === currentTarget);
+  isFirstTarget = false;
   const banner = document.getElementById("gameTargetBanner");
 
   if (currentTarget === "Plastic") {
     banner.className = "target-banner target-plastic";
-    banner.innerHTML = `🎯 Show <b>PLASTIC 🧴</b> ${isRepeat ? '<span style="font-size:13px;background:#0288d1;color:#fff;padding:2px 7px;border-radius:8px;">Again!</span>' : ''}`;
+    banner.innerHTML = `🧴 <b>Show PLASTIC! (Plastic Dikhao)</b> ${isRepeat ? '<span style="font-size:12.5px;background:#0288d1;color:#fff;padding:2px 7px;border-radius:8px;">Dubara Plastic!</span>' : ''}`;
   } else {
     banner.className = "target-banner target-paper";
-    banner.innerHTML = `🎯 Show <b>PAPER 📄</b> ${isRepeat ? '<span style="font-size:13px;background:#d81b60;color:#fff;padding:2px 7px;border-radius:8px;">Again!</span>' : ''}`;
+    banner.innerHTML = `📄 <b>Show PAPER! (Paper Dikhao)</b> ${isRepeat ? '<span style="font-size:12.5px;background:#d81b60;color:#fff;padding:2px 7px;border-radius:8px;">Dubara Paper!</span>' : ''}`;
   }
 }
 
@@ -1524,7 +1678,7 @@ async function start60sGame() {
   timeLeft = 60;
   currentScore = 0;
   gamePaused = false;
-  hasPickedFirstTarget = false;
+  isFirstTarget = true;
   gameHoldStart = 0;
   gameCooldownUntil = 0;
   buildTargetQueue();
@@ -1558,10 +1712,15 @@ function togglePauseGame() {
   gamePaused = !gamePaused;
   const pauseBtn = document.getElementById("btnPauseGame");
   const badge    = document.getElementById("gameStateBadge");
+  const vid      = document.getElementById("gameVideo");
   if (gamePaused) {
+    if (vid) vid.pause();
+    if (gameStream) gameStream.getVideoTracks().forEach(t => { t.enabled = false; });
     pauseBtn.textContent = "▶️ Resume";
     badge.textContent    = "⏸️ Paused";
   } else {
+    if (gameStream) gameStream.getVideoTracks().forEach(t => { t.enabled = true; });
+    if (vid) vid.play();
     pauseBtn.textContent = "⏸️ Pause";
     badge.textContent    = "🟢 Playing";
   }
@@ -1602,13 +1761,12 @@ async function loopGameAI() {
     const aPct = Math.round(aProb * 100);
     const ePct = Math.round(eProb * 100);
 
-    // Update 3 AI Scan Bars in Game Mode
-    document.getElementById("gPctPlastic").textContent = pPct + "%";
-    document.getElementById("gFillPlastic").style.width = pPct + "%";
-    document.getElementById("gPctPaper").textContent   = aPct + "%";
-    document.getElementById("gFillPaper").style.width   = aPct + "%";
-    document.getElementById("gPctEmpty").textContent   = ePct + "%";
-    document.getElementById("gFillEmpty").style.width   = ePct + "%";
+    document.getElementById("gamePctPlastic").textContent = pPct + "%";
+    document.getElementById("gameFillPlastic").style.width = pPct + "%";
+    document.getElementById("gamePctPaper").textContent   = aPct + "%";
+    document.getElementById("gameFillPaper").style.width   = aPct + "%";
+    document.getElementById("gamePctEmpty").textContent   = ePct + "%";
+    document.getElementById("gameFillEmpty").style.width   = ePct + "%";
 
     const now = Date.now();
     const holdLbl  = document.getElementById("gameHoldLabel");
@@ -1621,10 +1779,10 @@ async function loopGameAI() {
     }
 
     if (now < gameCooldownUntil) {
-      // Brief pause after scoring +10
+      // Cooldown after scoring
     } else if (!shownItem) {
       gameHoldStart = 0;
-      holdLbl.textContent = `⏱️ Show ${currentTarget} & Hold 0.80s:`;
+      holdLbl.textContent = `⏱️ Hold ${currentTarget} for 0.80s:`;
       holdTxt.textContent = "0.00s / 0.80s";
       holdFill.style.width = "0%";
     } else if (shownItem !== currentTarget) {
@@ -1641,13 +1799,12 @@ async function loopGameAI() {
       holdFill.style.width = pct + "%";
 
       if (elapsed >= HOLD_DURATION_MS) {
-        // 0.80s Hold Complete in Game Mode -> +10 Points, NO Arduino Servo Trigger!
         currentScore += 10;
         document.getElementById("gameScore").textContent = currentScore;
-        triggerBinSort(currentTarget, false);
+        triggerBinSort(currentTarget, "game");
         gameHoldStart = 0;
-        gameCooldownUntil = now + 1200;
-        holdLbl.innerHTML = `<span style="color:var(--green);">🎉 +10 Points! Next Target...</span>`;
+        gameCooldownUntil = now + 1300;
+        holdLbl.innerHTML = `<span style="color:var(--green);">🎉 +10 Points! Agla Target dekhen...</span>`;
         holdFill.style.width = "100%";
         nextGameTarget();
       }
@@ -1675,7 +1832,7 @@ function finish60sGame() {
 function saveFinishedGameScore() {
   const name  = document.getElementById("playerName").value.trim()  || "Student";
   const phone = document.getElementById("playerPhone").value.trim() || "Hidden";
-  const todayStr = new Date().toISOString().split("T")[0];
+  const todayStr = new Date().toISOString().slice(0, 10);
   const entry = { name: name, phone: phone, score: currentScore, date: todayStr };
 
   leaderboard.push(entry);
@@ -1692,6 +1849,10 @@ function saveFinishedGameScore() {
 
 function renderLeaderboard() {
   const tbody = document.getElementById("leaderboardBody");
+  if (!leaderboard.length) {
+    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;padding:10px;">Abhi koi game score nahi hai — 60s Game khelen!</td></tr>`;
+    return;
+  }
   tbody.innerHTML = leaderboard.slice(0, 10).map((row, idx) => `
     <tr>
       <td><b>#${idx + 1}</b> ${idx < 3 ? '🏅' : ''}</td>
@@ -1703,7 +1864,7 @@ function renderLeaderboard() {
 }
 
 // ============================================================================
-// 7. 5-CLICK MENTOR SUPER ADMIN PANEL (`401020169Admin`)
+// 7. 5-CLICK MENTOR ADMIN PANEL (WITH SHOW/HIDE PASSWORD MODAL)
 // ============================================================================
 let titleClicks = 0;
 let clickTimer = null;
@@ -1714,18 +1875,23 @@ function handleTitleClick() {
   clickTimer = setTimeout(() => { titleClicks = 0; }, 1800);
   if (titleClicks >= 5) {
     titleClicks = 0;
-    const pass = prompt("🔒 Enter Super Admin Password:");
-    if (pass === ADMIN_PASS) {
-      loggedInOfficer = "SUPER_ADMIN";
-      document.getElementById("btnLogoutOfficer").style.display = "inline-block";
-      document.getElementById("btnToggleOfficer").style.display = "none";
-      document.getElementById("boardTitleTxt").innerHTML = `👑 Super Admin: All Halqas`;
-      renderReportsTable();
-      populateAdminModal();
-      document.getElementById("adminModal").classList.add("open");
-    } else if (pass !== null) {
-      alert("❌ Incorrect Admin Password!");
-    }
+    document.getElementById("modalAdminPass").value = "";
+    document.getElementById("adminLoginModal").classList.add("open");
+  }
+}
+
+function verifyModalAdminLogin() {
+  const pass = document.getElementById("modalAdminPass").value.trim();
+  if (pass === ADMIN_PASS) {
+    document.getElementById("adminLoginModal").classList.remove("open");
+    loggedInOfficer = "SUPER_ADMIN";
+    document.getElementById("btnLogoutOfficer").style.display = "inline-block";
+    document.getElementById("boardTitleTxt").textContent = "📋 All Halqas (Super Admin)";
+    renderReportsTable();
+    populateAdminModal();
+    document.getElementById("adminModal").classList.add("open");
+  } else {
+    alert("❌ Incorrect Admin Password!");
   }
 }
 
@@ -1740,28 +1906,35 @@ function populateAdminModal() {
   `).join("");
 
   document.getElementById("adminReportsBody").innerHTML = civicReports.map(r => {
-    const cInfo = r.citizenInfo || (r.phone ? `${r.name} (${r.phone})` : r.name);
-    const photoHtml = r.photo
-      ? `<img src="${r.photo}" onclick="zoomPhoto('${r.id}')" style="width:36px;height:36px;object-fit:cover;border-radius:5px;cursor:pointer;">`
-      : `<span style="font-size:10px;">${r.wasteType || 'No Photo'}</span>`;
+    const photoThumb = (r.photo && String(r.photo).startsWith("data:image"))
+      ? `<img src="${r.photo}" onclick="zoomPhotoById('${r.id}')" style="width:36px;height:36px;object-fit:cover;border-radius:5px;cursor:pointer;">`
+      : `<small>${r.wasteType || 'No Photo'}</small>`;
     return `
       <tr>
         <td><b>${r.halqa}</b><br><code>${r.id}</code></td>
-        <td><b>${cInfo}</b><br><small>${r.loc}</small></td>
-        <td>${photoHtml}</td>
+        <td><b>${r.citizenInfo || r.name || 'Citizen'}</b><br><small>${r.loc || ''}</small></td>
+        <td>${photoThumb}</td>
         <td>
           ${r.status}<br>
-          <button onclick="markCleaned('${r.id}');populateAdminModal();" style="margin-top:3px;background:var(--green);color:#fff;border:0;border-radius:5px;padding:3px 6px;font-size:10.5px;cursor:pointer;">✔ Clean</button>
+          <button onclick="markCleanedById('${r.id}');populateAdminModal();" style="margin-top:3px;background:var(--green);color:#fff;border:0;border-radius:5px;padding:3px 6px;font-size:10.5px;cursor:pointer;">✔ Mark Cleaned</button>
         </td>
       </tr>`;
   }).join("");
 }
 
 function resetDemoCounters() {
-  if (confirm("Reset Local Plastic & Paper Census Counters to 0?")) {
+  if (confirm("Kya aap Google Sheet ki charon tabs (Civic_Reports, Waste_Audit, Game_Scores, Game_Leaders) ko fresh headers aur Chart ke saath reset karna chahte hain?")) {
     plasticCount = 0;
     paperCount   = 0;
+    dailyStats   = {};
+    civicReports = [];
+    leaderboard  = [];
+    localStorage.clear();
     refreshCensusUI();
+    renderReportsTable();
+    renderLeaderboard();
+    postToGoogleSheet({ action: "setupAndResetAll" });
+    alert("✅ Fresh Sheet Setup & Chart Request Sent to Google Sheet!");
   }
 }
 
@@ -1769,7 +1942,7 @@ function resetDemoCounters() {
 refreshCensusUI();
 renderReportsTable();
 renderLeaderboard();
-syncFromGoogleSheet();
+syncFromGoogleSheet(false);
 </script>
 </body>
 </html>
