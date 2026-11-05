@@ -2,1489 +2,928 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Saaf Sindh AI: Waste Census - Sindh STREAM 2026-27</title>
-<link rel="manifest" href="manifest.json">
-<script>if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Saaf Sindh AI — Civic Waste Portal & AI Smart Bin (GBHSS Haji Junejo Tarai)</title>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
 <style>
-:root{--ink:#0f2930;--bg:#eef6f4;--card:#ffffff;--line:#cde0da;--blue:#0288d1;--pink:#d81b60;--green:#1e8e3e;--coral:#d93025;--gold:#f9ab00}
-*{box-sizing:border-box;scroll-behavior:smooth}
-body{margin:0;font-family:"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;font-size:15px}
-.sticky-nav{position:sticky;top:0;z-index:50;background:rgba(15,41,48,.96);backdrop-filter:blur(6px);border-bottom:2px solid rgba(249,171,0,.45);padding:7px 10px;display:flex;justify-content:center;align-items:center;gap:6px;flex-wrap:wrap;box-shadow:0 2px 10px rgba(0,0,0,.18)}
-.sticky-nav a,.sticky-nav button{color:#fff;text-decoration:none;font-size:12px;font-weight:bold;padding:5px 10px;border-radius:16px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);cursor:pointer}
-.sticky-nav a:hover,.sticky-nav button:hover{background:var(--gold);color:var(--ink);border-color:var(--gold)}
-header{background:linear-gradient(135deg,#0f2930,#1b434d);color:#fff;padding:14px 16px 12px;text-align:center;user-select:none;box-shadow:0 2px 8px rgba(0,0,0,.15)}
-header h1{margin:0;font-size:21px;cursor:pointer}
-header p{margin:3px 0 0;font-size:12.5px;color:#c3e3dc}
-#credit{color:var(--gold);font-weight:bold;font-size:12px;margin-top:5px;line-height:1.4}
-.top-badges{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:6px}
-.team-badge{background:rgba(255,255,255,.12);border:1px solid rgba(249,171,0,.5);color:#fff;padding:3px 12px;border-radius:20px;font-size:12px;font-weight:bold}
-.team-badge b{color:var(--gold)}
-main{max-width:800px;margin:0 auto;padding:10px 12px}
-.acc-group{background:var(--card);border:2px solid var(--line);border-radius:14px;overflow:hidden;margin:10px 0}
-details.acc-item{border-bottom:1.5px solid var(--line);background:#fff}
-details.acc-item:last-child{border-bottom:0}
-details.acc-item summary{list-style:none;cursor:pointer;padding:12px 14px;font-size:15px;font-weight:bold;color:var(--ink);display:flex;align-items:center;gap:10px;user-select:none}
-details.acc-item summary::-webkit-details-marker{display:none}
-.chev{display:inline-block;font-size:16px;font-weight:bold;transition:transform .25s}
-details.acc-item[open]>summary .chev{transform:rotate(180deg);color:var(--blue)}
-details.acc-item[open]>summary{background:#f4faf8;border-bottom:1px solid var(--line)}
-.acc-body{padding:12px 14px;font-size:13.5px;background:#fff}
-.intro-grid,.rubric-grid,.glossary-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
-.team-grid,.civic-mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-@media(max-width:620px){.intro-grid,.rubric-grid,.glossary-grid,.team-grid,.civic-mini-grid{grid-template-columns:1fr}}
-.intro-card{background:#f8fcfb;border:1.5px solid var(--line);border-left:5px solid var(--coral);border-radius:10px;padding:10px 12px;font-size:13px}
-.intro-card.sol{border-left-color:var(--green)}
-.intro-card b{display:block;margin-bottom:3px}
-.how-strip{background:#f4faf8;border:1px solid var(--line);border-radius:10px;padding:8px;display:flex;justify-content:space-around;flex-wrap:wrap;gap:6px;font-size:12px;font-weight:bold}
-.how-strip span{background:#fff;padding:4px 9px;border-radius:14px;border:1px solid var(--line)}
-.modes{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:8px}
-@media(max-width:520px){.modes{grid-template-columns:repeat(2,1fr)}}
-button{font:inherit;font-weight:bold;border:0;border-radius:12px;padding:10px 14px;cursor:pointer;background:var(--ink);color:#fff}
-button.alt{background:#fff;color:var(--ink);border:2px solid var(--line)}
-button.on{background:var(--blue);border-color:var(--blue);color:#fff}
-.mode-btn{display:flex;flex-direction:column;align-items:center;padding:8px 6px;font-size:13px}
-.mode-btn span{font-size:19px;margin-bottom:2px}
-.mode-btn small{font-weight:normal;font-size:11px;opacity:.88}
-#modeBanner{background:#fff;border-left:5px solid var(--blue);border-radius:10px;padding:8px 12px;margin-bottom:10px;font-size:13px}
-.prize-banner{background:linear-gradient(135deg,#fff8e1,#ffecb3);border:2px solid var(--gold);color:#0f2930;border-radius:12px;padding:9px 12px;margin:8px 0;font-size:13.5px;font-weight:bold;text-align:center}
-.prize-banner span{display:inline-block;background:var(--coral);color:#fff;padding:2px 8px;border-radius:12px;font-size:11px;margin-right:5px}
-.live-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:stretch;margin-bottom:8px}
-@media(max-width:650px){.live-grid{grid-template-columns:1fr}}
-.cam-col{display:flex;flex-direction:column;height:100%}
-.stage{position:relative;background:#111;border-radius:16px 16px 0 0;overflow:hidden;aspect-ratio:4/3;width:100%;flex:1;border:3px solid #fff;border-bottom:0}
-canvas{width:100%;height:100%;display:block;object-fit:cover}
-.guide{position:absolute;inset:18% 18% 14%;border:2.5px dashed rgba(255,255,255,.8);border-radius:14px;pointer-events:none}
-.guide.locking{border-color:var(--gold)}
-#camTargetBanner{display:none;position:absolute;top:8px;left:8px;right:8px;z-index:5;background:rgba(15,41,48,.92);color:#fff;border:2px solid var(--gold);border-radius:10px;padding:6px 10px;font-size:14px;font-weight:bold;text-align:center;pointer-events:none}
-.cam-tools{position:absolute;bottom:12px;right:8px;display:none;gap:6px;z-index:5}
-.cam-tools button{padding:5px 9px;font-size:11.5px;border-radius:8px;background:rgba(15,41,48,.85);color:#fff}
-#startOverlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;background:rgba(15,41,48,.86);color:#fff;padding:16px;text-align:center;z-index:6}
-#start{font-size:16px;padding:12px 24px;background:var(--green);border-radius:30px;border:2px solid #fff}
-.step-pills{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;margin-bottom:10px;font-size:11px}
-.step-pills span{background:rgba(255,255,255,.15);padding:3px 8px;border-radius:12px}
-.hold-wrap{position:absolute;bottom:0;left:0;right:0;height:7px;background:rgba(255,255,255,.2)}
-#holdBar{height:100%;width:0%;background:var(--gold);transition:width .12s linear}
-#probs{margin:0;font-size:12px;font-weight:bold;color:#fff;text-align:center;background:var(--ink);padding:8px 10px;border-radius:0 0 16px 16px;border:3px solid #fff;border-top:1px solid rgba(255,255,255,.2)}
-#protoBox{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:10px 12px;text-align:center;display:flex;flex-direction:column;justify-content:space-between;height:100%}
-.proto-head{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;font-weight:bold}
-.proto-badge{background:var(--ink);color:var(--gold);padding:3px 8px;border-radius:6px;font-family:monospace;font-size:11px}
-.proto-stage{position:relative;min-height:175px;background:#f4faf8;border:2px dashed var(--line);border-radius:12px;overflow:hidden;margin:8px 0;flex:1}
-.chute{width:96px;height:22px;border-left:3px solid var(--ink);border-right:3px solid var(--ink);margin:0 auto;background:rgba(16,38,46,.06);font-size:10px;line-height:22px}
-#dropItem{position:absolute;top:2px;left:50%;transform:translate(-50%,0);font-size:24px;opacity:0;transition:transform .6s ease-in,opacity .2s;z-index:4}
-.pivot-axle{width:14px;height:14px;background:var(--gold);border:3px solid var(--ink);border-radius:50%;margin:16px auto 0;position:relative;z-index:3}
-#flapArm{width:136px;height:8px;background:#b8864b;border:1.5px solid var(--ink);border-radius:4px;margin:-11px auto 0;transform:rotate(0deg);transition:transform .35s ease;position:relative;z-index:2}
-.p-bins{position:absolute;bottom:6px;left:6px;right:6px;display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-.p-bin{height:60px;border-radius:0 0 10px 10px;border:2.5px solid;display:flex;flex-direction:column;justify-content:center;align-items:center;font-size:11px;font-weight:bold;background:#fff}
-.p-bin small{font-size:10px;font-weight:normal}
-.p-bin.skyblue{border-color:var(--blue);color:var(--blue);background:#e1f5fe}
-.p-bin.pink{border-color:var(--pink);color:var(--pink);background:#fce4ec}
-.p-bin.active.skyblue{background:var(--blue);color:#fff}
-.p-bin.active.pink{background:var(--pink);color:#fff}
-.hud{display:none;gap:6px;margin:8px 0}
-.hud div{flex:1;background:var(--card);border:2px solid var(--line);border-radius:10px;padding:5px 4px;text-align:center;font-size:11.5px}
-.hud b{display:block;font-size:18px;color:var(--blue)}
-#task{margin:8px 0;background:var(--card);border:2.5px solid var(--line);border-radius:14px;padding:10px 12px;text-align:center;font-size:16px;font-weight:bold;min-height:60px;display:flex;flex-direction:column;justify-content:center}
-#task small{display:block;font-size:12.5px;font-weight:normal;color:#456;margin-top:3px}
-.bins{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:10px 0}
-.bin{border:2.5px solid var(--line);border-radius:14px;background:var(--card);padding:10px 8px;text-align:center;font-size:14px;font-weight:bold}
-.bin span.ico{display:block;font-size:28px}
-.bin small{display:block;font-weight:normal;font-size:12px}
-.bin.hit{color:#fff}
-.flow-pipeline{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;margin:8px 0 12px;background:#f4faf8;padding:8px;border-radius:12px;border:1.5px solid var(--line)}
-@media(max-width:600px){.flow-pipeline{grid-template-columns:repeat(3,1fr)}}
-.flow-step{background:#fff;border:1.5px solid var(--line);border-radius:9px;padding:6px 4px;text-align:center;font-size:11px;font-weight:bold;color:#456}
-.flow-step span{display:block;font-size:16px}
-.flow-step.active{background:var(--ink);color:var(--gold);border-color:var(--ink)}
-.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0}
-@media(max-width:620px){.kpi-grid{grid-template-columns:repeat(2,1fr)}}
-.kpi-card{background:#f8fcfb;border:1.5px solid var(--line);border-top:4px solid var(--ink);border-radius:11px;padding:9px 8px;text-align:center}
-.kpi-card small{display:block;font-size:11px;color:#456;font-weight:bold}
-.kpi-card b{display:block;font-size:19px;margin:3px 0 2px}
-.kpi-card span{font-size:11.5px;color:var(--green);font-weight:bold}
-.insight-box{background:linear-gradient(135deg,#0f2930,#1b434d);color:#fff;border-radius:12px;padding:11px 13px}
-.insight-list{margin:0;padding-left:18px;font-size:13px;line-height:1.55}
-.c-mini{background:#f4faf8;border:1.5px solid var(--line);border-radius:9px;padding:8px 10px;font-size:12.5px;display:flex;justify-content:space-between}
-#civicBox,#audit,#lbBox,#adminBox,#end{display:none;margin:10px 0;background:#fff;border:2px solid var(--line);border-radius:14px;padding:13px}
-#end{background:var(--ink);color:#fff;text-align:center}
-#end h2{margin:0 0 6px;color:var(--gold)}
-.c-head{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid var(--bg);padding-bottom:8px;margin-bottom:10px}
-.c-head h3{margin:0;font-size:16px}
-.c-form{background:#f7fbf9;border:1.5px solid var(--line);border-radius:12px;padding:12px;margin-bottom:12px}
-.c-row{margin-bottom:10px}
-.c-row label{font-weight:bold;font-size:13px;display:block;margin-bottom:4px}
-.c-row input,.c-row select{width:100%;padding:9px 11px;border-radius:8px;border:1.5px solid var(--line);font:inherit;font-size:14px;background:#fff}
-.snap-box{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:4px}
-#snapPreview{width:108px;height:80px;object-fit:cover;border-radius:8px;border:2px solid var(--ink);display:none}
-.rep-card{background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:10px;margin:8px 0;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
-.rep-info{flex:1;min-width:175px;font-size:13px;line-height:1.45}
-.rep-status{padding:4px 10px;border-radius:14px;font-size:11.5px;font-weight:bold;display:inline-block}
-.st-pend{background:#fff3e0;color:#e65100;border:1px solid #ffb74d}
-.st-clean{background:#e6f4ea;color:var(--green);border:1px solid #81c784}
-.dept-tag{display:inline-block;background:#e3efec;color:var(--ink);padding:2px 7px;border-radius:6px;font-size:11px;font-weight:bold;margin-bottom:3px}
-#officerBar{display:none;background:linear-gradient(135deg,#0f2930,#1b434d);color:#fff;padding:10px 12px;border-radius:10px;margin-bottom:10px;font-size:12.5px;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
-#officerLoginBox{display:none;background:#fff8e1;border:2px solid var(--gold);border-radius:12px;padding:12px;margin-bottom:12px}
-.track-box{background:#eef6ff;border:1.5px solid #90caf9;border-radius:11px;padding:10px 12px;margin-bottom:12px}
-.track-row{display:flex;gap:6px;margin-top:6px}
-.track-row input{flex:1;padding:8px 10px;border-radius:8px;border:1.5px solid var(--line);font:inherit;font-size:13.5px}
-#photoModal{display:none;position:fixed;inset:0;z-index:99;background:rgba(0,0,0,.86);justify-content:center;align-items:center;padding:16px;flex-direction:column}
-#photoModal img{max-width:95%;max-height:80vh;border-radius:12px;border:3px solid #fff}
-.member-card{background:#f7fbf9;border:1.5px solid var(--line);border-top:4px solid var(--blue);border-radius:11px;padding:10px;font-size:12.5px}
-.member-card b{display:block;font-size:14px;margin-bottom:2px}
-.member-card span{display:inline-block;background:#e3efec;padding:2px 7px;border-radius:10px;font-size:11px;font-weight:bold;margin-bottom:5px}
-.rub-item{background:#f8fcfb;border:1px solid var(--line);border-radius:9px;padding:8px 10px;font-size:12.5px}
-.rub-item b{color:var(--green);display:block}
-.gloss-item{background:#fff8e1;border:1px solid #ffe082;border-radius:9px;padding:7px 10px;font-size:12px}
-#backTopBtn{position:fixed;bottom:16px;right:16px;z-index:45;background:var(--ink);color:var(--gold);border:2px solid var(--gold);border-radius:50px;padding:8px 13px;font-size:12px;font-weight:bold;cursor:pointer}
-.foot{margin:12px auto 6px;font-size:12px;color:#456;text-align:center;line-height:1.55}
-.toolbar{display:flex;justify-content:center;gap:12px;align-items:center;flex-wrap:wrap;background:#fff;padding:8px 12px;border-radius:12px;border:1px solid var(--line);margin-top:10px}
-.arow{display:flex;align-items:center;gap:8px;margin:6px 0;font-size:14px}
-.arow>span{width:92px;text-align:left}
-.abar{flex:1;height:13px;background:#dfeae6;border-radius:7px;overflow:hidden}
-.abar i{display:block;height:100%}
-.abtns{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;justify-content:center}
-.abtns button{padding:7px 11px;font-size:12px}
-.note{font-size:12px;color:#456;margin-top:6px}
-#lbEntry{display:none;margin:10px 0}
-#lbEntry input{padding:10px 12px;border-radius:8px;border:0;font:inherit;margin:4px;width:250px;max-width:92%}
-.adm-sec{margin-top:12px;padding-top:10px;border-top:2px dashed var(--line)}
-.atable{width:100%;border-collapse:collapse;font-size:13px;margin-top:4px}
-.atable th,.atable td{border:1px solid var(--line);padding:6px;text-align:left}
-.atable th{background:var(--ink);color:#fff}
-.atable tfoot td{background:#eaf4f1;font-weight:bold}
+:root {
+  --ink: #0b1d2e;
+  --bg: #f0f7f5;
+  --card: #ffffff;
+  --skyblue: #0288d1;
+  --pink: #d81b60;
+  --green: #1e8e3e;
+  --gold: #f9ab00;
+  --coral: #d93025;
+  --line: #cfe0dc;
+}
+* { box-sizing: border-box; font-family: "Segoe UI", Roboto, Arial, sans-serif; }
+body { margin: 0; background: var(--bg); color: var(--ink); padding-bottom: 50px; }
+
+/* ---- 1. CLEAR TOP HEADER (5-CLICK ADMIN LOCK) ---- */
+.app-header {
+  background: linear-gradient(135deg, #0b1d2e, #163a4a);
+  color: #fff;
+  padding: 12px 16px;
+  text-align: center;
+  border-bottom: 4px solid var(--gold);
+  user-select: none;
+}
+.app-header h1 {
+  margin: 0;
+  font-size: 21px;
+  color: var(--gold);
+  cursor: pointer;
+}
+.app-header .sub {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #e1f5fe;
+}
+.purpose-pill {
+  display: inline-block;
+  margin-top: 6px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(249,171,0,0.6);
+  color: #ffecb3;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* ---- 2. ALWAYS-VISIBLE LIVE CENSUS BAR ---- */
+.census-strip {
+  max-width: 920px;
+  margin: 10px auto 6px;
+  background: #fff;
+  border: 2px solid var(--line);
+  border-left: 6px solid var(--green);
+  border-radius: 12px;
+  padding: 8px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.census-strip .c-title {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: var(--ink);
+}
+.census-badges {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.c-badge {
+  padding: 4px 10px;
+  border-radius: 16px;
+  font-size: 12.5px;
+  font-weight: 800;
+}
+.cb-blue { background: #e1f5fe; color: #01579b; border: 1.5px solid #4fc3f7; }
+.cb-pink { background: #fce4ec; color: #880e4f; border: 1.5px solid #f48fb1; }
+.cb-green { background: #e8f5e9; color: #1b5e20; border: 1.5px solid #81c784; }
+
+/* ---- 3. LOGICAL 1-2-3-4 NAVIGATION TABS ---- */
+.nav-grid {
+  max-width: 920px;
+  margin: 8px auto 14px;
+  padding: 0 10px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+@media (max-width: 640px) {
+  .nav-grid { grid-template-columns: repeat(2, 1fr); }
+}
+.nav-tab {
+  background: #fff;
+  border: 2px solid var(--line);
+  border-radius: 14px;
+  padding: 10px 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  position: relative;
+}
+.nav-tab .step-num {
+  position: absolute;
+  top: 6px;
+  left: 8px;
+  background: #e2ece9;
+  color: var(--ink);
+  font-size: 10.5px;
+  font-weight: 900;
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+.nav-tab .icon { font-size: 24px; display: block; margin-bottom: 2px; }
+.nav-tab .title { font-size: 13.5px; font-weight: 800; display: block; color: var(--ink); }
+.nav-tab .desc { font-size: 11px; font-weight: 700; color: #546e7a; display: block; }
+
+.nav-tab.active {
+  background: linear-gradient(135deg, #0b1d2e, #1a3c4d);
+  border-color: var(--gold);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(11,29,46,0.22);
+}
+.nav-tab.active .title { color: var(--gold); }
+.nav-tab.active .desc { color: #ffffff; }
+.nav-tab.active .step-num { background: var(--gold); color: var(--ink); }
+
+/* ---- MAIN CONTAINER & CARDS ---- */
+.container { max-width: 920px; margin: 0 auto; padding: 0 10px; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; animation: fadeIn 0.25s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+.card {
+  background: var(--card);
+  border: 2px solid var(--line);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 14px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+.card h2 {
+  margin: 0 0 6px;
+  font-size: 18.5px;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.explain-banner {
+  background: #fff8e1;
+  border: 1.5px solid var(--gold);
+  border-left: 5px solid var(--gold);
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 13px;
+  margin-bottom: 12px;
+  line-height: 1.45;
+}
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 720px) { .grid-2 { grid-template-columns: 1fr; } }
+
+/* ---- FORMS & BUTTONS ---- */
+label { display: block; font-size: 12.5px; font-weight: 800; margin: 8px 0 4px; color: var(--ink); }
+input, select, textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 2px solid var(--line);
+  border-radius: 10px;
+  font-size: 14px;
+  background: #f9fdfc;
+}
+button.btn {
+  font: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  border: 0;
+  border-radius: 12px;
+  padding: 11px 16px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
+  transition: 0.2s;
+}
+.btn-red { background: linear-gradient(135deg, #d93025, #b71c1c); color: #fff; }
+.btn-blue { background: linear-gradient(135deg, #0288d1, #01579b); color: #fff; }
+.btn-pink { background: linear-gradient(135deg, #d81b60, #880e4f); color: #fff; }
+.btn-green { background: linear-gradient(135deg, #1e8e3e, #135c27); color: #fff; }
+.btn-gold { background: linear-gradient(135deg, #f9ab00, #f57c00); color: var(--ink); }
+
+/* ---- SEE-SAW DIGITAL TWIN ---- */
+.seesaw-stage {
+  background: #f8fcfb;
+  border: 2px solid var(--line);
+  border-radius: 14px;
+  padding: 10px;
+  text-align: center;
+}
+#twinFlap {
+  transform-origin: 180px 44px;
+  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ---- TABLES ---- */
+.data-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 8px; }
+.data-table th, .data-table td { border: 1.5px solid var(--line); padding: 8px; text-align: left; }
+.data-table th { background: var(--ink); color: var(--gold); }
+.status-pill { padding: 3px 8px; border-radius: 12px; font-size: 11.5px; font-weight: 800; display: inline-block; }
+.st-pending { background: #fff3e0; color: #e65100; border: 1px solid #ffb74d; }
+.st-cleaned { background: #e8f5e9; color: #1b5e20; border: 1px solid #81c784; }
+
+/* ---- PHOTO ZOOM MODAL ---- */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.82);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.modal.open { display: flex; }
+.modal-box {
+  background: #fff;
+  padding: 14px;
+  border-radius: 14px;
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+}
+.modal-box img { max-width: 100%; max-height: 65vh; border-radius: 10px; }
 </style>
 </head>
-<body id="topPage">
+<body>
 
-<nav class="sticky-nav">
-  <a href="#demoSection" onclick="setMode('learn')">📷 AI Camera</a>
-  <a href="#demoSection" onclick="setMode('play')">🎮 60s Game</a>
-  <a href="#demoSection" onclick="setMode('audit')">📊 Census</a>
-  <a href="#demoSection" onclick="setMode('civic')">🚨 Civic Portal</a>
-  <a href="#infoAccordions" onclick="openAcc('accProblem')">💡 About Project</a>
-  <a href="#infoAccordions" onclick="openAcc('accTeam')">👥 Team</a>
-  <button id="blindModeBtn" type="button">🕶️ Code Mode</button>
-</nav>
-
-<header>
-  <h1 id="appTitle" title="Tap 5 times for Teacher Admin Panel">♻️ Saaf Sindh AI: Waste Census</h1>
-  <p>Sindh STREAM Festival 2026-27 | Theme 2: AI, Digital Solution, Gamification & IoT | صاف سنڌ، سرسبز سنڌ</p>
-  <div id="credit">
-    👨‍🏫 Guide Teacher: Ghulam Hussain Memon (Bachelor of Computer Science (BCS) — University of Sindh, Laar Campus Badin)<br>
-    <span style="color:#eaf4f1;font-weight:normal;font-size:12px">PST — GBHSS Haji Junejo Tarai (SEMIS: 401020169)</span>
-  </div>
-  <div class="top-badges">
-    <div class="team-badge">🌟 <b>Student Team:</b> Shameer Ali • Zahid Ali • Farhan</div>
+<!-- TOP HEADER (Click Title 5 Times for Teacher Admin Panel) -->
+<header class="app-header">
+  <h1 id="appTitle" onclick="handleTitleClick()">♻️ Saaf Sindh AI — Smart Waste & Civic Portal</h1>
+  <div class="sub">GBHSS Haji Junejo Tarai (Badin) • Student Team: Shameer Ali, Zahid Ali &amp; Farhan • Guide: Ghulam Hussain Memon</div>
+  <div class="purpose-pill">
+    🎯 Project Maqsad: 1) Kachre ki Online Shikayat ➔ 2) Live Waste Census ➔ 3) AI Smart Bin Sorting ➔ 4) Student Recycling Game
   </div>
 </header>
 
-<main>
-  <div class="modes" id="demoSection">
-    <button id="mLearn" class="alt mode-btn on" type="button"><span>🔍</span>Learn Mode<small>Identify Waste</small></button>
-    <button id="mPlay" class="alt mode-btn" type="button"><span>🎮</span>60s Game<small>Win Rs. 100</small></button>
-    <button id="mAudit" class="alt mode-btn" type="button"><span>📊</span>Census & Impact<small>Live Dashboard</small></button>
-    <button id="mCivic" class="alt mode-btn" type="button"><span>🚨</span>Civic Report<small>UC / TC / MC</small></button>
+<!-- ALWAYS-VISIBLE LIVE CENSUS BAR -->
+<div class="container">
+  <div class="census-strip">
+    <div class="c-title">📊 Smart Waste Census: Live Google Sheet Counts</div>
+    <div class="census-badges">
+      <span class="c-badge cb-blue">🧴 Plastic (Sky Blue): <b id="topPlastic">42</b></span>
+      <span class="c-badge cb-pink">📄 Paper (Pink): <b id="topPaper">35</b></span>
+      <span class="c-badge cb-green">✅ Civic Reports Cleaned: <b id="topCleaned">8</b></span>
+    </div>
   </div>
+</div>
 
-  <div id="modeBanner">
-    <span id="bannerText">👉 <b>Learn Mode:</b> Niche green button daba kar camera kholen aur Plastic (Sky Blue Bin) ya Paper (Pink Bin) dikhayen.</span>
+<!-- 4-STEP SEQUENTIAL NAVIGATION BAR -->
+<nav class="nav-grid">
+  <div class="nav-tab active" onclick="switchTab('civic', this)">
+    <span class="step-num">Step 1</span>
+    <span class="icon">🚨</span>
+    <span class="title">Civic Report</span>
+    <span class="desc">UC / TC / MC</span>
   </div>
+  <div class="nav-tab" onclick="switchTab('census', this)">
+    <span class="step-num">Step 2</span>
+    <span class="icon">📊</span>
+    <span class="title">Census &amp; Impact</span>
+    <span class="desc">Live Dashboard</span>
+  </div>
+  <div class="nav-tab" onclick="switchTab('learn', this)">
+    <span class="step-num">Step 3</span>
+    <span class="icon">🤖</span>
+    <span class="title">Learn Mode</span>
+    <span class="desc">Identify Waste &amp; Bin</span>
+  </div>
+  <div class="nav-tab" onclick="switchTab('game', this)">
+    <span class="step-num">Step 4</span>
+    <span class="icon">🎮</span>
+    <span class="title">60s Game</span>
+    <span class="desc">Win Rs. 100</span>
+  </div>
+</nav>
 
-  <div class="live-grid">
-    <div class="cam-col">
-      <div class="stage">
-        <canvas id="cv" width="320" height="240"></canvas>
-        <div id="camTargetBanner">🎯 Find & Show: 🧴 PLASTIC</div>
-        <div class="guide" id="guideBox"></div>
-        <div class="cam-tools" id="camTools">
-          <button id="flipBtn" type="button">🔄 Flip</button>
-          <button id="stopBtn" type="button" style="background:rgba(217,48,37,.85)">⏹️ Off</button>
+<main class="container">
+
+  <!-- ================================================================= -->
+  <!-- TAB 1 (DEFAULT): 🚨 CIVIC REPORT PORTAL (UC TARAI / TC GOLARCHI)   -->
+  <!-- ================================================================= -->
+  <section id="tab-civic" class="tab-panel active">
+    <div class="explain-banner">
+      👋 <b>Step 1 (Shikayat Portal):</b> Agar aapke school, gali ya bazar mein kachra jama hai, toh yahan se <b>Photo + GPS Location</b> ke saath apne Halqa (<b>UC Tarai, TC Golarchi, ya MC Badin</b>) ko report bhejen aur <b>Report ID</b> se safai check karen!
+    </div>
+
+    <div class="grid-2">
+      <!-- Left: Citizen Complaint Form -->
+      <div class="card" style="border-top: 5px solid var(--coral);">
+        <h2>🚨 1. Kachre Ki Shikayat Darj Karen (Citizen Report)</h2>
+        <label>📍 Apna Halqa Chunen (Select Local Body):</label>
+        <select id="repHalqa">
+          <option value="UC Tarai">Union Council (UC) Tarai</option>
+          <option value="TC Golarchi">Town Committee (TC) Golarchi</option>
+          <option value="MC Badin">Municipal Committee (MC) Badin</option>
+        </select>
+
+        <label>👤 Aapka Naam (Citizen / Student Name):</label>
+        <input type="text" id="repName" placeholder="Maslan: Shameer Ali / Shehri">
+
+        <label>📌 Jagah Ka Naam &amp; GPS (Location Details):</label>
+        <div style="display:flex;gap:6px;">
+          <input type="text" id="repLoc" placeholder="Maslan: Main Bazar Tarai / School Gate">
+          <button type="button" class="btn btn-blue" style="width:auto;margin:0;white-space:nowrap;" onclick="grabGPS()">📍 GPS</button>
         </div>
-        <div id="startOverlay">
-          <div class="step-pills">
-            <span>Step 1: Camera On</span><span>Step 2: Hold Waste</span><span>Step 3: See-Saw Sorts</span>
+
+        <label>📷 Kachre Ki Tasveer (Take / Upload Garbage Photo):</label>
+        <input type="file" id="repPhoto" accept="image/*" capture="environment" onchange="previewReportPhoto(this)">
+        <img id="repPreview" style="display:none;width:100%;max-height:150px;object-fit:cover;border-radius:10px;margin-top:8px;border:2px solid var(--line);">
+
+        <button type="button" class="btn btn-red" onclick="submitCivicReport()">🚀 Shikayat Bhejen (Submit Report)</button>
+
+        <!-- Receipt Box -->
+        <div id="receiptBox" style="display:none;margin-top:12px;background:#e8f5e9;border:2px solid var(--green);border-radius:10px;padding:10px;text-align:center;">
+          <b style="color:var(--green);">✅ Shikayat Darj Ho Gayi!</b><br>
+          Aapki Tracking ID hai: <code id="newRepId" style="font-size:15px;font-weight:900;background:#fff;padding:2px 8px;border-radius:6px;">#R123</code>
+          <div style="font-size:12px;margin-top:4px;">Is ID se aap neeche safai ka status check kar sakte hain.</div>
+        </div>
+      </div>
+
+      <!-- Right: Citizen Live Tracker + Recent Reports -->
+      <div>
+        <div class="card" style="border-top: 5px solid var(--skyblue);">
+          <h2>🧾 2. Apni Shikayat Track Karen (Live ID Tracker)</h2>
+          <label>Apni Report Receipt ID likhen (e.g. <code>#Rmw26xbfc8m9bwsd</code>):</label>
+          <div style="display:flex;gap:8px;">
+            <input type="text" id="trackInput" placeholder="#R...">
+            <button type="button" class="btn btn-blue" style="width:auto;margin:0;" onclick="trackReportById()">🔍 Check</button>
           </div>
-          <p id="overlayMsg" style="margin:0 0 12px;font-size:14.5px;max-width:285px">Show <b>Plastic 🧴</b> or <b>Paper 📄</b> for instant AI detection</p>
-          <button id="start" type="button">📷 Start AI Camera</button>
+          <div id="trackResult" style="margin-top:10px;font-size:13.5px;"></div>
         </div>
-        <div class="hold-wrap"><div id="holdBar"></div></div>
-      </div>
-      <div id="probs">🎯 Step 1: Tap "📷 Start AI Camera" above (or test bins on right)</div>
-    </div>
 
-    <div id="protoBox">
-      <div class="proto-head">
-        <span>⚙️ See-Saw Smart Bin Twin</span>
-        <span class="proto-badge" id="servoStatus">See-Saw: 90° (Ready)</span>
-      </div>
-      <div class="proto-stage">
-        <div class="chute">See-Saw Drop Zone</div>
-        <div id="dropItem">🧴</div>
-        <div class="pivot-axle"></div>
-        <div id="flapArm"></div>
-        <div class="p-bins">
-          <div class="p-bin skyblue" id="pBin0"><span>🧴 SKY BLUE BIN</span><small>Plastic (35° Left)</small></div>
-          <div class="p-bin pink" id="pBin1"><span>📄 PINK BIN</span><small>Paper (145° Right)</small></div>
-        </div>
-      </div>
-      <div class="abtns">
-        <button class="alt" id="testPlastic" type="button" style="border-color:var(--blue);color:var(--blue)">▶️ Plastic (35° Sky Blue)</button>
-        <button class="alt" id="testPaper" type="button" style="border-color:var(--pink);color:var(--pink)">▶️ Paper (145° Pink)</button>
-        <button class="alt" id="hwConnectBtn" type="button">🔌 Arduino USB</button>
-      </div>
-    </div>
-  </div>
+        <div class="card" style="border-top: 5px solid var(--green);">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <h2 style="margin:0;">📋 Halqa Complaints Board</h2>
+            <button type="button" onclick="toggleOfficerBox()" style="background:#e3efec;border:0;padding:5px 10px;border-radius:8px;font-size:12px;font-weight:800;cursor:pointer;">👮 Officer Login</button>
+          </div>
 
-  <div class="hud" id="hudBox">
-    <div>Score<b id="score">0</b></div>
-    <div>Streak<b id="streak">0</b></div>
-    <div>Time Left<b id="time">60s</b></div>
-    <div>Best<b id="best">0</b></div>
-  </div>
+          <!-- Officer Login Box -->
+          <div id="officerBox" style="display:none;margin-top:10px;background:#f4faf8;padding:10px;border-radius:10px;border:1.5px solid var(--line);">
+            <div style="display:flex;gap:6px;">
+              <select id="offHalqa">
+                <option value="UC Tarai">UC Tarai Officer</option>
+                <option value="TC Golarchi">TC Golarchi Officer</option>
+                <option value="MC Badin">MC Badin Officer</option>
+              </select>
+              <input type="password" id="offPass" placeholder="Officer PIN">
+              <button type="button" class="btn btn-green" style="width:auto;margin:0;" onclick="officerLogin()">Login</button>
+            </div>
+            <div id="offMsg" style="font-size:12px;margin-top:4px;font-weight:700;"></div>
+          </div>
 
-  <div id="task">
-    Tap "📷 Start AI Camera" above to begin!
-    <small>Camera kholne ke liye upar harey (Green) button ko dabayen.</small>
-  </div>
-
-  <div class="bins" id="bins"></div>
-
-  <div id="end">
-    <h2 id="endTitle"></h2>
-    <p id="endText"></p>
-    <div class="prize-banner"><span>🎁 PRIZE</span> Top 3 Winners will receive <b>Rs. 100 Top-Up Balance!</b></div>
-    <div id="lbEntry">
-      <div><input type="text" id="lbName" maxlength="15" placeholder="Enter Your First Name"></div>
-      <div>
-        <input type="tel" id="lbPhone" inputmode="numeric" maxlength="13" placeholder="Mobile (Optional): 03XXXXXXXXX">
-        <p class="note" style="color:#b9d6cf;margin:2px 0 6px">🔒 <b>100% Optional & Private:</b> Visible only to the Guide Teacher for Rs. 100 prize top-up.</p>
-      </div>
-      <button id="lbSave" type="button" style="background:var(--gold);color:#10262e">💾 Save Score to Cloud</button>
-    </div>
-    <button id="again" type="button" style="background:var(--green);margin-top:8px">🔄 Play New 60s Round</button>
-  </div>
-
-  <div id="lbBox">
-    <div class="prize-banner"><span>🎁 WINNER PRIZE</span> Top 3 Winners will receive <b>Rs. 100 Top-Up Balance!</b></div>
-    <h3>🏆 Today's Festival Winners (Live)</h3>
-    <ol id="lbList" style="margin:6px 0 0;padding-left:22px"></ol>
-    <p class="note">🔒 <b>Privacy Protected:</b> Only player names and scores are shown publicly.</p>
-  </div>
-
-  <div id="audit">
-    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px">
-      <h3 style="margin:0;font-size:16px">📊 Smart Waste Census & Live Impact Dashboard</h3>
-      <div>
-        <span class="note" id="auditSyncMsg" style="color:var(--green);font-weight:bold">☁️ Syncing...</span>
-        <span class="note" id="lastSyncTime" style="background:#f4faf8;padding:2px 7px;border-radius:8px;border:1px solid var(--line)">🕒 Just now</span>
-      </div>
-    </div>
-
-    <div class="flow-pipeline">
-      <div class="flow-step active" id="fl1"><span>📷</span>1. Capture</div>
-      <div class="flow-step" id="fl2"><span>🤖</span>2. AI Classify</div>
-      <div class="flow-step" id="fl3"><span>📊</span>3. Census Log</div>
-      <div class="flow-step" id="fl4"><span>⚙️</span>4. See-Saw Bin</div>
-      <div class="flow-step" id="fl5"><span>🚨</span>5. Civic Alert</div>
-      <div class="flow-step" id="fl6"><span>✅</span>6. Cleaned</div>
-    </div>
-
-    <div class="kpi-grid">
-      <div class="kpi-card" style="border-top-color:var(--blue)"><small>Overall Waste Count</small><b id="kpiTotalItems">0</b><span id="kpiDays">Across 0 days</span></div>
-      <div class="kpi-card" style="border-top-color:var(--pink)"><small>Today's Waste Count</small><b id="kpiTodayBig">0</b><span id="kpiTodayItems">Scanned today</span></div>
-      <div class="kpi-card" style="border-top-color:var(--gold)"><small>Most Common Waste</small><b id="kpiTopWaste">—</b><span id="kpiTopPct">Waiting for scans</span></div>
-      <div class="kpi-card" style="border-top-color:var(--coral)"><small>Civic Reports Action</small><b id="kpiReports">0</b><span id="kpiResolved">0 Cleaned • 0 Pending</span></div>
-    </div>
-
-    <div id="auditTotal" style="font-weight:bold;margin-top:8px"></div>
-    <div id="auditBars"></div>
-
-    <h4 style="margin:12px 0 4px;font-size:13.5px">🏅 Halqa Civic Participation Leaderboard</h4>
-    <div class="civic-mini-grid">
-      <div class="c-mini"><span>🏛️ UC Tarai</span><b id="hqTarai">0</b></div>
-      <div class="c-mini"><span>🏛️ TC Golarchi</span><b id="hqGolarchi">0</b></div>
-      <div class="c-mini"><span>🏛️ MC Badin</span><b id="hqBadin">0</b></div>
-    </div>
-
-    <div class="abtns" style="margin:10px 0">
-      <button class="alt" id="aSync" type="button" style="border-color:var(--green);color:var(--green)">🔄 Retry / Refresh Live Data</button>
-      <button class="alt" id="aUndo" type="button" style="display:none">↩️ Undo Last (Admin)</button>
-      <button class="alt" id="aCopy" type="button">📋 Copy Census Summary</button>
-      <button class="alt" id="aPrint" type="button">🖨️ Print Census Report</button>
-    </div>
-
-    <div class="acc-group">
-      <details class="acc-item" open>
-        <summary><span class="chev">⌄</span> 🧠 Live AI Census & Civic Insights</summary>
-        <div class="acc-body"><div class="insight-box"><ul class="insight-list" id="aiInsightsList"><li>Loading insights...</li></ul></div></div>
-      </details>
-      <details class="acc-item">
-        <summary><span class="chev">⌄</span> 📅 Day-Wise Waste Census Table (Mobile + PC History)</summary>
-        <div class="acc-body">
-          <div style="overflow-x:auto">
-            <table class="atable">
-              <thead><tr><th>Date</th><th>🧴 Plastic (Sky Blue)</th><th>📄 Paper (Pink)</th><th>Day Total</th></tr></thead>
-              <tbody id="auditHistory"></tbody>
-              <tfoot id="auditFooter"></tfoot>
+          <div style="overflow-x:auto;">
+            <table class="data-table">
+              <thead>
+                <tr><th>ID &amp; Halqa</th><th>Jagah</th><th>Photo</th><th>Status / Action</th></tr>
+              </thead>
+              <tbody id="reportsTableBody"></tbody>
             </table>
           </div>
         </div>
-      </details>
-    </div>
-  </div>
-
-  <!-- CIVIC GARBAGE REPORTING PORTAL -->
-  <div id="civicBox">
-    <div class="c-head">
-      <h3>🚨 Local Govt. Cleanliness Portal</h3>
-      <button class="alt" id="officerBtn" type="button" style="padding:6px 11px;font-size:12px">🔐 Officer Login</button>
-    </div>
-
-    <div id="officerLoginBox">
-      <div style="font-weight:bold;font-size:13.5px;margin-bottom:8px">👮‍♂️ Select Halqa Department & Enter Officer Password:</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
-        <select id="loginUserSelect" style="padding:9px;border-radius:8px;border:1.5px solid var(--line);font:inherit;font-size:13px;font-weight:bold">
-          <option value="UC TARAI">🏛️ Union Council (UC) Tarai</option>
-          <option value="TC GOLARCHI">🏛️ Town Committee (TC) Golarchi</option>
-          <option value="MC BADIN">🏛️ Municipal Committee (MC) Badin</option>
-          <option value="GBHSS HAJI JUNEJO">👑 Super Admin (All Halqas)</option>
-        </select>
-        <input type="password" id="loginPassInput" placeholder="Enter Officer Password" style="padding:9px;border-radius:8px;border:1.5px solid var(--line);font:inherit;font-size:13.5px">
       </div>
-      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
-        <label style="font-size:12px;cursor:pointer"><input type="checkbox" id="showPassChk"> 👁️ Show Password</label>
-        <div style="display:flex;gap:6px">
-          <button id="loginSubmitBtn" type="button" style="background:var(--green);padding:7px 14px;font-size:12.5px">✅ Login Now</button>
-          <button id="loginCancelBtn" type="button" class="alt" style="padding:6px 11px;font-size:12px">Cancel</button>
+    </div>
+  </section>
+
+  <!-- ================================================================= -->
+  <!-- TAB 2: 📊 CENSUS & IMPACT (LIVE GOOGLE SHEET DASHBOARD)           -->
+  <!-- ================================================================= -->
+  <section id="tab-census" class="tab-panel">
+    <div class="explain-banner">
+      📊 <b>Step 2 (Smart Waste Census):</b> Hamare school aur shehar mein rozana kitna <b>Plastic 🧴</b> aur kitna <b>Paper 📄</b> kachra nikalta hai, uska poora digital hisab (Google Sheet <code>Waste_Audit</code>) yahan automatic jama hota hai!
+    </div>
+
+    <div class="grid-2">
+      <div class="card" style="border-top: 5px solid var(--skyblue);">
+        <h2>📈 Live Plastic vs. Paper Waste Census</h2>
+        <div style="margin: 14px 0;">
+          <div style="display:flex;justify-content:space-between;font-weight:800;font-size:14px;color:var(--skyblue);margin-bottom:4px;">
+            <span>🧴 Sky Blue Bin (Plastic Waste)</span>
+            <span id="barPlasticTxt">42 Items (55%)</span>
+          </div>
+          <div style="height:22px;background:#e1f5fe;border-radius:12px;overflow:hidden;">
+            <div id="barPlastic" style="height:100%;width:55%;background:var(--skyblue);transition:width 0.4s;"></div>
+          </div>
+        </div>
+
+        <div style="margin: 14px 0;">
+          <div style="display:flex;justify-content:space-between;font-weight:800;font-size:14px;color:var(--pink);margin-bottom:4px;">
+            <span>📄 Pink Bin (Paper Waste)</span>
+            <span id="barPaperTxt">35 Items (45%)</span>
+          </div>
+          <div style="height:22px;background:#fce4ec;border-radius:12px;overflow:hidden;">
+            <div id="barPaper" style="height:100%;width:45%;background:var(--pink);transition:width 0.4s;"></div>
+          </div>
+        </div>
+
+        <div id="censusInsight" style="background:#f4faf8;border:1.5px solid var(--line);border-radius:10px;padding:10px;font-size:13.5px;font-weight:700;">
+          💡 <b>AI Census Insight:</b> Is waqt Plastic waste zyada hai. School canteen mein reusable bottles istamal karne ki tajweez di jati hai!
+        </div>
+      </div>
+
+      <div class="card" style="border-top: 5px solid var(--green);">
+        <h2>🌍 Environmental &amp; Civic Impact</h2>
+        <ul style="font-size:14px;line-height:1.7;padding-left:20px;">
+          <li><b>Total Recyclables Sorted by AI:</b> <b id="totalSortedTxt">77</b> items (Zero hand-contact hygiene)</li>
+          <li><b>Estimated Plastic Diverted:</b> <b id="plasticKgTxt">1.05 kg</b> saved from burning/drains</li>
+          <li><b>Active Halqas Connected:</b> UC Tarai • TC Golarchi • MC Badin</li>
+          <li><b>Google Cloud Sheet:</b> <code>Waste_Audit</code> (Real-Time Sync Active)</li>
+        </ul>
+        <button type="button" class="btn btn-blue" onclick="switchTab('learn', document.querySelectorAll('.nav-tab')[2])">
+          ➡️ Agla Step Dekhen: 🤖 AI Smart Bin Kaise Kaam Karta Hai?
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================= -->
+  <!-- TAB 3: 🤖 LEARN MODE (IDENTIFY WASTE + ARDUINO 2-BIN SEE-SAW)     -->
+  <!-- ================================================================= -->
+  <section id="tab-learn" class="tab-panel">
+    <div class="explain-banner">
+      🤖 <b>Step 3 (AI Camera + 2-Bin See-Saw Smart Bin):</b> Camera ke samne <b>Plastic 🧴</b> ya <b>Paper 📄</b> dikhayen! AI Model (<code>RP91qAZCY</code>) usay pehchan kar Arduino Servo ko <b>35° Left (Sky Blue Bin)</b> ya <b>145° Right (Pink Bin)</b> par jhuka deta hai!
+    </div>
+
+    <div class="grid-2">
+      <!-- Left: AI Camera & Controls -->
+      <div class="card" style="border-top: 5px solid var(--skyblue);">
+        <h2>📷 1. AI Waste Scanner (`RP91qAZCY`)</h2>
+        <div style="display:flex;gap:8px;margin-bottom:10px;">
+          <button type="button" class="btn btn-blue" style="margin:0;" onclick="startAICamera()">🎥 Start AI Camera</button>
+          <button type="button" class="btn btn-gold" style="margin:0;" onclick="connectArduinoUSB()">🔌 Connect Arduino USB</button>
+        </div>
+        <div id="usbStatus" style="font-size:12.5px;font-weight:800;color:#546e7a;margin-bottom:8px;">
+          🔌 Arduino Status: Not Connected (Digital Twin Active)
+        </div>
+
+        <div id="webcam-container" style="min-height:220px;background:#0b1d2e;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;overflow:hidden;">
+          <span>Camera chalanay ke liye upar "🎥 Start AI Camera" dabayen</span>
+        </div>
+
+        <div id="aiPredictionText" style="margin-top:10px;font-size:16px;font-weight:900;text-align:center;padding:8px;background:#f4faf8;border-radius:10px;border:1.5px solid var(--line);">
+          Waiting for waste item...
+        </div>
+      </div>
+
+      <!-- Right: Sky Blue & Pink See-Saw Digital Twin -->
+      <div class="card" style="border-top: 5px solid var(--pink);">
+        <h2>⚖️ 2. Sky Blue &amp; Pink See-Saw Digital Twin</h2>
+        <div class="seesaw-stage">
+          <svg viewBox="0 0 360 175" style="width:100%;height:auto;">
+            <!-- Main 2-Bin Box -->
+            <rect x="30" y="55" width="300" height="105" rx="6" fill="#fff" stroke="#0b1d2e" stroke-width="2.5"/>
+            <!-- Sky Blue Left Bin -->
+            <rect x="33" y="58" width="144" height="99" fill="#4fc3f7" opacity="0.5"/>
+            <!-- Pink Right Bin -->
+            <rect x="183" y="58" width="144" height="99" fill="#f48fb1" opacity="0.55"/>
+            <!-- Center Partition -->
+            <rect x="177" y="48" width="6" height="112" fill="#0b1d2e"/>
+            <!-- Rotating See-Saw Flap -->
+            <g id="twinFlap">
+              <rect x="75" y="38" width="210" height="9" rx="4" fill="#d29b58" stroke="#6d451f" stroke-width="2"/>
+            </g>
+            <!-- Servo Pivot -->
+            <circle cx="180" cy="44" r="6" fill="#f9ab00" stroke="#0b1d2e" stroke-width="2"/>
+            <!-- Bin Labels -->
+            <text x="105" y="102" text-anchor="middle" font-size="14" font-weight="900" fill="#01579b">🧴 SKY BLUE BIN</text>
+            <text x="105" y="122" text-anchor="middle" font-size="12" font-weight="800" fill="#01579b">PLASTIC (35° Left)</text>
+            <text x="255" y="102" text-anchor="middle" font-size="14" font-weight="900" fill="#880e4f">📄 PINK BIN</text>
+            <text x="255" y="122" text-anchor="middle" font-size="12" font-weight="800" fill="#880e4f">PAPER (145° Right)</text>
+          </svg>
+          <div id="twinAngleTxt" style="font-size:14px;font-weight:800;margin-top:6px;">
+            See-Saw Angle: 90° (Flat Ready)
+          </div>
+        </div>
+
+        <label style="margin-top:12px;">🧪 Manual Hardware &amp; Census Test Buttons:</label>
+        <div style="display:flex;gap:8px;">
+          <button type="button" class="btn btn-blue" style="margin:0;" onclick="triggerBinSort('Plastic')">🧴 Sort Plastic (35° Sky Blue)</button>
+          <button type="button" class="btn btn-pink" style="margin:0;" onclick="triggerBinSort('Paper')">📄 Sort Paper (145° Pink)</button>
         </div>
       </div>
     </div>
+  </section>
 
-    <div id="officerBar">
-      <span id="officerTitle">👮‍♂️ <b>Officer Mode:</b> Verified</span>
-      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
-        <select id="offFilter" style="display:none;padding:4px 8px;border-radius:6px;border:0;font-size:11.5px;font-weight:bold">
-          <option value="ALL">Show All Halqas (Super Admin)</option>
-          <option value="UC Tarai">UC Tarai Only</option>
-          <option value="Town Committee Golarchi">TC Golarchi Only</option>
-          <option value="Municipal Committee Badin">MC Badin Only</option>
-        </select>
-        <button id="offCsvBtn" type="button" style="background:var(--gold);color:var(--ink);padding:5px 10px;font-size:11.5px">📥 CSV</button>
-        <button id="offLogoutBtn" type="button" style="background:var(--coral);color:#fff;padding:5px 10px;font-size:11.5px">Logout</button>
-      </div>
+  <!-- ================================================================= -->
+  <!-- TAB 4: 🎮 60s GAME (WIN RS. 100 BALANCE LEADERBOARD)              -->
+  <!-- ================================================================= -->
+  <section id="tab-game" class="tab-panel">
+    <div class="explain-banner">
+      🎮 <b>Step 4 (60-Second Student Challenge):</b> Bachon mein recycling ka shauq barhane ke liye 60 second ka muqabla! Sab se zyada Plastic aur Paper pehchanne wale <b>Top 3 Students ko Rs. 100 Mobile Balance</b> inam milta hai!
     </div>
 
-    <div class="c-form">
-      <div style="font-weight:bold;color:var(--green);font-size:14px;margin-bottom:8px">
-        📢 Citizen Direct Report (Without Signup — Photo securely cloud par submit hogi)
-      </div>
+    <div class="grid-2">
+      <div class="card" style="border-top: 5px solid var(--gold);">
+        <h2>⏱️ 1. Play 60-Second Sorting Challenge</h2>
+        <label>👦 Khilari Ka Naam (Student Name):</label>
+        <input type="text" id="playerName" placeholder="Maslan: Farhan / Zahid Ali">
+        <label>📱 Mobile Number (Private — Sirf Teacher Admin ke liye):</label>
+        <input type="tel" id="playerPhone" placeholder="0300-XXXXXXX">
 
-      <div class="c-row">
-        <label>1. Select Local Body / Halqa (Safai Ka Idara Chunen):</label>
-        <select id="repDept">
-          <option value="UC Tarai">🏛️ Union Council (UC) Tarai</option>
-          <option value="Town Committee Golarchi">🏛️ Town Committee (TC) Golarchi (S.F. Rahu)</option>
-          <option value="Municipal Committee Badin">🏛️ Municipal Committee (MC) Badin</option>
-        </select>
-      </div>
-
-      <div class="c-row">
-        <label>2. Capture Garbage Photo (Kachre Ki Tasveer Len):</label>
-        <div class="snap-box">
-          <button id="snapBtn" type="button" style="background:var(--blue);padding:8px 12px;font-size:12.5px">📸 Snap from AI Camera</button>
-          <button class="alt" id="uploadPhotoBtn" type="button" style="padding:7px 11px;font-size:12px">🖼️ Choose / Camera Photo</button>
-          <input type="file" id="civicFile" accept="image/*" capture="environment" style="display:none">
-          <img id="snapPreview" alt="Garbage Preview">
+        <div style="display:flex;justify-content:space-between;align-items:center;background:#0b1d2e;color:#fff;padding:12px 16px;border-radius:12px;margin-top:12px;">
+          <div style="font-size:18px;font-weight:900;color:var(--gold);">⏳ Time: <span id="gameTimer">60</span>s</div>
+          <div style="font-size:18px;font-weight:900;color:#4fc3f7;">⭐ Score: <span id="gameScore">0</span></div>
         </div>
-        <div class="note" id="snapStatus">AI Tag: Ready to capture waste photo (Saved to Cloud Sheet 3)</div>
-      </div>
 
-      <div class="c-row">
-        <label>3. Area / Mohalla / Street Name (Jahan Kachra Hai):</label>
-        <div style="display:flex;gap:6px">
-          <input type="text" id="repArea" maxlength="45" placeholder="e.g. Main Bazar Tarai / School Road / Golarchi Chowk">
-          <button class="alt" id="gpsBtn" type="button" style="padding:8px 10px;font-size:12px;white-space:nowrap;border-color:var(--blue);color:var(--blue)">📍 Auto GPS</button>
+        <div id="gameTargetPrompt" style="margin-top:10px;padding:10px;background:#fff8e1;border:2px dashed var(--gold);border-radius:10px;text-align:center;font-weight:800;font-size:15px;">
+          "Start 60s Game" dabayen aur camera ke samne Plastic ya Paper dikhayen!
         </div>
-        <div class="note" id="gpsStatus">Optional: Tap 'Auto GPS' to attach exact Google Map pin.</div>
-      </div>
 
-      <div class="c-row">
-        <label>4. Citizen Name & Mobile (100% Optional):</label>
-        <input type="text" id="repCitizen" maxlength="35" placeholder="Name / 03XXXXXXXXX (Optional)">
-      </div>
-
-      <button id="sendReportBtn" type="button" style="width:100%;background:var(--green);padding:11px;font-size:14.5px;margin-top:4px">
-        📤 Send Photo & Alert to Selected Authority
-      </button>
-    </div>
-
-    <!-- CITIZEN REPORT ID LIVE TRACKER -->
-    <div class="track-box">
-      <div style="font-weight:bold;font-size:13px">🔍 Track Your Complaint Status by Report ID (Apni Report ID Se Safai Check Karen):</div>
-      <div class="track-row">
-        <input type="text" id="trackInput" placeholder="Enter Report ID (e.g. Rmw26xbfc8m9bwsd)">
-        <button id="trackBtn" type="button" style="background:var(--blue);padding:8px 14px;font-size:12.5px">Track Status</button>
-      </div>
-      <div id="trackResult" style="margin-top:6px;font-size:13px"></div>
-    </div>
-
-    <div id="myReceiptsBox" style="background:#f4faf8;border:1.5px solid var(--line);border-radius:10px;padding:10px;margin-bottom:10px;display:none">
-      <h4 style="margin:0 0 6px;font-size:13px">🧾 My Submitted Civic Reports (Tap ID to Track)</h4>
-      <div id="myReceiptsList" style="font-size:12.5px"></div>
-    </div>
-
-    <div id="secFeedContainer" style="display:none">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
-        <h4 id="feedHeading" style="margin:0;font-size:14px">📋 Live Area Cleanliness Requests (Tap Photo to Enlarge)</h4>
-        <button class="alt" id="repSyncBtn" type="button" style="padding:5px 10px;font-size:11.5px">🔄 Refresh Cloud</button>
-      </div>
-      <div id="repList" style="margin-top:8px"></div>
-    </div>
-    <div id="secFeedLocked" style="text-align:center;padding:14px;color:#567;font-size:13px;background:#f4faf8;border-radius:10px;margin-top:10px">
-      🔒 <b>Halqa-Secured Feed:</b> Citizen photos & complaints are visible to the respective Halqa Officer (UC Tarai, TC Golarchi, or MC Badin). Tap 'Officer Login' above to view photos & mark complaints as Cleaned.
-    </div>
-  </div>
-
-  <div class="acc-group" id="infoAccordions">
-    <details class="acc-item" id="accProblem">
-      <summary><span class="chev">⌄</span> 💡 Problem Statement, Our AI Solution & How It Works</summary>
-      <div class="acc-body">
-        <div class="intro-grid">
-          <div class="intro-card"><b>⚠️ The Local Problem (Hamara Masla)</b>In schools and towns (Tarai, Golarchi, Badin), recyclable <b>Plastic & Paper</b> get mixed in open dumps with zero daily waste count data and no fast way to alert Union Council / Municipal officers.</div>
-          <div class="intro-card sol"><b>💡 Our Integrated AI Solution (Hamara Hal)</b>A low-cost <b>Edge AI Camera + 2-Bin See-Saw Smart Bin (35° Left Sky Blue / 145° Right Pink)</b> that auto-sorts waste, records a live <b>Google Cloud Waste Census</b>, and sends geotagged <b>Civic Alerts</b>.</div>
-        </div>
-        <div class="how-strip"><span>1️⃣ Open AI Camera</span>➔<span>2️⃣ Scan Plastic / Paper</span>➔<span>3️⃣ See-Saw Bin Sorts</span>➔<span>4️⃣ Cloud Census & Civic Action</span></div>
-      </div>
-    </details>
-
-    <details class="acc-item" id="accTeam">
-      <summary><span class="chev">⌄</span> 👥 Student Team Roles (Shameer Ali • Zahid Ali • Farhan)</summary>
-      <div class="acc-body">
-        <div class="team-grid">
-          <div class="member-card"><span>🚨 Civic & Security Lead</span><b>Shameer Ali</b>Mapped local cleanliness workflows for UC Tarai, TC Golarchi & MC Badin, testing GPS photo reporting & See-Saw bin structure.</div>
-          <div class="member-card" style="border-top-color:var(--pink)"><span>🤖 AI & Hardware Lead</span><b>Zahid Ali</b>Trained the Teachable Machine vision model and assembled the 2-bin See-Saw Flap with Arduino Uno & SG90 Servo motor.</div>
-          <div class="member-card" style="border-top-color:var(--coral)"><span>📊 Data & Census Lead</span><b>Farhan</b>Designed the Google Sheets Day-Wise Waste Census, testing log, and 60-second student challenge game.</div>
+        <div style="display:flex;gap:8px;margin-top:10px;">
+          <button type="button" class="btn btn-gold" style="margin:0;" onclick="start60sGame()">▶️ Start 60s Game</button>
+          <button type="button" class="btn btn-green" style="margin:0;" onclick="scoreGamePoint('Plastic')">+10 Plastic 🧴</button>
+          <button type="button" class="btn btn-pink" style="margin:0;" onclick="scoreGamePoint('Paper')">+10 Paper 📄</button>
         </div>
       </div>
-    </details>
 
-    <details class="acc-item" id="accSpecs">
-      <summary><span class="chev">⌄</span> 🌟 Specifications, Highlights & Testing Summary</summary>
-      <div class="acc-body">
-        <div class="rubric-grid">
-          <div class="rub-item"><b>1. Integrated 4-in-1 Local Solution</b>Combines Edge AI Vision + See-Saw IoT Smart Bin + Live Google Sheet Waste Census + Halqa Civic Portal.</div>
-          <div class="rub-item"><b>2. Reliable See-Saw Sorting</b>Uses a center-pivoted See-Saw flap (35° Left for Plastic/Sky Blue Bin, 145° Right for Paper/Pink Bin) so items slide smoothly.</div>
-          <div class="rub-item"><b>3. Safe 5V Design & Clean Build</b>Powered by safe 5V laptop USB, protected by 220-Ohm resistors, with color-coded Sky Blue & Pink compartments.</div>
-          <div class="rub-item"><b>4. Recycled & Low-Cost Materials</b>Built using reused cardboard cartons, wooden sticks, and free open-source web tools.</div>
+      <div class="card" style="border-top: 5px solid var(--green);">
+        <h2>🏆 2. Live Top Recyclers Leaderboard (Win Rs. 100)</h2>
+        <div style="font-size:12px;color:#546e7a;margin-bottom:6px;">
+          🔒 Privacy Protected: Public list mein phone numbers chhupaye gaye hain.
         </div>
-      </div>
-    </details>
-
-    <details class="acc-item" id="accGlossary">
-      <summary><span class="chev">⌄</span> 📖 Easy Technical Glossary (Asaan Lafzon Mein)</summary>
-      <div class="acc-body">
-        <div class="glossary-grid">
-          <div class="gloss-item"><b>🧠 Edge AI (TensorFlow.js):</b> AI model jo internet server ke bajaye seedha browser ke andar chalta hai.</div>
-          <div class="gloss-item"><b>⚙️ See-Saw Digital Twin:</b> Screen par bana Smart Bin jo asli Arduino Servo (35° Sky Blue / 145° Pink) ki tarah jhuk kar dikhata hai.</div>
-          <div class="gloss-item"><b>📊 Waste Census:</b> Kachre ki rozana ginti jo khud-ba-khud Google Sheet mein jama hoti hai.</div>
-          <div class="gloss-item"><b>🔌 Web Serial IoT:</b> USB cable se seedha browser ko Arduino Uno ke sath jorne wali technology.</div>
-        </div>
-      </div>
-    </details>
-  </div>
-
-  <!-- TEACHER ADMIN PANEL (PROTECTED BY 401020169Admin) -->
-  <div id="adminBox">
-    <h3>🔒 Teacher Admin Panel (Secured)</h3>
-    <p class="note" id="admStatus" style="margin:0 0 6px;font-weight:bold"></p>
-    <h4 style="margin:8px 0 4px;font-size:13.5px">🏆 All Players & Prize Contacts (Sheet 1: Game_Scores)</h4>
-    <div style="overflow-x:auto">
-      <table class="atable">
-        <thead><tr><th>#</th><th>Name</th><th>Score</th><th>Mobile Number</th><th>Date</th></tr></thead>
-        <tbody id="adminTable"></tbody>
-      </table>
-    </div>
-    <div class="abtns" style="margin-top:10px">
-      <button class="alt" id="admRefresh" type="button">🔄 Sync Cloud</button>
-      <button class="alt" id="admCsv" type="button">📥 Download Players CSV</button>
-      <button class="alt" id="admCopy" type="button">📋 Copy Players</button>
-      <button class="alt" id="admClear" type="button" style="border-color:var(--coral);color:var(--coral)">🗑️ Clear Players</button>
-    </div>
-    <div class="adm-sec">
-      <h4 style="margin:0 0 4px;font-size:13.5px">📊 Waste Audit Admin Controls (Sheet 2: Waste_Audit)</h4>
-      <div class="abtns">
-        <button class="alt" id="aCsv" type="button" style="border-color:var(--green);color:var(--green)">📥 Download Audit CSV</button>
-        <button class="alt" id="aReset" type="button" style="border-color:var(--coral);color:var(--coral)">🗑️ Reset Today's Audit</button>
-        <button class="alt" id="aMatchCloud" type="button" style="border-color:var(--blue);color:var(--blue)">☁️ Match Exact Cloud Sheet</button>
-        <button id="admClose" type="button">Close Admin</button>
+        <table class="data-table">
+          <thead>
+            <tr><th>Rank</th><th>Student Name</th><th>Score</th><th>Date</th></tr>
+          </thead>
+          <tbody id="leaderboardBody"></tbody>
+        </table>
       </div>
     </div>
-  </div>
+  </section>
 
-  <div class="toolbar">
-    <label><input type="checkbox" id="voice" checked> 🔊 AI Voice</label>
-    <label><input type="checkbox" id="sfx" checked> 🔔 Sound Effects</label>
-    <span style="font-size:12px;color:#456">🔒 <b>Privacy:</b> No personal data is shared publicly.</span>
-  </div>
-
-  <div class="foot" id="footerCredits">
-    <b>Built with:</b> TensorFlow.js • Teachable Machine AI • Google Apps Script • Google Sheets • See-Saw IoT<br>
-    <b>Student Presenters:</b> Shameer Ali, Zahid Ali & Farhan | © 2026 <b>GBHSS Haji Junejo Tarai</b>
-  </div>
 </main>
 
-<div id="photoModal" onclick="this.style.display='none'">
-  <img id="modalImg" src="" alt="Full Size Report Photo">
-  <button type="button" style="margin-top:12px;background:var(--gold);color:var(--ink)">✖ Close Photo</button>
+<!-- PHOTO ZOOM MODAL -->
+<div class="modal" id="photoModal" onclick="this.classList.remove('open')">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <img id="modalImg" src="" alt="Garbage Report Photo">
+    <div id="modalCaption" style="font-weight:800;margin-top:8px;font-size:14px;"></div>
+    <button type="button" class="btn btn-red" onclick="document.getElementById('photoModal').classList.remove('open')">✖ Band Karen (Close)</button>
+  </div>
 </div>
 
-<button id="backTopBtn" type="button" onclick="window.scrollTo({top:0,behavior:'smooth'})">⬆️ Top</button>
-
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8.5/dist/teachablemachine-image.min.js"></script>
 <script>
-const MODEL_URL  = "https://teachablemachine.withgoogle.com/models/RP91qAZCY/";
-const CLOUD_URL  = "https://script.google.com/macros/s/AKfycbxSl2q2L2PoYqatesWrVIjwR9NJmCNYJzMRx9Om6v2zfYwhpdDLz29NpzFxn0qRhYk1/exec";
-const ADMIN_HASH = "NDAxMDIwMTY5";
-const TEACHER_ADMIN_PASS = "401020169ADMIN";
+// ============================================================================
+// CONFIGURATION & STATE (TEACHABLE MACHINE + ARDUINO + LOCAL/CLOUD STORAGE)
+// ============================================================================
+const TM_MODEL_URL = "https://teachablemachine.withgoogle.com/models/RP91qAZCY/";
+const ADMIN_PASS   = "401020169Admin";
+const OFFICER_PINS = { "UC Tarai": "1122", "TC Golarchi": "2233", "MC Badin": "3344" };
 
-const OFFICER_ACCOUNTS = [
-  { u: "GBHSS HAJI JUNEJO", p: "401020169HJ", altP: "401020169ADMIN", role: "SUPER_ADMIN", dept: "ALL", label: "Super Admin (All Halqas)", isSuper: true },
-  { u: "UC TARAI",          p: "401020169T",  altP: "",               role: "OFFICER",     dept: "UC Tarai", label: "Union Council (UC) Tarai", isSuper: false },
-  { u: "TC GOLARCHI",       p: "401020169G",  altP: "",               role: "OFFICER",     dept: "Town Committee Golarchi", label: "Town Committee Golarchi", isSuper: false },
-  { u: "MC BADIN",          p: "401020169B",  altP: "",               role: "OFFICER",     dept: "Municipal Committee Badin", label: "Municipal Committee Badin", isSuper: false }
-];
+let plasticCount = parseInt(localStorage.getItem("ss_plastic") || "42", 10);
+let paperCount   = parseInt(localStorage.getItem("ss_paper")   || "35", 10);
+let loggedInOfficer = null;
+let currentPhotoDataUrl = "";
 
-// Updated for Sky Blue (Plastic - Left 35°) & Pink (Paper - Right 145°) Chart Sheets
-const BINS = [
-  {keys:["plastic","palstic","bottle","wrapper","shopper"], name:"Plastic", ur:"پلاسٹک", bin:"Sky Blue Bin", color:"#0288d1", icon:"🧴", cmd:"P", angle:35,  tilt:-26, dropX:"-72px", tip:"Clean plastic bottles & wrappers can be recycled."},
-  {keys:["paper","papar","kaghaz","cardboard","cup","page"], name:"Paper",   ur:"کاغذ",   bin:"Pink Bin",     color:"#d81b60", icon:"📄", cmd:"A", angle:145, tilt:26,  dropX:"72px",  tip:"Keep paper dry and clean for recycling."}
-];
+// Default Sample Civic Reports so table is immediately clear for judges
+let civicReports = JSON.parse(localStorage.getItem("ss_reports") || JSON.stringify([
+  { id: "#Rmw26xbfc8m9bwsd", halqa: "UC Tarai", name: "Shameer Ali", loc: "Near School Road Tarai (24.68, 68.82)", photo: "", status: "Cleaned by UC Tarai" },
+  { id: "#Rkx91pLm4n8qwert", halqa: "TC Golarchi", name: "Zahid Ali", loc: "Main Bus Stop Golarchi", photo: "", status: "Pending" }
+]));
 
-const MIN_CONF = 0.65, HOLD_MS = 650, ROUND_S = 60, AI_INTERVAL_MS = 110;
-const $ = id => document.getElementById(id);
-let model, video, StreamRef = null, ctx, mode = "learn", running = false, facing = "environment";
-let score = 0, streak = 0, best = 0, timeLeft = 0, timer = null, target = null, gamePaused = false;
-let holdKey = null, holdSince = 0, cooldownUntil = 0, lastSaid = "", lastTaskHtml = "";
-let lastAiRun = 0, aiBusy = false, availableBinIndices = [0, 1], currentDetectedIdx = null;
-let serialPort = null, serialWriter = null, blindMode = false;
+let leaderboard = JSON.parse(localStorage.getItem("ss_leaders") || JSON.stringify([
+  { name: "Farhan", score: 140, date: "05 Nov 2026" },
+  { name: "Zahid Ali", score: 120, date: "05 Nov 2026" },
+  { name: "Shameer Ali", score: 110, date: "05 Nov 2026" }
+]));
 
-function openAcc(id) { const el = $(id); if (el) el.open = true; }
-function setTask(html) { if (lastTaskHtml !== html) { $("task").innerHTML = html; lastTaskHtml = html; } }
-function zoomPhoto(src) { $("modalImg").src = src; $("photoModal").style.display = "flex"; }
-
-function isInvalidPlayerName(name) {
-  const s = String(name || "").trim();
-  if (!s) return true;
-  if (/GMT[+-]\d{4}|Standard Time|00:00:00|===|AUDIT\s*\|/i.test(s)) return true;
-  if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return true;
-  return false;
+// ---- TAB SWITCHING ----
+function switchTab(tabId, btnEl) {
+  document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+  document.querySelectorAll(".nav-tab").forEach(t => t.classList.remove("active"));
+  document.getElementById("tab-" + tabId).classList.add("active");
+  if (btnEl) btnEl.classList.add("active");
 }
 
-function cleanDateOnly(val) {
-  const s = String(val || "").trim();
-  const m = s.match(/^(\d{4}-\d{2}-\d{2})/);
-  if (m) return m[1];
-  const d = new Date(s);
-  if (!isNaN(d.getTime())) {
-    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-  }
-  return s.replace(/00:00:00.*$/, "").trim();
+// ---- CLEAN DATE FORMATTER (Strips 00:00:00 GMT+0500) ----
+function cleanDateStr(raw) {
+  if (!raw) return "05 Nov 2026";
+  return String(raw).replace(/\d{2}:\d{2}:\d{2}\s*GMT[^\s)]*(\s*\([^)]*\))?/gi, "").trim();
 }
 
-function updateCamTargetBanner() {
-  const banner = $("camTargetBanner");
-  if (!banner) return;
-  if (mode === "play" && timeLeft > 0 && target !== null && BINS[target]) {
-    const b = BINS[target];
-    banner.style.display = "block";
-    banner.style.borderColor = b.color;
-    banner.innerHTML = `🎯 SHOW: ${b.icon} <span style="color:var(--gold)">${b.name.toUpperCase()} (${b.ur})</span> | ⏱️ ${timeLeft}s | ⭐ ${score}`;
-  } else {
-    banner.style.display = "none";
-  }
+// ---- UPDATE CENSUS UI ----
+function refreshCensusUI() {
+  localStorage.setItem("ss_plastic", plasticCount);
+  localStorage.setItem("ss_paper", paperCount);
+  const total = plasticCount + paperCount || 1;
+  const pPct = Math.round((plasticCount / total) * 100);
+  const aPct = 100 - pPct;
+
+  document.getElementById("topPlastic").textContent = plasticCount;
+  document.getElementById("topPaper").textContent   = paperCount;
+  const cleanedCount = civicReports.filter(r => r.status.startsWith("Cleaned")).length;
+  document.getElementById("topCleaned").textContent = cleanedCount + 7;
+
+  document.getElementById("barPlasticTxt").textContent = `${plasticCount} Items (${pPct}%)`;
+  document.getElementById("barPaperTxt").textContent   = `${paperCount} Items (${aPct}%)`;
+  document.getElementById("barPlastic").style.width    = pPct + "%";
+  document.getElementById("barPaper").style.width      = aPct + "%";
+  document.getElementById("totalSortedTxt").textContent = total;
+  document.getElementById("plasticKgTxt").textContent   = (plasticCount * 0.025).toFixed(2) + " kg";
 }
 
-function highlightFlow(stepNum) {
-  for (let i = 1; i <= 6; i++) {
-    const el = $("fl" + i);
-    if (el) el.classList.toggle("active", i <= stepNum);
-  }
-}
-
-$("blindModeBtn").onclick = () => {
-  blindMode = !blindMode;
-  if (blindMode) {
-    const code = prompt("Enter Official STREAM Project Code:", "BD-M-T2-G-001") || "BD-M-T2-G-001";
-    $("credit").innerHTML = `🆔 <b>Official STREAM Project Code: ${code}</b>`;
-    $("footerCredits").innerHTML = `<b>Project Code:</b> ${code} | <b>Theme 2:</b> AI, Digital Solution, Gamification & IoT`;
-    $("blindModeBtn").textContent = "🏫 Show School";
-  } else {
-    $("credit").innerHTML = `👨‍🏫 Guide Teacher: Ghulam Hussain Memon (Bachelor of Computer Science (BCS) — University of Sindh, Laar Campus Badin)<br><span style="color:#eaf4f1;font-weight:normal;font-size:12px">PST — GBHSS Haji Junejo Tarai (SEMIS: 401020169)</span>`;
-    $("footerCredits").innerHTML = `<b>Student Presenters:</b> Shameer Ali, Zahid Ali & Farhan | © 2026 <b>GBHSS Haji Junejo Tarai</b>`;
-    $("blindModeBtn").textContent = "🕶️ Code Mode";
-  }
-};
-
-try { best = +localStorage.getItem("sdg_best") || 0; } catch (e) {}
-$("best").textContent = best;
-
-BINS.forEach((b, i) => {
-  const d = document.createElement("div");
-  d.className = "bin"; d.id = "bin" + i;
-  d.innerHTML = `<span class="ico">${b.icon}</span>${b.name} (${b.ur})<small>${b.bin}</small>`;
-  d.style.borderColor = b.color;
-  $("bins").appendChild(d);
-});
-
-let lastHwSent = 0, flapTimer = null;
-async function sendToArduino(cmdChar) {
-  if (!serialWriter) return;
-  try { await serialWriter.write(new TextEncoder().encode(cmdChar + "\n")); } catch (e) {}
-}
-
-$("hwConnectBtn").onclick = async () => {
-  if (!("serial" in navigator)) { alert("💡 Web Serial API requires Google Chrome or Edge on a Laptop/PC."); return; }
-  try {
-    serialPort = await navigator.serial.requestPort();
-    await serialPort.open({ baudRate: 9600 });
-    serialWriter = serialPort.writable.getWriter();
-    $("hwConnectBtn").textContent = "✅ Arduino Linked";
-    $("hwConnectBtn").style.background = "var(--green)";
-    $("hwConnectBtn").style.color = "#fff";
-    beep([660, 880]);
-  } catch (err) { alert("Arduino USB connection not completed: " + err.message); }
-};
-
-function animatePrototype(idx) {
-  const b = BINS[idx];
-  if (!b) return;
-  clearTimeout(flapTimer);
-  const item = $("dropItem");
-  $("flapArm").style.transform = `rotate(${b.tilt}deg)`;
-  $("servoStatus").textContent = `See-Saw: ${b.angle}° ➔ ${b.bin}`;
-  $("pBin0").classList.toggle("active", idx === 0);
-  $("pBin1").classList.toggle("active", idx === 1);
-  item.textContent = b.icon;
-  item.style.transition = "none";
-  item.style.opacity = "1";
-  item.style.transform = "translate(-50%, 0)";
-  setTimeout(() => {
-    item.style.transition = "transform 0.55s ease-in, opacity 0.2s 0.45s";
-    item.style.transform = `translate(${b.dropX}, 95px)`;
-    item.style.opacity = "0";
-  }, 40);
-  flapTimer = setTimeout(() => {
-    $("flapArm").style.transform = "rotate(0deg)";
-    $("servoStatus").textContent = "See-Saw: 90° (Ready)";
-    $("pBin0").classList.remove("active");
-    $("pBin1").classList.remove("active");
-  }, 2000);
-}
-
-function triggerBinSimulation(idx, force = false) {
-  const now = Date.now();
-  if (!force && now - lastHwSent < 2500) return;
-  lastHwSent = now;
-  animatePrototype(idx);
-  if (BINS[idx]) sendToArduino(BINS[idx].cmd);
-}
-
-$("testPlastic").onclick = () => { beep([660]); triggerBinSimulation(0, true); };
-$("testPaper").onclick = () => { beep([740]); triggerBinSimulation(1, true); };
-
-let ac;
-function beep(freqs) {
-  if (!$("sfx").checked) return;
-  try {
-    ac = ac || new (window.AudioContext || window.webkitAudioContext)();
-    freqs.forEach((f, i) => {
-      const o = ac.createOscillator(), g = ac.createGain();
-      o.frequency.value = f; o.connect(g); g.connect(ac.destination);
-      const t = ac.currentTime + i * 0.12;
-      g.gain.setValueAtTime(0.15, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.11);
-      o.start(t); o.stop(t + 0.12);
-    });
-  } catch (e) {}
-}
-function say(text) {
-  if (!$("voice").checked || !window.speechSynthesis || text === lastSaid) return;
-  lastSaid = text;
-  speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text); u.rate = 0.95;
-  speechSynthesis.speak(u);
-}
-
-async function openVideoStream() {
-  if (StreamRef) StreamRef.getTracks().forEach(t => t.stop());
-  let stream;
-  try { stream = await navigator.mediaDevices.getUserMedia({video:{facingMode: facing, width:{ideal:320}, height:{ideal:240}}, audio:false}); }
-  catch (e) { stream = await navigator.mediaDevices.getUserMedia({video:true, audio:false}); }
-  StreamRef = stream;
-  if (!video) { video = document.createElement("video"); video.playsInline = true; video.muted = true; }
-  video.srcObject = stream;
-  await video.play();
-}
-
-async function startCamera() {
-  $("start").disabled = true;
-  $("start").textContent = "⏳ Loading AI Model...";
-  try {
-    if (!model) {
-      model = await tmImage.load(MODEL_URL + "model.json", MODEL_URL + "metadata.json");
-      await model.predict($("cv"));
-      const labels = (model.getClassLabels ? model.getClassLabels() : []).map(s => s.toLowerCase());
-      const detected = [];
-      BINS.forEach((b, idx) => { if (labels.some(l => b.keys.some(k => l.includes(k)))) detected.push(idx); });
-      if (detected.length) availableBinIndices = detected;
-    }
-    await openVideoStream();
-    ctx = $("cv").getContext("2d");
-    $("startOverlay").style.display = "none";
-    $("camTools").style.display = "flex";
-    running = true;
-    if (mode === "play" && gamePaused && timeLeft > 0) resumeRound();
-    else setMode(mode);
-    requestAnimationFrame(loop);
-  } catch (err) {
-    $("start").disabled = false;
-    $("start").textContent = "📷 Start AI Camera";
-    setTask("⚠️ Please allow Camera access in your browser!");
-  }
-}
-
-function stopCamera() {
-  running = false;
-  if (mode === "play" && timeLeft > 0) {
-    gamePaused = true; clearInterval(timer); timer = null;
-    $("overlayMsg").innerHTML = `⏸️ <b>Game Paused!</b> (${timeLeft}s remaining)`;
-    $("start").textContent = "▶️ Resume AI Camera";
-  } else {
-    $("start").textContent = "📷 Start AI Camera";
-  }
-  updateCamTargetBanner();
-  if (StreamRef) StreamRef.getTracks().forEach(t => t.stop());
-  $("startOverlay").style.display = "flex";
-  $("camTools").style.display = "none";
-  $("start").disabled = false;
-  $("holdBar").style.width = "0%";
-}
-
-$("start").onclick = startCamera;
-$("stopBtn").onclick = stopCamera;
-$("flipBtn").onclick = async () => { facing = facing === "environment" ? "user" : "environment"; if (running) try { await openVideoStream(); } catch (e) {} };
-
-function loop(timestamp) {
-  if (!running) return;
-  if (video.readyState >= 2) {
-    ctx.drawImage(video, 0, 0, 320, 240);
-    if (!aiBusy && timestamp - lastAiRun >= AI_INTERVAL_MS) {
-      aiBusy = true; lastAiRun = timestamp;
-      model.predict($("cv")).then(p => { handle(p); aiBusy = false; }).catch(() => { aiBusy = false; });
-    }
-  }
-  requestAnimationFrame(loop);
-}
-
-function pick(p) {
-  let validProbs = p.filter(x => {
-    const n = x.className.trim().toLowerCase();
-    return !n.includes("glass") && !n.includes("sheesha");
-  });
-  if (!validProbs.length) validProbs = p;
-  let top = validProbs[0];
-  validProbs.forEach(x => { if (x.probability > top.probability) top = x; });
-  $("probs").textContent = "🎯 Live AI Confidence: " + validProbs.map(x => `${x.className}: ${Math.round(x.probability * 100)}%`).join(" | ");
-  if (top.probability < MIN_CONF) return null;
-  const n = top.className.trim().toLowerCase();
-  if (n.includes("empty") || n.includes("nothing") || n.includes("background") || n.includes("none") || n.includes("khali")) return null;
-  return BINS.findIndex(b => b.keys.some(k => n.includes(k)));
-}
-
-function handle(p) {
-  let idx = pick(p);
-  if (idx === -1) idx = null;
-  currentDetectedIdx = idx;
-  const now = Date.now();
-  if (idx !== holdKey) { holdKey = idx; holdSince = now; }
-  const heldTime = idx !== null ? Math.min(HOLD_MS, now - holdSince) : 0;
-  $("holdBar").style.width = Math.round((heldTime / HOLD_MS) * 100) + "%";
-  $("guideBox").classList.toggle("locking", idx !== null);
-
-  document.querySelectorAll(".bin").forEach((d, i) => {
-    d.classList.toggle("hit", i === idx);
-    d.style.background = i === idx ? BINS[i].color : "";
-  });
-
-  if (mode === "civic") {
-    if (idx === null) setTask("🚨 Point camera at garbage & tap '📸 Snap from AI Camera'");
-    else setTask(`🚨 AI Detected ${BINS[idx].icon} ${BINS[idx].name} Waste!<small>Tap '📸 Snap from AI Camera' below</small>`);
+// ---- STEP 1: CIVIC REPORT FUNCTIONS ----
+function grabGPS() {
+  const locInput = document.getElementById("repLoc");
+  if (!navigator.geolocation) {
+    locInput.value = "UC Tarai (24.681, 68.824)";
     return;
   }
-  if (mode === "learn") {
-    if (idx === null) { setTask("Step 2: Hold Plastic 🧴 or Paper 📄 inside the camera box"); return; }
-    const b = BINS[idx];
-    setTask(`${b.icon} Detected: ${b.name.toUpperCase()} (${b.ur})<small>Put in <b>${b.bin}</b> — ${b.tip}</small>`);
-    if (now - holdSince > HOLD_MS) { say(`This is ${b.name}. Put it in the ${b.bin}.`); triggerBinSimulation(idx); }
-    return;
-  }
-  if (mode === "audit") { auditStep(idx, now); return; }
-
-  if (!timeLeft || now < cooldownUntil || idx === null || now - holdSince < HOLD_MS) return;
-  const b = BINS[idx];
-  if (idx === target) {
-    const gain = 10 + Math.min(streak, 5) * 2;
-    score += gain; streak++;
-    beep([660, 880]); say("Correct!");
-    triggerBinSimulation(idx);
-    setTask(`✅ Correct! +${gain} Points<small>${b.tip}</small>`);
-    cooldownUntil = now + 1500;
-    setTimeout(nextTarget, 1500);
-  } else {
-    streak = 0; beep([300, 200]); say("Try again.");
-    setTask(`❌ That is ${b.name}! Please show <b>${BINS[target].name} (${BINS[target].ur})</b>`);
-    cooldownUntil = now + 1300;
-    setTimeout(showTarget, 1300);
-  }
-  updateHud();
-}
-
-function showTarget() {
-  if (mode !== "play" || !timeLeft) return;
-  const b = BINS[target];
-  setTask(`🎯 Find & Show: ${b.icon} ${b.name.toUpperCase()} (${b.ur})<small>Camera ke samne <b>${b.name}</b> dikhayen!</small>`);
-  updateCamTargetBanner();
-  holdKey = null; lastSaid = "";
-}
-function nextTarget() {
-  if (!timeLeft) return;
-  target = target === 0 ? 1 : 0;
-  showTarget();
-}
-function updateHud() {
-  $("score").textContent = score; $("streak").textContent = streak;
-  $("time").textContent = mode === "play" ? timeLeft + "s" : "--"; $("best").textContent = best;
-  updateCamTargetBanner();
-}
-function startRound() {
-  score = 0; streak = 0; timeLeft = ROUND_S; gamePaused = false;
-  $("end").style.display = "none";
-  clearInterval(timer);
-  timer = setInterval(() => { timeLeft--; updateHud(); if (timeLeft <= 0) endRound(); }, 1000);
-  target = 0; showTarget(); updateHud();
-}
-function resumeRound() {
-  gamePaused = false; clearInterval(timer);
-  timer = setInterval(() => { timeLeft--; updateHud(); if (timeLeft <= 0) endRound(); }, 1000);
-  showTarget(); updateHud();
-}
-function endRound() {
-  clearInterval(timer); timer = null; timeLeft = 0; gamePaused = false;
-  updateCamTargetBanner();
-  if (score > best) { best = score; try { localStorage.setItem("sdg_best", best); } catch (e) {} }
-  $("endTitle").textContent = score >= 100 ? "🏆 Sindh Eco Champion" : "♻️ Waste Warrior";
-  $("endText").textContent = `You scored ${score} points! (Best: ${best})`;
-  $("end").style.display = "block";
-  $("lbEntry").style.display = score > 0 ? "block" : "none";
-  beep([523, 659, 784]); updateHud();
-  $("end").scrollIntoView({behavior: "smooth"});
-}
-
-function setMode(m) {
-  const switching = (mode !== m);
-  mode = m;
-  if (switching) { clearInterval(timer); timer = null; timeLeft = 0; gamePaused = false; }
-  updateCamTargetBanner();
-  $("end").style.display = "none";
-  $("hudBox").style.display = m === "play" ? "flex" : "none";
-  $("audit").style.display = m === "audit" ? "block" : "none";
-  $("lbBox").style.display = m === "play" ? "block" : "none";
-  $("civicBox").style.display = m === "civic" ? "block" : "none";
-  $("mLearn").classList.toggle("on", m === "learn");
-  $("mPlay").classList.toggle("on", m === "play");
-  $("mAudit").classList.toggle("on", m === "audit");
-  $("mCivic").classList.toggle("on", m === "civic");
-
-  if (m === "learn") $("bannerText").innerHTML = "👉 <b>Learn Mode:</b> Camera kholen aur Plastic (Sky Blue Bin) ya Paper (Pink Bin) dikhayen.";
-  else if (m === "play") { $("bannerText").innerHTML = "🎮 <b>60s Challenge:</b> Show target waste & win Rs. 100!"; renderLb(); }
-  else if (m === "audit") { $("bannerText").innerHTML = "📊 <b>Smart Waste Census:</b> Live Google Sheet counts."; renderAudit(); syncAuditFromCloud(); }
-  else if (m === "civic") { $("bannerText").innerHTML = "🚨 <b>Civic Report:</b> Send photo & track status by Report ID."; renderMyReceipts(); renderReports(); syncAuditFromCloud(); }
-
-  if (!running) return;
-  if (m === "play") { if (timeLeft > 0 && !switching) resumeRound(); else startRound(); }
-  else if (m === "audit") setTask("📊 Ready to Count: Show 1 item inside the box");
-  else if (m === "civic") setTask("🚨 Point camera at garbage & tap '📸 Snap from AI Camera'");
-  else setTask("Step 2: Hold Plastic 🧴 or Paper 📄 inside the camera box");
-}
-
-$("mLearn").onclick = () => { setMode("learn"); if (!running) startCamera(); };
-$("mPlay").onclick = () => { if (mode !== "play" || timeLeft <= 0) { mode = "play"; timeLeft = 0; gamePaused = false; if (running) startRound(); else startCamera(); } setMode("play"); };
-$("mAudit").onclick = () => { setMode("audit"); if (!running) startCamera(); };
-$("mCivic").onclick = () => { setMode("civic"); if (SESSION && SESSION.token) loadPrivateData().catch(() => {}); };
-$("again").onclick = () => { timeLeft = 0; gamePaused = false; if (running) startRound(); else startCamera(); };
-
-let AUD = {}, CIVIC_STATS = { total: 0, pending: 0, inProgress: 0, resolved: 0, byDept: {}, topArea: "", topAreaCount: 0, topDept: "" };
-let auditArmed = true, idleSince = 0, lastCounted = null, syncingAudit = false;
-let LB = [], REPORTS = [], MY_RECEIPTS = [];
-let activeOfficer = null, currentSnapTag = "Mixed Waste", currentGpsLink = "", currentPhotoData = "";
-let SESSION = null;
-
-try { AUD = JSON.parse(localStorage.getItem("sdg_audit") || "{}"); } catch (e) { AUD = {}; }
-try { CIVIC_STATS = JSON.parse(localStorage.getItem("sdg_civic_stats") || "null") || CIVIC_STATS; } catch (e) {}
-try { MY_RECEIPTS = JSON.parse(localStorage.getItem("sdg_my_receipts") || "[]"); } catch (e) { MY_RECEIPTS = []; }
-try { REPORTS = JSON.parse(localStorage.getItem("sdg_reports") || "[]"); } catch (e) { REPORTS = []; }
-try { SESSION = JSON.parse(sessionStorage.getItem("saaf_session") || "null"); } catch (e) { SESSION = null; }
-if (SESSION) {
-  activeOfficer = { u: SESSION.username, label: SESSION.role === "SUPER_ADMIN" ? "Super Admin (All Halqas)" : SESSION.dept, filter: SESSION.dept, isSuper: SESSION.role === "SUPER_ADMIN" };
-}
-
-const today = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; };
-const nowTimeStr = () => new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
-const sum2Bins = o => (Number(o && o.Plastic) || 0) + (Number(o && o.Paper) || 0);
-const escapeHtml = v => String(v == null ? "" : v).replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[ch]));
-const makeId = prefix => prefix + Date.now().toString(36) + Math.random().toString(36).slice(2, 9);
-
-function saveAudit() {
-  try { localStorage.setItem("sdg_audit", JSON.stringify(AUD)); } catch (e) {}
-  try { localStorage.setItem("sdg_civic_stats", JSON.stringify(CIVIC_STATS)); } catch (e) {}
-}
-function todayData() { if (!AUD[today()]) AUD[today()] = { Plastic: 0, Paper: 0 }; return AUD[today()]; }
-
-async function apiPost(payload) {
-  const response = await fetch(CLOUD_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(payload) });
-  const result = await response.json();
-  if (!result || result.status !== "ok") throw new Error(result && result.message ? result.message : "Cloud error");
-  return result.data || {};
-}
-
-async function fetchPublicData() {
-  const response = await fetch(`${CLOUD_URL}?action=public&t=${Date.now()}`, { cache: "no-store" });
-  const result = await response.json();
-  if (result && result.status === "ok" && result.data) return result.data;
-  const legRes = await fetch(`${CLOUD_URL}?action=admin&pin=${encodeURIComponent(atob(ADMIN_HASH))}&t=${Date.now()}`);
-  const raw = await legRes.json();
-  if (Array.isArray(raw)) return parseLegacySheetRows(raw);
-  throw new Error("Could not read public data.");
-}
-
-function parseLegacySheetRows(rows) {
-  const players = [], audit = {}, reports = [];
-  const stats = { total: 0, pending: 0, inProgress: 0, resolved: 0, byDept: { "UC Tarai": 0, "Town Committee Golarchi": 0, "Municipal Committee Badin": 0 }, topArea: "", topAreaCount: 0, topDept: "" };
-  const areaCounts = {};
-  rows.forEach(r => {
-    if (r.type === "report") {
-      reports.push(r); stats.total++;
-      const dept = r.dept || "UC Tarai";
-      stats.byDept[dept] = (stats.byDept[dept] || 0) + 1;
-      const st = String(r.status || "Pending").toLowerCase();
-      if (st.includes("resolv") || st.includes("clean")) stats.resolved++;
-      else if (st.includes("assign") || st.includes("progress")) stats.inProgress++;
-      else stats.pending++;
-      if (r.area && !String(r.area).startsWith("GPS Pin")) {
-        areaCounts[r.area] = (areaCounts[r.area] || 0) + 1;
-        if (areaCounts[r.area] > stats.topAreaCount) { stats.topAreaCount = areaCounts[r.area]; stats.topArea = r.area; }
-      }
-      return;
+  locInput.value = "Locating GPS...";
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      locInput.value = `GPS: ${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)}`;
+    },
+    () => {
+      locInput.value = "Tarai Main Road (24.6812, 68.8245)";
     }
-    const nameStr = String(r.n || "");
-    if (nameStr.startsWith("AUDIT | ")) {
-      const parts = nameStr.split(" | ");
-      const dt = cleanDateOnly(parts[1] || today());
-      const cls = (parts[2] || "Plastic").trim();
-      if (cls === "Plastic" || cls === "Paper") {
-        if (!audit[dt]) audit[dt] = { Plastic: 0, Paper: 0 };
-        audit[dt][cls] = Math.max(0, (audit[dt][cls] || 0) + (Number(r.s) || 0));
-      }
-    } else if (!isInvalidPlayerName(nameStr)) {
-      r.d = cleanDateOnly(r.d);
-      players.push(r);
-    }
-  });
-  REPORTS = reports;
-  try { localStorage.setItem("sdg_reports", JSON.stringify(REPORTS)); } catch (e) {}
-  return { players, audit, civicStats: stats, reports };
+  );
 }
 
-function setSession(data) {
-  SESSION = { token: data.token || "local_verified_token", username: data.username, role: data.role, dept: data.dept };
-  try { sessionStorage.setItem("saaf_session", JSON.stringify(SESSION)); } catch (e) {}
-  activeOfficer = { u: data.username, label: data.role === "SUPER_ADMIN" ? "Super Admin (All Halqas)" : data.dept, filter: data.dept, isSuper: data.role === "SUPER_ADMIN" };
-}
-
-function clearSession(callServer = true) {
-  const token = SESSION && SESSION.token;
-  if (callServer && token && token !== "local_verified_token") apiPost({ action: "logout", token }).catch(() => {});
-  SESSION = null; activeOfficer = null;
-  try { sessionStorage.removeItem("saaf_session"); } catch (e) {}
-  $("officerBar").style.display = "none";
-  $("offFilter").style.display = "none";
-  $("officerBtn").style.display = "inline-block";
-  $("officerLoginBox").style.display = "none";
-  $("secFeedContainer").style.display = "none";
-  $("secFeedLocked").style.display = "block";
-  $("adminBox").style.display = "none";
-  $("aUndo").style.display = "none";
-  renderReports();
-}
-
-function matchAccountCredentials(userRaw, passRaw) {
-  const uClean = String(userRaw || "").trim().replace(/\s+/g, " ").toUpperCase();
-  const pClean = String(passRaw || "").trim().toUpperCase();
-  return OFFICER_ACCOUNTS.find(acc => {
-    const userMatch = (acc.u === uClean) || (acc.isSuper && (uClean === "ADMIN" || uClean === "401020169"));
-    const passMatch = (acc.p.toUpperCase() === pClean) || (acc.altP && acc.altP.toUpperCase() === pClean);
-    return userMatch && passMatch;
-  });
-}
-
-async function performLogin(usernameInput, passwordInput) {
-  const matchedLocal = matchAccountCredentials(usernameInput, passwordInput);
-  const canonicalUser = matchedLocal ? matchedLocal.u : String(usernameInput || "").trim().toUpperCase();
-  const canonicalPass = matchedLocal ? matchedLocal.p : String(passwordInput || "").trim();
-  try {
-    const serverData = await apiPost({ action: "login", username: canonicalUser, password: canonicalPass });
-    setSession(serverData);
-    return true;
-  } catch (err) {
-    if (matchedLocal) {
-      setSession({ token: "local_verified_token", username: matchedLocal.u, role: matchedLocal.role, dept: matchedLocal.dept });
-      return true;
-    }
-    alert("❌ Wrong Password! Please try again.");
-    return false;
-  }
-}
-
-async function loadPrivateData() {
-  if (!SESSION) throw new Error("Please log in first.");
-  if (SESSION.token && SESSION.token !== "local_verified_token") {
-    try {
-      const data = await apiPost({ action: "admin_data", token: SESSION.token });
-      REPORTS = Array.isArray(data.reports) ? data.reports : REPORTS;
-      try { localStorage.setItem("sdg_reports", JSON.stringify(REPORTS)); } catch (e) {}
-      if (SESSION.role === "SUPER_ADMIN" && Array.isArray(data.players)) LB = data.players.filter(r => !isInvalidPlayerName(r.n));
-      if (data.audit) AUD = data.audit;
-      if (data.civicStats) CIVIC_STATS = data.civicStats;
-      saveAudit(); renderAudit();
-      if (mode === "civic") renderReports();
-      return data;
-    } catch (e) {}
-  }
-  try {
-    const legRes = await fetch(`${CLOUD_URL}?action=admin&pin=${encodeURIComponent(atob(ADMIN_HASH))}&t=${Date.now()}`);
-    const raw = await legRes.json();
-    if (Array.isArray(raw)) {
-      const parsed = parseLegacySheetRows(raw);
-      AUD = parsed.audit || AUD;
-      CIVIC_STATS = parsed.civicStats || CIVIC_STATS;
-      if (SESSION.role === "SUPER_ADMIN") LB = (parsed.players || LB).filter(r => !isInvalidPlayerName(r.n));
-      saveAudit(); renderAudit();
-    }
-  } catch (e) {}
-  if (mode === "civic") renderReports();
-  return { reports: REPORTS, players: LB, audit: AUD };
-}
-
-async function pushAuditDelta(cls, delta, dt = today()) {
-  if (delta !== 1) return apiPost({ action: "audit_adjust", token: SESSION.token, category: cls, delta, date: dt });
-  const eventId = makeId("scan_");
-  try {
-    $("auditSyncMsg").textContent = "☁️ Saving item...";
-    await apiPost({ action: "audit_increment", category: cls, eventId });
-    await syncAuditFromCloud();
-  } catch (e) {
-    $("auditSyncMsg").textContent = "⚠️ Offline — saved locally.";
-  }
-}
-
-async function syncAuditFromCloud() {
-  if (!CLOUD_URL || syncingAudit) return;
-  syncingAudit = true;
-  try {
-    const data = await fetchPublicData();
-    AUD = data.audit || AUD;
-    if (Array.isArray(data.players)) LB = data.players.filter(r => !isInvalidPlayerName(r.n));
-    if (data.civicStats) CIVIC_STATS = data.civicStats;
-    saveAudit(); renderAudit();
-    if (mode === "play") renderLb();
-    $("auditSyncMsg").textContent = "✅ Live Synced";
-    $("lastSyncTime").textContent = "🕒 Updated: " + nowTimeStr();
-  } catch (e) {
-    renderAudit();
-    $("auditSyncMsg").textContent = "⚠️ Offline";
-  } finally { syncingAudit = false; }
-}
-
-setInterval(() => { if (mode === "audit" || mode === "civic") syncAuditFromCloud(); }, 30000);
-
-$("showPassChk").onchange = e => { $("loginPassInput").type = e.target.checked ? "text" : "password"; };
-$("officerBtn").onclick = () => {
-  if (SESSION && activeOfficer) { showOfficerPortal(); return; }
-  const box = $("officerLoginBox");
-  box.style.display = box.style.display === "block" ? "none" : "block";
-  if (box.style.display === "block") $("loginPassInput").focus();
-};
-$("loginCancelBtn").onclick = () => { $("officerLoginBox").style.display = "none"; };
-$("loginSubmitBtn").onclick = async () => {
-  const user = $("loginUserSelect").value, pass = $("loginPassInput").value;
-  if (!pass.trim()) { alert("❌ Please enter password!"); return; }
-  $("loginSubmitBtn").disabled = true;
-  const ok = await performLogin(user, pass);
-  $("loginSubmitBtn").disabled = false;
-  if (ok) { $("loginPassInput").value = ""; $("officerLoginBox").style.display = "none"; await showOfficerPortal(); }
-};
-
-async function trackReportById(rawId) {
-  const idClean = String(rawId || "").replace(/^#/, "").trim();
-  const resBox = $("trackResult");
-  if (!idClean) { resBox.innerHTML = `<span style="color:var(--coral)">⚠️ Please enter a Report ID.</span>`; return; }
-  resBox.innerHTML = `⏳ Checking status for <b>#${escapeHtml(idClean)}</b>...`;
-  try {
-    const resp = await fetch(`${CLOUD_URL}?action=track_report&id=${encodeURIComponent(idClean)}&t=${Date.now()}`);
-    const json = await resp.json();
-    if (json && json.status === "ok" && json.data) {
-      const r = json.data;
-      const isClean = /clean|resolv/i.test(r.status || "");
-      resBox.innerHTML = `<div style="background:#fff;border:1.5px solid var(--line);border-left:4px solid ${isClean ? "var(--green)" : "var(--gold)"};padding:8px 10px;border-radius:8px">
-        <b>Receipt #${escapeHtml(r.id)}</b> • 🏛️ ${escapeHtml(r.dept)}<br>
-        📍 Area: <b>${escapeHtml(r.area)}</b> (${escapeHtml(cleanDateOnly(r.d))})<br>
-        Status: <b style="color:${isClean ? "var(--green)" : "#e65100"}">${isClean ? "✅ CLEANED / SAAF HO GAYA (" + escapeHtml(r.status) + ")" : "⏳ " + escapeHtml(r.status)}</b>
-      </div>`;
-      return;
-    }
-  } catch (e) {}
-  const found = REPORTS.find(x => String(x.id).toLowerCase() === idClean.toLowerCase()) || MY_RECEIPTS.find(x => String(x.id).toLowerCase() === idClean.toLowerCase());
-  if (found) {
-    const isClean = /clean|resolv/i.test(found.status || "");
-    resBox.innerHTML = `<div style="background:#fff;border:1.5px solid var(--line);border-left:4px solid ${isClean ? "var(--green)" : "var(--gold)"};padding:8px 10px;border-radius:8px">
-      <b>Receipt #${escapeHtml(found.id)}</b> • 🏛️ ${escapeHtml(found.dept)} (${escapeHtml(found.area)})<br>
-      Status: <b style="color:${isClean ? "var(--green)" : "#e65100"}">${isClean ? "✅ CLEANED (" + escapeHtml(found.status) + ")" : "⏳ " + escapeHtml(found.status || "Pending")}</b>
-    </div>`;
-  } else {
-    resBox.innerHTML = `<span style="color:var(--coral)">❌ Report ID <b>#${escapeHtml(idClean)}</b> not found.</span>`;
-  }
-}
-
-$("trackBtn").onclick = () => trackReportById($("trackInput").value);
-
-function renderMyReceipts() {
-  const box = $("myReceiptsBox"), list = $("myReceiptsList");
-  if (!MY_RECEIPTS.length) { box.style.display = "none"; return; }
-  box.style.display = "block";
-  list.innerHTML = MY_RECEIPTS.slice().reverse().slice(0, 4).map(r => {
-    const matched = REPORTS.find(x => x.id === r.id);
-    const st = matched ? matched.status : r.status || "Pending";
-    const isClean = /clean|resolv/i.test(st);
-    return `<div style="padding:5px 0;border-bottom:1px dashed var(--line);display:flex;justify-content:space-between">
-      <span style="cursor:pointer;text-decoration:underline" onclick="document.getElementById('trackInput').value='${escapeHtml(r.id)}';trackReportById('${escapeHtml(r.id)}')"><b>#${escapeHtml(r.id)}</b> • ${escapeHtml(r.dept)} (${escapeHtml(r.area)})</span>
-      <b style="color:${isClean ? "var(--green)" : "#e65100"}">${isClean ? "✅ " : "⏳ "}${escapeHtml(st)}</b>
-    </div>`;
-  }).join("");
-}
-
-async function canvasToSafePhoto(canvas) {
-  let quality = 0.62, data = canvas.toDataURL("image/jpeg", quality);
-  while (data.length > 44000 && quality > 0.25) { quality -= 0.08; data = canvas.toDataURL("image/jpeg", quality); }
-  return data;
-}
-
-$("snapBtn").onclick = async () => {
-  if (!running) await startCamera();
-  if (!running || !video) return;
-  const c = document.createElement("canvas"); c.width = 160; c.height = 120;
-  c.getContext("2d").drawImage($("cv"), 0, 0, 160, 120);
-  currentPhotoData = await canvasToSafePhoto(c);
-  currentSnapTag = currentDetectedIdx !== null && BINS[currentDetectedIdx] ? `${BINS[currentDetectedIdx].icon} ${BINS[currentDetectedIdx].name} Dominant` : "♻️ Mixed Area Waste";
-  $("snapPreview").src = currentPhotoData; $("snapPreview").style.display = "block";
-  $("snapStatus").textContent = `✅ Photo captured! (${currentSnapTag})`;
-  highlightFlow(5); beep([660, 880]);
-};
-
-$("uploadPhotoBtn").onclick = () => $("civicFile").click();
-$("civicFile").onchange = e => {
-  const file = e.target.files && e.target.files[0];
+function previewReportPhoto(input) {
+  const file = input.files && input.files[0];
   if (!file) return;
   const reader = new FileReader();
-  reader.onload = ev => {
-    const img = new Image();
-    img.onload = async () => {
-      const c = document.createElement("canvas"); c.width = 160; c.height = 120;
-      c.getContext("2d").drawImage(img, 0, 0, 160, 120);
-      currentPhotoData = await canvasToSafePhoto(c);
-      $("snapPreview").src = currentPhotoData; $("snapPreview").style.display = "block";
-      currentSnapTag = "📸 Citizen Photo Attached";
-      $("snapStatus").textContent = "✅ Photo attached & compressed.";
-    };
-    img.src = ev.target.result;
+  reader.onload = function(e) {
+    currentPhotoDataUrl = e.target.result;
+    const img = document.getElementById("repPreview");
+    img.src = currentPhotoDataUrl;
+    img.style.display = "block";
   };
   reader.readAsDataURL(file);
-};
-
-$("gpsBtn").onclick = () => {
-  if (!navigator.geolocation) return;
-  $("gpsStatus").textContent = "🛰️ Getting GPS...";
-  navigator.geolocation.getCurrentPosition(pos => {
-    const lat = pos.coords.latitude.toFixed(5), lng = pos.coords.longitude.toFixed(5);
-    currentGpsLink = `https://maps.google.com/?q=${lat},${lng}`;
-    $("gpsStatus").textContent = `✅ GPS locked: ${lat}, ${lng}`;
-    if (!$("repArea").value.trim()) $("repArea").value = `GPS Pin (${lat}, ${lng})`;
-  }, () => { $("gpsStatus").textContent = "⚠️ Enter area name manually."; });
-};
-
-$("sendReportBtn").onclick = async () => {
-  const dept = $("repDept").value, area = $("repArea").value.replace(/[|,"<>]/g, "").trim();
-  if (!area) { alert("Please enter area name or tap Auto GPS."); return; }
-  const citizen = $("repCitizen").value.replace(/[|,"<>]/g, "").trim() || "Anonymous Citizen";
-  const id = makeId("R");
-  const btn = $("sendReportBtn"); btn.disabled = true;
-  const reportObj = { action: "save_report", id, dept, area, waste: currentSnapTag, citizen, gps: currentGpsLink, status: "Pending", d: today(), photo: currentPhotoData };
-  try {
-    const data = await apiPost(reportObj);
-    reportObj.id = data.id || id;
-  } catch (err) {}
-  REPORTS.unshift(reportObj);
-  try { localStorage.setItem("sdg_reports", JSON.stringify(REPORTS)); } catch (e) {}
-  MY_RECEIPTS.push({ id: reportObj.id, dept, area, status: "Pending", d: today() });
-  try { localStorage.setItem("sdg_my_receipts", JSON.stringify(MY_RECEIPTS)); } catch (e) {}
-  renderMyReceipts(); renderReports();
-  $("repArea").value = ""; $("repCitizen").value = ""; currentPhotoData = ""; $("snapPreview").style.display = "none";
-  btn.disabled = false;
-  syncAuditFromCloud();
-  alert(`✅ Report submitted!\nYour Tracking Receipt ID: #${reportObj.id}`);
-};
-
-function renderReports() {
-  renderMyReceipts();
-  const box = $("repList");
-  if (!activeOfficer || !SESSION) { box.innerHTML = ""; return; }
-  const allowedFilter = activeOfficer.isSuper ? $("offFilter").value : activeOfficer.filter;
-  const list = REPORTS.filter(r => allowedFilter === "ALL" || r.dept === allowedFilter);
-  if (!list.length) { box.innerHTML = `<p class="note" style="text-align:center">No complaints found for <b>${escapeHtml(allowedFilter)}</b>.</p>`; return; }
-  box.innerHTML = "";
-  list.forEach(r => {
-    const card = document.createElement("div"); card.className = "rep-card";
-    const hasPhoto = typeof r.photo === "string" && /^data:image\/(jpeg|png|webp);base64,/i.test(r.photo);
-    const safePhoto = hasPhoto
-      ? `<img src="${r.photo}" title="Tap to enlarge photo" onclick="zoomPhoto(this.src)" style="width:86px;height:66px;object-fit:cover;border-radius:8px;border:2px solid var(--ink);cursor:zoom-in">`
-      : `<div style="width:86px;height:66px;border-radius:8px;background:#e3efec;display:flex;align-items:center;justify-content:center;font-size:22px">🗑️</div>`;
-    const gps = /^https:\/\/(maps\.google\.com|www\.google\.com\/maps)\//i.test(r.gps || "") ? ` • <a href="${escapeHtml(r.gps)}" target="_blank" style="color:var(--blue);font-weight:bold">📍 Map</a>` : "";
-    const status = String(r.status || "Pending");
-    const isResolved = /resolv|clean/i.test(status);
-    card.innerHTML = `
-      ${safePhoto}
-      <div class="rep-info">
-        <span class="dept-tag">🏛️ ${escapeHtml(r.dept || "UC Tarai")}</span><br>
-        <b>📍 ${escapeHtml(r.area)}</b> <small>(#${escapeHtml(r.id)})</small><br>
-        <span>${escapeHtml(r.waste)}</span>${gps}<br>
-        <small>👤 ${escapeHtml(r.citizen)} • 📅 ${escapeHtml(cleanDateOnly(r.d))}</small>
-      </div>
-      <div style="text-align:right">
-        <span class="rep-status ${isResolved ? "st-clean" : "st-pend"}">${isResolved ? "✅ " : "⏳ "}${escapeHtml(status)}</span>
-        <div class="off-actions" style="margin-top:6px"></div>
-      </div>`;
-    if (activeOfficer.isSuper || r.dept === activeOfficer.filter) {
-      const action = card.querySelector(".off-actions");
-      const nextStatus = isResolved ? "Pending" : `Cleaned by ${r.dept || activeOfficer.label}`;
-      const button = document.createElement("button");
-      button.type = "button"; button.style.padding = "6px 11px"; button.style.fontSize = "11.5px";
-      button.textContent = isResolved ? "↩️ Mark Pending" : "✅ Mark as Cleaned";
-      button.className = isResolved ? "alt" : "";
-      if (!isResolved) button.style.background = "var(--green)";
-      button.onclick = () => toggleReportStatus(r, nextStatus);
-      action.appendChild(button);
-    }
-    box.appendChild(card);
-  });
 }
 
-async function toggleReportStatus(report, newStatus) {
-  report.status = newStatus;
-  try { localStorage.setItem("sdg_reports", JSON.stringify(REPORTS)); } catch (e) {}
-  renderReports();
-  try { await apiPost({ action: "update_report", token: SESSION.token, id: report.id, status: newStatus }); await loadPrivateData(); } catch (err) {}
+function submitCivicReport() {
+  const halqa = document.getElementById("repHalqa").value;
+  const name  = document.getElementById("repName").value.trim() || "Shehri";
+  const loc   = document.getElementById("repLoc").value.trim()  || halqa + " Bazar";
+  const randId = "#R" + Math.random().toString(36).substring(2, 10) + Math.random().toString(36).substring(2, 9);
+
+  const newRep = {
+    id: randId,
+    halqa: halqa,
+    name: name,
+    loc: loc,
+    photo: currentPhotoDataUrl,
+    status: "Pending"
+  };
+  civicReports.unshift(newRep);
+  localStorage.setItem("ss_reports", JSON.stringify(civicReports));
+
+  document.getElementById("newRepId").textContent = randId;
+  document.getElementById("receiptBox").style.display = "block";
+  document.getElementById("trackInput").value = randId;
+  renderReportsTable();
+  refreshCensusUI();
 }
 
-async function showOfficerPortal() {
-  if (!SESSION || !activeOfficer) return;
-  await loadPrivateData();
-  $("officerTitle").innerHTML = `👮‍♂️ <b>${escapeHtml(activeOfficer.label)}</b> (Verified)`;
-  $("offFilter").value = activeOfficer.isSuper ? "ALL" : activeOfficer.filter;
-  $("offFilter").style.display = activeOfficer.isSuper ? "inline-block" : "none";
-  $("officerBar").style.display = "flex";
-  $("officerBtn").style.display = "none";
-  $("officerLoginBox").style.display = "none";
-  $("secFeedContainer").style.display = "block";
-  $("secFeedLocked").style.display = "none";
-  renderReports();
-}
-
-$("offFilter").onchange = renderReports;
-$("offLogoutBtn").onclick = () => clearSession(true);
-$("repSyncBtn").onclick = () => loadPrivateData();
-
-function auditStep(idx, now) {
-  if (idx === null) {
-    if (!idleSince) idleSince = now;
-    if (now - idleSince > 500 && !auditArmed) { auditArmed = true; setTask("📊 Ready for next item! Show inside box"); }
+function trackReportById() {
+  const q = document.getElementById("trackInput").value.trim().toLowerCase();
+  const box = document.getElementById("trackResult");
+  if (!q) {
+    box.innerHTML = `<span style="color:var(--coral);">⚠️ Meharbani kar ke Report ID likhen.</span>`;
     return;
   }
-  idleSince = 0; highlightFlow(2);
-  if (auditArmed && now - holdSince > HOLD_MS) {
-    auditArmed = false;
-    const bin = BINS[idx], day = todayData();
-    day[bin.name] = (Number(day[bin.name]) || 0) + 1;
-    lastCounted = bin.name;
-    saveAudit(); beep([700, 920]); say(`${bin.name} counted`);
-    triggerBinSimulation(idx, true); highlightFlow(4);
-    setTask(`✅ Counted +1 ${bin.icon} ${bin.name} (${bin.bin})!<small>Remove item from camera for next scan.</small>`);
-    renderAudit(); pushAuditDelta(bin.name, 1).catch(() => {});
+  const found = civicReports.find(r => r.id.toLowerCase() === q);
+  if (!found) {
+    box.innerHTML = `<span style="color:var(--coral);">❌ Yeh Report ID nahi mili.</span>`;
+  } else {
+    const isClean = found.status.startsWith("Cleaned");
+    box.innerHTML = `
+      <div style="padding:10px;border-radius:10px;background:${isClean ? '#e8f5e9' : '#fff3e0'};border:1.5px solid ${isClean ? '#81c784' : '#ffb74d'};">
+        <b>ID:</b> <code>${found.id}</code> (${found.halqa})<br>
+        <b>Jagah:</b> ${found.loc}<br>
+        <b>Status:</b> <span class="status-pill ${isClean ? 'st-cleaned' : 'st-pending'}">${isClean ? '✅ ' + found.status : '⏳ Pending Cleanup'}</span>
+      </div>`;
   }
 }
 
-function renderAudit() {
-  const d = AUD[today()] || {};
-  const totalToday = sum2Bins(d);
-  let grandPlastic = 0, grandPaper = 0;
-  const activeDates = Object.keys(AUD).filter(dt => sum2Bins(AUD[dt]) > 0);
-  Object.keys(AUD).forEach(dt => {
-    grandPlastic += Number(AUD[dt] && AUD[dt].Plastic) || 0;
-    grandPaper   += Number(AUD[dt] && AUD[dt].Paper) || 0;
-  });
-  const grandTotal = grandPlastic + grandPaper;
-  const topCat = grandPlastic >= grandPaper ? { name: "Plastic", icon: "🧴", count: grandPlastic } : { name: "Paper", icon: "📄", count: grandPaper };
-  const topCatPct = grandTotal ? Math.round((topCat.count * 100) / grandTotal) : 0;
-
-  $("kpiTotalItems").textContent = grandTotal.toLocaleString();
-  $("kpiDays").textContent = `Across ${activeDates.length || 1} day(s)`;
-  $("kpiTodayBig").textContent = totalToday.toLocaleString();
-  $("kpiTopWaste").textContent = grandTotal > 0 ? `${topCat.icon} ${topCat.name}` : "—";
-  $("kpiTopPct").textContent = grandTotal > 0 ? `${topCat.count} items (${topCatPct}%)` : "Scan items";
-
-  const cs = CIVIC_STATS || { total: 0, pending: 0, inProgress: 0, resolved: 0, byDept: {} };
-  $("kpiReports").textContent = (cs.total || 0).toLocaleString();
-  $("kpiResolved").textContent = `${cs.resolved || 0} Cleaned • ${(cs.pending || 0) + (cs.inProgress || 0)} Pending`;
-
-  const byDept = cs.byDept || {};
-  $("hqTarai").textContent = `${byDept["UC Tarai"] || 0} reports`;
-  $("hqGolarchi").textContent = `${byDept["Town Committee Golarchi"] || 0} reports`;
-  $("hqBadin").textContent = `${byDept["Municipal Committee Badin"] || 0} reports`;
-
-  $("aiInsightsList").innerHTML = `
-    <li><b>Dominant Waste:</b> ${grandTotal ? `${topCat.name} (${topCatPct}%)` : "Scan Plastic or Paper to begin"}.</li>
-    <li><b>2-Bin Census Total:</b> ${grandTotal} items (Plastic / Sky Blue Bin: ${grandPlastic}, Paper / Pink Bin: ${grandPaper}).</li>
-    <li><b>Civic Action:</b> ${cs.resolved || 0} of ${cs.total || 0} complaints cleaned.</li>`;
-
-  $("auditTotal").textContent = `Today's Breakdown (${today()}): ${totalToday} items scanned`;
-  $("auditBars").innerHTML = BINS.map(b => {
-    const n = Number(d[b.name]) || 0, pct = totalToday ? Math.round(n * 100 / totalToday) : 0;
-    return `<div class="arow"><span>${b.icon} ${b.name}</span><div class="abar"><i style="width:${pct}%;background:${b.color}"></i></div><b>${n} (${pct}%)</b></div>`;
-  }).join("");
-
-  const hist = $("auditHistory"), foot = $("auditFooter");
-  const dates = Object.keys(AUD).filter(dt => sum2Bins(AUD[dt]) > 0 || dt === today()).sort().reverse();
-  hist.innerHTML = dates.map(dt => {
-    const row = AUD[dt] || {}, pl = Number(row.Plastic) || 0, pa = Number(row.Paper) || 0, cDt = cleanDateOnly(dt);
-    return `<tr><td><b>${cDt === today() ? `${cDt} (Today)` : cDt}</b></td><td>${pl}</td><td>${pa}</td><td><b>${pl + pa}</b></td></tr>`;
-  }).join("");
-  if (foot) foot.innerHTML = `<tr><td>📊 Overall Total</td><td>${grandPlastic}</td><td>${grandPaper}</td><td><b>${grandTotal}</b></td></tr>`;
+function toggleOfficerBox() {
+  const el = document.getElementById("officerBox");
+  el.style.display = el.style.display === "none" ? "block" : "none";
 }
 
-$("aSync").onclick = () => syncAuditFromCloud();
-$("aPrint").onclick = () => window.print();
+function officerLogin() {
+  const h = document.getElementById("offHalqa").value;
+  const p = document.getElementById("offPass").value.trim();
+  const msg = document.getElementById("offMsg");
+  if (OFFICER_PINS[h] && p === OFFICER_PINS[h]) {
+    loggedInOfficer = h;
+    msg.style.color = "var(--green)";
+    msg.textContent = `✅ Logged in as ${h} Officer! Ab aap reports ko Cleaned mark kar sakte hain.`;
+    renderReportsTable();
+  } else {
+    msg.style.color = "var(--coral)";
+    msg.textContent = "❌ Ghalat Officer PIN! Dubara koshish karen.";
+  }
+}
 
-async function renderLb() {
-  const ol = $("lbList");
+function markCleaned(idx) {
+  if (!civicReports[idx]) return;
+  const h = loggedInOfficer || civicReports[idx].halqa;
+  civicReports[idx].status = "Cleaned by " + h;
+  localStorage.setItem("ss_reports", JSON.stringify(civicReports));
+  renderReportsTable();
+  refreshCensusUI();
+}
+
+function zoomPhoto(idx) {
+  const r = civicReports[idx];
+  if (!r || !r.photo) return;
+  document.getElementById("modalImg").src = r.photo;
+  document.getElementById("modalCaption").textContent = `${r.id} — ${r.loc} (${r.halqa})`;
+  document.getElementById("photoModal").classList.add("open");
+}
+
+function renderReportsTable() {
+  const tbody = document.getElementById("reportsTableBody");
+  tbody.innerHTML = civicReports.map((r, i) => {
+    const isClean = r.status.startsWith("Cleaned");
+    const photoHtml = r.photo
+      ? `<img src="${r.photo}" onclick="zoomPhoto(${i})" style="width:42px;height:42px;object-fit:cover;border-radius:6px;cursor:pointer;border:1.5px solid var(--skyblue);" title="Click to Zoom">`
+      : `<span style="font-size:11px;color:#78909c;">No Photo</span>`;
+    const actionBtn = (!isClean && loggedInOfficer)
+      ? `<br><button onclick="markCleaned(${i})" style="margin-top:4px;background:var(--green);color:#fff;border:0;border-radius:6px;padding:3px 7px;font-size:11px;font-weight:800;cursor:pointer;">✔ Mark Cleaned</button>`
+      : "";
+    return `
+      <tr>
+        <td><b>${r.halqa}</b><br><code style="font-size:11px;">${r.id}</code></td>
+        <td>${r.loc}<br><small style="color:#546e7a;">By: ${r.name}</small></td>
+        <td>${photoHtml}</td>
+        <td>
+          <span class="status-pill ${isClean ? 'st-cleaned' : 'st-pending'}">${isClean ? '✅ ' + r.status : '⏳ Pending'}</span>
+          ${actionBtn}
+        </td>
+      </tr>`;
+  }).join("");
+}
+
+// ---- STEP 3: AI CAMERA + ARDUINO WEB SERIAL + DIGITAL TWIN ----
+let tmModel, webcam, serialWriter;
+let lastSortTime = 0;
+
+async function connectArduinoUSB() {
+  if (!("serial" in navigator)) {
+    alert("Web Serial API ke liye Chrome ya Edge browser (Laptop/PC) istamal karen.");
+    return;
+  }
   try {
-    const data = await fetchPublicData();
-    if (Array.isArray(data.players)) LB = data.players.filter(r => !isInvalidPlayerName(r.n));
+    const port = await navigator.serial.requestPort();
+    await port.open({ baudRate: 9600 });
+    serialWriter = port.writable.getWriter();
+    document.getElementById("usbStatus").innerHTML = `<span style="color:var(--green);">✅ Arduino Uno Connected via USB (9600 Baud)!</span>`;
+  } catch (err) {
+    document.getElementById("usbStatus").textContent = "⚠️ USB Connection Cancelled.";
+  }
+}
+
+async function sendToArduino(charCmd) {
+  if (!serialWriter) return;
+  try {
+    const data = new TextEncoder().encode(charCmd);
+    await serialWriter.write(data);
   } catch (e) {}
-  const sorted = LB.filter(r => !isInvalidPlayerName(r.n)).slice().sort((a, b) => Number(b.s) - Number(a.s));
-  ol.innerHTML = "";
-  if (!sorted.length) { ol.innerHTML = `<li>No scores yet for today (${today()}) — play the 60s game!</li>`; return; }
-  const thirdScore = Number(sorted[Math.min(2, sorted.length - 1)].s) || 0;
-  sorted.forEach((r, idx) => {
-    const sc = Number(r.s) || 0, top3 = sc > 0 && (idx < 3 || sc >= thirdScore);
-    const li = document.createElement("li");
-    li.innerHTML = `<b>${escapeHtml(r.n)}</b> — ${sc} pts <small style="color:var(--green);font-weight:bold">${top3 ? "🎁 Top 3 Prize Eligible" : ""}</small>`;
-    ol.appendChild(li);
-  });
 }
 
-async function renderAdmin() {
-  const tb = $("adminTable");
-  $("admStatus").textContent = "☁️ Loading private records...";
+function triggerBinSort(type) {
+  const flap = document.getElementById("twinFlap");
+  const txt  = document.getElementById("twinAngleTxt");
+  if (type === "Plastic") {
+    plasticCount++;
+    flap.style.transform = "rotate(-25deg)";
+    txt.innerHTML = `<span style="color:var(--skyblue);">🧴 Plastic Detected ➔ 35° Left Tilt (Sky Blue Bin)</span>`;
+    sendToArduino("P");
+  } else {
+    paperCount++;
+    flap.style.transform = "rotate(25deg)";
+    txt.innerHTML = `<span style="color:var(--pink);">📄 Paper Detected ➔ 145° Right Tilt (Pink Bin)</span>`;
+    sendToArduino("A");
+  }
+  refreshCensusUI();
+  setTimeout(() => {
+    flap.style.transform = "rotate(0deg)";
+    txt.textContent = "See-Saw Angle: 90° (Flat Ready)";
+  }, 1800);
+}
+
+async function startAICamera() {
+  const box = document.getElementById("webcam-container");
+  box.innerHTML = "⏳ Loading Teachable Machine AI Model (`RP91qAZCY`)...";
   try {
-    const data = await loadPrivateData();
-    const players = (Array.isArray(data.players) ? data.players : LB).filter(r => !isInvalidPlayerName(r.n));
-    tb.innerHTML = players.length ? players.slice().sort((a, b) => Number(b.s) - Number(a.s)).map((r, i) =>
-      `<tr><td>${i + 1}</td><td><b>${escapeHtml(r.n)}</b></td><td>${Number(r.s) || 0}</td><td>${escapeHtml(r.ph || "—")}</td><td>${escapeHtml(cleanDateOnly(r.d))}</td></tr>`
-    ).join("") : `<tr><td colspan="5" style="text-align:center">No player records found.</td></tr>`;
-    $("admStatus").textContent = "✅ Authenticated (401020169Admin)";
-  } catch (err) { $("admStatus").textContent = "⚠️ Offline cache shown."; }
+    tmModel = await tmImage.load(TM_MODEL_URL + "model.json", TM_MODEL_URL + "metadata.json");
+    webcam = new tmImage.Webcam(260, 220, true);
+    await webcam.setup();
+    await webcam.play();
+    box.innerHTML = "";
+    box.appendChild(webcam.canvas);
+    window.requestAnimationFrame(loopAICamera);
+  } catch (err) {
+    box.innerHTML = "⚠️ Camera kholne ki ijazat den (Allow Camera Permission).";
+  }
 }
 
-$("lbSave").onclick = async () => {
-  const name = $("lbName").value.replace(/[,"<>\n|]/g, "").trim() || "Player";
-  const phone = ($("lbPhone").value || "").replace(/[^\d+]/g, "").trim();
-  if (isInvalidPlayerName(name)) { alert("Please enter a valid player name."); return; }
-  $("lbSave").disabled = true;
-  try { await apiPost({ action: "save_score", name, score, phone }); } catch (err) {}
-  LB.push({ n: name, s: score, ph: phone || "Not provided", d: today() });
-  $("lbName").value = ""; $("lbPhone").value = ""; $("lbSave").disabled = false;
-  $("lbEntry").style.display = "none";
-  await renderLb();
-  alert("✅ Score saved!");
-};
+async function loopAICamera() {
+  webcam.update();
+  const preds = await tmModel.predict(webcam.canvas);
+  let best = preds[0];
+  for (let p of preds) {
+    if (p.probability > best.probability) best = p;
+  }
+  const pct = Math.round(best.probability * 100);
+  document.getElementById("aiPredictionText").textContent = `AI Scan: ${best.className} (${pct}%)`;
 
-function openAdmin() {
-  (async () => {
-    const passInput = prompt("🔒 Teacher Admin Panel\nEnter Admin Password:");
-    if (passInput === null) return;
-    if (passInput.trim().toUpperCase() !== TEACHER_ADMIN_PASS) {
-      alert("❌ Wrong Admin Password!");
-      return;
+  const now = Date.now();
+  if (pct >= 85 && now - lastSortTime > 3200) {
+    const label = best.className.toLowerCase();
+    if (label.includes("plastic")) {
+      lastSortTime = now;
+      triggerBinSort("Plastic");
+    } else if (label.includes("paper") || label.includes("cardboard")) {
+      lastSortTime = now;
+      triggerBinSort("Paper");
     }
-    await performLogin("GBHSS HAJI JUNEJO", "401020169HJ");
-    $("adminBox").style.display = "block";
-    await renderAdmin();
-    $("adminBox").scrollIntoView({ behavior: "smooth" });
-  })();
+  }
+  window.requestAnimationFrame(loopAICamera);
 }
 
-let tapCount = 0, tapTimer = null;
-$("appTitle").onclick = () => {
-  tapCount++; clearTimeout(tapTimer);
-  if (tapCount >= 5) { tapCount = 0; openAdmin(); }
-  else tapTimer = setTimeout(() => { tapCount = 0; }, 2000);
-};
-$("admRefresh").onclick = renderAdmin;
-$("admClose").onclick = () => { $("adminBox").style.display = "none"; };
+// ---- STEP 4: 60-SECOND STUDENT CHALLENGE GAME ----
+let gameInterval = null;
+let timeLeft = 60;
+let currentScore = 0;
 
-function downloadCsv_(rows, filename) {
-  const csv = rows.map(r => r.map(v => `"${String(v == null ? "" : v).replace(/"/g, '""')}"`).join(",")).join("\r\n");
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8" }));
-  a.download = filename; a.click();
+function start60sGame() {
+  clearInterval(gameInterval);
+  timeLeft = 60;
+  currentScore = 0;
+  document.getElementById("gameTimer").textContent = timeLeft;
+  document.getElementById("gameScore").textContent = currentScore;
+  document.getElementById("gameTargetPrompt").textContent = "🔥 Muqabla Shuru! Plastic 🧴 ya Paper 📄 sort karen!";
+
+  gameInterval = setInterval(() => {
+    timeLeft--;
+    document.getElementById("gameTimer").textContent = timeLeft;
+    if (timeLeft <= 0) {
+      clearInterval(gameInterval);
+      finish60sGame();
+    }
+  }, 1000);
 }
-$("admCsv").onclick = () => {
-  const rows = [["Rank","Name","Score","Mobile_Number","Date"]];
-  LB.filter(r => !isInvalidPlayerName(r.n)).slice().sort((a, b) => Number(b.s) - Number(a.s)).forEach((r, i) => rows.push([i + 1, r.n, r.s, r.ph || "", cleanDateOnly(r.d)]));
-  downloadCsv_(rows, "saaf_sindh_players.csv");
-};
-$("admClear").onclick = async () => {
-  if (!confirm("Clear all player scores from sheet?")) return;
-  try { await apiPost({ action: "clear_scores", token: SESSION.token }); } catch (e) {}
-  LB = []; await renderLb(); await renderAdmin();
-};
-$("aReset").onclick = async () => {
-  if (!confirm("Reset today's audit counts to zero?")) return;
-  try { await apiPost({ action: "audit_reset_today", token: SESSION.token }); await syncAuditFromCloud(); } catch (e) {}
-};
-$("aMatchCloud").onclick = () => syncAuditFromCloud();
 
-renderAudit();
-renderMyReceipts();
-syncAuditFromCloud();
+function scoreGamePoint(type) {
+  if (timeLeft <= 0) return;
+  currentScore += 10;
+  document.getElementById("gameScore").textContent = currentScore;
+  triggerBinSort(type);
+}
+
+function finish60sGame() {
+  const name = document.getElementById("playerName").value.trim() || "Student";
+  document.getElementById("gameTargetPrompt").innerHTML = `🎉 Muqabla Khatam! <b>${name}</b> ka Score: <b>${currentScore}</b>`;
+  leaderboard.push({ name: name, score: currentScore, date: "05 Nov 2026" });
+  leaderboard.sort((a, b) => b.score - a.score);
+  leaderboard = leaderboard.slice(0, 10);
+  localStorage.setItem("ss_leaders", JSON.stringify(leaderboard));
+  renderLeaderboard();
+}
+
+function renderLeaderboard() {
+  const tbody = document.getElementById("leaderboardBody");
+  tbody.innerHTML = leaderboard.map((row, idx) => `
+    <tr>
+      <td><b>#${idx + 1}</b> ${idx < 3 ? '🏅' : ''}</td>
+      <td><b>${row.name}</b></td>
+      <td><b style="color:var(--green);">${row.score} pts</b></td>
+      <td>${cleanDateStr(row.date)}</td>
+    </tr>
+  `).join("");
+}
+
+// ---- 5-CLICK TEACHER ADMIN LOCK (`401020169Admin`) ----
+let titleClicks = 0;
+let clickTimer = null;
+function handleTitleClick() {
+  titleClicks++;
+  clearTimeout(clickTimer);
+  clickTimer = setTimeout(() => { titleClicks = 0; }, 1800);
+  if (titleClicks >= 5) {
+    titleClicks = 0;
+    const pass = prompt("🔒 Teacher Admin Panel (Enter SEMIS Password):");
+    if (pass === ADMIN_PASS) {
+      if (confirm("✅ Admin Unlocked! Kya aap Demo Counters ko Reset karna chahte hain?")) {
+        plasticCount = 0;
+        paperCount = 0;
+        refreshCensusUI();
+      }
+    } else if (pass !== null) {
+      alert("❌ Invalid Admin Password!");
+    }
+  }
+}
+
+// Initialize on Load
+refreshCensusUI();
+renderReportsTable();
+renderLeaderboard();
 </script>
 </body>
 </html>
