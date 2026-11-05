@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Saaf Sindh AI v9.8 — Civic Waste Portal & Smart Bin</title>
+<title>Saaf Sindh AI v9.9 — Civic Waste Portal & Smart Bin</title>
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
 <style>
@@ -450,7 +450,7 @@ button.btn:disabled { opacity: 0.55; cursor: not-allowed; }
 <main class="container">
 
   <!-- ================================================================= -->
-  <!-- TAB 1: 🚨 CIVIC REPORT PORTAL (RECENT 5 + SEE MORE + REFRESH)    -->
+  <!-- TAB 1: 🚨 CIVIC REPORT PORTAL (AUTO-CLEAR FORM + RECENT 5)       -->
   <!-- ================================================================= -->
   <section id="tab-civic" class="tab-panel active">
     <div class="grid-2">
@@ -509,7 +509,7 @@ button.btn:disabled { opacity: 0.55; cursor: not-allowed; }
         <div class="card" style="border-top: 5px solid var(--skyblue);">
           <h2>🧾 Apni Shikayat Track Karen (Report ID Tracker)</h2>
           <div style="display:flex;gap:6px;">
-            <input type="text" id="trackInput" placeholder="Enter Report ID (e.g. R776659)">
+            <input type="text" id="trackInput" placeholder="Enter Report ID (e.g. RGX2BVL)">
             <button type="button" class="btn btn-blue" style="width:auto;margin:0;" onclick="trackReportById()">🔍 Track</button>
           </div>
           <div id="trackResult" style="margin-top:8px;font-size:12.5px;"></div>
@@ -631,15 +631,18 @@ button.btn:disabled { opacity: 0.55; cursor: not-allowed; }
   </section>
 
   <!-- ================================================================= -->
-  <!-- TAB 3: 🤖 LEARN MODE (WITH PAUSE/RESUME CAMERA + ARDUINO TWIN)    -->
+  <!-- TAB 3: 🤖 LEARN MODE (VOICE ASSISTANT + PAUSE CAM + ARDUINO TWIN) -->
   <!-- ================================================================= -->
   <section id="tab-learn" class="tab-panel">
     <div class="learn-grid">
-      <!-- Left: AI Camera with Start / Pause-Resume / Front-Back + 3 Live Bars -->
+      <!-- Left: AI Camera with Start / Pause-Resume / Voice / Front-Back -->
       <div class="card" style="border-top: 5px solid var(--skyblue);">
         <h2>
           <span>📷 AI Waste Scanner (`RP91qAZCY`)</span>
-          <span id="usbStatus" style="font-size:11px;background:#fff3e0;color:#e65100;padding:3px 8px;border-radius:10px;">🔌 USB: Digital Twin Mode</span>
+          <div style="display:flex;gap:5px;align-items:center;">
+            <button type="button" id="btnVoiceToggle" class="mini-btn" onclick="toggleLearnVoice()">🔊 Voice: ON</button>
+            <span id="usbStatus" style="font-size:11px;background:#fff3e0;color:#e65100;padding:3px 8px;border-radius:10px;">🔌 USB: Digital Twin</span>
+          </div>
         </h2>
 
         <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
@@ -659,7 +662,7 @@ button.btn:disabled { opacity: 0.55; cursor: not-allowed; }
         <!-- 0.80s HOLD STEADY PROGRESS BAR -->
         <div class="hold-meter-wrap">
           <div class="hold-meter-head">
-            <span>⏱️ Hold Steady Timer (0.80s to Count &amp; Move Arduino):</span>
+            <span>⏱️ Hold Steady Timer (0.80s to Count, Speak &amp; Move Arduino):</span>
             <span id="learnHoldTxt">0.00s / 0.80s</span>
           </div>
           <div class="hold-meter-bar">
@@ -703,7 +706,7 @@ button.btn:disabled { opacity: 0.55; cursor: not-allowed; }
       <div class="card" style="border-top: 5px solid var(--pink);">
         <h2 style="font-size:15px;">⚙️ Digital Twin: How Arduino Model Works</h2>
         <div style="font-size:11.5px;color:#546e7a;margin-bottom:6px;">
-          Learn Mode mein jab Plastic ya Paper 0.80 sec hold hota hai, toh Arduino Servo (Pin 9) See-Saw flap ko jhuka kar kachra sahi bin mein girata hai:
+          Learn Mode mein jab Plastic ya Paper 0.80 sec hold hota hai, toh Voice bolti hai aur Arduino Servo (Pin 9) See-Saw flap ko jhuka deta hai:
         </div>
 
         <div class="seesaw-stage">
@@ -726,7 +729,7 @@ button.btn:disabled { opacity: 0.55; cursor: not-allowed; }
           </div>
         </div>
 
-        <label style="margin-top:8px;">🧪 Manual Test (Learn Mode + Arduino):</label>
+        <label style="margin-top:8px;">🧪 Manual Test (Learn Mode + Voice + Arduino):</label>
         <div style="display:flex;gap:6px;">
           <button type="button" class="btn btn-blue" style="margin:0;font-size:12px;padding:8px;" onclick="triggerBinSort('Plastic', 'learn')">🧴 Test Plastic (35°)</button>
           <button type="button" class="btn btn-pink" style="margin:0;font-size:12px;padding:8px;" onclick="triggerBinSort('Paper', 'learn')">📄 Test Paper (145°)</button>
@@ -823,10 +826,10 @@ button.btn:disabled { opacity: 0.55; cursor: not-allowed; }
         </div>
       </div>
 
-      <!-- Right: Cloud-Synced Leaderboard -->
+      <!-- Right: Cloud-Synced Leaderboard (From Game_Scores) -->
       <div class="card" style="border-top: 5px solid var(--green);">
         <h2>
-          <span>🏆 Live Top Recyclers (Win Rs. 100)</span>
+          <span>🏆 Live Top Recyclers (`Game_Scores`)</span>
           <button type="button" class="mini-btn sync-btn-label" onclick="syncFromGoogleSheet(true)">🔄 Refresh Sheet</button>
         </h2>
         <div style="font-size:11.5px;color:#546e7a;margin-bottom:6px;">
@@ -858,8 +861,8 @@ button.btn:disabled { opacity: 0.55; cursor: not-allowed; }
       <ul style="margin:0;padding-left:18px;">
         <li><b>1. Civic Report Portal:</b> Union Council (UC) Tarai, Town Committee (TC) Golarchi aur Municipal Committee (MC) Badin ke liye geotagged photo complaint aur live Report ID tracking.</li>
         <li><b>2. Smart Waste Census:</b> Google Sheet (<code>Waste_Audit</code>) mein Plastic aur Paper ka day-wise live digital hisab, graph aur AI insights.</li>
-        <li><b>3. AI + Arduino See-Saw Smart Bin:</b> Google Teachable Machine (<code>RP91qAZCY</code>) + Arduino Uno &amp; SG90 Servo See-Saw (35° Left Plastic / 145° Right Paper).</li>
-        <li><b>4. 60s Gamification Challenge:</b> Students mein safai aur recycling ka shauq paida karne ke liye 60-second AI Target Challenge.</li>
+        <li><b>3. AI + Arduino See-Saw Smart Bin:</b> Google Teachable Machine (<code>RP91qAZCY</code>) + Voice Assistant + Arduino Uno &amp; SG90 Servo See-Saw (35° Left Plastic / 145° Right Paper).</li>
+        <li><b>4. 60s Gamification Challenge:</b> Students mein safai aur recycling ka shauq paida karne ke liye 60-second AI Target Challenge (<code>Game_Scores</code>).</li>
       </ul>
     </div>
   </details>
@@ -891,7 +894,7 @@ button.btn:disabled { opacity: 0.55; cursor: not-allowed; }
   </div>
 </div>
 
-<!-- MENTOR SUPER ADMIN DASHBOARD MODAL (`401020169Admin`) -->
+<!-- MENTOR SUPER ADMIN DASHBOARD MODAL (`401020169Admin` — CLEAN WITHOUT RESET BUTTON) -->
 <div class="modal" id="adminModal" onclick="this.classList.remove('open')">
   <div class="modal-box" onclick="event.stopPropagation()">
     <div style="display:flex;justify-content:space-between;align-items:center;">
@@ -899,8 +902,8 @@ button.btn:disabled { opacity: 0.55; cursor: not-allowed; }
       <button type="button" onclick="officerLogout();document.getElementById('adminModal').classList.remove('open');" style="background:var(--coral);color:#fff;border:0;padding:5px 10px;border-radius:8px;font-size:12px;font-weight:800;cursor:pointer;">🚪 Logout Admin</button>
     </div>
 
-    <h3 style="margin:10px 0 4px;font-size:14px;">📱 Game Players With Mobile Numbers (`Game_Scores` / `Game_Leaders`)</h3>
-    <div style="max-height:155px;overflow-y:auto;">
+    <h3 style="margin:10px 0 4px;font-size:14px;">📱 Game Players With Mobile Numbers (`Game_Scores`)</h3>
+    <div style="max-height:165px;overflow-y:auto;">
       <table class="data-table">
         <thead><tr><th>Student</th><th>Mobile Number</th><th>Score</th><th>Date</th></tr></thead>
         <tbody id="adminLeadersBody"></tbody>
@@ -908,17 +911,14 @@ button.btn:disabled { opacity: 0.55; cursor: not-allowed; }
     </div>
 
     <h3 style="margin:12px 0 4px;font-size:14px;">📞 All Halqa Reports With Citizen Info &amp; Photos (`Civic_Reports`)</h3>
-    <div style="max-height:180px;overflow-y:auto;">
+    <div style="max-height:190px;overflow-y:auto;">
       <table class="data-table">
         <thead><tr><th>ID &amp; Halqa</th><th>Citizen Info</th><th>Photo</th><th>Status / Action</th></tr></thead>
         <tbody id="adminReportsBody"></tbody>
       </table>
     </div>
 
-    <div style="display:flex;gap:8px;margin-top:12px;">
-      <button type="button" class="btn btn-gold" style="margin:0;" onclick="resetDemoCounters()">🧹 Setup / Reset Fresh Sheets &amp; Graph</button>
-      <button type="button" class="btn btn-dark" style="margin:0;" onclick="document.getElementById('adminModal').classList.remove('open')">✖ Close Window</button>
-    </div>
+    <button type="button" class="btn btn-dark" style="margin-top:12px;" onclick="document.getElementById('adminModal').classList.remove('open')">✖ Close Window</button>
   </div>
 </div>
 
@@ -944,7 +944,8 @@ let paperCount   = parseInt(localStorage.getItem("ss_paper")   || "0", 10);
 let dailyStats   = JSON.parse(localStorage.getItem("ss_daily") || "{}");
 let loggedInOfficer = null;
 let currentPhotoDataUrl = "";
-let showAllReports = false; // Show only recent 5 by default
+let showAllReports = false;
+let learnVoiceEnabled = true;
 
 let civicReports = JSON.parse(localStorage.getItem("ss_reports") || "[]");
 let leaderboard  = JSON.parse(localStorage.getItem("ss_leaders") || "[]");
@@ -982,7 +983,34 @@ function normalizeHalqaName(h) {
 }
 
 // ============================================================================
-// 2. GOOGLE APPS SCRIPT CLOUD SYNC (WITH VISUAL REFRESH FEEDBACK)
+// 2. LEARN MODE VOICE ASSISTANT ("Put it in the...")
+// ============================================================================
+function toggleLearnVoice() {
+  learnVoiceEnabled = !learnVoiceEnabled;
+  const btn = document.getElementById("btnVoiceToggle");
+  btn.textContent = learnVoiceEnabled ? "🔊 Voice: ON" : "🔇 Voice: OFF";
+  if (!learnVoiceEnabled && "speechSynthesis" in window) {
+    window.speechSynthesis.cancel();
+  }
+}
+
+function speakLearnVoice(type) {
+  if (!learnVoiceEnabled || !("speechSynthesis" in window)) return;
+  try {
+    window.speechSynthesis.cancel();
+    const text = (type === "Plastic")
+      ? "Plastic detected! Please put it in the Sky Blue Plastic Bin."
+      : "Paper detected! Please put it in the Pink Paper Bin.";
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = "en-US";
+    utter.rate = 1.0;
+    utter.pitch = 1.05;
+    window.speechSynthesis.speak(utter);
+  } catch (e) {}
+}
+
+// ============================================================================
+// 3. GOOGLE APPS SCRIPT CLOUD SYNC
 // ============================================================================
 async function postToGoogleSheet(payload) {
   try {
@@ -1041,7 +1069,7 @@ async function syncFromGoogleSheet(showFeedback) {
 }
 
 // ============================================================================
-// 3. CENSUS UI, DAY-WISE GRAPH & COMMUNITY AI INSIGHTS
+// 4. CENSUS UI, DAY-WISE GRAPH & COMMUNITY AI INSIGHTS
 // ============================================================================
 function recordLocalDailyScan(type) {
   const today = new Date().toISOString().slice(0, 10);
@@ -1121,7 +1149,7 @@ function refreshCensusUI() {
 }
 
 // ============================================================================
-// 4. CIVIC REPORT: RECENT 5 + SEE MORE + HALQA FILTER + PHOTO PRIVACY
+// 5. CIVIC REPORT: AUTO-CLEAR AFTER SUBMIT + RECENT 5 + SEE MORE
 // ============================================================================
 let repStream = null;
 let repFacing = "environment";
@@ -1239,6 +1267,18 @@ function submitCivicReport() {
   localStorage.setItem("ss_reports", JSON.stringify(civicReports));
   postToGoogleSheet({ action: "addReport", report: newRep });
 
+  // IMMEDIATELY CLEAR ALL FORM INPUTS & HIDE PHOTO PREVIEW AFTER SUBMIT!
+  document.getElementById("repHalqa").selectedIndex = 0;
+  document.getElementById("repName").value  = "";
+  document.getElementById("repPhone").value = "";
+  document.getElementById("repLoc").value   = "";
+  document.getElementById("repFileInput").value = "";
+  currentPhotoDataUrl = "";
+  const prev = document.getElementById("repPreview");
+  prev.src = "";
+  prev.style.display = "none";
+  stopReportCamera();
+
   document.getElementById("newRepId").textContent = randId;
   document.getElementById("receiptBox").style.display = "block";
   document.getElementById("trackInput").value = randId;
@@ -1341,7 +1381,6 @@ function renderReportsTable() {
   const isLogged = Boolean(loggedInOfficer);
   thPhoto.style.display = isLogged ? "table-cell" : "none";
 
-  // Filter rows by Halqa if a specific Halqa Officer is logged in
   const filteredRows = civicReports.filter(r => {
     if (!loggedInOfficer || loggedInOfficer === "SUPER_ADMIN") return true;
     return normalizeHalqaName(r.halqa) === normalizeHalqaName(loggedInOfficer);
@@ -1353,7 +1392,6 @@ function renderReportsTable() {
     return;
   }
 
-  // Show only recent 5 unless "See More" is clicked
   const displayedRows = showAllReports ? filteredRows : filteredRows.slice(0, 5);
 
   if (filteredRows.length > 5) {
@@ -1401,7 +1439,7 @@ function renderReportsTable() {
 }
 
 // ============================================================================
-// 5. LEARN MODE: PAUSE/RESUME CAMERA + 0.80s HOLD + ARDUINO TWIN
+// 6. LEARN MODE: VOICE ("Put it in the...") + PAUSE CAM + ARDUINO TWIN
 // ============================================================================
 let tmModel = null;
 let learnStream = null;
@@ -1443,7 +1481,7 @@ async function sendToArduino(charCmd) {
   } catch (e) {}
 }
 
-// Arduino ONLY moves when mode === 'learn'
+// Arduino & Voice ONLY trigger when mode === 'learn'
 function triggerBinSort(type, mode) {
   const flap = document.getElementById("twinFlap");
   const txt  = document.getElementById("twinAngleTxt");
@@ -1453,6 +1491,7 @@ function triggerBinSort(type, mode) {
       flap.style.transform = "rotate(-25deg)";
       txt.innerHTML = `<span style="color:var(--skyblue);">🧴 Plastic ➔ 35° Left Tilt (Pin 4 LED + Pin 9 Servo)</span>`;
       sendToArduino("P");
+      speakLearnVoice("Plastic");
     }
   } else {
     paperCount++;
@@ -1460,6 +1499,7 @@ function triggerBinSort(type, mode) {
       flap.style.transform = "rotate(25deg)";
       txt.innerHTML = `<span style="color:var(--pink);">📄 Paper ➔ 145° Right Tilt (Pin 6 LED + Pin 9 Servo)</span>`;
       sendToArduino("A");
+      speakLearnVoice("Paper");
     }
   }
   recordLocalDailyScan(type);
@@ -1592,12 +1632,12 @@ async function loopLearnAI() {
       if (elapsed >= HOLD_DURATION_MS) {
         triggerBinSort(detected, "learn");
         statusEl.innerHTML = detected === "Plastic"
-          ? `✅ <b>Plastic Counted!</b> ➔ Arduino Tilting 35° Left!`
-          : `✅ <b>Paper Counted!</b> ➔ Arduino Tilting 145° Right!`;
+          ? `🔊 <b>"Put it in the Sky Blue Plastic Bin!"</b> (35° Left)`
+          : `🔊 <b>"Put it in the Pink Paper Bin!"</b> (145° Right)`;
         statusEl.style.background = detected === "Plastic" ? "#e1f5fe" : "#fce4ec";
         learnHoldItem = null;
         learnHoldStart = 0;
-        learnCooldownUntil = now + 1800;
+        learnCooldownUntil = now + 2000;
       } else {
         statusEl.innerHTML = `⏳ Holding <b>${detected}</b>... (${(elapsed / 1000).toFixed(2)}s / 0.80s)`;
         statusEl.style.background = "#fff8e1";
@@ -1608,7 +1648,7 @@ async function loopLearnAI() {
 }
 
 // ============================================================================
-// 6. 60s GAME: NO TARGET #, LIVE AI %, 2-1-1-2 PATTERN, NO ARDUINO TRIGGER
+// 7. 60s GAME: NO TARGET #, LIVE AI %, 2-1-1-2 PATTERN, NO ARDUINO TRIGGER
 // ============================================================================
 let gameStream = null;
 let gameFacing = "environment";
@@ -1843,8 +1883,10 @@ function saveFinishedGameScore() {
   postToGoogleSheet({ action: "addGameScore", entry: entry });
   renderLeaderboard();
 
+  document.getElementById("playerName").value  = "";
+  document.getElementById("playerPhone").value = "";
   document.getElementById("gameEndForm").style.display = "none";
-  document.getElementById("gameTargetBanner").innerHTML = `✅ <b>${name}</b> ka Score (<b>${currentScore} pts</b>) Leaderboard mein save ho gaya!`;
+  document.getElementById("gameTargetBanner").innerHTML = `✅ <b>${name}</b> ka Score (<b>${currentScore} pts</b>) Game_Scores mein save ho gaya!`;
 }
 
 function renderLeaderboard() {
@@ -1864,7 +1906,7 @@ function renderLeaderboard() {
 }
 
 // ============================================================================
-// 7. 5-CLICK MENTOR ADMIN PANEL (WITH SHOW/HIDE PASSWORD MODAL)
+// 8. 5-CLICK MENTOR ADMIN PANEL (CLEAN WITHOUT RESET BUTTON)
 // ============================================================================
 let titleClicks = 0;
 let clickTimer = null;
@@ -1920,22 +1962,6 @@ function populateAdminModal() {
         </td>
       </tr>`;
   }).join("");
-}
-
-function resetDemoCounters() {
-  if (confirm("Kya aap Google Sheet ki charon tabs (Civic_Reports, Waste_Audit, Game_Scores, Game_Leaders) ko fresh headers aur Chart ke saath reset karna chahte hain?")) {
-    plasticCount = 0;
-    paperCount   = 0;
-    dailyStats   = {};
-    civicReports = [];
-    leaderboard  = [];
-    localStorage.clear();
-    refreshCensusUI();
-    renderReportsTable();
-    renderLeaderboard();
-    postToGoogleSheet({ action: "setupAndResetAll" });
-    alert("✅ Fresh Sheet Setup & Chart Request Sent to Google Sheet!");
-  }
 }
 
 // Initialize on page load
