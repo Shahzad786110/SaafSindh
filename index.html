@@ -7,148 +7,113 @@
 <link rel="manifest" href="manifest.json">
 <script>if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");</script>
 <style>
-:root{--ink:#0f2930;--bg:#eef6f4;--card:#ffffff;--line:#cde0da;--blue:#1967d2;--green:#1e8e3e;--coral:#d93025;--gold:#f9ab00}
+:root{--ink:#0f2930;--bg:#eef6f4;--card:#ffffff;--line:#cde0da;--blue:#0288d1;--pink:#d81b60;--green:#1e8e3e;--coral:#d93025;--gold:#f9ab00}
 *{box-sizing:border-box;scroll-behavior:smooth}
-body{margin:0;font-family:"Segoe UI",Roboto,"Trebuchet MS",Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;font-size:15px}
-
-/* ---- STICKY NAVIGATION BAR ---- */
+body{margin:0;font-family:"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;font-size:15px}
 .sticky-nav{position:sticky;top:0;z-index:50;background:rgba(15,41,48,.96);backdrop-filter:blur(6px);border-bottom:2px solid rgba(249,171,0,.45);padding:7px 10px;display:flex;justify-content:center;align-items:center;gap:6px;flex-wrap:wrap;box-shadow:0 2px 10px rgba(0,0,0,.18)}
-.sticky-nav a,.sticky-nav button{color:#fff;text-decoration:none;font-size:12px;font-weight:bold;padding:5px 10px;border-radius:16px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);cursor:pointer;transition:all .2s}
+.sticky-nav a,.sticky-nav button{color:#fff;text-decoration:none;font-size:12px;font-weight:bold;padding:5px 10px;border-radius:16px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);cursor:pointer}
 .sticky-nav a:hover,.sticky-nav button:hover{background:var(--gold);color:var(--ink);border-color:var(--gold)}
-
 header{background:linear-gradient(135deg,#0f2930,#1b434d);color:#fff;padding:14px 16px 12px;text-align:center;user-select:none;box-shadow:0 2px 8px rgba(0,0,0,.15)}
-header h1{margin:0;font-size:21px;letter-spacing:.3px;cursor:pointer}
+header h1{margin:0;font-size:21px;cursor:pointer}
 header p{margin:3px 0 0;font-size:12.5px;color:#c3e3dc}
 #credit{color:var(--gold);font-weight:bold;font-size:12px;margin-top:5px;line-height:1.4}
-.top-badges{display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;margin-top:6px}
+.top-badges{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:6px}
 .team-badge{background:rgba(255,255,255,.12);border:1px solid rgba(249,171,0,.5);color:#fff;padding:3px 12px;border-radius:20px;font-size:12px;font-weight:bold}
 .team-badge b{color:var(--gold)}
-
 main{max-width:800px;margin:0 auto;padding:10px 12px}
-
-/* ---- CLEAN COLLAPSIBLE ACCORDION (⌄ ARROW STYLE) ---- */
-.acc-group{background:var(--card);border:2px solid var(--line);border-radius:14px;overflow:hidden;margin:10px 0;box-shadow:0 2px 6px rgba(0,0,0,.04)}
+.acc-group{background:var(--card);border:2px solid var(--line);border-radius:14px;overflow:hidden;margin:10px 0}
 details.acc-item{border-bottom:1.5px solid var(--line);background:#fff}
 details.acc-item:last-child{border-bottom:0}
-details.acc-item summary{list-style:none;cursor:pointer;padding:12px 14px;font-size:15px;font-weight:bold;color:var(--ink);display:flex;align-items:center;gap:10px;user-select:none;transition:background .15s}
+details.acc-item summary{list-style:none;cursor:pointer;padding:12px 14px;font-size:15px;font-weight:bold;color:var(--ink);display:flex;align-items:center;gap:10px;user-select:none}
 details.acc-item summary::-webkit-details-marker{display:none}
-details.acc-item summary:hover{background:#f4faf8}
-.chev{display:inline-block;font-size:16px;font-weight:bold;color:var(--ink);transition:transform .25s ease;line-height:1}
-details.acc-item[open] > summary .chev{transform:rotate(180deg);color:var(--blue)}
-details.acc-item[open] > summary{background:#f4faf8;border-bottom:1px solid var(--line)}
+.chev{display:inline-block;font-size:16px;font-weight:bold;transition:transform .25s}
+details.acc-item[open]>summary .chev{transform:rotate(180deg);color:var(--blue)}
+details.acc-item[open]>summary{background:#f4faf8;border-bottom:1px solid var(--line)}
 .acc-body{padding:12px 14px;font-size:13.5px;background:#fff}
-
-/* ---- PROBLEM & SOLUTION CARDS ---- */
-.intro-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
-@media(max-width:620px){.intro-grid{grid-template-columns:1fr}}
+.intro-grid,.rubric-grid,.glossary-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.team-grid,.civic-mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+@media(max-width:620px){.intro-grid,.rubric-grid,.glossary-grid,.team-grid,.civic-mini-grid{grid-template-columns:1fr}}
 .intro-card{background:#f8fcfb;border:1.5px solid var(--line);border-left:5px solid var(--coral);border-radius:10px;padding:10px 12px;font-size:13px}
 .intro-card.sol{border-left-color:var(--green)}
-.intro-card b{display:block;font-size:13.5px;margin-bottom:3px;color:var(--ink)}
-.how-strip{background:#f4faf8;border:1px solid var(--line);border-radius:10px;padding:8px 10px;display:flex;justify-content:space-around;align-items:center;flex-wrap:wrap;gap:6px;font-size:12px;font-weight:bold;text-align:center}
+.intro-card b{display:block;margin-bottom:3px}
+.how-strip{background:#f4faf8;border:1px solid var(--line);border-radius:10px;padding:8px;display:flex;justify-content:space-around;flex-wrap:wrap;gap:6px;font-size:12px;font-weight:bold}
 .how-strip span{background:#fff;padding:4px 9px;border-radius:14px;border:1px solid var(--line)}
-
-/* ---- RESPONSIVE 4 MODE TABS ---- */
 .modes{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:8px}
 @media(max-width:520px){.modes{grid-template-columns:repeat(2,1fr)}}
-button{font:inherit;font-weight:bold;border:0;border-radius:12px;padding:10px 14px;cursor:pointer;background:var(--ink);color:#fff;transition:background .2s,transform .15s}
-button:active{transform:scale(.97)}
+button{font:inherit;font-weight:bold;border:0;border-radius:12px;padding:10px 14px;cursor:pointer;background:var(--ink);color:#fff}
 button.alt{background:#fff;color:var(--ink);border:2px solid var(--line)}
-button.on{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:0 4px 10px rgba(25,103,210,.28)}
-.mode-btn{display:flex;flex-direction:column;align-items:center;padding:8px 6px;font-size:13px;text-align:center}
+button.on{background:var(--blue);border-color:var(--blue);color:#fff}
+.mode-btn{display:flex;flex-direction:column;align-items:center;padding:8px 6px;font-size:13px}
 .mode-btn span{font-size:19px;margin-bottom:2px}
 .mode-btn small{font-weight:normal;font-size:11px;opacity:.88}
-
-/* ---- MODE BANNER & PRIZE BANNER ---- */
-#modeBanner{background:#fff;border-left:5px solid var(--blue);border-radius:10px;padding:8px 12px;margin-bottom:10px;font-size:13px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 1px 4px rgba(0,0,0,.05)}
-.prize-banner{background:linear-gradient(135deg,#fff8e1,#ffecb3);border:2px solid var(--gold);color:#0f2930;border-radius:12px;padding:9px 12px;margin:8px 0;font-size:13.5px;font-weight:bold;text-align:center;box-shadow:0 2px 6px rgba(249,171,0,.2)}
+#modeBanner{background:#fff;border-left:5px solid var(--blue);border-radius:10px;padding:8px 12px;margin-bottom:10px;font-size:13px}
+.prize-banner{background:linear-gradient(135deg,#fff8e1,#ffecb3);border:2px solid var(--gold);color:#0f2930;border-radius:12px;padding:9px 12px;margin:8px 0;font-size:13.5px;font-weight:bold;text-align:center}
 .prize-banner span{display:inline-block;background:var(--coral);color:#fff;padding:2px 8px;border-radius:12px;font-size:11px;margin-right:5px}
-
-/* ---- EQUAL SIZE SIDE-BY-SIDE CAMERA & DIGITAL TWIN GRID ---- */
 .live-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:stretch;margin-bottom:8px}
 @media(max-width:650px){.live-grid{grid-template-columns:1fr}}
 .cam-col{display:flex;flex-direction:column;height:100%}
-
-.stage{position:relative;background:#111;border-radius:16px 16px 0 0;overflow:hidden;aspect-ratio:4/3;width:100%;flex:1;box-shadow:0 4px 14px rgba(0,0,0,.18);border:3px solid #fff;border-bottom:0}
+.stage{position:relative;background:#111;border-radius:16px 16px 0 0;overflow:hidden;aspect-ratio:4/3;width:100%;flex:1;border:3px solid #fff;border-bottom:0}
 canvas{width:100%;height:100%;display:block;object-fit:cover}
-.guide{position:absolute;inset:18% 18% 14%;border:2.5px dashed rgba(255,255,255,.8);border-radius:14px;pointer-events:none;transition:border-color .2s}
+.guide{position:absolute;inset:18% 18% 14%;border:2.5px dashed rgba(255,255,255,.8);border-radius:14px;pointer-events:none}
 .guide.locking{border-color:var(--gold)}
-
-#camTargetBanner{display:none;position:absolute;top:8px;left:8px;right:8px;z-index:5;background:rgba(15,41,48,.92);color:#fff;border:2px solid var(--gold);border-radius:10px;padding:6px 10px;font-size:14px;font-weight:bold;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,.35);pointer-events:none}
-
+#camTargetBanner{display:none;position:absolute;top:8px;left:8px;right:8px;z-index:5;background:rgba(15,41,48,.92);color:#fff;border:2px solid var(--gold);border-radius:10px;padding:6px 10px;font-size:14px;font-weight:bold;text-align:center;pointer-events:none}
 .cam-tools{position:absolute;bottom:12px;right:8px;display:none;gap:6px;z-index:5}
 .cam-tools button{padding:5px 9px;font-size:11.5px;border-radius:8px;background:rgba(15,41,48,.85);color:#fff}
 #startOverlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;background:rgba(15,41,48,.86);color:#fff;padding:16px;text-align:center;z-index:6}
-#start{font-size:16px;padding:12px 24px;background:var(--green);border-radius:30px;box-shadow:0 4px 16px rgba(30,142,62,.55);border:2px solid #fff}
+#start{font-size:16px;padding:12px 24px;background:var(--green);border-radius:30px;border:2px solid #fff}
 .step-pills{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;margin-bottom:10px;font-size:11px}
 .step-pills span{background:rgba(255,255,255,.15);padding:3px 8px;border-radius:12px}
 .hold-wrap{position:absolute;bottom:0;left:0;right:0;height:7px;background:rgba(255,255,255,.2)}
 #holdBar{height:100%;width:0%;background:var(--gold);transition:width .12s linear}
-
-#probs{margin:0;font-size:12px;font-weight:bold;color:#fff;text-align:center;background:var(--ink);padding:8px 10px;border-radius:0 0 16px 16px;border:3px solid #fff;border-top:1px solid rgba(255,255,255,.2);box-shadow:0 4px 12px rgba(0,0,0,.12)}
-
-/* ---- 2-BIN SEE-SAW DIGITAL TWIN ---- */
-#protoBox{margin:0;background:var(--card);border:2px solid var(--line);border-radius:16px;padding:10px 12px;text-align:center;display:flex;flex-direction:column;justify-content:space-between;height:100%;box-shadow:0 4px 12px rgba(0,0,0,.06)}
-.proto-head{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;font-weight:bold;gap:4px}
-.proto-badge{background:var(--ink);color:var(--gold);padding:3px 8px;border-radius:6px;font-family:monospace;font-size:11px;white-space:nowrap}
+#probs{margin:0;font-size:12px;font-weight:bold;color:#fff;text-align:center;background:var(--ink);padding:8px 10px;border-radius:0 0 16px 16px;border:3px solid #fff;border-top:1px solid rgba(255,255,255,.2)}
+#protoBox{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:10px 12px;text-align:center;display:flex;flex-direction:column;justify-content:space-between;height:100%}
+.proto-head{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;font-weight:bold}
+.proto-badge{background:var(--ink);color:var(--gold);padding:3px 8px;border-radius:6px;font-family:monospace;font-size:11px}
 .proto-stage{position:relative;min-height:175px;background:#f4faf8;border:2px dashed var(--line);border-radius:12px;overflow:hidden;margin:8px 0;flex:1}
-.chute{width:96px;height:22px;border-left:3px solid var(--ink);border-right:3px solid var(--ink);margin:0 auto;background:rgba(16,38,46,0.06);font-size:10px;color:#456;line-height:22px}
-#dropItem{position:absolute;top:2px;left:50%;transform:translate(-50%,0);font-size:24px;opacity:0;transition:transform 0.6s ease-in, opacity 0.2s;z-index:4}
+.chute{width:96px;height:22px;border-left:3px solid var(--ink);border-right:3px solid var(--ink);margin:0 auto;background:rgba(16,38,46,.06);font-size:10px;line-height:22px}
+#dropItem{position:absolute;top:2px;left:50%;transform:translate(-50%,0);font-size:24px;opacity:0;transition:transform .6s ease-in,opacity .2s;z-index:4}
 .pivot-axle{width:14px;height:14px;background:var(--gold);border:3px solid var(--ink);border-radius:50%;margin:16px auto 0;position:relative;z-index:3}
-#flapArm{width:136px;height:8px;background:#b8864b;border:1.5px solid var(--ink);border-radius:4px;margin:-11px auto 0;transform:rotate(0deg);transition:transform 0.35s cubic-bezier(.4,1.4,.6,1);position:relative;z-index:2}
+#flapArm{width:136px;height:8px;background:#b8864b;border:1.5px solid var(--ink);border-radius:4px;margin:-11px auto 0;transform:rotate(0deg);transition:transform .35s ease;position:relative;z-index:2}
 .p-bins{position:absolute;bottom:6px;left:6px;right:6px;display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-.p-bin{height:62px;border-radius:0 0 10px 10px;border:2.5px solid;display:flex;flex-direction:column;justify-content:center;align-items:center;font-size:11px;font-weight:bold;background:#fff;transition:background .25s,color .25s;padding:4px}
-.p-bin small{font-size:10px;font-weight:normal;margin-top:2px;opacity:.9}
-.p-bin.blue{border-color:var(--blue);color:var(--blue)}
-.p-bin.green{border-color:var(--green);color:var(--green)}
-.p-bin.active.blue{background:var(--blue);color:#fff}
-.p-bin.active.green{background:var(--green);color:#fff}
-
-/* ---- GAME HUD & AI TASK BOX ---- */
+.p-bin{height:60px;border-radius:0 0 10px 10px;border:2.5px solid;display:flex;flex-direction:column;justify-content:center;align-items:center;font-size:11px;font-weight:bold;background:#fff}
+.p-bin small{font-size:10px;font-weight:normal}
+.p-bin.skyblue{border-color:var(--blue);color:var(--blue);background:#e1f5fe}
+.p-bin.pink{border-color:var(--pink);color:var(--pink);background:#fce4ec}
+.p-bin.active.skyblue{background:var(--blue);color:#fff}
+.p-bin.active.pink{background:var(--pink);color:#fff}
 .hud{display:none;gap:6px;margin:8px 0}
 .hud div{flex:1;background:var(--card);border:2px solid var(--line);border-radius:10px;padding:5px 4px;text-align:center;font-size:11.5px}
 .hud b{display:block;font-size:18px;color:var(--blue)}
-
-#task{margin:8px 0;background:var(--card);border:2.5px solid var(--line);border-radius:14px;padding:10px 12px;text-align:center;font-size:16.5px;font-weight:bold;min-height:62px;display:flex;flex-direction:column;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.05)}
+#task{margin:8px 0;background:var(--card);border:2.5px solid var(--line);border-radius:14px;padding:10px 12px;text-align:center;font-size:16px;font-weight:bold;min-height:60px;display:flex;flex-direction:column;justify-content:center}
 #task small{display:block;font-size:12.5px;font-weight:normal;color:#456;margin-top:3px}
-
-/* ---- 2 BINS (Plastic & Paper) ---- */
 .bins{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:10px 0}
-.bin{border:2.5px solid var(--line);border-radius:14px;background:var(--card);padding:10px 8px;text-align:center;font-size:14px;font-weight:bold;transition:transform .2s,background .2s}
-.bin span.ico{display:block;font-size:28px;margin-bottom:2px}
-.bin small{display:block;font-weight:normal;font-size:12px;opacity:.85;margin-top:2px}
-.bin.hit{transform:translateY(-3px);color:#fff;box-shadow:0 6px 14px rgba(0,0,0,.15)}
-
-/* ---- SMART WASTE CENSUS & IMPACT DASHBOARD ---- */
+.bin{border:2.5px solid var(--line);border-radius:14px;background:var(--card);padding:10px 8px;text-align:center;font-size:14px;font-weight:bold}
+.bin span.ico{display:block;font-size:28px}
+.bin small{display:block;font-weight:normal;font-size:12px}
+.bin.hit{color:#fff}
 .flow-pipeline{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;margin:8px 0 12px;background:#f4faf8;padding:8px;border-radius:12px;border:1.5px solid var(--line)}
 @media(max-width:600px){.flow-pipeline{grid-template-columns:repeat(3,1fr)}}
-.flow-step{background:#fff;border:1.5px solid var(--line);border-radius:9px;padding:6px 4px;text-align:center;font-size:11px;font-weight:bold;color:#456;transition:all .25s}
-.flow-step span{display:block;font-size:16px;margin-bottom:2px}
-.flow-step.active{background:var(--ink);color:var(--gold);border-color:var(--ink);transform:translateY(-2px);box-shadow:0 3px 8px rgba(15,41,48,.18)}
-
+.flow-step{background:#fff;border:1.5px solid var(--line);border-radius:9px;padding:6px 4px;text-align:center;font-size:11px;font-weight:bold;color:#456}
+.flow-step span{display:block;font-size:16px}
+.flow-step.active{background:var(--ink);color:var(--gold);border-color:var(--ink)}
 .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0}
 @media(max-width:620px){.kpi-grid{grid-template-columns:repeat(2,1fr)}}
 .kpi-card{background:#f8fcfb;border:1.5px solid var(--line);border-top:4px solid var(--ink);border-radius:11px;padding:9px 8px;text-align:center}
-.kpi-card small{display:block;font-size:11px;color:#456;text-transform:uppercase;letter-spacing:.3px;font-weight:bold}
-.kpi-card b{display:block;font-size:19px;color:var(--ink);margin:3px 0 2px}
+.kpi-card small{display:block;font-size:11px;color:#456;font-weight:bold}
+.kpi-card b{display:block;font-size:19px;margin:3px 0 2px}
 .kpi-card span{font-size:11.5px;color:var(--green);font-weight:bold}
-
-.insight-box{background:linear-gradient(135deg,#0f2930,#1b434d);color:#fff;border-radius:12px;padding:11px 13px;margin:8px 0;box-shadow:0 3px 10px rgba(15,41,48,.14)}
-.insight-list{margin:0;padding-left:18px;font-size:13px;line-height:1.55;color:#eaf4f1}
-.insight-list li{margin-bottom:4px}
-.insight-list b{color:#fff}
-
-.civic-mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:8px 0}
-@media(max-width:520px){.civic-mini-grid{grid-template-columns:1fr}}
-.c-mini{background:#f4faf8;border:1.5px solid var(--line);border-radius:9px;padding:8px 10px;font-size:12.5px;display:flex;justify-content:space-between;align-items:center}
-
-/* ---- CIVIC GARBAGE REPORTING & LOCAL GOVT PORTAL ---- */
-#civicBox{display:none;margin:10px 0;background:#fff;border:2px solid var(--line);border-radius:14px;padding:14px}
-.c-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;border-bottom:2px solid var(--bg);padding-bottom:8px;margin-bottom:10px}
-.c-head h3{margin:0;font-size:16px;color:var(--ink)}
+.insight-box{background:linear-gradient(135deg,#0f2930,#1b434d);color:#fff;border-radius:12px;padding:11px 13px}
+.insight-list{margin:0;padding-left:18px;font-size:13px;line-height:1.55}
+.c-mini{background:#f4faf8;border:1.5px solid var(--line);border-radius:9px;padding:8px 10px;font-size:12.5px;display:flex;justify-content:space-between}
+#civicBox,#audit,#lbBox,#adminBox,#end{display:none;margin:10px 0;background:#fff;border:2px solid var(--line);border-radius:14px;padding:13px}
+#end{background:var(--ink);color:#fff;text-align:center}
+#end h2{margin:0 0 6px;color:var(--gold)}
+.c-head{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid var(--bg);padding-bottom:8px;margin-bottom:10px}
+.c-head h3{margin:0;font-size:16px}
 .c-form{background:#f7fbf9;border:1.5px solid var(--line);border-radius:12px;padding:12px;margin-bottom:12px}
 .c-row{margin-bottom:10px}
-.c-row label{font-weight:bold;font-size:13px;display:block;margin-bottom:4px;color:var(--ink)}
-.c-row input,.c-row select{width:100%;padding:10px 11px;border-radius:8px;border:1.5px solid var(--line);font:inherit;font-size:14px;background:#fff}
+.c-row label{font-weight:bold;font-size:13px;display:block;margin-bottom:4px}
+.c-row input,.c-row select{width:100%;padding:9px 11px;border-radius:8px;border:1.5px solid var(--line);font:inherit;font-size:14px;background:#fff}
 .snap-box{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:4px}
 #snapPreview{width:108px;height:80px;object-fit:cover;border-radius:8px;border:2px solid var(--ink);display:none}
 .rep-card{background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:10px;margin:8px 0;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
@@ -158,172 +123,118 @@ canvas{width:100%;height:100%;display:block;object-fit:cover}
 .st-clean{background:#e6f4ea;color:var(--green);border:1px solid #81c784}
 .dept-tag{display:inline-block;background:#e3efec;color:var(--ink);padding:2px 7px;border-radius:6px;font-size:11px;font-weight:bold;margin-bottom:3px}
 #officerBar{display:none;background:linear-gradient(135deg,#0f2930,#1b434d);color:#fff;padding:10px 12px;border-radius:10px;margin-bottom:10px;font-size:12.5px;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
-
-/* ---- EASY INLINE OFFICER LOGIN BOX ---- */
 #officerLoginBox{display:none;background:#fff8e1;border:2px solid var(--gold);border-radius:12px;padding:12px;margin-bottom:12px}
-
-/* ---- CITIZEN REPORT ID TRACKER BOX ---- */
 .track-box{background:#eef6ff;border:1.5px solid #90caf9;border-radius:11px;padding:10px 12px;margin-bottom:12px}
 .track-row{display:flex;gap:6px;margin-top:6px}
 .track-row input{flex:1;padding:8px 10px;border-radius:8px;border:1.5px solid var(--line);font:inherit;font-size:13.5px}
-
-/* ---- PHOTO ZOOM MODAL ---- */
-#photoModal{display:none;position:fixed;inset:0;z-index:99;background:rgba(0,0,0,.85);justify-content:center;align-items:center;padding:16px;flex-direction:column}
+#photoModal{display:none;position:fixed;inset:0;z-index:99;background:rgba(0,0,0,.86);justify-content:center;align-items:center;padding:16px;flex-direction:column}
 #photoModal img{max-width:95%;max-height:80vh;border-radius:12px;border:3px solid #fff}
-
-/* ---- TEAM, HIGHLIGHTS & GLOSSARY GRIDS ---- */
-.team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-@media(max-width:620px){.team-grid{grid-template-columns:1fr}}
 .member-card{background:#f7fbf9;border:1.5px solid var(--line);border-top:4px solid var(--blue);border-radius:11px;padding:10px;font-size:12.5px}
-.member-card b{display:block;font-size:14px;color:var(--ink);margin-bottom:2px}
-.member-card span{display:inline-block;background:#e3efec;color:var(--ink);padding:2px 7px;border-radius:10px;font-size:11px;font-weight:bold;margin-bottom:5px}
-.rubric-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-@media(max-width:620px){.rubric-grid{grid-template-columns:1fr}}
+.member-card b{display:block;font-size:14px;margin-bottom:2px}
+.member-card span{display:inline-block;background:#e3efec;padding:2px 7px;border-radius:10px;font-size:11px;font-weight:bold;margin-bottom:5px}
 .rub-item{background:#f8fcfb;border:1px solid var(--line);border-radius:9px;padding:8px 10px;font-size:12.5px}
-.rub-item b{color:var(--green);display:block;margin-bottom:2px}
-.glossary-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-@media(max-width:580px){.glossary-grid{grid-template-columns:1fr}}
+.rub-item b{color:var(--green);display:block}
 .gloss-item{background:#fff8e1;border:1px solid #ffe082;border-radius:9px;padding:7px 10px;font-size:12px}
-
-#backTopBtn{position:fixed;bottom:16px;right:16px;z-index:45;background:var(--ink);color:var(--gold);border:2px solid var(--gold);border-radius:50px;padding:8px 13px;font-size:12px;font-weight:bold;box-shadow:0 4px 12px rgba(0,0,0,.25);cursor:pointer}
-
-#end{display:none;margin:12px 0;background:var(--ink);color:#fff;border-radius:14px;padding:18px;text-align:center}
-#end h2{margin:0 0 6px;color:var(--gold)}
+#backTopBtn{position:fixed;bottom:16px;right:16px;z-index:45;background:var(--ink);color:var(--gold);border:2px solid var(--gold);border-radius:50px;padding:8px 13px;font-size:12px;font-weight:bold;cursor:pointer}
 .foot{margin:12px auto 6px;font-size:12px;color:#456;text-align:center;line-height:1.55}
 .toolbar{display:flex;justify-content:center;gap:12px;align-items:center;flex-wrap:wrap;background:#fff;padding:8px 12px;border-radius:12px;border:1px solid var(--line);margin-top:10px}
-label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
 .arow{display:flex;align-items:center;gap:8px;margin:6px 0;font-size:14px}
 .arow>span{width:92px;text-align:left}
 .abar{flex:1;height:13px;background:#dfeae6;border-radius:7px;overflow:hidden}
 .abar i{display:block;height:100%}
-#audit{display:none;margin:10px 0;background:#fff;border:2px solid var(--line);border-radius:14px;padding:12px}
-#auditTotal{font-weight:bold;margin-bottom:4px;font-size:14.5px}
 .abtns{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;justify-content:center}
 .abtns button{padding:7px 11px;font-size:12px}
 .note{font-size:12px;color:#456;margin-top:6px}
-#lbBox{display:none;margin:10px 0;background:#fff;border:2px solid var(--line);border-radius:14px;padding:12px}
-#lbBox h3{margin:0;font-size:16px}
-#lbBox ol{margin:6px 0 0;padding-left:22px;font-size:14.5px}
 #lbEntry{display:none;margin:10px 0}
 #lbEntry input{padding:10px 12px;border-radius:8px;border:0;font:inherit;margin:4px;width:250px;max-width:92%}
-#adminBox{display:none;margin:14px 0;background:#fff;border:3px solid var(--ink);border-radius:14px;padding:14px}
-#adminBox h3{margin:0 0 8px;color:var(--ink)}
 .adm-sec{margin-top:12px;padding-top:10px;border-top:2px dashed var(--line)}
 .atable{width:100%;border-collapse:collapse;font-size:13px;margin-top:4px}
 .atable th,.atable td{border:1px solid var(--line);padding:6px;text-align:left}
 .atable th{background:var(--ink);color:#fff}
-.atable tfoot td{background:#eaf4f1;font-weight:bold;border-top:2px solid var(--ink)}
-@media print{
-  .sticky-nav,.modes,.live-grid,.bins,.toolbar,.abtns,#modeBanner,#backTopBtn{display:none!important}
-  #audit{display:block!important;border:0}
-  details.acc-item{display:block!important}
-}
+.atable tfoot td{background:#eaf4f1;font-weight:bold}
 </style>
 </head>
 <body id="topPage">
 
-<!-- STICKY QUICK NAVIGATION BAR -->
-<nav class="sticky-nav" aria-label="Main Navigation">
+<nav class="sticky-nav">
   <a href="#demoSection" onclick="setMode('learn')">📷 AI Camera</a>
   <a href="#demoSection" onclick="setMode('play')">🎮 60s Game</a>
   <a href="#demoSection" onclick="setMode('audit')">📊 Census</a>
   <a href="#demoSection" onclick="setMode('civic')">🚨 Civic Portal</a>
   <a href="#infoAccordions" onclick="openAcc('accProblem')">💡 About Project</a>
   <a href="#infoAccordions" onclick="openAcc('accTeam')">👥 Team</a>
-  <button id="blindModeBtn" type="button" title="Toggle School Name vs Official Project Code">🕶️ Code Mode</button>
+  <button id="blindModeBtn" type="button">🕶️ Code Mode</button>
 </nav>
 
 <header>
   <h1 id="appTitle" title="Tap 5 times for Teacher Admin Panel">♻️ Saaf Sindh AI: Waste Census</h1>
-  <p>Sindh STREAM Journey 2026-27 | Theme 2: AI, Digital Solution, Gamification & IoT | صاف سنڌ، سرسبز سنڌ</p>
+  <p>Sindh STREAM Festival 2026-27 | Theme 2: AI, Digital Solution, Gamification & IoT | صاف سنڌ، سرسبز سنڌ</p>
   <div id="credit">
     👨‍🏫 Guide Teacher: Ghulam Hussain Memon (Bachelor of Computer Science (BCS) — University of Sindh, Laar Campus Badin)<br>
     <span style="color:#eaf4f1;font-weight:normal;font-size:12px">PST — GBHSS Haji Junejo Tarai (SEMIS: 401020169)</span>
   </div>
-  <div class="top-badges" id="headerTeamBadge">
+  <div class="top-badges">
     <div class="team-badge">🌟 <b>Student Team:</b> Shameer Ali • Zahid Ali • Farhan</div>
   </div>
 </header>
 
 <main>
-  <!-- 4 RESPONSIVE MODE TABS -->
   <div class="modes" id="demoSection">
-    <button id="mLearn" class="alt mode-btn on" type="button">
-      <span>🔍</span>Learn Mode<small>Identify Waste</small>
-    </button>
-    <button id="mPlay" class="alt mode-btn" type="button">
-      <span>🎮</span>60s Game<small>Win Rs. 100</small>
-    </button>
-    <button id="mAudit" class="alt mode-btn" type="button">
-      <span>📊</span>Census & Impact<small>Live Dashboard</small>
-    </button>
-    <button id="mCivic" class="alt mode-btn" type="button">
-      <span>🚨</span>Civic Report<small>UC / TC / MC</small>
-    </button>
+    <button id="mLearn" class="alt mode-btn on" type="button"><span>🔍</span>Learn Mode<small>Identify Waste</small></button>
+    <button id="mPlay" class="alt mode-btn" type="button"><span>🎮</span>60s Game<small>Win Rs. 100</small></button>
+    <button id="mAudit" class="alt mode-btn" type="button"><span>📊</span>Census & Impact<small>Live Dashboard</small></button>
+    <button id="mCivic" class="alt mode-btn" type="button"><span>🚨</span>Civic Report<small>UC / TC / MC</small></button>
   </div>
 
-  <!-- FRIENDLY GUIDE BANNER -->
   <div id="modeBanner">
-    <span id="bannerText">👉 <b>Learn Mode:</b> Niche green button daba kar camera kholen aur Plastic ya Paper dikhayen.</span>
+    <span id="bannerText">👉 <b>Learn Mode:</b> Niche green button daba kar camera kholen aur Plastic (Sky Blue Bin) ya Paper (Pink Bin) dikhayen.</span>
   </div>
 
-  <!-- EQUAL-SIZE SIDE-BY-SIDE CAMERA & 2-BIN SEE-SAW DIGITAL TWIN -->
   <div class="live-grid">
-    <!-- LEFT COLUMN: CAMERA + AI CONFIDENCE DIRECTLY BELOW -->
     <div class="cam-col">
       <div class="stage">
         <canvas id="cv" width="320" height="240"></canvas>
         <div id="camTargetBanner">🎯 Find & Show: 🧴 PLASTIC</div>
         <div class="guide" id="guideBox"></div>
         <div class="cam-tools" id="camTools">
-          <button id="flipBtn" type="button" title="Switch Front/Back Camera">🔄 Flip</button>
-          <button id="stopBtn" type="button" title="Pause Camera" style="background:rgba(217,48,37,.85)">⏹️ Off</button>
+          <button id="flipBtn" type="button">🔄 Flip</button>
+          <button id="stopBtn" type="button" style="background:rgba(217,48,37,.85)">⏹️ Off</button>
         </div>
         <div id="startOverlay">
           <div class="step-pills">
-            <span>Step 1: Camera On</span>
-            <span>Step 2: Hold Waste</span>
-            <span>Step 3: See-Saw Sorts</span>
+            <span>Step 1: Camera On</span><span>Step 2: Hold Waste</span><span>Step 3: See-Saw Sorts</span>
           </div>
           <p id="overlayMsg" style="margin:0 0 12px;font-size:14.5px;max-width:285px">Show <b>Plastic 🧴</b> or <b>Paper 📄</b> for instant AI detection</p>
-          <button id="start" type="button" title="Click to activate webcam or phone camera">📷 Start AI Camera</button>
+          <button id="start" type="button">📷 Start AI Camera</button>
         </div>
         <div class="hold-wrap"><div id="holdBar"></div></div>
       </div>
       <div id="probs">🎯 Step 1: Tap "📷 Start AI Camera" above (or test bins on right)</div>
     </div>
 
-    <!-- RIGHT COLUMN: 2-BIN SEE-SAW SMART BIN -->
     <div id="protoBox">
       <div class="proto-head">
-        <span title="Virtual simulation of our physical Arduino + SG90 See-Saw Smart Bin">⚙️ See-Saw Smart Bin Twin</span>
+        <span>⚙️ See-Saw Smart Bin Twin</span>
         <span class="proto-badge" id="servoStatus">See-Saw: 90° (Ready)</span>
       </div>
       <div class="proto-stage">
         <div class="chute">See-Saw Drop Zone</div>
         <div id="dropItem">🧴</div>
-        <div class="pivot-axle" title="SG90 Servo Center Pivot"></div>
+        <div class="pivot-axle"></div>
         <div id="flapArm"></div>
         <div class="p-bins">
-          <div class="p-bin blue" id="pBin0">
-            <span>🧴 BLUE BIN</span>
-            <small>Plastic (35° Left)</small>
-          </div>
-          <div class="p-bin green" id="pBin1">
-            <span>📄 GREEN BIN</span>
-            <small>Paper (145° Right)</small>
-          </div>
+          <div class="p-bin skyblue" id="pBin0"><span>🧴 SKY BLUE BIN</span><small>Plastic (35° Left)</small></div>
+          <div class="p-bin pink" id="pBin1"><span>📄 PINK BIN</span><small>Paper (145° Right)</small></div>
         </div>
       </div>
       <div class="abtns">
-        <button class="alt" id="testPlastic" type="button" style="border-color:var(--blue);color:var(--blue)">▶️ Plastic (35°)</button>
-        <button class="alt" id="testPaper" type="button" style="border-color:var(--green);color:var(--green)">▶️ Paper (145°)</button>
-        <button class="alt" id="hwConnectBtn" type="button" title="Connect Physical Arduino Uno via USB Cable">🔌 Arduino USB</button>
+        <button class="alt" id="testPlastic" type="button" style="border-color:var(--blue);color:var(--blue)">▶️ Plastic (35° Sky Blue)</button>
+        <button class="alt" id="testPaper" type="button" style="border-color:var(--pink);color:var(--pink)">▶️ Paper (145° Pink)</button>
+        <button class="alt" id="hwConnectBtn" type="button">🔌 Arduino USB</button>
       </div>
     </div>
   </div>
 
-  <!-- GAME SCOREBOARD -->
   <div class="hud" id="hudBox">
     <div>Score<b id="score">0</b></div>
     <div>Streak<b id="streak">0</b></div>
@@ -331,54 +242,45 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
     <div>Best<b id="best">0</b></div>
   </div>
 
-  <!-- AI INSTRUCTION / "FIND & SHOW" BOX -->
   <div id="task">
     Tap "📷 Start AI Camera" above to begin!
     <small>Camera kholne ke liye upar harey (Green) button ko dabayen.</small>
   </div>
 
-  <!-- 2 COLOR-CODED BINS (Plastic & Paper) -->
   <div class="bins" id="bins"></div>
 
-  <!-- END OF 60s GAME POPUP -->
   <div id="end">
     <h2 id="endTitle"></h2>
     <p id="endText"></p>
-    <div class="prize-banner" style="margin:10px 0">
-      <span>🎁 PRIZE</span> Top 3 Winners will receive <b>Rs. 100 Top-Up Balance!</b>
-    </div>
+    <div class="prize-banner"><span>🎁 PRIZE</span> Top 3 Winners will receive <b>Rs. 100 Top-Up Balance!</b></div>
     <div id="lbEntry">
       <div><input type="text" id="lbName" maxlength="15" placeholder="Enter Your First Name"></div>
       <div>
         <input type="tel" id="lbPhone" inputmode="numeric" maxlength="13" placeholder="Mobile (Optional): 03XXXXXXXXX">
-        <p class="note" style="color:#b9d6cf;margin:2px 0 6px">🔒 <b>100% Optional & Private:</b> Leave blank if you wish. Numbers are visible only to the Guide Teacher for Rs. 100 prize top-up.</p>
+        <p class="note" style="color:#b9d6cf;margin:2px 0 6px">🔒 <b>100% Optional & Private:</b> Visible only to the Guide Teacher for Rs. 100 prize top-up.</p>
       </div>
       <button id="lbSave" type="button" style="background:var(--gold);color:#10262e">💾 Save Score to Cloud</button>
     </div>
     <button id="again" type="button" style="background:var(--green);margin-top:8px">🔄 Play New 60s Round</button>
   </div>
 
-  <!-- PUBLIC DAILY EXHIBITION WINNERS LEADERBOARD -->
   <div id="lbBox">
-    <div class="prize-banner">
-      <span>🎁 WINNER PRIZE</span> Top 3 Winners will receive <b>Rs. 100 Top-Up Balance!</b>
-    </div>
-    <h3>🏆 Today's Exhibition Winners (Live)</h3>
-    <ol id="lbList"></ol>
+    <div class="prize-banner"><span>🎁 WINNER PRIZE</span> Top 3 Winners will receive <b>Rs. 100 Top-Up Balance!</b></div>
+    <h3>🏆 Today's Festival Winners (Live)</h3>
+    <ol id="lbList" style="margin:6px 0 0;padding-left:22px"></ol>
     <p class="note">🔒 <b>Privacy Protected:</b> Only player names and scores are shown publicly.</p>
   </div>
 
-  <!-- SMART WASTE CENSUS & LIVE IMPACT DASHBOARD -->
   <div id="audit">
     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px">
-      <h3 style="margin:0;font-size:16px;color:var(--ink)">📊 Smart Waste Census & Live Impact Dashboard</h3>
-      <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
-        <span class="note" id="auditSyncMsg" style="margin:0;color:var(--green);font-weight:bold">☁️ Syncing...</span>
-        <span class="note" id="lastSyncTime" style="margin:0;background:#f4faf8;padding:2px 7px;border-radius:8px;border:1px solid var(--line)">🕒 Just now</span>
+      <h3 style="margin:0;font-size:16px">📊 Smart Waste Census & Live Impact Dashboard</h3>
+      <div>
+        <span class="note" id="auditSyncMsg" style="color:var(--green);font-weight:bold">☁️ Syncing...</span>
+        <span class="note" id="lastSyncTime" style="background:#f4faf8;padding:2px 7px;border-radius:8px;border:1px solid var(--line)">🕒 Just now</span>
       </div>
     </div>
 
-    <div class="flow-pipeline" title="End-to-End Civic Waste Management Flow">
+    <div class="flow-pipeline">
       <div class="flow-step active" id="fl1"><span>📷</span>1. Capture</div>
       <div class="flow-step" id="fl2"><span>🤖</span>2. AI Classify</div>
       <div class="flow-step" id="fl3"><span>📊</span>3. Census Log</div>
@@ -388,33 +290,17 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
     </div>
 
     <div class="kpi-grid">
-      <div class="kpi-card" style="border-top-color:var(--blue)">
-        <small>Overall Waste Count</small>
-        <b id="kpiTotalItems">0</b>
-        <span id="kpiDays">Across 0 census days</span>
-      </div>
-      <div class="kpi-card" style="border-top-color:var(--green)">
-        <small>Today's Waste Count</small>
-        <b id="kpiTodayBig">0</b>
-        <span id="kpiTodayItems">Scanned today</span>
-      </div>
-      <div class="kpi-card" style="border-top-color:var(--gold)">
-        <small>Most Common Waste</small>
-        <b id="kpiTopWaste">—</b>
-        <span id="kpiTopPct">Waiting for scans</span>
-      </div>
-      <div class="kpi-card" style="border-top-color:var(--coral)">
-        <small>Civic Reports Action</small>
-        <b id="kpiReports">0</b>
-        <span id="kpiResolved">0 Cleaned • 0 Pending</span>
-      </div>
+      <div class="kpi-card" style="border-top-color:var(--blue)"><small>Overall Waste Count</small><b id="kpiTotalItems">0</b><span id="kpiDays">Across 0 days</span></div>
+      <div class="kpi-card" style="border-top-color:var(--pink)"><small>Today's Waste Count</small><b id="kpiTodayBig">0</b><span id="kpiTodayItems">Scanned today</span></div>
+      <div class="kpi-card" style="border-top-color:var(--gold)"><small>Most Common Waste</small><b id="kpiTopWaste">—</b><span id="kpiTopPct">Waiting for scans</span></div>
+      <div class="kpi-card" style="border-top-color:var(--coral)"><small>Civic Reports Action</small><b id="kpiReports">0</b><span id="kpiResolved">0 Cleaned • 0 Pending</span></div>
     </div>
 
-    <div id="auditTotal" style="margin-top:8px"></div>
+    <div id="auditTotal" style="font-weight:bold;margin-top:8px"></div>
     <div id="auditBars"></div>
 
-    <h4 style="margin:12px 0 4px;font-size:13.5px;color:var(--ink)">🏅 Halqa Civic Participation Leaderboard</h4>
-    <div class="civic-mini-grid" id="halqaBreakdown">
+    <h4 style="margin:12px 0 4px;font-size:13.5px">🏅 Halqa Civic Participation Leaderboard</h4>
+    <div class="civic-mini-grid">
       <div class="c-mini"><span>🏛️ UC Tarai</span><b id="hqTarai">0</b></div>
       <div class="c-mini"><span>🏛️ TC Golarchi</span><b id="hqGolarchi">0</b></div>
       <div class="c-mini"><span>🏛️ MC Badin</span><b id="hqBadin">0</b></div>
@@ -424,49 +310,38 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
       <button class="alt" id="aSync" type="button" style="border-color:var(--green);color:var(--green)">🔄 Retry / Refresh Live Data</button>
       <button class="alt" id="aUndo" type="button" style="display:none">↩️ Undo Last (Admin)</button>
       <button class="alt" id="aCopy" type="button">📋 Copy Census Summary</button>
-      <button class="alt" id="aPrint" type="button" style="border-color:var(--ink)">🖨️ Print Census Report</button>
+      <button class="alt" id="aPrint" type="button">🖨️ Print Census Report</button>
     </div>
 
     <div class="acc-group">
       <details class="acc-item" open>
         <summary><span class="chev">⌄</span> 🧠 Live AI Census & Civic Insights</summary>
-        <div class="acc-body">
-          <div class="insight-box" style="margin:0">
-            <ul class="insight-list" id="aiInsightsList">
-              <li>Scanning live Google Sheet data to generate waste & civic insights...</li>
-            </ul>
-          </div>
-        </div>
+        <div class="acc-body"><div class="insight-box"><ul class="insight-list" id="aiInsightsList"><li>Loading insights...</li></ul></div></div>
       </details>
-
       <details class="acc-item">
         <summary><span class="chev">⌄</span> 📅 Day-Wise Waste Census Table (Mobile + PC History)</summary>
         <div class="acc-body">
           <div style="overflow-x:auto">
             <table class="atable">
-              <thead>
-                <tr><th>Date</th><th>🧴 Plastic</th><th>📄 Paper</th><th>Day Total</th></tr>
-              </thead>
+              <thead><tr><th>Date</th><th>🧴 Plastic (Sky Blue)</th><th>📄 Paper (Pink)</th><th>Day Total</th></tr></thead>
               <tbody id="auditHistory"></tbody>
               <tfoot id="auditFooter"></tfoot>
             </table>
           </div>
-          <p class="note">All item counts from Mobile & PC are synced live with the <b>Waste_Audit</b> sheet in Google Sheets.</p>
         </div>
       </details>
     </div>
   </div>
 
-  <!-- CIVIC GARBAGE REPORTING & LOCAL GOVT PORTAL -->
+  <!-- CIVIC GARBAGE REPORTING PORTAL -->
   <div id="civicBox">
     <div class="c-head">
       <h3>🚨 Local Govt. Cleanliness Portal</h3>
-      <button class="alt" id="officerBtn" type="button" style="padding:6px 11px;font-size:12px;border-color:var(--ink)">🔐 Officer Login</button>
+      <button class="alt" id="officerBtn" type="button" style="padding:6px 11px;font-size:12px">🔐 Officer Login</button>
     </div>
 
-    <!-- EASY INLINE OFFICER LOGIN BOX -->
     <div id="officerLoginBox">
-      <div style="font-weight:bold;font-size:13.5px;margin-bottom:8px;color:var(--ink)">👮‍♂️ Select Halqa Department & Enter Officer Password:</div>
+      <div style="font-weight:bold;font-size:13.5px;margin-bottom:8px">👮‍♂️ Select Halqa Department & Enter Officer Password:</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
         <select id="loginUserSelect" style="padding:9px;border-radius:8px;border:1.5px solid var(--line);font:inherit;font-size:13px;font-weight:bold">
           <option value="UC TARAI">🏛️ Union Council (UC) Tarai</option>
@@ -477,7 +352,7 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
         <input type="password" id="loginPassInput" placeholder="Enter Officer Password" style="padding:9px;border-radius:8px;border:1.5px solid var(--line);font:inherit;font-size:13.5px">
       </div>
       <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
-        <label style="font-size:12px"><input type="checkbox" id="showPassChk"> 👁️ Show Password</label>
+        <label style="font-size:12px;cursor:pointer"><input type="checkbox" id="showPassChk"> 👁️ Show Password</label>
         <div style="display:flex;gap:6px">
           <button id="loginSubmitBtn" type="button" style="background:var(--green);padding:7px 14px;font-size:12.5px">✅ Login Now</button>
           <button id="loginCancelBtn" type="button" class="alt" style="padding:6px 11px;font-size:12px">Cancel</button>
@@ -485,7 +360,6 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
       </div>
     </div>
 
-    <!-- MUNICIPAL OFFICER ACTIVE BAR -->
     <div id="officerBar">
       <span id="officerTitle">👮‍♂️ <b>Officer Mode:</b> Verified</span>
       <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
@@ -500,7 +374,6 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
       </div>
     </div>
 
-    <!-- CITIZEN INSTANT REPORT FORM -->
     <div class="c-form">
       <div style="font-weight:bold;color:var(--green);font-size:14px;margin-bottom:8px">
         📢 Citizen Direct Report (Without Signup — Photo securely cloud par submit hogi)
@@ -536,7 +409,7 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
       </div>
 
       <div class="c-row">
-        <label>4. Citizen Name & Mobile (100% Optional — Bina Naam Ke Bhi Bhej Sakte Hain):</label>
+        <label>4. Citizen Name & Mobile (100% Optional):</label>
         <input type="text" id="repCitizen" maxlength="35" placeholder="Name / 03XXXXXXXXX (Optional)">
       </div>
 
@@ -547,7 +420,7 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
 
     <!-- CITIZEN REPORT ID LIVE TRACKER -->
     <div class="track-box">
-      <div style="font-weight:bold;font-size:13px;color:var(--ink)">🔍 Track Your Complaint Status by Report ID (Apni Report ID Se Safai Check Karen):</div>
+      <div style="font-weight:bold;font-size:13px">🔍 Track Your Complaint Status by Report ID (Apni Report ID Se Safai Check Karen):</div>
       <div class="track-row">
         <input type="text" id="trackInput" placeholder="Enter Report ID (e.g. Rmw26xbfc8m9bwsd)">
         <button id="trackBtn" type="button" style="background:var(--blue);padding:8px 14px;font-size:12.5px">Track Status</button>
@@ -555,13 +428,11 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
       <div id="trackResult" style="margin-top:6px;font-size:13px"></div>
     </div>
 
-    <!-- CITIZEN VERIFIED REPORT RECEIPTS -->
     <div id="myReceiptsBox" style="background:#f4faf8;border:1.5px solid var(--line);border-radius:10px;padding:10px;margin-bottom:10px;display:none">
-      <h4 style="margin:0 0 6px;font-size:13px;color:var(--ink)">🧾 My Submitted Civic Reports (Tap ID to Track)</h4>
+      <h4 style="margin:0 0 6px;font-size:13px">🧾 My Submitted Civic Reports (Tap ID to Track)</h4>
       <div id="myReceiptsList" style="font-size:12.5px"></div>
     </div>
 
-    <!-- SECURED MUNICIPAL COMPLAINTS FEED -->
     <div id="secFeedContainer" style="display:none">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
         <h4 id="feedHeading" style="margin:0;font-size:14px">📋 Live Area Cleanliness Requests (Tap Photo to Enlarge)</h4>
@@ -574,27 +445,15 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
     </div>
   </div>
 
-  <!-- CLEAN COLLAPSIBLE ACCORDION SECTIONS -->
   <div class="acc-group" id="infoAccordions">
     <details class="acc-item" id="accProblem">
       <summary><span class="chev">⌄</span> 💡 Problem Statement, Our AI Solution & How It Works</summary>
       <div class="acc-body">
         <div class="intro-grid">
-          <div class="intro-card">
-            <b>⚠️ The Local Problem (Hamara Masla)</b>
-            In schools and towns (Tarai, Golarchi, Badin), recyclable <b>Plastic & Paper</b> get mixed in open dumps with zero daily waste count data and no fast way to alert Union Council / Municipal officers.
-          </div>
-          <div class="intro-card sol">
-            <b>💡 Our Integrated AI Solution (Hamara Hal)</b>
-            A low-cost <b>Edge AI Camera + 2-Bin See-Saw Smart Bin (35° Left / 145° Right)</b> that auto-sorts waste, records a live <b>Google Cloud Waste Census</b>, and sends geotagged <b>Civic Alerts</b> to Halqa Officers.
-          </div>
+          <div class="intro-card"><b>⚠️ The Local Problem (Hamara Masla)</b>In schools and towns (Tarai, Golarchi, Badin), recyclable <b>Plastic & Paper</b> get mixed in open dumps with zero daily waste count data and no fast way to alert Union Council / Municipal officers.</div>
+          <div class="intro-card sol"><b>💡 Our Integrated AI Solution (Hamara Hal)</b>A low-cost <b>Edge AI Camera + 2-Bin See-Saw Smart Bin (35° Left Sky Blue / 145° Right Pink)</b> that auto-sorts waste, records a live <b>Google Cloud Waste Census</b>, and sends geotagged <b>Civic Alerts</b>.</div>
         </div>
-        <div class="how-strip">
-          <span>1️⃣ Open AI Camera</span> ➔
-          <span>2️⃣ Scan Plastic / Paper</span> ➔
-          <span>3️⃣ See-Saw Bin Sorts</span> ➔
-          <span>4️⃣ Cloud Census & Civic Action</span>
-        </div>
+        <div class="how-strip"><span>1️⃣ Open AI Camera</span>➔<span>2️⃣ Scan Plastic / Paper</span>➔<span>3️⃣ See-Saw Bin Sorts</span>➔<span>4️⃣ Cloud Census & Civic Action</span></div>
       </div>
     </details>
 
@@ -602,21 +461,9 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
       <summary><span class="chev">⌄</span> 👥 Student Team Roles (Shameer Ali • Zahid Ali • Farhan)</summary>
       <div class="acc-body">
         <div class="team-grid">
-          <div class="member-card">
-            <span>🚨 Civic & Security Lead</span>
-            <b>Shameer Ali</b>
-            Mapped local cleanliness workflows for UC Tarai, TC Golarchi & MC Badin, testing GPS photo reporting, role-based Halqa Officer access control & recycled cardboard See-Saw bin structure.
-          </div>
-          <div class="member-card" style="border-top-color:var(--green)">
-            <span>🤖 AI & Hardware Lead</span>
-            <b>Zahid Ali</b>
-            Trained the Teachable Machine vision model (Plastic, Paper & Empty classes) and assembled the 2-bin See-Saw Flap with Arduino Uno & SG90 Servo motor.
-          </div>
-          <div class="member-card" style="border-top-color:var(--coral)">
-            <span>📊 Data & Census Lead</span>
-            <b>Farhan</b>
-            Designed the Google Sheets Day-Wise Waste Census, recorded accuracy testing log, and 60-second student challenge game.
-          </div>
+          <div class="member-card"><span>🚨 Civic & Security Lead</span><b>Shameer Ali</b>Mapped local cleanliness workflows for UC Tarai, TC Golarchi & MC Badin, testing GPS photo reporting & See-Saw bin structure.</div>
+          <div class="member-card" style="border-top-color:var(--pink)"><span>🤖 AI & Hardware Lead</span><b>Zahid Ali</b>Trained the Teachable Machine vision model and assembled the 2-bin See-Saw Flap with Arduino Uno & SG90 Servo motor.</div>
+          <div class="member-card" style="border-top-color:var(--coral)"><span>📊 Data & Census Lead</span><b>Farhan</b>Designed the Google Sheets Day-Wise Waste Census, testing log, and 60-second student challenge game.</div>
         </div>
       </div>
     </details>
@@ -625,22 +472,10 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
       <summary><span class="chev">⌄</span> 🌟 Specifications, Highlights & Testing Summary</summary>
       <div class="acc-body">
         <div class="rubric-grid">
-          <div class="rub-item">
-            <b>1. Integrated 4-in-1 Local Solution</b>
-            Combines Edge AI Vision + See-Saw IoT Smart Bin + Live Google Sheet Waste Census + Halqa Civic Portal for Tarai, Golarchi & Badin.
-          </div>
-          <div class="rub-item">
-            <b>2. Reliable See-Saw Sorting</b>
-            Uses a center-pivoted See-Saw flap (35° Left for Plastic/Blue Bin, 145° Right for Paper/Green Bin) so items slide smoothly by gravity.
-          </div>
-          <div class="rub-item">
-            <b>3. Safe 5V Design & Clean Build</b>
-            Powered by safe 5V laptop USB (zero 220V AC mains hazard), protected by 220-Ohm resistors, with color-coded Blue & Green compartments.
-          </div>
-          <div class="rub-item">
-            <b>4. Recycled & Low-Cost Materials</b>
-            Built using <b>reused cardboard cartons</b>, wooden sticks, and free open-source web tools to keep the prototype affordable for any school.
-          </div>
+          <div class="rub-item"><b>1. Integrated 4-in-1 Local Solution</b>Combines Edge AI Vision + See-Saw IoT Smart Bin + Live Google Sheet Waste Census + Halqa Civic Portal.</div>
+          <div class="rub-item"><b>2. Reliable See-Saw Sorting</b>Uses a center-pivoted See-Saw flap (35° Left for Plastic/Sky Blue Bin, 145° Right for Paper/Pink Bin) so items slide smoothly.</div>
+          <div class="rub-item"><b>3. Safe 5V Design & Clean Build</b>Powered by safe 5V laptop USB, protected by 220-Ohm resistors, with color-coded Sky Blue & Pink compartments.</div>
+          <div class="rub-item"><b>4. Recycled & Low-Cost Materials</b>Built using reused cardboard cartons, wooden sticks, and free open-source web tools.</div>
         </div>
       </div>
     </details>
@@ -649,26 +484,23 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
       <summary><span class="chev">⌄</span> 📖 Easy Technical Glossary (Asaan Lafzon Mein)</summary>
       <div class="acc-body">
         <div class="glossary-grid">
-          <div class="gloss-item"><b>🧠 Edge AI (TensorFlow.js):</b> AI model jo internet server ke bajaye seedha aapke mobile/laptop ke browser ke andar chalta hai—tez aur safe!</div>
-          <div class="gloss-item"><b>⚙️ See-Saw Digital Twin:</b> Screen par bana hua Smart Bin jo bilkul asli Arduino Servo motor (35° Left / 145° Right) ki tarah live jhuk kar dikhata hai.</div>
-          <div class="gloss-item"><b>📊 Waste Census:</b> Kachre ki rozana ginti (Plastic aur Paper numbers) jo khud-ba-khud Google Sheet mein jama hoti hai.</div>
-          <div class="gloss-item"><b>🔌 Web Serial IoT:</b> Bina mehnge Wi-Fi module ke seedha USB cable se browser ko Arduino Uno ke sath jorne wali modern technology.</div>
+          <div class="gloss-item"><b>🧠 Edge AI (TensorFlow.js):</b> AI model jo internet server ke bajaye seedha browser ke andar chalta hai.</div>
+          <div class="gloss-item"><b>⚙️ See-Saw Digital Twin:</b> Screen par bana Smart Bin jo asli Arduino Servo (35° Sky Blue / 145° Pink) ki tarah jhuk kar dikhata hai.</div>
+          <div class="gloss-item"><b>📊 Waste Census:</b> Kachre ki rozana ginti jo khud-ba-khud Google Sheet mein jama hoti hai.</div>
+          <div class="gloss-item"><b>🔌 Web Serial IoT:</b> USB cable se seedha browser ko Arduino Uno ke sath jorne wali technology.</div>
         </div>
       </div>
     </details>
   </div>
 
-  <!-- SECRET TEACHER ADMIN PANEL (PROTECTED BY 401020169Admin) -->
+  <!-- TEACHER ADMIN PANEL (PROTECTED BY 401020169Admin) -->
   <div id="adminBox">
     <h3>🔒 Teacher Admin Panel (Secured)</h3>
     <p class="note" id="admStatus" style="margin:0 0 6px;font-weight:bold"></p>
-
     <h4 style="margin:8px 0 4px;font-size:13.5px">🏆 All Players & Prize Contacts (Sheet 1: Game_Scores)</h4>
     <div style="overflow-x:auto">
       <table class="atable">
-        <thead>
-          <tr><th>#</th><th>Name</th><th>Score</th><th>Mobile Number</th><th>Date</th></tr>
-        </thead>
+        <thead><tr><th>#</th><th>Name</th><th>Score</th><th>Mobile Number</th><th>Date</th></tr></thead>
         <tbody id="adminTable"></tbody>
       </table>
     </div>
@@ -678,7 +510,6 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
       <button class="alt" id="admCopy" type="button">📋 Copy Players</button>
       <button class="alt" id="admClear" type="button" style="border-color:var(--coral);color:var(--coral)">🗑️ Clear Players</button>
     </div>
-
     <div class="adm-sec">
       <h4 style="margin:0 0 4px;font-size:13.5px">📊 Waste Audit Admin Controls (Sheet 2: Waste_Audit)</h4>
       <div class="abtns">
@@ -690,45 +521,33 @@ label{font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:4px}
     </div>
   </div>
 
-  <!-- BOTTOM SETTINGS BAR -->
   <div class="toolbar">
     <label><input type="checkbox" id="voice" checked> 🔊 AI Voice</label>
     <label><input type="checkbox" id="sfx" checked> 🔔 Sound Effects</label>
-    <span style="font-size:12px;color:#456">🔒 <b>Privacy:</b> No personal data is shared publicly; officer portals are jurisdiction-locked.</span>
+    <span style="font-size:12px;color:#456">🔒 <b>Privacy:</b> No personal data is shared publicly.</span>
   </div>
 
-  <!-- PROFESSIONAL DEVELOPER FOOTER -->
   <div class="foot" id="footerCredits">
-    <b>Built with:</b> TensorFlow.js • Teachable Machine AI • Google Apps Script • Google Sheets • Digital Twin & Web Serial IoT<br>
+    <b>Built with:</b> TensorFlow.js • Teachable Machine AI • Google Apps Script • Google Sheets • See-Saw IoT<br>
     <b>Student Presenters:</b> Shameer Ali, Zahid Ali & Farhan | © 2026 <b>GBHSS Haji Junejo Tarai</b>
   </div>
 </main>
 
-<!-- FULL-SCREEN PHOTO ZOOM MODAL FOR OFFICERS -->
 <div id="photoModal" onclick="this.style.display='none'">
-  <img id="modalImg" src="" alt="Full Size Garbage Report Photo">
+  <img id="modalImg" src="" alt="Full Size Report Photo">
   <button type="button" style="margin-top:12px;background:var(--gold);color:var(--ink)">✖ Close Photo</button>
 </div>
 
-<!-- FLOATING BACK TO TOP BUTTON -->
-<button id="backTopBtn" type="button" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Scroll Back to Top">⬆️ Top</button>
+<button id="backTopBtn" type="button" onclick="window.scrollTo({top:0,behavior:'smooth'})">⬆️ Top</button>
 
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8.5/dist/teachablemachine-image.min.js"></script>
 <script>
-/* ========================================================= */
-/* SAAF SINDH AI: WASTE CENSUS - v9.2 (FINAL POLISHED)       */
-/* Model URL: RP91qAZCY (Saved Drive Model)                  */
-/* Student Team: Shameer Ali, Zahid Ali & Farhan             */
-/* Guide Teacher: Ghulam Hussain Memon (BCS - Univ of Sindh) */
-/* ========================================================= */
-
 const MODEL_URL  = "https://teachablemachine.withgoogle.com/models/RP91qAZCY/";
 const CLOUD_URL  = "https://script.google.com/macros/s/AKfycbxSl2q2L2PoYqatesWrVIjwR9NJmCNYJzMRx9Om6v2zfYwhpdDLz29NpzFxn0qRhYk1/exec";
-const ADMIN_HASH = "NDAxMDIwMTY5"; // Base64 SEMIS 401020169
-const TEACHER_ADMIN_PASS = "401020169ADMIN"; // Dedicated 5-click Teacher Admin password
+const ADMIN_HASH = "NDAxMDIwMTY5";
+const TEACHER_ADMIN_PASS = "401020169ADMIN";
 
-// Verified Halqa Officer & Super Admin Accounts
 const OFFICER_ACCOUNTS = [
   { u: "GBHSS HAJI JUNEJO", p: "401020169HJ", altP: "401020169ADMIN", role: "SUPER_ADMIN", dept: "ALL", label: "Super Admin (All Halqas)", isSuper: true },
   { u: "UC TARAI",          p: "401020169T",  altP: "",               role: "OFFICER",     dept: "UC Tarai", label: "Union Council (UC) Tarai", isSuper: false },
@@ -736,14 +555,13 @@ const OFFICER_ACCOUNTS = [
   { u: "MC BADIN",          p: "401020169B",  altP: "",               role: "OFFICER",     dept: "Municipal Committee Badin", label: "Municipal Committee Badin", isSuper: false }
 ];
 
-// 2-Bin See-Saw Configuration (Plastic = Left 35°, Paper = Right 145°)
+// Updated for Sky Blue (Plastic - Left 35°) & Pink (Paper - Right 145°) Chart Sheets
 const BINS = [
-  {keys:["plastic","palstic","bottle","wrapper","shopper"], name:"Plastic", ur:"پلاسٹک", bin:"Blue Bin",  color:"#1967d2", icon:"🧴", cmd:"P", angle:35,  tilt:-26, dropX:"-72px", tip:"Clean plastic bottles & wrappers can be recycled."},
-  {keys:["paper","papar","kaghaz","cardboard","cup","page"], name:"Paper",   ur:"کاغذ",   bin:"Green Bin", color:"#1e8e3e", icon:"📄", cmd:"A", angle:145, tilt:26,  dropX:"72px",  tip:"Keep paper dry and clean for recycling."}
+  {keys:["plastic","palstic","bottle","wrapper","shopper"], name:"Plastic", ur:"پلاسٹک", bin:"Sky Blue Bin", color:"#0288d1", icon:"🧴", cmd:"P", angle:35,  tilt:-26, dropX:"-72px", tip:"Clean plastic bottles & wrappers can be recycled."},
+  {keys:["paper","papar","kaghaz","cardboard","cup","page"], name:"Paper",   ur:"کاغذ",   bin:"Pink Bin",     color:"#d81b60", icon:"📄", cmd:"A", angle:145, tilt:26,  dropX:"72px",  tip:"Keep paper dry and clean for recycling."}
 ];
 
 const MIN_CONF = 0.65, HOLD_MS = 650, ROUND_S = 60, AI_INTERVAL_MS = 110;
-
 const $ = id => document.getElementById(id);
 let model, video, StreamRef = null, ctx, mode = "learn", running = false, facing = "environment";
 let score = 0, streak = 0, best = 0, timeLeft = 0, timer = null, target = null, gamePaused = false;
@@ -751,27 +569,13 @@ let holdKey = null, holdSince = 0, cooldownUntil = 0, lastSaid = "", lastTaskHtm
 let lastAiRun = 0, aiBusy = false, availableBinIndices = [0, 1], currentDetectedIdx = null;
 let serialPort = null, serialWriter = null, blindMode = false;
 
-function openAcc(id) {
-  const el = $(id);
-  if (el) el.open = true;
-}
-
-function setTask(html) {
-  if (lastTaskHtml !== html) {
-    $("task").innerHTML = html;
-    lastTaskHtml = html;
-  }
-}
-
-function zoomPhoto(src) {
-  $("modalImg").src = src;
-  $("photoModal").style.display = "flex";
-}
+function openAcc(id) { const el = $(id); if (el) el.open = true; }
+function setTask(html) { if (lastTaskHtml !== html) { $("task").innerHTML = html; lastTaskHtml = html; } }
+function zoomPhoto(src) { $("modalImg").src = src; $("photoModal").style.display = "flex"; }
 
 function isInvalidPlayerName(name) {
   const s = String(name || "").trim();
   if (!s) return true;
-  // Filter out Date-object strings like "Wed Nov 04 2026 00:00:00 GMT+0500..." or banner rows
   if (/GMT[+-]\d{4}|Standard Time|00:00:00|===|AUDIT\s*\|/i.test(s)) return true;
   if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return true;
   return false;
@@ -795,7 +599,7 @@ function updateCamTargetBanner() {
     const b = BINS[target];
     banner.style.display = "block";
     banner.style.borderColor = b.color;
-    banner.innerHTML = `🎯 SHOW: ${b.icon} <span style="color:var(--gold)">${b.name.toUpperCase()} (${b.ur})</span> &nbsp;|&nbsp; ⏱️ ${timeLeft}s &nbsp;|&nbsp; ⭐ ${score}`;
+    banner.innerHTML = `🎯 SHOW: ${b.icon} <span style="color:var(--gold)">${b.name.toUpperCase()} (${b.ur})</span> | ⏱️ ${timeLeft}s | ⭐ ${score}`;
   } else {
     banner.style.display = "none";
   }
@@ -808,17 +612,16 @@ function highlightFlow(stepNum) {
   }
 }
 
-/* ---- Project Code Toggle ---- */
 $("blindModeBtn").onclick = () => {
   blindMode = !blindMode;
   if (blindMode) {
     const code = prompt("Enter Official STREAM Project Code:", "BD-M-T2-G-001") || "BD-M-T2-G-001";
-    $("credit").innerHTML = `🆔 <b>Official STREAM Project Code: ${code}</b><br><span style="color:#eaf4f1;font-weight:normal;font-size:12px">Project Code Display Mode Active</span>`;
+    $("credit").innerHTML = `🆔 <b>Official STREAM Project Code: ${code}</b>`;
     $("footerCredits").innerHTML = `<b>Project Code:</b> ${code} | <b>Theme 2:</b> AI, Digital Solution, Gamification & IoT`;
     $("blindModeBtn").textContent = "🏫 Show School";
   } else {
     $("credit").innerHTML = `👨‍🏫 Guide Teacher: Ghulam Hussain Memon (Bachelor of Computer Science (BCS) — University of Sindh, Laar Campus Badin)<br><span style="color:#eaf4f1;font-weight:normal;font-size:12px">PST — GBHSS Haji Junejo Tarai (SEMIS: 401020169)</span>`;
-    $("footerCredits").innerHTML = `<b>Built with:</b> TensorFlow.js • Teachable Machine AI • Google Apps Script • Google Sheets • Digital Twin & Web Serial IoT<br><b>Student Presenters:</b> Shameer Ali, Zahid Ali & Farhan | © 2026 <b>GBHSS Haji Junejo Tarai</b>`;
+    $("footerCredits").innerHTML = `<b>Student Presenters:</b> Shameer Ali, Zahid Ali & Farhan | © 2026 <b>GBHSS Haji Junejo Tarai</b>`;
     $("blindModeBtn").textContent = "🕶️ Code Mode";
   }
 };
@@ -834,22 +637,14 @@ BINS.forEach((b, i) => {
   $("bins").appendChild(d);
 });
 
-/* ---- Digital Twin 2-Bin See-Saw + Web Serial Arduino ---- */
 let lastHwSent = 0, flapTimer = null;
-
 async function sendToArduino(cmdChar) {
   if (!serialWriter) return;
-  try {
-    const data = new TextEncoder().encode(cmdChar + "\n");
-    await serialWriter.write(data);
-  } catch (e) {}
+  try { await serialWriter.write(new TextEncoder().encode(cmdChar + "\n")); } catch (e) {}
 }
 
 $("hwConnectBtn").onclick = async () => {
-  if (!("serial" in navigator)) {
-    alert("💡 Web Serial API requires Google Chrome or Edge on a Laptop/PC with USB port.");
-    return;
-  }
+  if (!("serial" in navigator)) { alert("💡 Web Serial API requires Google Chrome or Edge on a Laptop/PC."); return; }
   try {
     serialPort = await navigator.serial.requestPort();
     await serialPort.open({ baudRate: 9600 });
@@ -858,9 +653,7 @@ $("hwConnectBtn").onclick = async () => {
     $("hwConnectBtn").style.background = "var(--green)";
     $("hwConnectBtn").style.color = "#fff";
     beep([660, 880]);
-  } catch (err) {
-    alert("Arduino USB connection was not completed: " + err.message);
-  }
+  } catch (err) { alert("Arduino USB connection not completed: " + err.message); }
 };
 
 function animatePrototype(idx) {
@@ -872,7 +665,6 @@ function animatePrototype(idx) {
   $("servoStatus").textContent = `See-Saw: ${b.angle}° ➔ ${b.bin}`;
   $("pBin0").classList.toggle("active", idx === 0);
   $("pBin1").classList.toggle("active", idx === 1);
-
   item.textContent = b.icon;
   item.style.transition = "none";
   item.style.opacity = "1";
@@ -882,7 +674,6 @@ function animatePrototype(idx) {
     item.style.transform = `translate(${b.dropX}, 95px)`;
     item.style.opacity = "0";
   }, 40);
-
   flapTimer = setTimeout(() => {
     $("flapArm").style.transform = "rotate(0deg)";
     $("servoStatus").textContent = "See-Saw: 90° (Ready)";
@@ -902,7 +693,6 @@ function triggerBinSimulation(idx, force = false) {
 $("testPlastic").onclick = () => { beep([660]); triggerBinSimulation(0, true); };
 $("testPaper").onclick = () => { beep([740]); triggerBinSimulation(1, true); };
 
-/* ---- Sound and Voice ---- */
 let ac;
 function beep(freqs) {
   if (!$("sfx").checked) return;
@@ -925,17 +715,13 @@ function say(text) {
   speechSynthesis.speak(u);
 }
 
-/* ---- Camera & AI Model ---- */
 async function openVideoStream() {
   if (StreamRef) StreamRef.getTracks().forEach(t => t.stop());
   let stream;
   try { stream = await navigator.mediaDevices.getUserMedia({video:{facingMode: facing, width:{ideal:320}, height:{ideal:240}}, audio:false}); }
   catch (e) { stream = await navigator.mediaDevices.getUserMedia({video:true, audio:false}); }
   StreamRef = stream;
-  if (!video) {
-    video = document.createElement("video");
-    video.playsInline = true; video.muted = true;
-  }
+  if (!video) { video = document.createElement("video"); video.playsInline = true; video.muted = true; }
   video.srcObject = stream;
   await video.play();
 }
@@ -949,9 +735,7 @@ async function startCamera() {
       await model.predict($("cv"));
       const labels = (model.getClassLabels ? model.getClassLabels() : []).map(s => s.toLowerCase());
       const detected = [];
-      BINS.forEach((b, idx) => {
-        if (labels.some(l => b.keys.some(k => l.includes(k)))) detected.push(idx);
-      });
+      BINS.forEach((b, idx) => { if (labels.some(l => b.keys.some(k => l.includes(k)))) detected.push(idx); });
       if (detected.length) availableBinIndices = detected;
     }
     await openVideoStream();
@@ -959,33 +743,24 @@ async function startCamera() {
     $("startOverlay").style.display = "none";
     $("camTools").style.display = "flex";
     running = true;
-
-    if (mode === "play" && gamePaused && timeLeft > 0) {
-      resumeRound();
-    } else {
-      setMode(mode);
-    }
+    if (mode === "play" && gamePaused && timeLeft > 0) resumeRound();
+    else setMode(mode);
     requestAnimationFrame(loop);
   } catch (err) {
     $("start").disabled = false;
     $("start").textContent = "📷 Start AI Camera";
-    setTask("⚠️ Please allow Camera access in your browser!<small>Tip: You can still test the See-Saw Smart Bin using the ▶️ Plastic / Paper buttons.</small>");
+    setTask("⚠️ Please allow Camera access in your browser!");
   }
 }
 
 function stopCamera() {
   running = false;
   if (mode === "play" && timeLeft > 0) {
-    gamePaused = true;
-    clearInterval(timer);
-    timer = null;
-    $("overlayMsg").innerHTML = `⏸️ <b>Game Paused!</b> (${timeLeft}s remaining & Score: ${score})`;
+    gamePaused = true; clearInterval(timer); timer = null;
+    $("overlayMsg").innerHTML = `⏸️ <b>Game Paused!</b> (${timeLeft}s remaining)`;
     $("start").textContent = "▶️ Resume AI Camera";
-    setTask(`⏸️ Game Paused at ${timeLeft}s<small>Tap 'Resume AI Camera' to continue.</small>`);
   } else {
-    $("overlayMsg").innerHTML = "Show <b>Plastic 🧴</b> or <b>Paper 📄</b> for instant AI detection";
     $("start").textContent = "📷 Start AI Camera";
-    setTask("Camera paused.<small>Tap 'Start AI Camera' whenever you are ready.</small>");
   }
   updateCamTargetBanner();
   if (StreamRef) StreamRef.getTracks().forEach(t => t.stop());
@@ -997,31 +772,20 @@ function stopCamera() {
 
 $("start").onclick = startCamera;
 $("stopBtn").onclick = stopCamera;
-
-$("flipBtn").onclick = async () => {
-  facing = facing === "environment" ? "user" : "environment";
-  if (running) {
-    try { await openVideoStream(); } catch (e) {}
-  }
-};
+$("flipBtn").onclick = async () => { facing = facing === "environment" ? "user" : "environment"; if (running) try { await openVideoStream(); } catch (e) {} };
 
 function loop(timestamp) {
   if (!running) return;
   if (video.readyState >= 2) {
     ctx.drawImage(video, 0, 0, 320, 240);
     if (!aiBusy && timestamp - lastAiRun >= AI_INTERVAL_MS) {
-      aiBusy = true;
-      lastAiRun = timestamp;
-      model.predict($("cv")).then(p => {
-        handle(p);
-        aiBusy = false;
-      }).catch(() => { aiBusy = false; });
+      aiBusy = true; lastAiRun = timestamp;
+      model.predict($("cv")).then(p => { handle(p); aiBusy = false; }).catch(() => { aiBusy = false; });
     }
   }
   requestAnimationFrame(loop);
 }
 
-/* ---- AI Detection (Strictly Plastic & Paper; Ignores Glass/Empty) ---- */
 function pick(p) {
   let validProbs = p.filter(x => {
     const n = x.className.trim().toLowerCase();
@@ -1043,10 +807,8 @@ function handle(p) {
   currentDetectedIdx = idx;
   const now = Date.now();
   if (idx !== holdKey) { holdKey = idx; holdSince = now; }
-
   const heldTime = idx !== null ? Math.min(HOLD_MS, now - holdSince) : 0;
-  const pct = Math.round((heldTime / HOLD_MS) * 100);
-  $("holdBar").style.width = pct + "%";
+  $("holdBar").style.width = Math.round((heldTime / HOLD_MS) * 100) + "%";
   $("guideBox").classList.toggle("locking", idx !== null);
 
   document.querySelectorAll(".bin").forEach((d, i) => {
@@ -1055,30 +817,17 @@ function handle(p) {
   });
 
   if (mode === "civic") {
-    if (idx === null) {
-      setTask("🚨 Point camera at garbage & tap '📸 Snap from AI Camera'<small>Photo securely cloud par submit hogi</small>");
-    } else {
-      const b = BINS[idx];
-      highlightFlow(5);
-      setTask(`🚨 AI Detected ${b.icon} ${b.name} Waste!<small>Tap '📸 Snap from AI Camera' below to attach photo & send alert</small>`);
-    }
+    if (idx === null) setTask("🚨 Point camera at garbage & tap '📸 Snap from AI Camera'");
+    else setTask(`🚨 AI Detected ${BINS[idx].icon} ${BINS[idx].name} Waste!<small>Tap '📸 Snap from AI Camera' below</small>`);
     return;
   }
-
   if (mode === "learn") {
-    if (idx === null) {
-      setTask("Step 2: Hold Plastic 🧴 or Paper 📄 inside the camera box<small>Cheez ko dabbay ke beech mein rakhen</small>");
-      return;
-    }
+    if (idx === null) { setTask("Step 2: Hold Plastic 🧴 or Paper 📄 inside the camera box"); return; }
     const b = BINS[idx];
     setTask(`${b.icon} Detected: ${b.name.toUpperCase()} (${b.ur})<small>Put in <b>${b.bin}</b> — ${b.tip}</small>`);
-    if (now - holdSince > HOLD_MS) {
-      say(`This is ${b.name}. Put it in the ${b.bin}.`);
-      triggerBinSimulation(idx);
-    }
+    if (now - holdSince > HOLD_MS) { say(`This is ${b.name}. Put it in the ${b.bin}.`); triggerBinSimulation(idx); }
     return;
   }
-
   if (mode === "audit") { auditStep(idx, now); return; }
 
   if (!timeLeft || now < cooldownUntil || idx === null || now - holdSince < HOLD_MS) return;
@@ -1103,16 +852,14 @@ function handle(p) {
 function showTarget() {
   if (mode !== "play" || !timeLeft) return;
   const b = BINS[target];
-  setTask(`🎯 Find & Show: ${b.icon} ${b.name.toUpperCase()} (${b.ur})<small>Camera ke samne <b>${b.name} (${b.ur})</b> dikhayen!</small>`);
+  setTask(`🎯 Find & Show: ${b.icon} ${b.name.toUpperCase()} (${b.ur})<small>Camera ke samne <b>${b.name}</b> dikhayen!</small>`);
   updateCamTargetBanner();
   holdKey = null; lastSaid = "";
 }
 function nextTarget() {
   if (!timeLeft) return;
-  const pool = availableBinIndices.length ? availableBinIndices : [0, 1];
-  let n;
-  do { n = pool[Math.floor(Math.random() * pool.length)]; } while (pool.length > 1 && n === target);
-  target = n; showTarget();
+  target = target === 0 ? 1 : 0;
+  showTarget();
 }
 function updateHud() {
   $("score").textContent = score; $("streak").textContent = streak;
@@ -1124,11 +871,10 @@ function startRound() {
   $("end").style.display = "none";
   clearInterval(timer);
   timer = setInterval(() => { timeLeft--; updateHud(); if (timeLeft <= 0) endRound(); }, 1000);
-  nextTarget(); updateHud();
+  target = 0; showTarget(); updateHud();
 }
 function resumeRound() {
-  gamePaused = false;
-  clearInterval(timer);
+  gamePaused = false; clearInterval(timer);
   timer = setInterval(() => { timeLeft--; updateHud(); if (timeLeft <= 0) endRound(); }, 1000);
   showTarget(); updateHud();
 }
@@ -1136,8 +882,7 @@ function endRound() {
   clearInterval(timer); timer = null; timeLeft = 0; gamePaused = false;
   updateCamTargetBanner();
   if (score > best) { best = score; try { localStorage.setItem("sdg_best", best); } catch (e) {} }
-  const rank = score >= 150 ? "🏆 Sindh Eco Champion" : score >= 100 ? "🌟 Green Hero" : score >= 50 ? "♻️ Waste Warrior" : "🌱 Eco Starter";
-  $("endTitle").textContent = rank;
+  $("endTitle").textContent = score >= 100 ? "🏆 Sindh Eco Champion" : "♻️ Waste Warrior";
   $("endText").textContent = `You scored ${score} points! (Best: ${best})`;
   $("end").style.display = "block";
   $("lbEntry").style.display = score > 0 ? "block" : "none";
@@ -1146,70 +891,38 @@ function endRound() {
 }
 
 function setMode(m) {
-  const switchingMode = (mode !== m);
+  const switching = (mode !== m);
   mode = m;
-  if (switchingMode) {
-    clearInterval(timer); timer = null; timeLeft = 0; gamePaused = false;
-  }
+  if (switching) { clearInterval(timer); timer = null; timeLeft = 0; gamePaused = false; }
   updateCamTargetBanner();
   $("end").style.display = "none";
   $("hudBox").style.display = m === "play" ? "flex" : "none";
   $("audit").style.display = m === "audit" ? "block" : "none";
   $("lbBox").style.display = m === "play" ? "block" : "none";
   $("civicBox").style.display = m === "civic" ? "block" : "none";
-
   $("mLearn").classList.toggle("on", m === "learn");
   $("mPlay").classList.toggle("on", m === "play");
   $("mAudit").classList.toggle("on", m === "audit");
   $("mCivic").classList.toggle("on", m === "civic");
 
-  if (m === "learn") {
-    $("bannerText").innerHTML = "👉 <b>Learn Mode:</b> Camera kholen aur Plastic ya Paper dikhayen.";
-  } else if (m === "play") {
-    $("bannerText").innerHTML = "🎮 <b>60s Challenge:</b> Camera ke upar/neeche likhi hui cheez dikhayen aur Rs. 100 jeeten!";
-    renderLb();
-  } else if (m === "audit") {
-    $("bannerText").innerHTML = "📊 <b>Smart Waste Census & Impact Dashboard:</b> Live Google Sheet item counts.";
-    renderAudit(); syncAuditFromCloud();
-  } else if (m === "civic") {
-    $("bannerText").innerHTML = "🚨 <b>Civic Report:</b> Send photo & location to UC Tarai, TC Golarchi, or MC Badin.";
-    renderMyReceipts(); renderReports(); syncAuditFromCloud();
-  }
+  if (m === "learn") $("bannerText").innerHTML = "👉 <b>Learn Mode:</b> Camera kholen aur Plastic (Sky Blue Bin) ya Paper (Pink Bin) dikhayen.";
+  else if (m === "play") { $("bannerText").innerHTML = "🎮 <b>60s Challenge:</b> Show target waste & win Rs. 100!"; renderLb(); }
+  else if (m === "audit") { $("bannerText").innerHTML = "📊 <b>Smart Waste Census:</b> Live Google Sheet counts."; renderAudit(); syncAuditFromCloud(); }
+  else if (m === "civic") { $("bannerText").innerHTML = "🚨 <b>Civic Report:</b> Send photo & track status by Report ID."; renderMyReceipts(); renderReports(); syncAuditFromCloud(); }
 
   if (!running) return;
-  if (m === "play") {
-    if (timeLeft > 0 && !switchingMode) resumeRound();
-    else startRound();
-  } else if (m === "audit") {
-    setTask("📊 Ready to Count: Show 1 item inside the box<small>Ek item scan hone ke baad hata len, phir agla dikhayen</small>");
-  } else if (m === "civic") {
-    setTask("🚨 Point camera at garbage & tap '📸 Snap from AI Camera'<small>Photo seedha Cloud Sheet 3 mein save hogi</small>");
-  } else {
-    setTask("Step 2: Hold Plastic 🧴 or Paper 📄 inside the camera box<small>Cheez ko dabbay ke beech mein rakhen</small>");
-  }
+  if (m === "play") { if (timeLeft > 0 && !switching) resumeRound(); else startRound(); }
+  else if (m === "audit") setTask("📊 Ready to Count: Show 1 item inside the box");
+  else if (m === "civic") setTask("🚨 Point camera at garbage & tap '📸 Snap from AI Camera'");
+  else setTask("Step 2: Hold Plastic 🧴 or Paper 📄 inside the camera box");
 }
 
 $("mLearn").onclick = () => { setMode("learn"); if (!running) startCamera(); };
-$("mPlay").onclick = () => {
-  if (mode !== "play" || timeLeft <= 0) {
-    mode = "play"; timeLeft = 0; gamePaused = false;
-    if (running) startRound();
-    else startCamera();
-  }
-  setMode("play");
-};
+$("mPlay").onclick = () => { if (mode !== "play" || timeLeft <= 0) { mode = "play"; timeLeft = 0; gamePaused = false; if (running) startRound(); else startCamera(); } setMode("play"); };
 $("mAudit").onclick = () => { setMode("audit"); if (!running) startCamera(); };
-$("mCivic").onclick = () => {
-  setMode("civic");
-  if (SESSION && SESSION.token) loadPrivateData().catch(() => {});
-};
-$("again").onclick = () => {
-  timeLeft = 0; gamePaused = false;
-  if (running) startRound();
-  else startCamera();
-};
+$("mCivic").onclick = () => { setMode("civic"); if (SESSION && SESSION.token) loadPrivateData().catch(() => {}); };
+$("again").onclick = () => { timeLeft = 0; gamePaused = false; if (running) startRound(); else startCamera(); };
 
-/* ---- Hybrid Authentication & Cloud Sync ---- */
 let AUD = {}, CIVIC_STATS = { total: 0, pending: 0, inProgress: 0, resolved: 0, byDept: {}, topArea: "", topAreaCount: 0, topDept: "" };
 let auditArmed = true, idleSince = 0, lastCounted = null, syncingAudit = false;
 let LB = [], REPORTS = [], MY_RECEIPTS = [];
@@ -1222,57 +935,32 @@ try { MY_RECEIPTS = JSON.parse(localStorage.getItem("sdg_my_receipts") || "[]");
 try { REPORTS = JSON.parse(localStorage.getItem("sdg_reports") || "[]"); } catch (e) { REPORTS = []; }
 try { SESSION = JSON.parse(sessionStorage.getItem("saaf_session") || "null"); } catch (e) { SESSION = null; }
 if (SESSION) {
-  activeOfficer = {
-    u: SESSION.username,
-    label: SESSION.role === "SUPER_ADMIN" ? "Super Admin (All Halqas)" : SESSION.dept,
-    filter: SESSION.dept,
-    isSuper: SESSION.role === "SUPER_ADMIN"
-  };
+  activeOfficer = { u: SESSION.username, label: SESSION.role === "SUPER_ADMIN" ? "Super Admin (All Halqas)" : SESSION.dept, filter: SESSION.dept, isSuper: SESSION.role === "SUPER_ADMIN" };
 }
 
-const today = () => {
-  const d = new Date();
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-};
-const nowTimeStr = () => {
-  const d = new Date();
-  return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
-};
+const today = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; };
+const nowTimeStr = () => new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
 const sum2Bins = o => (Number(o && o.Plastic) || 0) + (Number(o && o.Paper) || 0);
-const escapeHtml = value => String(value == null ? "" : value).replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[ch]));
+const escapeHtml = v => String(v == null ? "" : v).replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[ch]));
 const makeId = prefix => prefix + Date.now().toString(36) + Math.random().toString(36).slice(2, 9);
 
 function saveAudit() {
   try { localStorage.setItem("sdg_audit", JSON.stringify(AUD)); } catch (e) {}
   try { localStorage.setItem("sdg_civic_stats", JSON.stringify(CIVIC_STATS)); } catch (e) {}
 }
-function todayData() {
-  if (!AUD[today()]) AUD[today()] = { Plastic: 0, Paper: 0 };
-  return AUD[today()];
-}
+function todayData() { if (!AUD[today()]) AUD[today()] = { Plastic: 0, Paper: 0 }; return AUD[today()]; }
 
 async function apiPost(payload) {
-  if (!CLOUD_URL) throw new Error("Cloud API URL is not configured.");
-  const response = await fetch(CLOUD_URL, {
-    method: "POST",
-    headers: { "Content-Type": "text/plain;charset=utf-8" },
-    body: JSON.stringify(payload)
-  });
+  const response = await fetch(CLOUD_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(payload) });
   const result = await response.json();
-  if (!result || result.status !== "ok") {
-    const err = new Error(result && result.message ? result.message : "Cloud request failed.");
-    err.code = result && result.code ? result.code : "API_ERROR";
-    throw err;
-  }
+  if (!result || result.status !== "ok") throw new Error(result && result.message ? result.message : "Cloud error");
   return result.data || {};
 }
 
 async function fetchPublicData() {
   const response = await fetch(`${CLOUD_URL}?action=public&t=${Date.now()}`, { cache: "no-store" });
   const result = await response.json();
-  if (result && result.status === "ok" && result.data) {
-    return result.data;
-  }
+  if (result && result.status === "ok" && result.data) return result.data;
   const legRes = await fetch(`${CLOUD_URL}?action=admin&pin=${encodeURIComponent(atob(ADMIN_HASH))}&t=${Date.now()}`);
   const raw = await legRes.json();
   if (Array.isArray(raw)) return parseLegacySheetRows(raw);
@@ -1285,8 +973,7 @@ function parseLegacySheetRows(rows) {
   const areaCounts = {};
   rows.forEach(r => {
     if (r.type === "report") {
-      reports.push(r);
-      stats.total++;
+      reports.push(r); stats.total++;
       const dept = r.dept || "UC Tarai";
       stats.byDept[dept] = (stats.byDept[dept] || 0) + 1;
       const st = String(r.status || "Pending").toLowerCase();
@@ -1319,27 +1006,15 @@ function parseLegacySheetRows(rows) {
 }
 
 function setSession(data) {
-  SESSION = {
-    token: data.token || "local_verified_token",
-    username: data.username,
-    role: data.role,
-    dept: data.dept,
-    password: data.password || ""
-  };
+  SESSION = { token: data.token || "local_verified_token", username: data.username, role: data.role, dept: data.dept };
   try { sessionStorage.setItem("saaf_session", JSON.stringify(SESSION)); } catch (e) {}
-  activeOfficer = {
-    u: data.username,
-    label: data.role === "SUPER_ADMIN" ? "Super Admin (All Halqas)" : data.dept,
-    filter: data.dept,
-    isSuper: data.role === "SUPER_ADMIN"
-  };
+  activeOfficer = { u: data.username, label: data.role === "SUPER_ADMIN" ? "Super Admin (All Halqas)" : data.dept, filter: data.dept, isSuper: data.role === "SUPER_ADMIN" };
 }
 
 function clearSession(callServer = true) {
   const token = SESSION && SESSION.token;
   if (callServer && token && token !== "local_verified_token") apiPost({ action: "logout", token }).catch(() => {});
-  SESSION = null;
-  activeOfficer = null;
+  SESSION = null; activeOfficer = null;
   try { sessionStorage.removeItem("saaf_session"); } catch (e) {}
   $("officerBar").style.display = "none";
   $("offFilter").style.display = "none";
@@ -1366,25 +1041,16 @@ async function performLogin(usernameInput, passwordInput) {
   const matchedLocal = matchAccountCredentials(usernameInput, passwordInput);
   const canonicalUser = matchedLocal ? matchedLocal.u : String(usernameInput || "").trim().toUpperCase();
   const canonicalPass = matchedLocal ? matchedLocal.p : String(passwordInput || "").trim();
-
   try {
     const serverData = await apiPost({ action: "login", username: canonicalUser, password: canonicalPass });
-    serverData.password = canonicalPass;
     setSession(serverData);
     return true;
   } catch (err) {
     if (matchedLocal) {
-      setSession({
-        token: "local_verified_token",
-        username: matchedLocal.u,
-        role: matchedLocal.role,
-        dept: matchedLocal.dept,
-        password: canonicalPass
-      });
+      setSession({ token: "local_verified_token", username: matchedLocal.u, role: matchedLocal.role, dept: matchedLocal.dept });
       return true;
     }
-    // Clean popup without exposing any passwords!
-    alert("❌ Wrong Password! Please enter the correct password for the selected department.");
+    alert("❌ Wrong Password! Please try again.");
     return false;
   }
 }
@@ -1396,13 +1062,10 @@ async function loadPrivateData() {
       const data = await apiPost({ action: "admin_data", token: SESSION.token });
       REPORTS = Array.isArray(data.reports) ? data.reports : REPORTS;
       try { localStorage.setItem("sdg_reports", JSON.stringify(REPORTS)); } catch (e) {}
-      if (SESSION.role === "SUPER_ADMIN" && Array.isArray(data.players)) {
-        LB = data.players.filter(r => !isInvalidPlayerName(r.n));
-      }
+      if (SESSION.role === "SUPER_ADMIN" && Array.isArray(data.players)) LB = data.players.filter(r => !isInvalidPlayerName(r.n));
       if (data.audit) AUD = data.audit;
       if (data.civicStats) CIVIC_STATS = data.civicStats;
-      saveAudit();
-      renderAudit();
+      saveAudit(); renderAudit();
       if (mode === "civic") renderReports();
       return data;
     } catch (e) {}
@@ -1415,8 +1078,7 @@ async function loadPrivateData() {
       AUD = parsed.audit || AUD;
       CIVIC_STATS = parsed.civicStats || CIVIC_STATS;
       if (SESSION.role === "SUPER_ADMIN") LB = (parsed.players || LB).filter(r => !isInvalidPlayerName(r.n));
-      saveAudit();
-      renderAudit();
+      saveAudit(); renderAudit();
     }
   } catch (e) {}
   if (mode === "civic") renderReports();
@@ -1424,128 +1086,59 @@ async function loadPrivateData() {
 }
 
 async function pushAuditDelta(cls, delta, dt = today()) {
-  if (delta !== 1) {
-    if (!SESSION || SESSION.role !== "SUPER_ADMIN") throw new Error("Only Super Admin can reverse or adjust audit counts.");
-    return apiPost({ action: "audit_adjust", token: SESSION.token, category: cls, delta, date: dt });
-  }
+  if (delta !== 1) return apiPost({ action: "audit_adjust", token: SESSION.token, category: cls, delta, date: dt });
   const eventId = makeId("scan_");
-  const pending = (() => { try { return JSON.parse(localStorage.getItem("sdg_pending_audit") || "[]"); } catch (e) { return []; } })();
-  pending.push({ category: cls, eventId });
-  try { localStorage.setItem("sdg_pending_audit", JSON.stringify(pending)); } catch (e) {}
   try {
-    $("auditSyncMsg").textContent = "☁️ Saving item to Google Sheet...";
+    $("auditSyncMsg").textContent = "☁️ Saving item...";
     await apiPost({ action: "audit_increment", category: cls, eventId });
-    const left = pending.filter(x => x.eventId !== eventId);
-    try { localStorage.setItem("sdg_pending_audit", JSON.stringify(left)); } catch (e) {}
     await syncAuditFromCloud();
   } catch (e) {
-    try {
-      const tag = `AUDIT | ${dt} | ${cls}`;
-      await fetch(`${CLOUD_URL}?action=save&n=${encodeURIComponent(tag)}&s=1&ph=Waste_Audit&t=${Date.now()}`);
-      const left = pending.filter(x => x.eventId !== eventId);
-      try { localStorage.setItem("sdg_pending_audit", JSON.stringify(left)); } catch (err) {}
-      await syncAuditFromCloud();
-    } catch (err) {
-      $("auditSyncMsg").textContent = "⚠️ Offline — scan saved on device.";
-    }
+    $("auditSyncMsg").textContent = "⚠️ Offline — saved locally.";
   }
-}
-
-async function flushPendingAudit() {
-  let pending = [];
-  try { pending = JSON.parse(localStorage.getItem("sdg_pending_audit") || "[]"); } catch (e) { pending = []; }
-  if (!pending.length) return;
-  const remaining = [];
-  for (const item of pending) {
-    try {
-      await apiPost({ action: "audit_increment", category: item.category, eventId: item.eventId });
-    } catch (e) {
-      remaining.push(item);
-    }
-  }
-  try { localStorage.setItem("sdg_pending_audit", JSON.stringify(remaining)); } catch (e) {}
 }
 
 async function syncAuditFromCloud() {
   if (!CLOUD_URL || syncingAudit) return;
   syncingAudit = true;
   try {
-    $("auditSyncMsg").textContent = "☁️ Syncing live census...";
-    await flushPendingAudit();
     const data = await fetchPublicData();
     AUD = data.audit || AUD;
-    if (Array.isArray(data.players)) {
-      LB = data.players.filter(r => !isInvalidPlayerName(r.n));
-    }
+    if (Array.isArray(data.players)) LB = data.players.filter(r => !isInvalidPlayerName(r.n));
     if (data.civicStats) CIVIC_STATS = data.civicStats;
-    saveAudit();
-    renderAudit();
+    saveAudit(); renderAudit();
     if (mode === "play") renderLb();
     $("auditSyncMsg").textContent = "✅ Live Synced";
     $("lastSyncTime").textContent = "🕒 Updated: " + nowTimeStr();
   } catch (e) {
     renderAudit();
-    $("auditSyncMsg").textContent = "⚠️ Offline — Tap 'Retry / Refresh' to reconnect";
-  } finally {
-    syncingAudit = false;
-  }
+    $("auditSyncMsg").textContent = "⚠️ Offline";
+  } finally { syncingAudit = false; }
 }
 
-setInterval(() => {
-  if (mode === "audit" || mode === "civic") syncAuditFromCloud();
-  if (mode === "civic" && SESSION) loadPrivateData().catch(() => {});
-}, 30000);
+setInterval(() => { if (mode === "audit" || mode === "civic") syncAuditFromCloud(); }, 30000);
 
-/* ---- Civic Garbage Reporting, Report ID Tracker & Officer Login ---- */
-$("showPassChk").onchange = e => {
-  $("loginPassInput").type = e.target.checked ? "text" : "password";
-};
-
+$("showPassChk").onchange = e => { $("loginPassInput").type = e.target.checked ? "text" : "password"; };
 $("officerBtn").onclick = () => {
-  if (SESSION && activeOfficer) {
-    showOfficerPortal();
-    return;
-  }
+  if (SESSION && activeOfficer) { showOfficerPortal(); return; }
   const box = $("officerLoginBox");
   box.style.display = box.style.display === "block" ? "none" : "block";
   if (box.style.display === "block") $("loginPassInput").focus();
 };
-
-$("loginCancelBtn").onclick = () => {
-  $("officerLoginBox").style.display = "none";
-};
-
+$("loginCancelBtn").onclick = () => { $("officerLoginBox").style.display = "none"; };
 $("loginSubmitBtn").onclick = async () => {
-  const user = $("loginUserSelect").value;
-  const pass = $("loginPassInput").value;
-  if (!pass.trim()) {
-    alert("Please enter the Officer Password!");
-    $("loginPassInput").focus();
-    return;
-  }
+  const user = $("loginUserSelect").value, pass = $("loginPassInput").value;
+  if (!pass.trim()) { alert("❌ Please enter password!"); return; }
   $("loginSubmitBtn").disabled = true;
-  $("loginSubmitBtn").textContent = "⏳ Verifying...";
   const ok = await performLogin(user, pass);
   $("loginSubmitBtn").disabled = false;
-  $("loginSubmitBtn").textContent = "✅ Login Now";
-  if (ok) {
-    $("loginPassInput").value = "";
-    $("officerLoginBox").style.display = "none";
-    await showOfficerPortal();
-  }
+  if (ok) { $("loginPassInput").value = ""; $("officerLoginBox").style.display = "none"; await showOfficerPortal(); }
 };
 
-// Track Report Status by ID
 async function trackReportById(rawId) {
   const idClean = String(rawId || "").replace(/^#/, "").trim();
   const resBox = $("trackResult");
-  if (!idClean) {
-    resBox.innerHTML = `<span style="color:var(--coral)">⚠️ Please enter a Report ID (e.g. Rmw26xbfc8m9bwsd)</span>`;
-    return;
-  }
-  resBox.innerHTML = `⏳ Checking live status for <b>#${escapeHtml(idClean)}</b>...`;
-
-  // 1. Check cloud API if supported
+  if (!idClean) { resBox.innerHTML = `<span style="color:var(--coral)">⚠️ Please enter a Report ID.</span>`; return; }
+  resBox.innerHTML = `⏳ Checking status for <b>#${escapeHtml(idClean)}</b>...`;
   try {
     const resp = await fetch(`${CLOUD_URL}?action=track_report&id=${encodeURIComponent(idClean)}&t=${Date.now()}`);
     const json = await resp.json();
@@ -1555,42 +1148,34 @@ async function trackReportById(rawId) {
       resBox.innerHTML = `<div style="background:#fff;border:1.5px solid var(--line);border-left:4px solid ${isClean ? "var(--green)" : "var(--gold)"};padding:8px 10px;border-radius:8px">
         <b>Receipt #${escapeHtml(r.id)}</b> • 🏛️ ${escapeHtml(r.dept)}<br>
         📍 Area: <b>${escapeHtml(r.area)}</b> (${escapeHtml(cleanDateOnly(r.d))})<br>
-        Status: <b style="color:${isClean ? "var(--green)" : "#e65100"}">${isClean ? "✅ CLEANED / SAAF HO GAYA (" + escapeHtml(r.status) + ")" : "⏳ " + escapeHtml(r.status) + " (Action in Progress)"}</b>
+        Status: <b style="color:${isClean ? "var(--green)" : "#e65100"}">${isClean ? "✅ CLEANED / SAAF HO GAYA (" + escapeHtml(r.status) + ")" : "⏳ " + escapeHtml(r.status)}</b>
       </div>`;
       return;
     }
   } catch (e) {}
-
-  // 2. Check loaded reports or local receipts
-  const found = REPORTS.find(x => String(x.id).toLowerCase() === idClean.toLowerCase()) ||
-                MY_RECEIPTS.find(x => String(x.id).toLowerCase() === idClean.toLowerCase());
+  const found = REPORTS.find(x => String(x.id).toLowerCase() === idClean.toLowerCase()) || MY_RECEIPTS.find(x => String(x.id).toLowerCase() === idClean.toLowerCase());
   if (found) {
     const isClean = /clean|resolv/i.test(found.status || "");
     resBox.innerHTML = `<div style="background:#fff;border:1.5px solid var(--line);border-left:4px solid ${isClean ? "var(--green)" : "var(--gold)"};padding:8px 10px;border-radius:8px">
-      <b>Receipt #${escapeHtml(found.id)}</b> • 🏛️ ${escapeHtml(found.dept)}<br>
-      📍 Area: <b>${escapeHtml(found.area)}</b><br>
+      <b>Receipt #${escapeHtml(found.id)}</b> • 🏛️ ${escapeHtml(found.dept)} (${escapeHtml(found.area)})<br>
       Status: <b style="color:${isClean ? "var(--green)" : "#e65100"}">${isClean ? "✅ CLEANED (" + escapeHtml(found.status) + ")" : "⏳ " + escapeHtml(found.status || "Pending")}</b>
     </div>`;
   } else {
-    resBox.innerHTML = `<span style="color:var(--coral)">❌ No report found with ID <b>#${escapeHtml(idClean)}</b>. Please check the ID and try again.</span>`;
+    resBox.innerHTML = `<span style="color:var(--coral)">❌ Report ID <b>#${escapeHtml(idClean)}</b> not found.</span>`;
   }
 }
 
 $("trackBtn").onclick = () => trackReportById($("trackInput").value);
 
 function renderMyReceipts() {
-  const box = $("myReceiptsBox");
-  const list = $("myReceiptsList");
-  if (!MY_RECEIPTS.length) {
-    box.style.display = "none";
-    return;
-  }
+  const box = $("myReceiptsBox"), list = $("myReceiptsList");
+  if (!MY_RECEIPTS.length) { box.style.display = "none"; return; }
   box.style.display = "block";
   list.innerHTML = MY_RECEIPTS.slice().reverse().slice(0, 4).map(r => {
     const matched = REPORTS.find(x => x.id === r.id);
     const st = matched ? matched.status : r.status || "Pending";
     const isClean = /clean|resolv/i.test(st);
-    return `<div style="padding:5px 0;border-bottom:1px dashed var(--line);display:flex;justify-content:space-between;align-items:center">
+    return `<div style="padding:5px 0;border-bottom:1px dashed var(--line);display:flex;justify-content:space-between">
       <span style="cursor:pointer;text-decoration:underline" onclick="document.getElementById('trackInput').value='${escapeHtml(r.id)}';trackReportById('${escapeHtml(r.id)}')"><b>#${escapeHtml(r.id)}</b> • ${escapeHtml(r.dept)} (${escapeHtml(r.area)})</span>
       <b style="color:${isClean ? "var(--green)" : "#e65100"}">${isClean ? "✅ " : "⏳ "}${escapeHtml(st)}</b>
     </div>`;
@@ -1598,193 +1183,110 @@ function renderMyReceipts() {
 }
 
 async function canvasToSafePhoto(canvas) {
-  let quality = 0.62;
-  let data = canvas.toDataURL("image/jpeg", quality);
-  while (data.length > 44000 && quality > 0.25) {
-    quality -= 0.08;
-    data = canvas.toDataURL("image/jpeg", quality);
-  }
-  if (data.length > 45000) throw new Error("Photo is too large. Please capture a smaller image.");
+  let quality = 0.62, data = canvas.toDataURL("image/jpeg", quality);
+  while (data.length > 44000 && quality > 0.25) { quality -= 0.08; data = canvas.toDataURL("image/jpeg", quality); }
   return data;
 }
 
 $("snapBtn").onclick = async () => {
   if (!running) await startCamera();
-  if (!running || !video || video.readyState < 2) {
-    alert("Camera is not ready. Please start the AI camera or use 'Choose / Camera Photo'.");
-    return;
-  }
-  const c = document.createElement("canvas");
-  c.width = 160; c.height = 120;
+  if (!running || !video) return;
+  const c = document.createElement("canvas"); c.width = 160; c.height = 120;
   c.getContext("2d").drawImage($("cv"), 0, 0, 160, 120);
-  try {
-    currentPhotoData = await canvasToSafePhoto(c);
-    const detectedName = currentDetectedIdx !== null && BINS[currentDetectedIdx]
-      ? `${BINS[currentDetectedIdx].icon} ${BINS[currentDetectedIdx].name} Dominant`
-      : "♻️ Mixed Area Waste";
-    currentSnapTag = detectedName;
-    $("snapPreview").src = currentPhotoData;
-    $("snapPreview").style.display = "block";
-    $("snapStatus").textContent = `✅ Photo captured! AI tag: ${detectedName}`;
-    highlightFlow(5);
-    beep([660, 880]);
-  } catch (e) { alert(e.message); }
+  currentPhotoData = await canvasToSafePhoto(c);
+  currentSnapTag = currentDetectedIdx !== null && BINS[currentDetectedIdx] ? `${BINS[currentDetectedIdx].icon} ${BINS[currentDetectedIdx].name} Dominant` : "♻️ Mixed Area Waste";
+  $("snapPreview").src = currentPhotoData; $("snapPreview").style.display = "block";
+  $("snapStatus").textContent = `✅ Photo captured! (${currentSnapTag})`;
+  highlightFlow(5); beep([660, 880]);
 };
 
 $("uploadPhotoBtn").onclick = () => $("civicFile").click();
 $("civicFile").onchange = e => {
   const file = e.target.files && e.target.files[0];
   if (!file) return;
-  if (!file.type.startsWith("image/")) { alert("Please select an image file."); return; }
   const reader = new FileReader();
   reader.onload = ev => {
     const img = new Image();
     img.onload = async () => {
-      const c = document.createElement("canvas");
-      c.width = 160; c.height = 120;
+      const c = document.createElement("canvas"); c.width = 160; c.height = 120;
       c.getContext("2d").drawImage(img, 0, 0, 160, 120);
-      try {
-        currentPhotoData = await canvasToSafePhoto(c);
-        $("snapPreview").src = currentPhotoData;
-        $("snapPreview").style.display = "block";
-        currentSnapTag = "📸 Citizen Photo Attached";
-        $("snapStatus").textContent = "✅ Photo attached and compressed. Ready to submit.";
-        highlightFlow(5);
-      } catch (err) { alert(err.message); }
+      currentPhotoData = await canvasToSafePhoto(c);
+      $("snapPreview").src = currentPhotoData; $("snapPreview").style.display = "block";
+      currentSnapTag = "📸 Citizen Photo Attached";
+      $("snapStatus").textContent = "✅ Photo attached & compressed.";
     };
-    img.onerror = () => alert("Could not read this image.");
     img.src = ev.target.result;
   };
   reader.readAsDataURL(file);
 };
 
 $("gpsBtn").onclick = () => {
-  if (!navigator.geolocation) {
-    $("gpsStatus").textContent = "⚠️ GPS is not supported in this browser.";
-    return;
-  }
-  $("gpsStatus").textContent = "🛰️ Getting GPS coordinates...";
+  if (!navigator.geolocation) return;
+  $("gpsStatus").textContent = "🛰️ Getting GPS...";
   navigator.geolocation.getCurrentPosition(pos => {
-    const lat = pos.coords.latitude.toFixed(5);
-    const lng = pos.coords.longitude.toFixed(5);
+    const lat = pos.coords.latitude.toFixed(5), lng = pos.coords.longitude.toFixed(5);
     currentGpsLink = `https://maps.google.com/?q=${lat},${lng}`;
     $("gpsStatus").textContent = `✅ GPS locked: ${lat}, ${lng}`;
     if (!$("repArea").value.trim()) $("repArea").value = `GPS Pin (${lat}, ${lng})`;
-  }, () => {
-    $("gpsStatus").textContent = "⚠️ Location permission denied — enter the area name manually.";
-  }, { enableHighAccuracy: true, timeout: 12000, maximumAge: 60000 });
+  }, () => { $("gpsStatus").textContent = "⚠️ Enter area name manually."; });
 };
 
 $("sendReportBtn").onclick = async () => {
-  const dept = $("repDept").value;
-  const area = $("repArea").value.replace(/[|,"<>]/g, "").trim();
-  if (!area) {
-    alert("Please enter the area / street name or tap Auto GPS.");
-    $("repArea").focus();
-    return;
-  }
+  const dept = $("repDept").value, area = $("repArea").value.replace(/[|,"<>]/g, "").trim();
+  if (!area) { alert("Please enter area name or tap Auto GPS."); return; }
   const citizen = $("repCitizen").value.replace(/[|,"<>]/g, "").trim() || "Anonymous Citizen";
   const id = makeId("R");
-  const btn = $("sendReportBtn");
-  btn.disabled = true;
-  btn.textContent = "⏳ Submitting report securely...";
-
-  const reportObj = {
-    action: "save_report", id, dept, area,
-    waste: currentSnapTag, citizen, gps: currentGpsLink,
-    status: "Pending", d: today(), photo: currentPhotoData
-  };
-
+  const btn = $("sendReportBtn"); btn.disabled = true;
+  const reportObj = { action: "save_report", id, dept, area, waste: currentSnapTag, citizen, gps: currentGpsLink, status: "Pending", d: today(), photo: currentPhotoData };
   try {
     const data = await apiPost(reportObj);
-    const finalId = data.id || id;
-    reportObj.id = finalId;
-    REPORTS.unshift(reportObj);
-    try { localStorage.setItem("sdg_reports", JSON.stringify(REPORTS)); } catch (e) {}
-    MY_RECEIPTS.push({ id: finalId, dept, area, status: "Pending", d: today() });
-    try { localStorage.setItem("sdg_my_receipts", JSON.stringify(MY_RECEIPTS)); } catch (e) {}
-    renderMyReceipts();
-    renderReports();
-
-    $("repArea").value = "";
-    $("repCitizen").value = "";
-    currentPhotoData = "";
-    currentGpsLink = "";
-    $("snapPreview").style.display = "none";
-    $("snapStatus").textContent = "Ready to capture or attach a report photo.";
-    highlightFlow(5);
-    beep([523, 659, 784]);
-    await syncAuditFromCloud();
-    alert(`✅ Report submitted successfully!\nYour Tracking Receipt ID is: #${finalId}`);
-  } catch (err) {
-    REPORTS.unshift(reportObj);
-    try { localStorage.setItem("sdg_reports", JSON.stringify(REPORTS)); } catch (e) {}
-    MY_RECEIPTS.push({ id, dept, area, status: "Pending", d: today() });
-    try { localStorage.setItem("sdg_my_receipts", JSON.stringify(MY_RECEIPTS)); } catch (e) {}
-    renderMyReceipts();
-    renderReports();
-    alert(`✅ Report recorded!\nYour Tracking Receipt ID is: #${id}`);
-  } finally {
-    btn.disabled = false;
-    btn.textContent = "📤 Send Photo & Alert to Selected Authority";
-  }
+    reportObj.id = data.id || id;
+  } catch (err) {}
+  REPORTS.unshift(reportObj);
+  try { localStorage.setItem("sdg_reports", JSON.stringify(REPORTS)); } catch (e) {}
+  MY_RECEIPTS.push({ id: reportObj.id, dept, area, status: "Pending", d: today() });
+  try { localStorage.setItem("sdg_my_receipts", JSON.stringify(MY_RECEIPTS)); } catch (e) {}
+  renderMyReceipts(); renderReports();
+  $("repArea").value = ""; $("repCitizen").value = ""; currentPhotoData = ""; $("snapPreview").style.display = "none";
+  btn.disabled = false;
+  syncAuditFromCloud();
+  alert(`✅ Report submitted!\nYour Tracking Receipt ID: #${reportObj.id}`);
 };
-
-function getAllowedFilter() {
-  if (!activeOfficer) return "NONE";
-  return activeOfficer.isSuper ? $("offFilter").value : activeOfficer.filter;
-}
 
 function renderReports() {
   renderMyReceipts();
   const box = $("repList");
-  if (!activeOfficer || !SESSION) {
-    box.innerHTML = "";
-    return;
-  }
-  const allowedFilter = getAllowedFilter();
+  if (!activeOfficer || !SESSION) { box.innerHTML = ""; return; }
+  const allowedFilter = activeOfficer.isSuper ? $("offFilter").value : activeOfficer.filter;
   const list = REPORTS.filter(r => allowedFilter === "ALL" || r.dept === allowedFilter);
-  $("feedHeading").textContent = allowedFilter === "ALL"
-    ? "📋 All Halqas Cleanliness Requests (Tap Photo to Enlarge)"
-    : `📋 ${allowedFilter} — Cleanliness Requests (Tap Photo to Enlarge)`;
-  if (!list.length) {
-    box.innerHTML = `<p class="note" style="text-align:center;padding:12px">No complaints found for <b>${escapeHtml(allowedFilter)}</b>.</p>`;
-    return;
-  }
+  if (!list.length) { box.innerHTML = `<p class="note" style="text-align:center">No complaints found for <b>${escapeHtml(allowedFilter)}</b>.</p>`; return; }
   box.innerHTML = "";
   list.forEach(r => {
-    const card = document.createElement("div");
-    card.className = "rep-card";
+    const card = document.createElement("div"); card.className = "rep-card";
     const hasPhoto = typeof r.photo === "string" && /^data:image\/(jpeg|png|webp);base64,/i.test(r.photo);
     const safePhoto = hasPhoto
-      ? `<img src="${r.photo}" title="Tap to view full photo" onclick="zoomPhoto(this.src)" alt="Complaint photo" style="width:86px;height:66px;object-fit:cover;border-radius:8px;border:2px solid var(--ink);cursor:zoom-in">`
+      ? `<img src="${r.photo}" title="Tap to enlarge photo" onclick="zoomPhoto(this.src)" style="width:86px;height:66px;object-fit:cover;border-radius:8px;border:2px solid var(--ink);cursor:zoom-in">`
       : `<div style="width:86px;height:66px;border-radius:8px;background:#e3efec;display:flex;align-items:center;justify-content:center;font-size:22px">🗑️</div>`;
-    const gps = /^https:\/\/(maps\.google\.com|www\.google\.com\/maps)\//i.test(r.gps || "")
-      ? ` • <a href="${escapeHtml(r.gps)}" rel="noopener" target="_blank" style="color:var(--blue);font-weight:bold">📍 Map</a>` : "";
+    const gps = /^https:\/\/(maps\.google\.com|www\.google\.com\/maps)\//i.test(r.gps || "") ? ` • <a href="${escapeHtml(r.gps)}" target="_blank" style="color:var(--blue);font-weight:bold">📍 Map</a>` : "";
     const status = String(r.status || "Pending");
     const isResolved = /resolv|clean/i.test(status);
-    const statusClass = isResolved ? "st-clean" : "st-pend";
-    const statusBadge = `<span class="rep-status ${statusClass}">${isResolved ? "✅ " : "⏳ "}${escapeHtml(status)}</span>`;
     card.innerHTML = `
       ${safePhoto}
       <div class="rep-info">
         <span class="dept-tag">🏛️ ${escapeHtml(r.dept || "UC Tarai")}</span><br>
-        <b>📍 ${escapeHtml(r.area)}</b> <small style="color:#456">(#${escapeHtml(r.id)})</small><br>
+        <b>📍 ${escapeHtml(r.area)}</b> <small>(#${escapeHtml(r.id)})</small><br>
         <span>${escapeHtml(r.waste)}</span>${gps}<br>
-        <small style="color:#567">👤 ${escapeHtml(r.citizen)} • 📅 ${escapeHtml(cleanDateOnly(r.d))}</small>
+        <small>👤 ${escapeHtml(r.citizen)} • 📅 ${escapeHtml(cleanDateOnly(r.d))}</small>
       </div>
       <div style="text-align:right">
-        ${statusBadge}
+        <span class="rep-status ${isResolved ? "st-clean" : "st-pend"}">${isResolved ? "✅ " : "⏳ "}${escapeHtml(status)}</span>
         <div class="off-actions" style="margin-top:6px"></div>
       </div>`;
     if (activeOfficer.isSuper || r.dept === activeOfficer.filter) {
       const action = card.querySelector(".off-actions");
-      const cleanedLabel = `Cleaned by ${r.dept || activeOfficer.label}`;
-      const nextStatus = isResolved ? "Pending" : cleanedLabel;
+      const nextStatus = isResolved ? "Pending" : `Cleaned by ${r.dept || activeOfficer.label}`;
       const button = document.createElement("button");
-      button.type = "button";
-      button.style.padding = "6px 11px";
-      button.style.fontSize = "11.5px";
+      button.type = "button"; button.style.padding = "6px 11px"; button.style.fontSize = "11.5px";
       button.textContent = isResolved ? "↩️ Mark Pending" : "✅ Mark as Cleaned";
       button.className = isResolved ? "alt" : "";
       if (!isResolved) button.style.background = "var(--green)";
@@ -1796,23 +1298,10 @@ function renderReports() {
 }
 
 async function toggleReportStatus(report, newStatus) {
-  if (!SESSION || !activeOfficer) return;
-  if (!activeOfficer.isSuper && report.dept !== activeOfficer.filter) {
-    alert("⚠️ Access Denied: You can only update reports in your own Halqa!");
-    return;
-  }
   report.status = newStatus;
   try { localStorage.setItem("sdg_reports", JSON.stringify(REPORTS)); } catch (e) {}
-  if (/resolv|clean/i.test(newStatus)) highlightFlow(6);
   renderReports();
-  try {
-    if (SESSION.token && SESSION.token !== "local_verified_token") {
-      await apiPost({ action: "update_report", token: SESSION.token, id: report.id, status: newStatus });
-    } else {
-      await fetch(`${CLOUD_URL}?action=update_report&id=${encodeURIComponent(report.id)}&st=${encodeURIComponent(newStatus)}&t=${Date.now()}`);
-    }
-    await loadPrivateData();
-  } catch (err) {}
+  try { await apiPost({ action: "update_report", token: SESSION.token, id: report.id, status: newStatus }); await loadPrivateData(); } catch (err) {}
 }
 
 async function showOfficerPortal() {
@@ -1831,43 +1320,24 @@ async function showOfficerPortal() {
 
 $("offFilter").onchange = renderReports;
 $("offLogoutBtn").onclick = () => clearSession(true);
-
-$("offCsvBtn").onclick = () => {
-  if (!activeOfficer) return;
-  const list = REPORTS.filter(r => activeOfficer.isSuper || r.dept === activeOfficer.filter);
-  const rows = [["Report_ID","Halqa_Department","Area","Waste_Type","Citizen_Info","GPS_Map","Status","Date"]];
-  list.forEach(r => rows.push([r.id,r.dept,r.area,r.waste,r.citizen,r.gps,r.status,cleanDateOnly(r.d)]));
-  downloadCsv_(rows, `${activeOfficer.u.toLowerCase().replace(/\s+/g, "_")}_reports.csv`);
-};
-
 $("repSyncBtn").onclick = () => loadPrivateData();
 
-/* ---- Waste Audit Step & Smart Dashboard Rendering (2 BINS: PLASTIC & PAPER) ---- */
 function auditStep(idx, now) {
   if (idx === null) {
     if (!idleSince) idleSince = now;
-    if (now - idleSince > 500 && !auditArmed) {
-      auditArmed = true;
-      setTask("📊 Ready for next item! Show inside box<small>Ab agla Plastic ya Paper camera ke samne layen</small>");
-    }
+    if (now - idleSince > 500 && !auditArmed) { auditArmed = true; setTask("📊 Ready for next item! Show inside box"); }
     return;
   }
-  idleSince = 0;
-  highlightFlow(2);
+  idleSince = 0; highlightFlow(2);
   if (auditArmed && now - holdSince > HOLD_MS) {
     auditArmed = false;
-    const bin = BINS[idx];
-    const day = todayData();
+    const bin = BINS[idx], day = todayData();
     day[bin.name] = (Number(day[bin.name]) || 0) + 1;
     lastCounted = bin.name;
-    saveAudit();
-    beep([700, 920]);
-    say(`${bin.name} counted`);
-    triggerBinSimulation(idx, true);
-    highlightFlow(4);
-    setTask(`✅ Counted +1 ${bin.icon} ${bin.name}!<small style="color:var(--green);font-weight:bold">Remove item from camera to count the next one.</small>`);
-    renderAudit();
-    pushAuditDelta(bin.name, 1).catch(() => {});
+    saveAudit(); beep([700, 920]); say(`${bin.name} counted`);
+    triggerBinSimulation(idx, true); highlightFlow(4);
+    setTask(`✅ Counted +1 ${bin.icon} ${bin.name} (${bin.bin})!<small>Remove item from camera for next scan.</small>`);
+    renderAudit(); pushAuditDelta(bin.name, 1).catch(() => {});
   }
 }
 
@@ -1876,234 +1346,96 @@ function renderAudit() {
   const totalToday = sum2Bins(d);
   let grandPlastic = 0, grandPaper = 0;
   const activeDates = Object.keys(AUD).filter(dt => sum2Bins(AUD[dt]) > 0);
-
   Object.keys(AUD).forEach(dt => {
     grandPlastic += Number(AUD[dt] && AUD[dt].Plastic) || 0;
     grandPaper   += Number(AUD[dt] && AUD[dt].Paper) || 0;
   });
   const grandTotal = grandPlastic + grandPaper;
-
-  const catTotals = [
-    { name: "Plastic", icon: "🧴", count: grandPlastic },
-    { name: "Paper",   icon: "📄", count: grandPaper }
-  ].sort((a, b) => b.count - a.count);
-
-  const topCat = catTotals[0];
+  const topCat = grandPlastic >= grandPaper ? { name: "Plastic", icon: "🧴", count: grandPlastic } : { name: "Paper", icon: "📄", count: grandPaper };
   const topCatPct = grandTotal ? Math.round((topCat.count * 100) / grandTotal) : 0;
 
   $("kpiTotalItems").textContent = grandTotal.toLocaleString();
-  $("kpiDays").textContent = `Across ${activeDates.length || 1} active day(s)`;
+  $("kpiDays").textContent = `Across ${activeDates.length || 1} day(s)`;
   $("kpiTodayBig").textContent = totalToday.toLocaleString();
-  $("kpiTodayItems").textContent = `Items counted today`;
-
-  if (grandTotal > 0) {
-    $("kpiTopWaste").textContent = `${topCat.icon} ${topCat.name}`;
-    $("kpiTopPct").textContent = `${topCat.count} items (${topCatPct}% of total)`;
-  } else {
-    $("kpiTopWaste").textContent = "—";
-    $("kpiTopPct").textContent = "Scan items to begin";
-  }
+  $("kpiTopWaste").textContent = grandTotal > 0 ? `${topCat.icon} ${topCat.name}` : "—";
+  $("kpiTopPct").textContent = grandTotal > 0 ? `${topCat.count} items (${topCatPct}%)` : "Scan items";
 
   const cs = CIVIC_STATS || { total: 0, pending: 0, inProgress: 0, resolved: 0, byDept: {} };
   $("kpiReports").textContent = (cs.total || 0).toLocaleString();
   $("kpiResolved").textContent = `${cs.resolved || 0} Cleaned • ${(cs.pending || 0) + (cs.inProgress || 0)} Pending`;
-
-  if (cs.resolved > 0) highlightFlow(6);
-  else if (cs.total > 0) highlightFlow(5);
-  else if (grandTotal > 0) highlightFlow(4);
 
   const byDept = cs.byDept || {};
   $("hqTarai").textContent = `${byDept["UC Tarai"] || 0} reports`;
   $("hqGolarchi").textContent = `${byDept["Town Committee Golarchi"] || 0} reports`;
   $("hqBadin").textContent = `${byDept["Municipal Committee Badin"] || 0} reports`;
 
-  const insights = [];
-  if (grandTotal > 0) {
-    insights.push(`<b>Dominant Waste Insight:</b> <b>${topCat.name}</b> is currently the most frequently detected waste category (<b>${topCatPct}%</b> share — ${topCat.count} of ${grandTotal} total items).`);
-    insights.push(`<b>2-Bin Census Breakdown:</b> Total <b>${grandTotal}</b> items classified across <b>${activeDates.length || 1}</b> day(s) — Plastic: <b>${grandPlastic}</b>, Paper: <b>${grandPaper}</b>.`);
-  } else {
-    insights.push(`<b>Waste Census Ready:</b> Scan Plastic or Paper items with the AI camera to generate live category counts.`);
-  }
-
-  if (cs.total > 0) {
-    const resRate = Math.round(((cs.resolved || 0) * 100) / cs.total);
-    const hotspotStr = cs.topArea
-      ? `Area <b>"${escapeHtml(cs.topArea)}"</b> (${cs.topAreaCount} report${cs.topAreaCount > 1 ? "s" : ""}) under <b>${escapeHtml(cs.topDept || "Local Govt")}</b> shows the highest reported concentration.`
-      : `<b>${escapeHtml(cs.topDept || "UC Tarai")}</b> currently leads in reported civic activity.`;
-    insights.push(`<b>Civic Hotspot & Action:</b> Out of <b>${cs.total}</b> civic reports, <b>${cs.resolved} (${resRate}%)</b> are cleaned/resolved. ${hotspotStr}`);
-  } else {
-    insights.push(`<b>Civic Reporting Active:</b> Citizens can submit geotagged waste alerts to <b>UC Tarai</b>, <b>TC Golarchi</b>, and <b>MC Badin</b> without signup.`);
-  }
-  $("aiInsightsList").innerHTML = insights.map(line => `<li>${line}</li>`).join("");
+  $("aiInsightsList").innerHTML = `
+    <li><b>Dominant Waste:</b> ${grandTotal ? `${topCat.name} (${topCatPct}%)` : "Scan Plastic or Paper to begin"}.</li>
+    <li><b>2-Bin Census Total:</b> ${grandTotal} items (Plastic / Sky Blue Bin: ${grandPlastic}, Paper / Pink Bin: ${grandPaper}).</li>
+    <li><b>Civic Action:</b> ${cs.resolved || 0} of ${cs.total || 0} complaints cleaned.</li>`;
 
   $("auditTotal").textContent = `Today's Breakdown (${today()}): ${totalToday} items scanned`;
   $("auditBars").innerHTML = BINS.map(b => {
-    const n = Number(d[b.name]) || 0;
-    const pct = totalToday ? Math.round(n * 100 / totalToday) : 0;
+    const n = Number(d[b.name]) || 0, pct = totalToday ? Math.round(n * 100 / totalToday) : 0;
     return `<div class="arow"><span>${b.icon} ${b.name}</span><div class="abar"><i style="width:${pct}%;background:${b.color}"></i></div><b>${n} (${pct}%)</b></div>`;
   }).join("");
 
   const hist = $("auditHistory"), foot = $("auditFooter");
-  if (!hist) return;
   const dates = Object.keys(AUD).filter(dt => sum2Bins(AUD[dt]) > 0 || dt === today()).sort().reverse();
-  if (!dates.length) {
-    hist.innerHTML = `<tr><td colspan="4" style="text-align:center">No items counted yet</td></tr>`;
-    if (foot) foot.innerHTML = "";
-    return;
-  }
   hist.innerHTML = dates.map(dt => {
-    const row = AUD[dt] || {};
-    const pl = Number(row.Plastic) || 0, pa = Number(row.Paper) || 0;
-    const cleanDt = cleanDateOnly(dt);
-    return `<tr><td><b>${cleanDt === today() ? `${cleanDt} (Today)` : cleanDt}</b></td><td>${pl}</td><td>${pa}</td><td><b>${pl + pa}</b></td></tr>`;
+    const row = AUD[dt] || {}, pl = Number(row.Plastic) || 0, pa = Number(row.Paper) || 0, cDt = cleanDateOnly(dt);
+    return `<tr><td><b>${cDt === today() ? `${cDt} (Today)` : cDt}</b></td><td>${pl}</td><td>${pa}</td><td><b>${pl + pa}</b></td></tr>`;
   }).join("");
   if (foot) foot.innerHTML = `<tr><td>📊 Overall Total</td><td>${grandPlastic}</td><td>${grandPaper}</td><td><b>${grandTotal}</b></td></tr>`;
 }
 
-function summary() {
-  const d = AUD[today()] || {};
-  const todayTotal = sum2Bins(d);
-  let gPl = 0, gPa = 0;
-  Object.keys(AUD).forEach(dt => {
-    gPl += Number(AUD[dt] && AUD[dt].Plastic) || 0;
-    gPa += Number(AUD[dt] && AUD[dt].Paper) || 0;
-  });
-  const allTime = gPl + gPa;
-  const cs = CIVIC_STATS || { total: 0, resolved: 0 };
-  return `Saaf Sindh AI Census (${today()}): ${todayTotal} items today | ${allTime} total items (Plastic ${gPl}, Paper ${gPa}) | Civic Reports: ${cs.total || 0} total (${cs.resolved || 0} cleaned).`;
-}
-
 $("aSync").onclick = () => syncAuditFromCloud();
 $("aPrint").onclick = () => window.print();
-$("aUndo").style.display = activeOfficer && activeOfficer.isSuper ? "inline-block" : "none";
-$("aUndo").onclick = async () => {
-  if (!SESSION || !activeOfficer || !activeOfficer.isSuper) {
-    alert("Only Super Admin can reverse a saved cloud count.");
-    return;
-  }
-  if (!lastCounted || !(Number(todayData()[lastCounted]) > 0)) return;
-  try {
-    await apiPost({ action: "audit_adjust", token: SESSION.token, category: lastCounted, delta: -1, date: today() });
-    lastCounted = null;
-    await syncAuditFromCloud();
-  } catch (err) { alert(err.message); }
-};
 
-$("aReset").onclick = async () => {
-  if (!SESSION || SESSION.role !== "SUPER_ADMIN") { alert("Super Admin login is required."); return; }
-  if (!confirm("Reset today's audit counts to zero across all devices? Historical records will remain in the sheet.")) return;
-  try {
-    await apiPost({ action: "audit_reset_today", token: SESSION.token });
-    await syncAuditFromCloud();
-    alert("Today's audit has been reset.");
-  } catch (err) { alert("Reset failed: " + err.message); }
-};
-
-$("aMatchCloud").onclick = async () => {
-  try {
-    await syncAuditFromCloud();
-    alert("Device view refreshed from the Google Sheet.");
-  } catch (e) { alert(e.message); }
-};
-
-$("aCopy").onclick = () => {
-  if (navigator.clipboard) navigator.clipboard.writeText(summary()).then(() => alert("Census Summary copied!"));
-  else prompt("Copy this summary:", summary());
-};
-
-$("aCsv").onclick = () => {
-  const rows = [["Date","Plastic","Paper","Day_Total"]];
-  let gPl = 0, gPa = 0;
-  Object.keys(AUD).sort().reverse().forEach(dt => {
-    const pl = Number(AUD[dt] && AUD[dt].Plastic) || 0;
-    const pa = Number(AUD[dt] && AUD[dt].Paper) || 0;
-    gPl += pl; gPa += pa;
-    rows.push([cleanDateOnly(dt), pl, pa, pl + pa]);
-  });
-  rows.push(["OVERALL_TOTAL", gPl, gPa, gPl + gPa]);
-  downloadCsv_(rows, "saaf_sindh_daywise_waste_audit.csv");
-};
-
-/* ---- Public Leaderboard: Filters Out Any Date-String Rows & Supports Ties ---- */
 async function renderLb() {
   const ol = $("lbList");
   try {
     const data = await fetchPublicData();
-    if (Array.isArray(data.players)) {
-      LB = data.players.filter(r => !isInvalidPlayerName(r.n));
-    }
-    if (data.civicStats) CIVIC_STATS = data.civicStats;
+    if (Array.isArray(data.players)) LB = data.players.filter(r => !isInvalidPlayerName(r.n));
   } catch (e) {}
   const sorted = LB.filter(r => !isInvalidPlayerName(r.n)).slice().sort((a, b) => Number(b.s) - Number(a.s));
   ol.innerHTML = "";
-  if (!sorted.length) {
-    const li = document.createElement("li");
-    li.textContent = `No scores yet for today (${today()}) — play the 60-second game!`;
-    ol.appendChild(li);
-    return;
-  }
-  const thirdPlaceScore = Number(sorted[Math.min(2, sorted.length - 1)].s) || 0;
+  if (!sorted.length) { ol.innerHTML = `<li>No scores yet for today (${today()}) — play the 60s game!</li>`; return; }
+  const thirdScore = Number(sorted[Math.min(2, sorted.length - 1)].s) || 0;
   sorted.forEach((r, idx) => {
-    const sc = Number(r.s) || 0;
-    const isTop3OrTied = sc > 0 && (idx < 3 || sc >= thirdPlaceScore);
+    const sc = Number(r.s) || 0, top3 = sc > 0 && (idx < 3 || sc >= thirdScore);
     const li = document.createElement("li");
-    li.innerHTML = `<b>${escapeHtml(r.n)}</b> — ${sc} pts <small style="color:var(--green);font-weight:bold">${isTop3OrTied ? "🎁 Top 3 Prize Eligible" : ""}</small>`;
+    li.innerHTML = `<b>${escapeHtml(r.n)}</b> — ${sc} pts <small style="color:var(--green);font-weight:bold">${top3 ? "🎁 Top 3 Prize Eligible" : ""}</small>`;
     ol.appendChild(li);
   });
 }
 
 async function renderAdmin() {
   const tb = $("adminTable");
-  if (!SESSION || SESSION.role !== "SUPER_ADMIN") {
-    $("admStatus").textContent = "🔒 Teacher Admin password is required.";
-    tb.innerHTML = `<tr><td colspan="5" style="text-align:center">Not authorized</td></tr>`;
-    return;
-  }
-  $("admStatus").textContent = "☁️ Loading private records from Google Sheets...";
+  $("admStatus").textContent = "☁️ Loading private records...";
   try {
     const data = await loadPrivateData();
     const players = (Array.isArray(data.players) ? data.players : LB).filter(r => !isInvalidPlayerName(r.n));
-    tb.innerHTML = "";
-    if (!players.length) {
-      tb.innerHTML = `<tr><td colspan="5" style="text-align:center">No player records found.</td></tr>`;
-    } else {
-      players.slice().sort((a, b) => Number(b.s) - Number(a.s)).forEach((r, i) => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `<td>${i + 1}</td><td><b>${escapeHtml(r.n)}</b></td><td>${Number(r.s) || 0}</td><td>${escapeHtml(r.ph || "—")}</td><td>${escapeHtml(cleanDateOnly(r.d))}</td>`;
-        tb.appendChild(tr);
-      });
-    }
-    $("admStatus").textContent = "✅ Authenticated — private records loaded.";
-    $("aUndo").style.display = "inline-block";
-  } catch (err) {
-    $("admStatus").textContent = "⚠️ Showing cached records: " + err.message;
-  }
+    tb.innerHTML = players.length ? players.slice().sort((a, b) => Number(b.s) - Number(a.s)).map((r, i) =>
+      `<tr><td>${i + 1}</td><td><b>${escapeHtml(r.n)}</b></td><td>${Number(r.s) || 0}</td><td>${escapeHtml(r.ph || "—")}</td><td>${escapeHtml(cleanDateOnly(r.d))}</td></tr>`
+    ).join("") : `<tr><td colspan="5" style="text-align:center">No player records found.</td></tr>`;
+    $("admStatus").textContent = "✅ Authenticated (401020169Admin)";
+  } catch (err) { $("admStatus").textContent = "⚠️ Offline cache shown."; }
 }
 
 $("lbSave").onclick = async () => {
   const name = $("lbName").value.replace(/[,"<>\n|]/g, "").trim() || "Player";
   const phone = ($("lbPhone").value || "").replace(/[^\d+]/g, "").trim();
-  const btn = $("lbSave");
-  btn.disabled = true;
-  btn.textContent = "Saving securely...";
-  try {
-    await apiPost({ action: "save_score", name: name, score: score, phone: phone });
-  } catch (err) {
-    try {
-      await fetch(`${CLOUD_URL}?action=save&n=${encodeURIComponent(name)}&s=${score}&ph=${encodeURIComponent(phone || "Not provided")}&t=${Date.now()}`);
-    } catch (e) {}
-  }
+  if (isInvalidPlayerName(name)) { alert("Please enter a valid player name."); return; }
+  $("lbSave").disabled = true;
+  try { await apiPost({ action: "save_score", name, score, phone }); } catch (err) {}
   LB.push({ n: name, s: score, ph: phone || "Not provided", d: today() });
-  $("lbName").value = "";
-  $("lbPhone").value = "";
-  btn.disabled = false;
-  btn.textContent = "💾 Save Score to Cloud";
+  $("lbName").value = ""; $("lbPhone").value = ""; $("lbSave").disabled = false;
   $("lbEntry").style.display = "none";
   await renderLb();
-  alert("✅ Score saved to Google Sheet! Mobile numbers stay private for Teacher Admin only.");
+  alert("✅ Score saved!");
 };
 
-/* ---- 5-Click Teacher Admin Panel: ALWAYS Requires 401020169Admin ---- */
 function openAdmin() {
   (async () => {
     const passInput = prompt("🔒 Teacher Admin Panel\nEnter Admin Password:");
@@ -2121,71 +1453,38 @@ function openAdmin() {
 
 let tapCount = 0, tapTimer = null;
 $("appTitle").onclick = () => {
-  tapCount++;
-  clearTimeout(tapTimer);
+  tapCount++; clearTimeout(tapTimer);
   if (tapCount >= 5) { tapCount = 0; openAdmin(); }
   else tapTimer = setTimeout(() => { tapCount = 0; }, 2000);
 };
-window.addEventListener("keydown", e => {
-  if (e.ctrlKey && e.shiftKey && (e.key === "A" || e.key === "a")) {
-    e.preventDefault();
-    openAdmin();
-  }
-});
-function checkHash() { if (location.hash.toLowerCase() === "#admin") openAdmin(); }
-window.addEventListener("hashchange", checkHash);
-setTimeout(checkHash, 400);
-
 $("admRefresh").onclick = renderAdmin;
-$("admClose").onclick = () => {
-  $("adminBox").style.display = "none";
-  if (location.hash.toLowerCase() === "#admin") history.replaceState(null, "", location.pathname + location.search);
-};
+$("admClose").onclick = () => { $("adminBox").style.display = "none"; };
 
 function downloadCsv_(rows, filename) {
-  const csv = rows.map(row => row.map(value => `"${String(value == null ? "" : value).replace(/"/g, '""')}"`).join(",")).join("\r\n");
-  const blobUrl = URL.createObjectURL(new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8" }));
+  const csv = rows.map(r => r.map(v => `"${String(v == null ? "" : v).replace(/"/g, '""')}"`).join(",")).join("\r\n");
   const a = document.createElement("a");
-  a.href = blobUrl;
-  a.download = filename;
-  a.click();
-  setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
+  a.href = URL.createObjectURL(new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8" }));
+  a.download = filename; a.click();
 }
-
 $("admCsv").onclick = () => {
-  if (!SESSION || SESSION.role !== "SUPER_ADMIN") return;
   const rows = [["Rank","Name","Score","Mobile_Number","Date"]];
   LB.filter(r => !isInvalidPlayerName(r.n)).slice().sort((a, b) => Number(b.s) - Number(a.s)).forEach((r, i) => rows.push([i + 1, r.n, r.s, r.ph || "", cleanDateOnly(r.d)]));
-  downloadCsv_(rows, "saaf_sindh_players_contacts.csv");
+  downloadCsv_(rows, "saaf_sindh_players.csv");
 };
-
-$("admCopy").onclick = () => {
-  if (!SESSION || SESSION.role !== "SUPER_ADMIN") return;
-  const txt = LB.filter(r => !isInvalidPlayerName(r.n)).slice().sort((a, b) => Number(b.s) - Number(a.s))
-    .map((r, i) => `${i + 1}. ${r.n} | Score: ${r.s} | Phone: ${r.ph || "N/A"} (${cleanDateOnly(r.d)})`).join("\n") || "No records.";
-  if (navigator.clipboard) navigator.clipboard.writeText(txt).then(() => alert("Private player records copied."));
-  else prompt("Copy records:", txt);
-};
-
 $("admClear").onclick = async () => {
-  if (!SESSION || SESSION.role !== "SUPER_ADMIN") { alert("Teacher Admin login is required."); return; }
-  if (!confirm("Delete ALL player scores and phone numbers from the Game_Scores sheet? This cannot be undone.")) return;
-  try {
-    await apiPost({ action: "clear_scores", token: SESSION.token });
-  } catch (err) {
-    try { await fetch(`${CLOUD_URL}?action=clear&pin=${encodeURIComponent(atob(ADMIN_HASH))}&t=${Date.now()}`); } catch (e) {}
-  }
-  LB = [];
-  await renderLb();
-  await renderAdmin();
-  alert("Player records cleared from Google Sheet.");
+  if (!confirm("Clear all player scores from sheet?")) return;
+  try { await apiPost({ action: "clear_scores", token: SESSION.token }); } catch (e) {}
+  LB = []; await renderLb(); await renderAdmin();
 };
+$("aReset").onclick = async () => {
+  if (!confirm("Reset today's audit counts to zero?")) return;
+  try { await apiPost({ action: "audit_reset_today", token: SESSION.token }); await syncAuditFromCloud(); } catch (e) {}
+};
+$("aMatchCloud").onclick = () => syncAuditFromCloud();
 
-// Startup
 renderAudit();
 renderMyReceipts();
 syncAuditFromCloud();
-
 </script>
 </body>
 </html>
