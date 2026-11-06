@@ -343,10 +343,18 @@ button.btn:disabled { opacity: 0.55; cursor: not-allowed; }
   transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* ---- TABLES ---- */
+/* ---- TABLES & DAY-WISE LEADERBOARD HEADER ---- */
 .data-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 6px; }
 .data-table th, .data-table td { border: 1.5px solid var(--line); padding: 6px 7px; text-align: left; }
 .data-table th { background: var(--ink); color: var(--gold); }
+.day-group-row td {
+  background: #e8f5e9;
+  color: #1b5e20;
+  font-weight: 900;
+  font-size: 12px;
+  padding: 6px 8px;
+  border-top: 2px solid #81c784;
+}
 .status-pill { padding: 2px 7px; border-radius: 10px; font-size: 11px; font-weight: 800; display: inline-block; }
 .st-pending { background: #fff3e0; color: #e65100; border: 1px solid #ffb74d; }
 .st-cleaned { background: #e8f5e9; color: #1b5e20; border: 1px solid #81c784; }
@@ -366,7 +374,7 @@ button.btn:disabled { opacity: 0.55; cursor: not-allowed; }
   font-size: 14px;
   font-weight: 800;
   color: var(--ink);
-  background: linear-gradient(90deg, #e1f5fe, #fce4ec);
+  background: linear-gradient(90deg, #fce4ec, #e1f5fe);
   cursor: pointer;
   list-style: none;
   display: flex;
@@ -416,8 +424,8 @@ button.btn:disabled { opacity: 0.55; cursor: not-allowed; }
   <div class="census-strip">
     <div class="census-label">📊 Smart Waste Census (Live Sheet):</div>
     <div class="census-row">
-      <span class="c-chip cc-plastic">🧴 Plastic: <b id="topPlastic">0</b></span>
       <span class="c-chip cc-paper">📄 Paper: <b id="topPaper">0</b></span>
+      <span class="c-chip cc-plastic">🧴 Plastic: <b id="topPlastic">0</b></span>
       <span class="c-chip cc-civic">🚨 Civic Reports: <b id="topCivic">0</b></span>
     </div>
   </div>
@@ -450,7 +458,7 @@ button.btn:disabled { opacity: 0.55; cursor: not-allowed; }
 <main class="container">
 
   <!-- ================================================================= -->
-  <!-- TAB 1: 🚨 CIVIC REPORT PORTAL (AUTO-CLEAR FORM + RECENT 5)       -->
+  <!-- TAB 1: 🚨 CIVIC REPORT PORTAL (AUTO-CLEAR FORM + RECENT 5)        -->
   <!-- ================================================================= -->
   <section id="tab-civic" class="tab-panel active">
     <div class="grid-2">
@@ -578,13 +586,13 @@ button.btn:disabled { opacity: 0.55; cursor: not-allowed; }
       </h2>
 
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0;text-align:center;">
-        <div style="background:#e1f5fe;padding:10px;border-radius:10px;border:1.5px solid #4fc3f7;">
-          <div style="font-size:11.5px;font-weight:800;color:#01579b;">🧴 PLASTIC SCANNED</div>
-          <div id="cenPlasticBig" style="font-size:24px;font-weight:900;color:#01579b;">0</div>
-        </div>
         <div style="background:#fce4ec;padding:10px;border-radius:10px;border:1.5px solid #f48fb1;">
           <div style="font-size:11.5px;font-weight:800;color:#880e4f;">📄 PAPER SCANNED</div>
           <div id="cenPaperBig" style="font-size:24px;font-weight:900;color:#880e4f;">0</div>
+        </div>
+        <div style="background:#e1f5fe;padding:10px;border-radius:10px;border:1.5px solid #4fc3f7;">
+          <div style="font-size:11.5px;font-weight:800;color:#01579b;">🧴 PLASTIC SCANNED</div>
+          <div id="cenPlasticBig" style="font-size:24px;font-weight:900;color:#01579b;">0</div>
         </div>
         <div style="background:#e8f5e9;padding:10px;border-radius:10px;border:1.5px solid #81c784;">
           <div style="font-size:11.5px;font-weight:800;color:#1b5e20;">♻️ TOTAL SORTED</div>
@@ -593,16 +601,6 @@ button.btn:disabled { opacity: 0.55; cursor: not-allowed; }
       </div>
 
       <!-- Overall Ratio Bars -->
-      <div style="margin: 12px 0;">
-        <div style="display:flex;justify-content:space-between;font-weight:800;font-size:13px;color:var(--skyblue);margin-bottom:4px;">
-          <span>🧴 Plastic Waste Ratio</span>
-          <span id="barPlasticTxt">0 Items (0%)</span>
-        </div>
-        <div style="height:18px;background:#e1f5fe;border-radius:10px;overflow:hidden;">
-          <div id="barPlastic" style="height:100%;width:0%;background:var(--skyblue);transition:width 0.4s;"></div>
-        </div>
-      </div>
-
       <div style="margin: 12px 0;">
         <div style="display:flex;justify-content:space-between;font-weight:800;font-size:13px;color:var(--pink);margin-bottom:4px;">
           <span>📄 Paper Waste Ratio</span>
@@ -613,12 +611,22 @@ button.btn:disabled { opacity: 0.55; cursor: not-allowed; }
         </div>
       </div>
 
-      <!-- DAY-WISE GRAPH (PLASTIC VS PAPER BY DATE) -->
+      <div style="margin: 12px 0;">
+        <div style="display:flex;justify-content:space-between;font-weight:800;font-size:13px;color:var(--skyblue);margin-bottom:4px;">
+          <span>🧴 Plastic Waste Ratio</span>
+          <span id="barPlasticTxt">0 Items (0%)</span>
+        </div>
+        <div style="height:18px;background:#e1f5fe;border-radius:10px;overflow:hidden;">
+          <div id="barPlastic" style="height:100%;width:0%;background:var(--skyblue);transition:width 0.4s;"></div>
+        </div>
+      </div>
+
+      <!-- DAY-WISE GRAPH (PAPER VS PLASTIC BY DATE) -->
       <div class="day-chart-box">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:6px;">
           <b style="font-size:13.5px;color:var(--ink);">📅 Day-Wise Waste Graph (Live Google Sheet Trend)</b>
           <div style="font-size:11.5px;font-weight:800;">
-            <span style="color:var(--skyblue);">🟦 Plastic</span> &nbsp;|&nbsp; <span style="color:var(--pink);">🟥 Paper</span>
+            <span style="color:var(--pink);">🟥 Paper</span> &nbsp;|&nbsp; <span style="color:var(--skyblue);">🟦 Plastic</span>
           </div>
         </div>
         <div id="dayWiseChartContainer"></div>
@@ -638,7 +646,7 @@ button.btn:disabled { opacity: 0.55; cursor: not-allowed; }
       <!-- Left: AI Camera with Start / Pause-Resume / Voice / Front-Back -->
       <div class="card" style="border-top: 5px solid var(--skyblue);">
         <h2>
-          <span>📷 AI Waste Scanner (`RP91qAZCY`)</span>
+          <span>📷 AI Waste Scanner</span>
           <div style="display:flex;gap:5px;align-items:center;">
             <button type="button" id="btnVoiceToggle" class="mini-btn" onclick="toggleLearnVoice()">🔊 Voice: ON</button>
             <span id="usbStatus" style="font-size:11px;background:#fff3e0;color:#e65100;padding:3px 8px;border-radius:10px;">🔌 USB: Digital Twin</span>
@@ -670,16 +678,8 @@ button.btn:disabled { opacity: 0.55; cursor: not-allowed; }
           </div>
         </div>
 
-        <!-- 3 LIVE AI PROBABILITY BARS: PLASTIC, PAPER, EMPTY -->
+        <!-- 3 LIVE AI PROBABILITY BARS: PAPER, PLASTIC, EMPTY -->
         <div class="prob-box">
-          <div class="prob-row">
-            <div class="prob-head" style="color:var(--skyblue);">
-              <span>🧴 Plastic</span>
-              <span id="pctPlastic">0%</span>
-            </div>
-            <div class="prob-track"><div id="fillPlastic" class="prob-fill" style="background:var(--skyblue);"></div></div>
-          </div>
-
           <div class="prob-row">
             <div class="prob-head" style="color:var(--pink);">
               <span>📄 Paper</span>
@@ -689,8 +689,16 @@ button.btn:disabled { opacity: 0.55; cursor: not-allowed; }
           </div>
 
           <div class="prob-row">
+            <div class="prob-head" style="color:var(--skyblue);">
+              <span>🧴 Plastic</span>
+              <span id="pctPlastic">0%</span>
+            </div>
+            <div class="prob-track"><div id="fillPlastic" class="prob-fill" style="background:var(--skyblue);"></div></div>
+          </div>
+
+          <div class="prob-row">
             <div class="prob-head" style="color:#455a64;">
-              <span>🚫 Empty (Plastic aur Paper dono nahi hain)</span>
+              <span>🚫 Empty (Paper aur Plastic dono nahi hain)</span>
               <span id="pctEmpty">100%</span>
             </div>
             <div class="prob-track"><div id="fillEmpty" class="prob-fill" style="background:#78909c;width:100%;"></div></div>
@@ -698,31 +706,35 @@ button.btn:disabled { opacity: 0.55; cursor: not-allowed; }
         </div>
 
         <div id="aiPredictionText" style="margin-top:8px;font-size:13.5px;font-weight:900;text-align:center;padding:7px;background:#eceff1;border-radius:8px;color:var(--ink);">
-          🚫 Empty: Camera ke samne Plastic ya Paper 0.80 sec hold karen
+          🚫 Empty: Camera ke samne Paper ya Plastic 0.80 sec hold karen
         </div>
       </div>
 
-      <!-- Right (Compact Side-by-Side): Digital Twin How Arduino Model Works -->
+      <!-- Right (Compact Side-by-Side): Digital Twin How Arduino Model Works (LEFT: PAPER, RIGHT: PLASTIC) -->
       <div class="card" style="border-top: 5px solid var(--pink);">
         <h2 style="font-size:15px;">⚙️ Digital Twin: How Arduino Model Works</h2>
         <div style="font-size:11.5px;color:#546e7a;margin-bottom:6px;">
-          Learn Mode mein jab Plastic ya Paper 0.80 sec hold hota hai, toh Voice bolti hai aur Arduino Servo (Pin 9) See-Saw flap ko jhuka deta hai:
+          Learn Mode mein jab Paper ya Plastic 0.80 sec hold hota hai, toh Voice bolti hai aur Arduino Servo (Pin 9) See-Saw flap ko jhuka deta hai:
         </div>
 
         <div class="seesaw-stage">
           <svg viewBox="0 0 360 165" style="width:100%;max-width:260px;height:auto;">
             <rect x="30" y="50" width="300" height="100" rx="6" fill="#fff" stroke="#0b1d2e" stroke-width="2.5"/>
-            <rect x="33" y="53" width="144" height="94" fill="#4fc3f7" opacity="0.5"/>
-            <rect x="183" y="53" width="144" height="94" fill="#f48fb1" opacity="0.55"/>
+            <!-- Left Side: PAPER (Pink) -->
+            <rect x="33" y="53" width="144" height="94" fill="#f48fb1" opacity="0.55"/>
+            <!-- Right Side: PLASTIC (Sky Blue) -->
+            <rect x="183" y="53" width="144" height="94" fill="#4fc3f7" opacity="0.5"/>
             <rect x="177" y="44" width="6" height="106" fill="#0b1d2e"/>
             <g id="twinFlap">
               <rect x="75" y="36" width="210" height="8" rx="4" fill="#d29b58" stroke="#6d451f" stroke-width="2"/>
             </g>
             <circle cx="180" cy="42" r="6" fill="#f9ab00" stroke="#0b1d2e" stroke-width="2"/>
-            <text x="105" y="96" text-anchor="middle" font-size="13" font-weight="900" fill="#01579b">🧴 PLASTIC</text>
-            <text x="105" y="114" text-anchor="middle" font-size="11" font-weight="800" fill="#01579b">35° Left Tilt</text>
-            <text x="255" y="96" text-anchor="middle" font-size="13" font-weight="900" fill="#880e4f">📄 PAPER</text>
-            <text x="255" y="114" text-anchor="middle" font-size="11" font-weight="800" fill="#880e4f">145° Right Tilt</text>
+            <!-- Left Label: PAPER (35° Left Tilt) -->
+            <text x="105" y="96" text-anchor="middle" font-size="13" font-weight="900" fill="#880e4f">📄 PAPER</text>
+            <text x="105" y="114" text-anchor="middle" font-size="11" font-weight="800" fill="#880e4f">35° Left Tilt</text>
+            <!-- Right Label: PLASTIC (145° Right Tilt) -->
+            <text x="255" y="96" text-anchor="middle" font-size="13" font-weight="900" fill="#01579b">🧴 PLASTIC</text>
+            <text x="255" y="114" text-anchor="middle" font-size="11" font-weight="800" fill="#01579b">145° Right Tilt</text>
           </svg>
           <div id="twinAngleTxt" style="font-size:12.5px;font-weight:800;margin-top:4px;">
             Servo Angle: 90° (Flat Neutral)
@@ -731,19 +743,19 @@ button.btn:disabled { opacity: 0.55; cursor: not-allowed; }
 
         <label style="margin-top:8px;">🧪 Manual Test (Learn Mode + Voice + Arduino):</label>
         <div style="display:flex;gap:6px;">
-          <button type="button" class="btn btn-blue" style="margin:0;font-size:12px;padding:8px;" onclick="triggerBinSort('Plastic', 'learn')">🧴 Test Plastic (35°)</button>
-          <button type="button" class="btn btn-pink" style="margin:0;font-size:12px;padding:8px;" onclick="triggerBinSort('Paper', 'learn')">📄 Test Paper (145°)</button>
+          <button type="button" class="btn btn-pink" style="margin:0;font-size:12px;padding:8px;" onclick="triggerBinSort('Paper', 'learn')">📄 Test Paper (35°)</button>
+          <button type="button" class="btn btn-blue" style="margin:0;font-size:12px;padding:8px;" onclick="triggerBinSort('Plastic', 'learn')">🧴 Test Plastic (145°)</button>
         </div>
       </div>
     </div>
   </section>
 
   <!-- ================================================================= -->
-  <!-- TAB 4: 🎮 60s GAME (NO TARGET #, LIVE AI %, NO ARDUINO TRIGGER)   -->
+  <!-- TAB 4: 🎮 60s GAME (NO TARGET #, LIVE AI %, DAY-WISE WINNERS)     -->
   <!-- ================================================================= -->
   <section id="tab-game" class="tab-panel">
     <div class="tip-banner">
-      💡 <b>Tip — 🎮 (60-Second Student Challenge):</b> Bachon mein recycling ka shauq barhane ke liye 60 second ka muqabla! Sab se zyada Plastic aur Paper pehchanne wale <b>Top 3 Students ko Rs. 100 Mobile Balance</b> inam milta hai!
+      💡 <b>Tip — 🎮 (60-Second Student Challenge):</b> Bachon mein recycling ka shauq barhane ke liye 60 second ka muqabla! Har roz sab se zyada Paper aur Plastic pehchanne wale <b>Day Winners (Top 3 Students) ko Rs. 100 Mobile Balance</b> inam milta hai!
     </div>
 
     <div class="grid-2">
@@ -760,7 +772,7 @@ button.btn:disabled { opacity: 0.55; cursor: not-allowed; }
 
         <!-- Clean Target Prompt Box (No Target Number!) -->
         <div id="gameTargetBanner" class="target-banner">
-          🎯 "▶️ Start 60s Game" dabayen — Screen bataegi ke Plastic dikhana hai ya Paper!
+          🎯 "▶️ Start 60s Game" dabayen — Screen bataegi ke Paper dikhana hai ya Plastic!
         </div>
 
         <!-- In-Game Camera View -->
@@ -785,18 +797,18 @@ button.btn:disabled { opacity: 0.55; cursor: not-allowed; }
         <!-- 3 LIVE AI SCAN PERCENTAGE BARS IN GAME MODE -->
         <div class="prob-box">
           <div class="prob-row">
-            <div class="prob-head" style="color:var(--skyblue);">
-              <span>🧴 Plastic Scan %</span>
-              <span id="gamePctPlastic">0%</span>
-            </div>
-            <div class="prob-track"><div id="gameFillPlastic" class="prob-fill" style="background:var(--skyblue);"></div></div>
-          </div>
-          <div class="prob-row">
             <div class="prob-head" style="color:var(--pink);">
               <span>📄 Paper Scan %</span>
               <span id="gamePctPaper">0%</span>
             </div>
             <div class="prob-track"><div id="gameFillPaper" class="prob-fill" style="background:var(--pink);"></div></div>
+          </div>
+          <div class="prob-row">
+            <div class="prob-head" style="color:var(--skyblue);">
+              <span>🧴 Plastic Scan %</span>
+              <span id="gamePctPlastic">0%</span>
+            </div>
+            <div class="prob-track"><div id="gameFillPlastic" class="prob-fill" style="background:var(--skyblue);"></div></div>
           </div>
           <div class="prob-row">
             <div class="prob-head" style="color:#455a64;">
@@ -826,15 +838,24 @@ button.btn:disabled { opacity: 0.55; cursor: not-allowed; }
         </div>
       </div>
 
-      <!-- Right: Cloud-Synced Leaderboard (From Game_Scores) -->
+      <!-- Right: Cloud-Synced Day-Wise Winners Leaderboard (From Game_Scores) -->
       <div class="card" style="border-top: 5px solid var(--green);">
         <h2>
-          <span>🏆 Live Top Recyclers (`Game_Scores`)</span>
+          <span>🏆 Day-Wise Winners (`Game_Scores`)</span>
           <button type="button" class="mini-btn sync-btn-label" onclick="syncFromGoogleSheet(true)">🔄 Refresh Sheet</button>
         </h2>
         <div style="font-size:11.5px;color:#546e7a;margin-bottom:6px;">
           🔒 Mobile numbers public leaderboard par chhupaye gaye hain (Sirf Mentor Admin dekh sakta hai).
         </div>
+
+        <!-- Day Selector for Day-Wise Winners -->
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;">
+          <label style="margin:0;white-space:nowrap;font-size:12px;">📅 Filter Day:</label>
+          <select id="leaderDayFilter" onchange="renderLeaderboard()" style="padding:5px 8px;font-size:12px;">
+            <option value="ALL_DAYS">📅 All Days (Day-Wise Winners)</option>
+          </select>
+        </div>
+
         <table class="data-table">
           <thead>
             <tr><th>Rank</th><th>Student Name</th><th>Score</th><th>Date</th></tr>
@@ -860,9 +881,9 @@ button.btn:disabled { opacity: 0.55; cursor: not-allowed; }
       </p>
       <ul style="margin:0;padding-left:18px;">
         <li><b>1. Civic Report Portal:</b> Union Council (UC) Tarai, Town Committee (TC) Golarchi aur Municipal Committee (MC) Badin ke liye geotagged photo complaint aur live Report ID tracking.</li>
-        <li><b>2. Smart Waste Census:</b> Google Sheet (<code>Waste_Audit</code>) mein Plastic aur Paper ka day-wise live digital hisab, graph aur AI insights.</li>
-        <li><b>3. AI + Arduino See-Saw Smart Bin:</b> Google Teachable Machine (<code>RP91qAZCY</code>) + Voice Assistant + Arduino Uno &amp; SG90 Servo See-Saw (35° Left Plastic / 145° Right Paper).</li>
-        <li><b>4. 60s Gamification Challenge:</b> Students mein safai aur recycling ka shauq paida karne ke liye 60-second AI Target Challenge (<code>Game_Scores</code>).</li>
+        <li><b>2. Smart Waste Census:</b> Google Sheet (<code>Waste_Audit</code>) mein Paper aur Plastic ka day-wise live digital hisab, graph aur AI insights.</li>
+        <li><b>3. AI + Arduino See-Saw Smart Bin:</b> Google Teachable Machine AI Model + Voice Assistant + Arduino Uno &amp; SG90 Servo See-Saw (35° Left Paper / 145° Right Plastic).</li>
+        <li><b>4. 60s Gamification Challenge:</b> Students mein safai aur recycling ka shauq paida karne ke liye 60-second AI Target Challenge aur Day-Wise Winners Leaderboard (<code>Game_Scores</code>).</li>
       </ul>
     </div>
   </details>
@@ -974,6 +995,20 @@ function cleanDateStr(raw) {
   return String(raw).replace(/\d{2}:\d{2}:\d{2}\s*GMT[^\s)]*(\s*\([^)]*\))?/gi, "").trim();
 }
 
+function normalizeDayKey(raw) {
+  if (!raw) return new Date().toISOString().slice(0, 10);
+  const s = String(raw).trim();
+  if (/^\d{4}-\d{2}-\d{2}/.test(s)) return s.slice(0, 10);
+  const d = new Date(s);
+  if (!isNaN(d.getTime())) {
+    const yr = d.getFullYear();
+    const mo = String(d.getMonth() + 1).padStart(2, "0");
+    const da = String(d.getDate()).padStart(2, "0");
+    return `${yr}-${mo}-${da}`;
+  }
+  return cleanDateStr(s);
+}
+
 function normalizeHalqaName(h) {
   const s = String(h || "").trim();
   if (s === "TC Golarchi" || s.toLowerCase().includes("golarchi")) return "Town Committee Golarchi";
@@ -998,9 +1033,9 @@ function speakLearnVoice(type) {
   if (!learnVoiceEnabled || !("speechSynthesis" in window)) return;
   try {
     window.speechSynthesis.cancel();
-    const text = (type === "Plastic")
-      ? "Plastic detected! Please put it in the Sky Blue Plastic Bin."
-      : "Paper detected! Please put it in the Pink Paper Bin.";
+    const text = (type === "Paper")
+      ? "Paper detected! Please put it in the Pink Paper Bin on the left."
+      : "Plastic detected! Please put it in the Sky Blue Plastic Bin on the right.";
     const utter = new SpeechSynthesisUtterance(text);
     utter.lang = "en-US";
     utter.rate = 1.0;
@@ -1090,25 +1125,25 @@ function renderDayWiseChart() {
     }
   }
   if (!dates.length) {
-    box.innerHTML = `<div style="font-size:12px;color:#546e7a;text-align:center;padding:8px;">Abhi koi scan record nahi hai — Learn Mode ya Game Mode mein Plastic/Paper scan karen!</div>`;
+    box.innerHTML = `<div style="font-size:12px;color:#546e7a;text-align:center;padding:8px;">Abhi koi scan record nahi hai — Learn Mode ya Game Mode mein Paper/Plastic scan karen!</div>`;
     return;
   }
 
   box.innerHTML = dates.map(d => {
-    const p = dailyStats[d]?.plastic || 0;
     const a = dailyStats[d]?.paper   || 0;
-    const tot = p + a || 1;
-    const pW = Math.round((p / tot) * 100);
-    const aW = (p + a) ? (100 - pW) : 0;
+    const p = dailyStats[d]?.plastic || 0;
+    const tot = a + p || 1;
+    const aW = Math.round((a / tot) * 100);
+    const pW = (a + p) ? (100 - aW) : 0;
     return `
       <div class="day-row">
         <div style="font-weight:800;color:var(--ink);">${d}</div>
         <div class="day-bars">
-          <div style="width:${pW}%;background:var(--skyblue);" title="Plastic: ${p}"></div>
           <div style="width:${aW}%;background:var(--pink);" title="Paper: ${a}"></div>
+          <div style="width:${pW}%;background:var(--skyblue);" title="Plastic: ${p}"></div>
         </div>
         <div style="text-align:right;font-weight:800;font-size:11px;">
-          <span style="color:var(--skyblue);">${p}P</span> / <span style="color:var(--pink);">${a}A</span>
+          <span style="color:var(--pink);">${a}A</span> / <span style="color:var(--skyblue);">${p}P</span>
         </div>
       </div>
     `;
@@ -1140,7 +1175,7 @@ function refreshCensusUI() {
 
   const insightEl = document.getElementById("censusInsight");
   if (total === 0) {
-    insightEl.innerHTML = `💡 <b>AI Census Insight:</b> Google Sheet bilkul clean aur ready hai! Jaise hi aap Plastic ya Paper scan karenge, live Day-Wise Graph aur AI Insights yahan update honge.`;
+    insightEl.innerHTML = `💡 <b>AI Census Insight:</b> Google Sheet bilkul clean aur ready hai! Jaise hi aap Paper ya Plastic scan karenge, live Day-Wise Graph aur AI Insights yahan update honge.`;
   } else if (plasticCount >= paperCount) {
     insightEl.innerHTML = `💡 <b>AI Census Insight:</b> Is waqt ilaqay (UC Tarai / TC Golarchi / MC Badin) mein <b>Plastic waste (${pPct}%)</b> zyada hai. Bazar, dukanon aur gharon mein single-use plastic theliyon ki jagah kapray ke reusable thailay istamal karne aur plastic recycling barhane ki tajweez di jati hai.`;
   } else {
@@ -1439,7 +1474,7 @@ function renderReportsTable() {
 }
 
 // ============================================================================
-// 6. LEARN MODE: VOICE ("Put it in the...") + PAUSE CAM + ARDUINO TWIN
+// 6. LEARN MODE: LEFT = PAPER (35°), RIGHT = PLASTIC (145°) + ARDUINO TWIN
 // ============================================================================
 let tmModel = null;
 let learnStream = null;
@@ -1481,25 +1516,25 @@ async function sendToArduino(charCmd) {
   } catch (e) {}
 }
 
-// Arduino & Voice ONLY trigger when mode === 'learn'
+// Updated: Paper = 35° Left Tilt, Plastic = 145° Right Tilt
 function triggerBinSort(type, mode) {
   const flap = document.getElementById("twinFlap");
   const txt  = document.getElementById("twinAngleTxt");
-  if (type === "Plastic") {
-    plasticCount++;
-    if (mode === "learn") {
-      flap.style.transform = "rotate(-25deg)";
-      txt.innerHTML = `<span style="color:var(--skyblue);">🧴 Plastic ➔ 35° Left Tilt (Pin 4 LED + Pin 9 Servo)</span>`;
-      sendToArduino("P");
-      speakLearnVoice("Plastic");
-    }
-  } else {
+  if (type === "Paper") {
     paperCount++;
     if (mode === "learn") {
-      flap.style.transform = "rotate(25deg)";
-      txt.innerHTML = `<span style="color:var(--pink);">📄 Paper ➔ 145° Right Tilt (Pin 6 LED + Pin 9 Servo)</span>`;
+      flap.style.transform = "rotate(-25deg)";
+      txt.innerHTML = `<span style="color:var(--pink);">📄 Paper ➔ 35° Left Tilt (Pin 9 Servo)</span>`;
       sendToArduino("A");
       speakLearnVoice("Paper");
+    }
+  } else {
+    plasticCount++;
+    if (mode === "learn") {
+      flap.style.transform = "rotate(25deg)";
+      txt.innerHTML = `<span style="color:var(--skyblue);">🧴 Plastic ➔ 145° Right Tilt (Pin 9 Servo)</span>`;
+      sendToArduino("P");
+      speakLearnVoice("Plastic");
     }
   }
   recordLocalDailyScan(type);
@@ -1558,7 +1593,7 @@ function togglePauseLearnCamera() {
     learnStream.getVideoTracks().forEach(t => { t.enabled = true; });
     vid.play();
     pauseBtn.textContent = "⏸️ Pause Cam";
-    statusEl.innerHTML = "🎥 Camera Resumed — Plastic ya Paper 0.80 sec hold karen";
+    statusEl.innerHTML = "🎥 Camera Resumed — Paper ya Plastic 0.80 sec hold karen";
     statusEl.style.background = "#e8f5e9";
   }
 }
@@ -1617,7 +1652,7 @@ async function loopLearnAI() {
       learnHoldStart = 0;
       holdTxt.textContent = "0.00s / 0.80s";
       holdFill.style.width = "0%";
-      statusEl.innerHTML = `🚫 <b>Empty (${ePct}%):</b> Plastic aur Paper dono nahi hain`;
+      statusEl.innerHTML = `🚫 <b>Empty (${ePct}%):</b> Paper aur Plastic dono nahi hain`;
       statusEl.style.background = "#eceff1";
     } else {
       if (learnHoldItem !== detected) {
@@ -1631,10 +1666,10 @@ async function loopLearnAI() {
 
       if (elapsed >= HOLD_DURATION_MS) {
         triggerBinSort(detected, "learn");
-        statusEl.innerHTML = detected === "Plastic"
-          ? `🔊 <b>"Put it in the Sky Blue Plastic Bin!"</b> (35° Left)`
-          : `🔊 <b>"Put it in the Pink Paper Bin!"</b> (145° Right)`;
-        statusEl.style.background = detected === "Plastic" ? "#e1f5fe" : "#fce4ec";
+        statusEl.innerHTML = detected === "Paper"
+          ? `🔊 <b>"Put it in the Pink Paper Bin!"</b> (35° Left)`
+          : `🔊 <b>"Put it in the Sky Blue Plastic Bin!"</b> (145° Right)`;
+        statusEl.style.background = detected === "Paper" ? "#fce4ec" : "#e1f5fe";
         learnHoldItem = null;
         learnHoldStart = 0;
         learnCooldownUntil = now + 2000;
@@ -1648,7 +1683,7 @@ async function loopLearnAI() {
 }
 
 // ============================================================================
-// 7. 60s GAME: NO TARGET #, LIVE AI %, 2-1-1-2 PATTERN, NO ARDUINO TRIGGER
+// 7. 60s GAME: NO TARGET #, LIVE AI %, DAY-WISE WINNERS LEADERBOARD
 // ============================================================================
 let gameStream = null;
 let gameFacing = "environment";
@@ -1660,7 +1695,7 @@ let currentScore = 0;
 
 const STREAK_PATTERN = [2, 1, 1, 2, 1, 2, 1, 1, 2, 1];
 let targetQueue = [];
-let currentTarget = "Plastic";
+let currentTarget = "Paper";
 let isFirstTarget = true;
 
 let gameHoldStart = 0;
@@ -1668,7 +1703,7 @@ let gameCooldownUntil = 0;
 
 function buildTargetQueue() {
   targetQueue = [];
-  let item = Math.random() < 0.5 ? "Plastic" : "Paper";
+  let item = Math.random() < 0.5 ? "Paper" : "Plastic";
   for (let i = 0; i < 25; i++) {
     const count = STREAK_PATTERN[i % STREAK_PATTERN.length];
     for (let c = 0; c < count; c++) {
@@ -1877,7 +1912,7 @@ function saveFinishedGameScore() {
 
   leaderboard.push(entry);
   leaderboard.sort((a, b) => b.score - a.score);
-  leaderboard = leaderboard.slice(0, 15);
+  leaderboard = leaderboard.slice(0, 50);
   localStorage.setItem("ss_leaders", JSON.stringify(leaderboard));
 
   postToGoogleSheet({ action: "addGameScore", entry: entry });
@@ -1889,20 +1924,69 @@ function saveFinishedGameScore() {
   document.getElementById("gameTargetBanner").innerHTML = `✅ <b>${name}</b> ka Score (<b>${currentScore} pts</b>) Game_Scores mein save ho gaya!`;
 }
 
+// Updated: Day-Wise Winners Leaderboard with Date Grouping & Filter
 function renderLeaderboard() {
   const tbody = document.getElementById("leaderboardBody");
+  const filterSel = document.getElementById("leaderDayFilter");
+
   if (!leaderboard.length) {
     tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;padding:10px;">Abhi koi game score nahi hai — 60s Game khelen!</td></tr>`;
     return;
   }
-  tbody.innerHTML = leaderboard.slice(0, 10).map((row, idx) => `
-    <tr>
-      <td><b>#${idx + 1}</b> ${idx < 3 ? '🏅' : ''}</td>
-      <td><b>${row.name}</b></td>
-      <td><b style="color:var(--green);">${row.score} pts</b></td>
-      <td>${cleanDateStr(row.date)}</td>
-    </tr>
-  `).join("");
+
+  const todayStr = new Date().toISOString().slice(0, 10);
+  const byDay = {};
+
+  leaderboard.forEach(row => {
+    const dayKey = normalizeDayKey(row.date);
+    if (!byDay[dayKey]) byDay[dayKey] = [];
+    byDay[dayKey].push(row);
+  });
+
+  const sortedDays = Object.keys(byDay).sort().reverse();
+
+  // Populate Day Filter Dropdown while keeping selection
+  if (filterSel) {
+    const prevVal = filterSel.value || "ALL_DAYS";
+    let opts = `<option value="ALL_DAYS">📅 All Days (Day-Wise Winners)</option>`;
+    sortedDays.forEach(d => {
+      const label = (d === todayStr) ? `🏆 Today (${d}) Winners` : `📅 ${d} Winners`;
+      opts += `<option value="${d}">${label}</option>`;
+    });
+    filterSel.innerHTML = opts;
+    if (prevVal === "ALL_DAYS" || sortedDays.includes(prevVal)) {
+      filterSel.value = prevVal;
+    }
+  }
+
+  const selectedDay = filterSel ? filterSel.value : "ALL_DAYS";
+  const daysToShow = (selectedDay === "ALL_DAYS") ? sortedDays : [selectedDay];
+
+  let html = "";
+  daysToShow.forEach(dayKey => {
+    const dayList = (byDay[dayKey] || []).slice().sort((a, b) => Number(b.score) - Number(a.score));
+    if (!dayList.length) return;
+
+    const dayHeading = (dayKey === todayStr)
+      ? `🏆 Today's Winners (${dayKey})`
+      : `📅 Day Winners — ${dayKey}`;
+
+    html += `<tr class="day-group-row"><td colspan="4">${dayHeading}</td></tr>`;
+
+    dayList.slice(0, 5).forEach((row, idx) => {
+      const medal = idx === 0 ? "🥇" : idx === 1 ? "🥈" : idx === 2 ? "🥉" : "";
+      html += `
+        <tr>
+          <td><b>#${idx + 1}</b> ${medal}</td>
+          <td><b>${row.name}</b> ${idx === 0 ? '<span style="font-size:10.5px;background:#fff8e1;color:#e65100;padding:1px 5px;border-radius:6px;border:1px solid #ffb74d;font-weight:800;">Day Winner</span>' : ''}</td>
+          <td><b style="color:var(--green);">${row.score} pts</b></td>
+          <td>${dayKey}</td>
+        </tr>
+      `;
+    });
+  });
+
+  tbody.innerHTML = html || `<tr><td colspan="4" style="text-align:center;padding:10px;">Is din ka koi winner record nahi mila.</td></tr>`;
 }
 
 // ============================================================================
@@ -1943,7 +2027,7 @@ function populateAdminModal() {
       <td><b>${l.name}</b></td>
       <td><b style="color:var(--skyblue);">${l.phone || 'N/A'}</b></td>
       <td><b>${l.score}</b></td>
-      <td>${cleanDateStr(l.date)}</td>
+      <td>${normalizeDayKey(l.date)}</td>
     </tr>
   `).join("");
 
